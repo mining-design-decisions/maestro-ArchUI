@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Creating New Model{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <label for="modelname">Model Name</label>
+    <input name="modelname" id="modelname" required>
+</form>
+{% endblock %}
