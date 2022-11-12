@@ -61,7 +61,10 @@ Flask template files can inherit from each other with a system called blocks: pa
 # More resources
 ## External Documentation Links
 
-- CSS: https://pythonhosted.org/Flask-Bootstrap/basic-usage.html
+- Bootstrap with Flask: https://pythonhosted.org/Flask-Bootstrap/basic-usage.html
+- Bootstrap Components: https://getbootstrap.com/docs/3.3/components
+	+ Note the 3.3: at time of writing, the Bootstrap version bundled with Flask-Bootstrap is 3.3.7, which is not the latest.
+- Bootstrap Padding in 3.3: https://stackoverflow.com/questions/32233489/does-bootstrap-have-builtin-padding-and-margin-classes
 
 ## Notes on other Packages
 
