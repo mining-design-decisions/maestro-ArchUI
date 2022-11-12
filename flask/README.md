@@ -59,5 +59,10 @@ Flask template files can inherit from each other with a system called blocks: pa
 - `register_blueprint` the newly created Blueprint wherever you need it, be it in another blueprint (nested blueprints) or straight in the `__init__.py` file.
 
 # More resources
+## External Documentation Links
 
 - CSS: https://pythonhosted.org/Flask-Bootstrap/basic-usage.html
+
+## Notes on other Packages
+
+- At time of writing, `flask-nav` is incompatible with Python 3.10 and up.
