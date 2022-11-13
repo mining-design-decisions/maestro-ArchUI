@@ -7,8 +7,16 @@ pip install -r requirements.txt
 ```
 Run the above to make sure you have installed all required dependencies of the project. If the requirements.txt is not complete, notify the developers or add the forgotten dependency yourself.
 
+Ensure that the `mining-design-decisions` project is installed in the same parent directory as this project:
+```
+cd ..
+cd ..
+git clone https://github.com/mining-design-decisions/mining-design-decisions
+```
+
 ## Running
 
+Run this command in the `archui/flask` directory, the same as this Readme.
 ```
 flask run
 ```
@@ -54,7 +62,7 @@ Flask template files can inherit from each other with a system called blocks: pa
 
 ## Creating a new endpoint category (Flask Blueprint)
 
-- Create a new file according to the blueprint structure: either in the root `app` directory alongside `__init__.py` or in its own subdirectory. 
+- Create a new file according to the blueprint structure: either in the `blueprints` directory or in its own subdirectory. 
 - Add the `bp = Blueprint(...)` at the top of the file, or use whatever other name you like, and create routes as in other files.
 - `register_blueprint` the newly created Blueprint wherever you need it, be it in another blueprint (nested blueprints) or straight in the `__init__.py` file.
 
@@ -66,6 +74,6 @@ Flask template files can inherit from each other with a system called blocks: pa
 	+ Note the 3.3: at time of writing, the Bootstrap version bundled with Flask-Bootstrap is 3.3.7, which is not the latest.
 - Bootstrap Padding in 3.3: https://stackoverflow.com/questions/32233489/does-bootstrap-have-builtin-padding-and-margin-classes
 
-## Notes on other Packages
+## Notes on Python Version
 
-- At time of writing, `flask-nav` is incompatible with Python 3.10 and up.
+- At time of writing, `flask-nav` is incompatible with Python 3.10 and up. This is unfortunate, because the CLI on which this interface builds is only available with Python 3.10. Several of the CLI's dependencies are incompatible with Python 3.11. 

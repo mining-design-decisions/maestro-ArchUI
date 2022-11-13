@@ -22,7 +22,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from app import models
+    from .blueprints import models
 
     app.register_blueprint(models.bp)
 
