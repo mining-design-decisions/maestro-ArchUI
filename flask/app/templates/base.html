@@ -28,14 +28,19 @@
                 <li>
                     <a href="{{ url_for('models.createModel') }}">Make New Model</a>
                 </li>
-                <li>
-                    <a href="{{ url_for('models.hyperParamHelp') }}">Hyper Parameter Help</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('models.paramHelp') }}">Parameter Help</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('models.comboStrat') }}">Combination Strategy Help</a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{ url_for('models.hyperParamHelp') }}">Hyper Parameter Help</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('models.paramHelp') }}">Parameter Help</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('models.comboStrat') }}">Combination Strategy Help</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>

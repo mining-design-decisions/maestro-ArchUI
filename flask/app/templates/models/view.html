@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}View Model {{ name }}{% endblock %}
+
+{% block margin_content %}
+<h3>Viewing Model: {{name}}</h3>
+<ul>
+{% for p in params %}
+    <li>{{p}}: {{params[p]}}</li>
+{% endfor %}
+</ul>
+{% endblock %}

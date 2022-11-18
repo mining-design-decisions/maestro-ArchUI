@@ -6,17 +6,34 @@ from flask import request
 from flask import redirect
 from flask import url_for
 import json
+import os
 
 bp = Blueprint("models", __name__, url_prefix="/models")
 
 @bp.route('/viewall', methods=["GET"])
 def viewall():
     # show all models
-    models = [{
-        'name': 'Foo Bar'
-    }]
+    models = []
+    dir = os.fsencode('app/models')
+    for file in os.listdir(dir):
+        filename = os.fsdecode(file)
+        if filename.endswith('.json'):
+            modelname = filename[:-5]
+            models.append(modelname)
 
     return render_template("models/viewall.html", models=models)
+
+@bp.route('/view/<model>', methods=['GET'])
+def view(model):
+    # is model name valid?
+    models = os.listdir('app/models')
+    if model+'.json' not in models:
+        return render_template('error.html')
+        
+    with open(f'app/models/{model}.json', 'r') as f:
+        model_obj = json.load(f)
+    
+    return render_template('models/view.html', name=model, params=model_obj)
 
 @bp.route('/create', methods=["GET"])
 def createModel():
