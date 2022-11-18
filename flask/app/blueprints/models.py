@@ -81,10 +81,6 @@ def createModel():
 
 @bp.route('/create', methods=["POST"])
 def postModel():
-    # print(request.form)
-    for element in request.form:
-        print(f"{element}: {request.form[element]}")
-
     # todo validity checking
     # - including does this name already exist?
 
