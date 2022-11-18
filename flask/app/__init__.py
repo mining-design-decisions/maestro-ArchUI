@@ -22,9 +22,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from .blueprints import models
+    from .blueprints import models, run
 
     app.register_blueprint(models.bp)
+    app.register_blueprint(run.bp)
 
     @app.route("/hello")
     def hello():
