@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}Arch UI{% endblock %}
+{% block title %}Arch UI - {% block subtitle %}{% endblock %}{% endblock %}
 
 {% import "bootstrap/fixes.html" as fixes %}
 
@@ -27,6 +27,15 @@
                 </li>
                 <li>
                     <a href="{{ url_for('models.createModel') }}">Make New Model</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('models.hyperParamHelp') }}">Hyper Parameter Help</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('models.paramHelp') }}">Parameter Help</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('models.comboStrat') }}">Combination Strategy Help</a>
                 </li>
             </ul>
         </div>
