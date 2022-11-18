@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}Run Models{% endblock %}
+
+{% block margin_content %}
+<form method="POST" id="run" action="{{ url_for('run.postSelect') }}">
+    <h3>Select Models to Run:</h3>
+    {% for model in models %}
+        <div class="form-group">
+            <label for="run_{{model}}">{{model}}: </label>
+            <input name="run_{{model}}" id="run_{{model}}" type="checkbox">
+        </div>
+    {% endfor %}
+    <h3>Enter Apache Project Key:</h3>
+    <div class="form-group">
+        <label for="projectkey">Project Key: </label>
+        <input name="projectkey" id="projectkey" required
+            title="Can be found as prefix in issue IDs, such as CASSANDRA (with issue keys such as CASSANDRA-1234)">
+    </div>
+</form>
+
+{% endblock %}
