@@ -61,6 +61,7 @@ def createModel():
         'peregrine', # not in scope
         'save-trained-generator', # will probably override anyway
         'ontology-classes', # preset. maybe change later to allow editing. for now set JIT
+        'force-regenerate-data', # forced on for model saving
     ]
 
     args = []

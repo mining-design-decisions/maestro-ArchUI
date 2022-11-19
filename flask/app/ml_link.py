@@ -9,6 +9,7 @@ sys.path.append(ml_path)
 from deep_learning.dl_manager import cli
 from deep_learning.dl_manager import feature_generators
 from deep_learning.dl_manager import classifiers
+from deep_learning.issuedata_extractor.text_cleaner import remove_formatting, fix_punctuation, FormattingHandling
 
 def test():
     cli.show_combination_strategies()
