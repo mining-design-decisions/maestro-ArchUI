@@ -4,7 +4,12 @@ Launching the web server needs to be done through commandline. Open a command te
 ## First time running
 
 First, ensure that you have a suitable Python version installed: as noted below in this document, the only version that will be able to run this project correctly is 3.10.
+
+You can check your current Python version with `python -V`.
+
+
 ```
+cd flask
 pip install -r requirements.txt
 ```
 Run the above in the `flask` subdirectory to make sure you have installed all required dependencies of the project. If the requirements.txt is not complete, please notify the developer.
@@ -15,7 +20,7 @@ cd ..
 cd ..
 git clone https://github.com/mining-design-decisions/mining-design-decisions
 ```
-You also need to run `pip install -r requirements.txt` in this repository's `deep_learning` folder, as well as `git clone https://github.com/jmaarleveld/visualkeras`, as in its own readme.
+You also need to run `pip install -r requirements.txt` in the `mining-design-decisions` project's `deep_learning` folder, as well as `git clone https://github.com/jmaarleveld/visualkeras`, as in its own readme.
 
 ## Running
 
