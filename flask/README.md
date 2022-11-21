@@ -20,6 +20,8 @@ cd ..
 cd ..
 git clone https://github.com/mining-design-decisions/mining-design-decisions
 ```
+In order for ArchUI to work correctly, it needs the `mining-design-decisions` project to be on the `model-saving` branch.
+
 You also need to run `pip install -r requirements.txt` in the `mining-design-decisions` project's `deep_learning` folder, as well as `git clone https://github.com/jmaarleveld/visualkeras`, as in its own readme.
 
 ## Running
