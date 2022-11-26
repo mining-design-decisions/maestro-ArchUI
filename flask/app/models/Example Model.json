@@ -1,1 +1,11 @@
-{"classifier": "FullyConnectedModel", "epochs": "1000", "split-size": "0.2", "max-train": "-1", "k-cross": "0", "quick-cross": "on", "hyper-params": "number-of-hidden-layers=1 hidden-layer-1-size=16 optimizer=adam loss=crossentropy", "test-project": "None", "class-balancer": "None", "batch-size": "32", "combination-strategy": "add", "ensemble-strategy": "stacking", "stacking-meta-classifier": "FullyConnectedModel", "stacking-meta-classifier-hyper-parameters": "", "boosting-rounds": "10", "use-early-stopping": "on", "early-stopping-patience": "30", "early-stopping-min-delta": "0.001", "early-stopping-attribute": "loss", "input-mode": "BOWFrequency", "output-mode": "Detection", "params": "max-len=400"}
+{
+    "classifier": "FullyConnectedModel",
+    "epochs": "1000",
+    "quick-cross": true,
+    "hyper-params": "number-of-hidden-layers=1 hidden-layer-1-size=16 optimizer=adam loss=crossentropy",
+    "use-early-stopping": true,
+    "early-stopping-patience": "30",
+    "input-mode": "BOWFrequency",
+    "output-mode": "Detection",
+    "params": "max-len=400"
+}

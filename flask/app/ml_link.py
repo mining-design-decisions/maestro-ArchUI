@@ -11,8 +11,6 @@ from deep_learning.dl_manager import feature_generators
 from deep_learning.dl_manager import classifiers
 from deep_learning.issuedata_extractor.text_cleaner import remove_formatting, fix_punctuation, FormattingHandling
 
-def test():
-    cli.show_combination_strategies()
 
 def get_cli_json():
     file_path = path.abspath('../../mining-design-decisions/deep_learning/dl_manager/cli.json')
@@ -68,3 +66,46 @@ def get_possible_ontologies():
 
 def get_combination_strategies():
     return cli.STRATEGIES
+
+def train_and_run(model_name):
+
+    # step 1: train
+    print(f"Training {model_name}...")
+
+    with open(f'app/models/{model_name}.json', 'r') as f:
+        model_params = json.load(f)
+
+    additional_params = {
+        "file": "app/data/training.json", # todo load from db
+        "force-regenerate-data": True,
+        "store-model": True,
+        "target-model-path": f"app/data/models/{model_name}"
+    }
+
+    args = ['__main__.py', 'run']
+
+    for param in model_params:
+        if param != 'classifier':
+            args.append('--' + param)
+        if type(model_params[param]) != bool:
+            args.extend(str(model_params[param]).split())
+
+    for param in additional_params:
+        args.append('--' + param)
+        if type(additional_params[param]) != bool:
+            args.append(str(additional_params[param]))
+
+    import sys
+    sys.argv = args
+
+    cli.main()
+
+    # step 2: test
+    print(f"Predicting with {model_name}...")
+
+    args = ['__main__.py', 'predict', '--model', 
+        f'app/data/models/{model_name}', '--data', 
+        'app/data/testing.json']
+    sys.argv = args
+
+    cli.main()

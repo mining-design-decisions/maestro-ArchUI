@@ -32,24 +32,26 @@
                 id="{{ arg.name }}" 
                 title="{{ arg.help }}" 
                 type="checkbox"
-                {% if 'default' in arg %}
-                    value="{{arg.default}}"
-                {% endif %}
             >
             {% else %}
                 {% if arg.type == 'enum' %}
                 <select name="{{arg.name}}" id="{{arg.name}}" title="{{arg.help}}">
                     {% for option in arg.options %}
-                    <option value="{{option}}">{{option}}</option>
+                        {% if option.lower() != 'none' %}
+                        <option value="{{option}}">{{option}}</option>
+                        {% endif %}
                     {% endfor %}
+                    {% if not arg.required %}
+                    <option value="" selected="selected"></option>
+                    {% endif %}
                 </select>
                 {% else %}
                 <input
                     name="{{ arg.name }}" 
                     id="{{ arg.name }}" 
                     title="{{ arg.help }}" 
-                    {% if 'default' in arg %}
-                        value="{{arg.default}}" 
+                    {% if 'default' in arg and arg.required %}
+                        value="{{arg.default if arg.default.lower() != 'none' else ''}}" 
                     {% endif %}
                     type="{{ 'text' if (arg.type == 'str') else ('textarea' if (arg.type == 'dict') else 'number') }}"
                 >

@@ -66,6 +66,9 @@ def createModel():
 
     args = []
     for arg in run_args:
+        if arg['style'] == 'positional':
+            arg['required'] = True
+
         if arg['name'] in to_ignore:
             continue
 
@@ -93,6 +96,14 @@ def createModel():
         if 'hyper-param' in arg['name']:
             arg['help'] += ' Please find the Hyper Parameter Help page in the navbar to correctly format this section.'
 
+        if 'default' in arg:
+            arg['help'] += f" Default: {arg['default']}."
+        else:
+            arg['default'] = ''
+
+        if 'required' not in arg:
+            arg['required'] = False
+
         args.append(arg)
 
     return render_template("models/create.html", args=args)
@@ -105,7 +116,10 @@ def postModel():
     model_obj = {}
     for element in request.form:
         if element != "modelname":
-            model_obj[element] = request.form[element]
+            if request.form[element]:
+                model_obj[element] = request.form[element]
+                if model_obj[element] == 'on':
+                    model_obj[element] = True
     
     # save
     with open(f'app/models/{request.form["modelname"]}.json', 'w') as f:
