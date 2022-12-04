@@ -3,62 +3,33 @@
 {% block subtitle %}New Model{% endblock %}
 
 {% block margin_content %}
-<form method="POST" id="newmodel" action="{{ url_for('models.postModel') }}">
-    <h2>Hover over inputs to see tooltips.</h2>
+<form method="POST" id ="newmodel" action="{{ url_for('models.postModel') }}">
+    {{ form.csrf_token }}
 
     <div class="form-group">
-        <label for="modelname">Model Name: </label>
-        <input 
-            name="modelname" 
-            id="modelname" 
-            required 
-            title="Name to use to refer to this model configuration."
-        >
+        {{ form.model_name_field.label }}
+        {{ form.model_name_field(size=30) }}
     </div>
 
-<!--
-    ideas to add:
-    - e.g. if "use-early-stopping" is unchecked, it disables
-    the other early stopping related inputs temporarily
-    - macro for all the inputs
--->
+    <!-- pre-processing -->
 
-    {% for arg in args %}
-        <div class="form-group">
-            <label for="{{ arg.name }}">{{ arg.name.title() }}: </label>
-            {% if arg.style == 'flag' %}
-            <input
-                name="{{ arg.name }}" 
-                id="{{ arg.name }}" 
-                title="{{ arg.help }}" 
-                type="checkbox"
-            >
-            {% else %}
-                {% if arg.type == 'enum' %}
-                <select name="{{arg.name}}" id="{{arg.name}}" title="{{arg.help}}">
-                    {% for option in arg.options %}
-                        {% if option.lower() != 'none' %}
-                        <option value="{{option}}">{{option}}</option>
-                        {% endif %}
-                    {% endfor %}
-                    {% if not arg.required %}
-                    <option value="" selected="selected"></option>
-                    {% endif %}
-                </select>
-                {% else %}
-                <input
-                    name="{{ arg.name }}" 
-                    id="{{ arg.name }}" 
-                    title="{{ arg.help }}" 
-                    {% if 'default' in arg and arg.required %}
-                        value="{{arg.default if arg.default.lower() != 'none' else ''}}" 
-                    {% endif %}
-                    type="{{ 'text' if (arg.type == 'str') else ('textarea' if (arg.type == 'dict') else 'number') }}"
-                >
-                {% endif %}
-            {% endif %}
-        </div>
-    {% endfor %}
-    <input type="submit" value="Create New Model">
+    <!-- training -->
+    <div>
+    </div>
+    <div class="form-group">
+        {{ form.classifier_field.label }}
+        {{ form.classifier_field() }}
+    </div>
+
+    <div class="form-group">
+        {{ form.epochs_field}}
+    </div>
+
+    <!-- ensemble (?) -->
+
+    <p>
+        <input type="submit" value="Create New Model">
+    </p>
+
 </form>
 {% endblock %}

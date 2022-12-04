@@ -8,6 +8,44 @@ from flask import url_for
 import json
 import os
 
+from flask_wtf import FlaskForm
+from wtforms import StringField, SelectField, IntegerField, DecimalField, BooleanField
+from wtforms.validators import DataRequired, NumberRange
+
+class CreateModelForm(FlaskForm):
+    # todo put tooltips back
+    model_name_field = StringField('Model Name', validators=[DataRequired()])
+    classifier_field = SelectField('Classifier', validators=[DataRequired()], choices=lib.get_models_strlist())
+    epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)])
+    split_size_field = DecimalField('Split-Size', validators=[NumberRange(min=0.01, max=0.5)])
+    max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)])
+    k_cross_field = IntegerField('K-Cross', validators=[NumberRange(min=0)])
+    quick_cross_field = BooleanField('Quick Cross')
+    cross_project_field = BooleanField('Cross-Project')
+    architectural_only_field = BooleanField('Architectural-Only')
+    hyper_params_field = StringField('Hyper-Params')
+    test_project_field = StringField('Test-Project')
+    class_balancer_field = StringField('Class-Balancer')
+    batch_size_field = IntegerField('Batch-Size', validators=[NumberRange(min=1)])
+    combination_strategy_field = SelectField('Combination-Strategy', choices = [''] + []) # todo
+    ensemble_strategy_field = SelectField('Ensemble-Strategy', choices = [''] + []) # todo
+    stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices = [''] + lib.get_models_strlist())
+    stacking_meta_classifier_hyper_params_field = StringField('Stacking-Meta-Classifier-Hyper-Parameters')
+    stacking_use_concat_field = BooleanField('Stacking-Use-Concat')
+    stacking_no_matrix_field = BooleanField('Stacking-No-Matrix')
+    boosting_rounds_field = IntegerField('Boosting Rounds', validators=[NumberRange(min=1)])
+    use_early_stopping_field = BooleanField('Use-Early-Stopping')
+    early_stopping_patience_field = IntegerField('Early-Stopping-Patience', validators=[NumberRange(min=1)])
+    early_stopping_min_delta_field = DecimalField('Early-Stopping-Min-Delta', validators=[NumberRange(min=0.001)])
+    early_stopping_attribute_field = StringField('Early-Stopping-Attribute') # todo possible values? selectfield?
+    test_separately_field = BooleanField('Test-Separately')
+    input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], choices=[lib.get_input_modes()])
+    output_mode_field = SelectField('Output-Mode', validators=[DataRequired()], choices=lib.get_output_modes())
+    params_field = StringField('Params')
+    apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes')
+    # todo check cli.py constraints
+
+
 bp = Blueprint("models", __name__, url_prefix="/models")
 
 @bp.route('/viewall', methods=["GET"])
@@ -37,6 +75,7 @@ def view(model):
 
 @bp.route('/create', methods=["GET"])
 def createModel():
+    """
     options = lib.get_cli_json()
 
     run_args = None
@@ -107,6 +146,9 @@ def createModel():
         args.append(arg)
 
     return render_template("models/create.html", args=args)
+    """
+    form = CreateModelForm()
+    return render_template('models/create.html', form=form)
 
 @bp.route('/create', methods=["POST"])
 def postModel():
