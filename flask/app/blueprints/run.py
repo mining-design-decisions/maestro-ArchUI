@@ -72,6 +72,8 @@ def postSelect():
                 'results': results,
             }, f)
 
+    # todo: combine separate results files into one? for list view purposes?
+
     # - cleanup
     # root dir files
     for file in os.listdir('.'):
