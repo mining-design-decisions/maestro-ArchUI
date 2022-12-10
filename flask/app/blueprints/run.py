@@ -44,7 +44,7 @@ def postSelect():
     
     # - train the models and use the predict functionality on the new project
     for model in models_to_run:
-        train_and_run(model)
+        train_and_run(model) # todo split up!
 
         # - save the results
         with open('predictions.csv', 'r') as f:
