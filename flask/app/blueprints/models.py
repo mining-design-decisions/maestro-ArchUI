@@ -30,6 +30,10 @@ class CreateModelForm(FlaskForm):
     # todo: other preprocessor things that are currently hardcoded in jira_link
     # todo (stretch goal): target language (current is configured for java)
 
+    # tab: classifier
+    classifier_field = SelectField('Classifier', validators=[DataRequired()], choices=lib.get_models_strlist())
+    hyper_params_field = StringField('Hyper-Params') # todo generate table input-mode-specific
+
     # tab: training
     epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)])
     split_size_field = DecimalField('Split-Size', validators=[NumberRange(min=0.01, max=0.5)])
@@ -44,10 +48,6 @@ class CreateModelForm(FlaskForm):
     early_stopping_patience_field = IntegerField('Early-Stopping-Patience', validators=[NumberRange(min=1)])
     early_stopping_min_delta_field = DecimalField('Early-Stopping-Min-Delta', validators=[NumberRange(min=0.001)])
     early_stopping_attribute_field = StringField('Early-Stopping-Attribute') # todo possible values? selectfield?
-
-    # tab: classifier
-    classifier_field = SelectField('Classifier', validators=[DataRequired()], choices=lib.get_models_strlist())
-    hyper_params_field = StringField('Hyper-Params') # todo generate table input-mode-specific
 
     # tab: ensemble
     combination_strategy_field = SelectField('Combination-Strategy', choices = [''] + []) # todo

@@ -1,5 +1,4 @@
 flask
-flask-bootstrap
 flask-wtf
 nltk
 gensim

@@ -6,24 +6,25 @@
 <form method="POST" id ="newmodel" action="{{ url_for('models.postModel') }}">
     {{ form.csrf_token }}
 
+    <!-- tab: general -->
     <div class="form-group">
         {{ form.model_name_field.label }}
         {{ form.model_name_field(size=30) }}
     </div>
 
-    <!-- pre-processing -->
+    <!-- tab: pre-processing -->
 
-    <!-- training -->
-    <div>
-    </div>
+    <!-- tab: classifier -->
     <div class="form-group">
         {{ form.classifier_field.label }}
         {{ form.classifier_field() }}
     </div>
 
+    <!-- tab: training -->
     <div class="form-group">
         {{ form.epochs_field}}
     </div>
+
 
     <!-- ensemble (?) -->
 
