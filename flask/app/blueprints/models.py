@@ -24,7 +24,7 @@ class CreateModelForm(FlaskForm):
     output_mode_field = SelectField('Output-Mode', validators=[DataRequired()], choices=lib.get_output_modes())
 
     # tab: preprocessing
-    input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], choices=[lib.get_input_modes()])
+    input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], choices=lib.get_input_modes())
     params_field = StringField('Params') # todo generate table input-mode-specific
     apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes')
     # todo: other preprocessor things that are currently hardcoded in jira_link
@@ -53,7 +53,7 @@ class CreateModelForm(FlaskForm):
     combination_strategy_field = SelectField('Combination-Strategy', choices = [''] + []) # todo
     ensemble_strategy_field = SelectField('Ensemble-Strategy', choices = [''] + []) # todo
     stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices = [''] + lib.get_models_strlist())
-    stacking_meta_classifier_hyper_params_field = StringField('Stacking-Meta-Classifier-Hyper-Parameters')
+    stacking_meta_classifier_hyper_params_field = StringField('Stacking-Meta-Classifier-Hyper-Parameters') # todo see other hyper param field
     stacking_use_concat_field = BooleanField('Stacking-Use-Concat')
     stacking_no_matrix_field = BooleanField('Stacking-No-Matrix')
     boosting_rounds_field = IntegerField('Boosting Rounds', validators=[NumberRange(min=1)])

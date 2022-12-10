@@ -6,31 +6,151 @@
 <form method="POST" id ="newmodel" action="{{ url_for('models.postModel') }}">
     {{ form.csrf_token }}
 
-    <!-- tab: general -->
-    <div class="form-group">
-        {{ form.model_name_field.label }}
-        {{ form.model_name_field(size=30) }}
+    <ul class="nav nav-tabs" id="paramCats" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pre-processing-tab" data-bs-toggle="tab" data-bs-target="#pre-processing" type="button" role="tab" aria-controls="pre-processing" aria-selected="false">Pre-Processing</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="classifier-tab" data-bs-toggle="tab" data-bs-target="#classifier" type="button" role="tab" aria-controls="classifier" aria-selected="false">Classifier</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="training-tab" data-bs-toggle="tab" data-bs-target="#training" type="button" role="tab" aria-controls="training" aria-selected="false">Training</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="ensemble-tab" data-bs-toggle="tab" data-bs-target="#ensemble" type="button" role="tab" aria-controls="ensemble" aria-selected="false">Ensemble Learning</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="paramCatsContent">
+        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+            <!-- tab: general -->
+            <div class="form-group py-2">
+                {{ form.model_name_field.label }}
+                {{ form.model_name_field(size=30) }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.output_mode_field.label }}
+                {{ form.output_mode_field() }}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pre-processing" role="tabpanel" aria-labelledby="pre-processing-tab">
+            <!-- tab: pre-processing -->
+            <div class="form-group py-2">
+                {{ form.input_mode_field.label }}
+                {{ form.input_mode_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.params_field.label }}
+                {{ form.params_field(size=50)}}
+            </div>
+            <div class="form-group py-2">
+                {{ form.apply_ontology_classes_field() }}
+                {{ form.apply_ontology_classes_field.label }}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="classifier" role="tabpanel" aria-labelledby="classifier-tab">
+            <!-- tab: classifier -->
+            <div class="form-group py-2">
+                {{ form.classifier_field.label }}
+                {{ form.classifier_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.hyper_params_field.label }}
+                {{ form.hyper_params_field(size=50) }}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="training" role="tabpanel" aria-labelledby="training-tab">
+            <!-- tab: training -->
+            <div class="form-group py-2">
+                {{ form.epochs_field.label }}
+                {{ form.epochs_field }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.split_size_field.label }}
+                {{ form.split_size_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.max_train_field.label }}
+                {{ form.max_train_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.quick_cross_field() }}
+                {{ form.quick_cross_field.label }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.cross_project_field() }}
+                {{ form.cross_project_field.label }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.architectural_only_field() }}
+                {{ form.architectural_only_field.label }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.test_project_field.label }}
+                {{ form.test_project_field(size=30) }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.class_balancer_field.label }}
+                {{ form.class_balancer_field(size=30) }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.batch_size_field.label }}
+                {{ form.batch_size_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.use_early_stopping_field() }}
+                {{ form.use_early_stopping_field.label }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.early_stopping_patience_field.label }}
+                {{ form.early_stopping_patience_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.early_stopping_min_delta_field.label }}
+                {{ form.early_stopping_min_delta_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.early_stopping_attribute_field.label }}
+                {{ form.early_stopping_attribute_field() }}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="ensemble" role="tabpanel" aria-labelledby="ensemble-tab">
+            <!-- tab: ensemble -->
+            <div class="form-group py-2">
+                {{ form.combination_strategy_field.label }}
+                {{ form.combination_strategy_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.ensemble_strategy_field.label }}
+                {{ form.ensemble_strategy_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.stacking_meta_classifier_field.label }}
+                {{ form.stacking_meta_classifier_field() }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.stacking_meta_classifier_hyper_params_field.label }}
+                {{ form.stacking_meta_classifier_hyper_params_field(size=50) }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.stacking_use_concat_field() }}
+                {{ form.stacking_use_concat_field.label }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.stacking_no_matrix_field() }}
+                {{ form.stacking_no_matrix_field.label }}
+            </div>
+            <div class="form-group py-2">
+                {{ form.boosting_rounds_field.label }}
+                {{ form.boosting_rounds_field() }}
+            </div>
+        </div>
     </div>
 
-    <!-- tab: pre-processing -->
-
-    <!-- tab: classifier -->
-    <div class="form-group">
-        {{ form.classifier_field.label }}
-        {{ form.classifier_field() }}
-    </div>
-
-    <!-- tab: training -->
-    <div class="form-group">
-        {{ form.epochs_field}}
-    </div>
-
-
-    <!-- ensemble (?) -->
-
-    <p>
-        <input type="submit" value="Create New Model">
-    </p>
+    <input type="submit" value="Create New Model" class="my-2">
 
 </form>
 {% endblock %}
