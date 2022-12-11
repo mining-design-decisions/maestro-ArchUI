@@ -195,9 +195,7 @@ document.getElementById('classifier_select').onchange() // run once to init
 <script>
 document.getElementById('input_mode_field').onchange = function() {
     selected = this.value
-    console.log(selected)
     params = {{inmode_params|tojson|safe}}[selected]
-    console.log(params)
     new_html = ''
 
     params.forEach(param => {
