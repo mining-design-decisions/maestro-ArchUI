@@ -63,6 +63,20 @@ def get_input_mode_params():
             results[inmode].append(f'{name} -- {param.description}')
     return results
 
+def get_input_mode_params_raw():
+    inmodes = feature_generators.generators
+    results = {}
+    for inmode in inmodes:
+        params = inmodes[inmode].get_parameters()
+        results[inmode] = []
+        for name, param in params.items():
+            results[inmode].append({
+                'name': name,
+                'desc': param.description,
+                'type': param.type
+            })
+    return results
+
 def get_output_modes():
     result = []
     for key in vars(feature_generators.OutputMode):

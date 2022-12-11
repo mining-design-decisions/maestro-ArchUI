@@ -10,14 +10,7 @@ import os
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, DecimalField, BooleanField
-from wtforms import Form, FieldList, FormField
 from wtforms.validators import DataRequired, NumberRange
-
-class HyperParameterForm(Form):
-    name: str
-
-class HParam_Int(HyperParameterForm):
-    value = IntegerField()
 
 class CreateModelForm(FlaskForm):
     # todo put tooltips back
@@ -47,9 +40,11 @@ class CreateModelForm(FlaskForm):
     split_size_field = DecimalField('Split-Size', validators=[NumberRange(min=0.01, max=0.5)])
     max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)])
     quick_cross_field = BooleanField('Quick Cross')
-    cross_project_field = BooleanField('Cross-Project')
-    architectural_only_field = BooleanField('Architectural-Only')
+    # cross_project_field = BooleanField('Cross-Project')
+    project_mode_field = SelectField('Project Mode', choices=['Default','Cross-Project', 'Test-Project'])
     test_project_field = StringField('Test-Project')
+
+    architectural_only_field = BooleanField('Architectural-Only')
     class_balancer_field = StringField('Class-Balancer')
     batch_size_field = IntegerField('Batch-Size', validators=[NumberRange(min=1)])  
     use_early_stopping_field = BooleanField('Use-Early-Stopping')
@@ -168,9 +163,11 @@ def createModel():
 
     return render_template("models/create.html", args=args)
     """
+    
     form = CreateModelForm()
     hyper_params = lib.get_hyper_params()
-    return render_template('models/create.html', form=form, hyper_params=hyper_params)
+    inmode_params = lib.get_input_mode_params_raw()
+    return render_template('models/create.html', form=form, hyper_params=hyper_params, inmode_params=inmode_params)
 
 @bp.route('/create', methods=["POST"])
 def postModel():

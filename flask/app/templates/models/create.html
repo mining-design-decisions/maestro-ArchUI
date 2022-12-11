@@ -39,16 +39,16 @@
         <div class="tab-pane fade" id="pre-processing" role="tabpanel" aria-labelledby="pre-processing-tab">
             <!-- tab: pre-processing -->
             <div class="form-group py-2">
+                {{ form.apply_ontology_classes_field() }}
+                {{ form.apply_ontology_classes_field.label }}
+            </div>
+            <div class="form-group py-2">
                 {{ form.input_mode_field.label }}
                 {{ form.input_mode_field() }}
             </div>
-            <div class="form-group py-2">
-                {{ form.params_field.label }}
-                {{ form.params_field(size=50)}}
-            </div>
-            <div class="form-group py-2">
-                {{ form.apply_ontology_classes_field() }}
-                {{ form.apply_ontology_classes_field.label }}
+            <hr/>
+            <div id="input_mode_parameters">
+
             </div>
         </div>
         <div class="tab-pane fade" id="classifier" role="tabpanel" aria-labelledby="classifier-tab">
@@ -57,6 +57,7 @@
                 {{ form.classifier_field.label }}
                 {{ form.classifier_field() }}
             </div>
+            <hr/>
             <div id="classifier_hyper_parameters">
 
             </div>
@@ -80,14 +81,14 @@
                 {{ form.quick_cross_field.label }}
             </div>
             <div class="form-group py-2">
-                {{ form.cross_project_field() }}
-                {{ form.cross_project_field.label }}
-            </div>
-            <div class="form-group py-2">
                 {{ form.architectural_only_field() }}
                 {{ form.architectural_only_field.label }}
             </div>
             <div class="form-group py-2">
+                {{ form.project_mode_field.label }}
+                {{ form.project_mode_field() }}
+            </div>
+            <div class="form-group py-2 ps-4" id="test_project_field_div">
                 {{ form.test_project_field.label }}
                 {{ form.test_project_field(size=30) }}
             </div>
@@ -103,18 +104,21 @@
                 {{ form.use_early_stopping_field() }}
                 {{ form.use_early_stopping_field.label }}
             </div>
-            <div class="form-group py-2">
-                {{ form.early_stopping_patience_field.label }}
-                {{ form.early_stopping_patience_field() }}
+            <div id="early_stopping_div" class="ps-4">
+                <div class="form-group py-2">
+                    {{ form.early_stopping_patience_field.label }}
+                    {{ form.early_stopping_patience_field() }}
+                </div>
+                <div class="form-group py-2">
+                    {{ form.early_stopping_min_delta_field.label }}
+                    {{ form.early_stopping_min_delta_field() }}
+                </div>
+                <div class="form-group py-2">
+                    {{ form.early_stopping_attribute_field.label }}
+                    {{ form.early_stopping_attribute_field() }}
+                </div>
             </div>
-            <div class="form-group py-2">
-                {{ form.early_stopping_min_delta_field.label }}
-                {{ form.early_stopping_min_delta_field() }}
-            </div>
-            <div class="form-group py-2">
-                {{ form.early_stopping_attribute_field.label }}
-                {{ form.early_stopping_attribute_field() }}
-            </div>
+            
         </div>
         <div class="tab-pane fade" id="ensemble" role="tabpanel" aria-labelledby="ensemble-tab">
             <!-- tab: ensemble -->
@@ -149,6 +153,7 @@
         </div>
     </div>
 
+    <hr/>
     <input type="submit" value="Create New Model" class="my-2">
 
 </form>
@@ -158,9 +163,6 @@
 <script>
 document.getElementById('classifier_select').onchange = function() {
     c_selected = this.value
-    if (!this || !this.value) {
-        return
-    }
     hp = {{hyper_params|tojson|safe}}[c_selected]
     new_html = ''
 
@@ -188,5 +190,64 @@ document.getElementById('classifier_select').onchange = function() {
     document.getElementById('classifier_hyper_parameters').innerHTML = new_html
 }
 document.getElementById('classifier_select').onchange() // run once to init
+</script>
+
+<script>
+document.getElementById('input_mode_field').onchange = function() {
+    selected = this.value
+    console.log(selected)
+    params = {{inmode_params|tojson|safe}}[selected]
+    console.log(params)
+    new_html = ''
+
+    params.forEach(param => {
+        new_html += '<div class="form-group py-2">\n'
+        switch(param.type) {
+            case 'str':
+                new_html += `<label for="param_${param.name}">${param.name} </label>\n`
+                new_html += `<input type="text" size="30" name="param_${param.name}" id="param_${param.name}">\n`
+                break;
+            case 'int':
+                new_html += `<label for="param_${param.name}">${param.name} </label>\n`
+                new_html += `<input type="number" size="10" name="param_${param.name}" id="param_${param.name}">\n`
+                break;
+            case 'bool':
+                new_html += `<input type="checkbox" size="1" name="param_${param.name}" id="param_${param.name}">\n`
+                new_html += `<label for="param_${param.name}"> ${param.name}</label>\n`
+                break;
+            default:
+                console.log('ERROR: unhandled type: ' + param.type)
+        }
+        new_html += '</div>\n'
+    })
+
+    document.getElementById('input_mode_parameters').innerHTML = new_html
+}
+document.getElementById('input_mode_field').onchange()
+</script>
+
+<script>
+document.getElementById('project_mode_field').onchange = function() {
+    selected = this.value.toLowerCase()
+    switch (selected) {
+        case 'test-project':
+            document.getElementById('test_project_field_div').setAttribute('class', 'form-group py-2 ps-4')
+            break;
+        default:
+            document.getElementById('test_project_field_div').setAttribute('class', 'form-group py-2 ps-4 d-none')
+    }
+}
+document.getElementById('project_mode_field').onchange()
+
+document.getElementById('use_early_stopping_field').onchange = function() {
+    toChange = document.getElementById('early_stopping_div')
+    if (this.checked) {
+        toChange.setAttribute('class', 'ps-4')
+    }
+    else {
+        toChange.setAttribute('class', 'ps-4 d-none')
+    }
+}
+document.getElementById('use_early_stopping_field').onchange()
 </script>
 {% endblock %}
