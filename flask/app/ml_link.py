@@ -34,6 +34,22 @@ def get_hyper_param_options():
 
     return results
 
+def get_hyper_params():
+    cla = classifiers.models
+    results = {}
+    for c in cla:
+        results[c] = []
+        classifier = cla[c]
+        for name, param in classifier.get_hyper_parameters().items():
+            results[c].append({
+                'name': name,
+                'min': param.minimum,
+                'max': param.maximum,
+                'default': param.default,
+                'type': type(param.default).__name__
+            })
+    return results
+
 def get_input_modes():
     return list(feature_generators.generators)
 

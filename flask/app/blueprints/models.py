@@ -10,10 +10,16 @@ import os
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, DecimalField, BooleanField
+from wtforms import Form, FieldList, FormField
 from wtforms.validators import DataRequired, NumberRange
 
+class HyperParameterForm(Form):
+    name: str
+
+class HParam_Int(HyperParameterForm):
+    value = IntegerField()
+
 class CreateModelForm(FlaskForm):
-    # todo complete the html template
     # todo put tooltips back
     # todo check cli.py constraints
 
@@ -31,8 +37,10 @@ class CreateModelForm(FlaskForm):
     # todo (stretch goal): target language (current is configured for java)
 
     # tab: classifier
-    classifier_field = SelectField('Classifier', validators=[DataRequired()], choices=lib.get_models_strlist())
-    hyper_params_field = StringField('Hyper-Params') # todo generate table input-mode-specific
+    classifier_field = SelectField('Classifier', validators=[DataRequired()], id='classifier_select', choices=lib.get_models_strlist())
+    # hyper_params_field = StringField('Hyper-Params') # todo generate table input-mode-specific
+    # hyper_params_field = FieldList(FormField(HyperParameterForm), min_entries=2, max_entries=18)
+    # todo look into above
 
     # tab: training
     epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)])
@@ -161,7 +169,8 @@ def createModel():
     return render_template("models/create.html", args=args)
     """
     form = CreateModelForm()
-    return render_template('models/create.html', form=form)
+    hyper_params = lib.get_hyper_params()
+    return render_template('models/create.html', form=form, hyper_params=hyper_params)
 
 @bp.route('/create', methods=["POST"])
 def postModel():
