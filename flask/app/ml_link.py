@@ -17,6 +17,50 @@ def get_cli_json():
     with open(file_path, 'r') as f:
         return json.load(f)
 
+def get_cli_json_tooltips():
+    tips = {}
+    options = get_cli_json()
+    run_args = None
+    make_features_args = None
+    for cmd in options['commands']:
+        if cmd['name'] == "run":
+            run_args = cmd['args']
+        if cmd['name'] == 'make-features':
+            make_features_args = cmd['args']
+
+    if run_args is None or make_features_args is None:
+        return None
+
+    # append make-features args
+    run_args.extend(make_features_args)
+
+    def rem_last_sentence(string):
+        return string.split('.')[0] + '.'
+
+    for arg in run_args:
+        match arg['name']:
+            case 'stacking-meta-classifier':
+                arg['help'] = rem_last_sentence(arg['help'])
+            case 'classifier':
+                arg['help'] = rem_last_sentence(arg['help'])
+            case 'input-mode':
+                arg['help'] = rem_last_sentence(arg['help'])
+            case 'output-mode':
+                arg['help'] = rem_last_sentence(arg['help'])
+            case 'combination-strategy':
+                arg['help'] = rem_last_sentence(arg['help']) + ' Please find the Combination Strategy Help page in the navbar for more information about this section.'
+            case 'ensemble-strategy':
+                arg['help'] = rem_last_sentence(arg['help']) + ' Please find the Combination Strategy Help page in the navbar for more information about this section.'
+            case _:
+                pass
+
+        if 'default' in arg:
+            arg['help'] += f" Default: {arg['default']}."
+
+        tips[arg['name']] = arg['help']
+
+    return tips
+
 def get_models_strlist():
     return list(classifiers.models)
 

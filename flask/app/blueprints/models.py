@@ -12,54 +12,53 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, NumberRange
 
+tooltips = lib.get_cli_json_tooltips()
+
 class CreateModelForm(FlaskForm):
     # todo put tooltips back
-    # todo check cli.py constraints
-
-    # organized in tabs/frames - see what's possible with bootstrap (3.3.7)
 
     # no tab - general?
-    model_name_field = StringField('Model Name', validators=[DataRequired()])
-    output_mode_field = SelectField('Output-Mode', validators=[DataRequired()], choices=lib.get_output_modes())
+    model_name_field = StringField('Model Name', validators=[DataRequired()], description='Name by which to identify this model configuration.')
+    output_mode_field = SelectField('Output-Mode', validators=[DataRequired()], description=tooltips['output-mode'], choices=lib.get_output_modes())
 
     # tab: preprocessing
-    input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], choices=lib.get_input_modes())
+    input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], description=tooltips['input-mode'], choices=lib.get_input_modes())
     params_field = StringField('Params') # todo generate table input-mode-specific
-    apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes')
+    apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes', description=tooltips['apply-ontology-classes'])
     # todo: other preprocessor things that are currently hardcoded in jira_link
     # todo (stretch goal): target language (current is configured for java)
 
     # tab: classifier
-    classifier_field = SelectField('Classifier', validators=[DataRequired()], id='classifier_select', choices=lib.get_models_strlist())
+    classifier_field = SelectField('Classifier', validators=[DataRequired()], description=tooltips['classifier'], id='classifier_select', choices=lib.get_models_strlist())
     # hyper_params_field = StringField('Hyper-Params') # todo generate table input-mode-specific
     # hyper_params_field = FieldList(FormField(HyperParameterForm), min_entries=2, max_entries=18)
     # todo look into above
 
     # tab: training
-    epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)])
-    split_size_field = DecimalField('Split-Size', validators=[NumberRange(min=0.01, max=0.5)])
-    max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)])
-    quick_cross_field = BooleanField('Quick Cross')
+    epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)], description=tooltips['epochs'])
+    split_size_field = DecimalField('Split-Size', validators=[NumberRange(min=0.01, max=0.5)], description=tooltips['split-size'])
+    max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)], description=tooltips['max-train'])
+    quick_cross_field = BooleanField('Quick Cross', description=tooltips['quick-cross'])
     # cross_project_field = BooleanField('Cross-Project')
-    project_mode_field = SelectField('Project Mode', choices=['Default','Cross-Project', 'Test-Project'])
-    test_project_field = StringField('Test-Project')
+    project_mode_field = SelectField('Project Mode', choices=['Default','Cross-Project', 'Test-Project'], description='Run cross project validation, use a specific project as test set, or neither.')
+    test_project_field = StringField('Test-Project', description=tooltips['test-project'])
 
-    architectural_only_field = BooleanField('Architectural-Only')
-    class_balancer_field = StringField('Class-Balancer')
-    batch_size_field = IntegerField('Batch-Size', validators=[NumberRange(min=1)])  
-    use_early_stopping_field = BooleanField('Use-Early-Stopping')
-    early_stopping_patience_field = IntegerField('Early-Stopping-Patience', validators=[NumberRange(min=1)])
-    early_stopping_min_delta_field = DecimalField('Early-Stopping-Min-Delta', validators=[NumberRange(min=0.001)])
-    early_stopping_attribute_field = StringField('Early-Stopping-Attribute') # todo possible values? selectfield?
+    architectural_only_field = BooleanField('Architectural-Only', description=tooltips['architectural-only'])
+    class_balancer_field = StringField('Class-Balancer', description=tooltips['class-balancer'])
+    batch_size_field = IntegerField('Batch-Size', validators=[NumberRange(min=1)], description=tooltips['batch-size'])
+    use_early_stopping_field = BooleanField('Use-Early-Stopping', description=tooltips['use-early-stopping'])
+    early_stopping_patience_field = IntegerField('Early-Stopping-Patience', validators=[NumberRange(min=1)], description=tooltips['early-stopping-patience'])
+    early_stopping_min_delta_field = DecimalField('Early-Stopping-Min-Delta', validators=[NumberRange(min=0.001)], description=tooltips['early-stopping-min-delta'])
+    early_stopping_attribute_field = StringField('Early-Stopping-Attribute', description=tooltips['early-stopping-attribute']) # todo possible values? selectfield?
 
     # tab: ensemble
-    combination_strategy_field = SelectField('Combination-Strategy', choices = [''] + []) # todo
-    ensemble_strategy_field = SelectField('Ensemble-Strategy', choices = [''] + []) # todo
-    stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices = [''] + lib.get_models_strlist())
-    stacking_meta_classifier_hyper_params_field = StringField('Stacking-Meta-Classifier-Hyper-Parameters') # todo see other hyper param field
-    stacking_use_concat_field = BooleanField('Stacking-Use-Concat')
-    stacking_no_matrix_field = BooleanField('Stacking-No-Matrix')
-    boosting_rounds_field = IntegerField('Boosting Rounds', validators=[NumberRange(min=1)])
+    combination_strategy_field = SelectField('Combination-Strategy', choices = [''] + [], description=tooltips['combination-strategy']) # todo
+    ensemble_strategy_field = SelectField('Ensemble-Strategy', choices = [''] + [], description=tooltips['ensemble-strategy']) # todo
+    stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices = [''] + lib.get_models_strlist(), description=tooltips['stacking-meta-classifier'])
+    stacking_meta_classifier_hyper_params_field = StringField('Stacking-Meta-Classifier-Hyper-Parameters', description=tooltips['stacking-meta-classifier-hyper-parameters']) # todo see other hyper param field
+    stacking_use_concat_field = BooleanField('Stacking-Use-Concat', description=tooltips['stacking-use-concat'])
+    stacking_no_matrix_field = BooleanField('Stacking-No-Matrix', description=tooltips['stacking-no-matrix'])
+    boosting_rounds_field = IntegerField('Boosting Rounds', validators=[NumberRange(min=1)], description=tooltips['boosting-rounds'])
 
 
 bp = Blueprint("models", __name__, url_prefix="/models")
