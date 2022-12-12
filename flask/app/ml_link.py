@@ -178,6 +178,9 @@ def train_and_run(model_name):
         "target-model-path": f"app/data/models/{model_name}"
     }
 
+    if 'apply-ontology-classes' in model_params:
+        additional_params['ontology-classes'] = 'app/data/ontologies.json'
+
     args = ['__main__.py', 'run', model_params['classifier']]
 
     for param in model_params:
