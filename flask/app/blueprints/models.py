@@ -40,7 +40,7 @@ class CreateModelForm(FlaskForm):
     max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)], description=tooltips['max-train'])
     quick_cross_field = BooleanField('Quick Cross', description=tooltips['quick-cross'])
     # cross_project_field = BooleanField('Cross-Project')
-    project_mode_field = SelectField('Project Mode', choices=['Default','Cross-Project', 'Test-Project'], description='Run cross project validation, use a specific project as test set, or neither.')
+    project_mode_field = SelectField('Project Mode', choices=['','Cross-Project', 'Test-Project'], description='Run cross project validation, use a specific project as test set, or neither.')
     test_project_field = StringField('Test-Project', description=tooltips['test-project'])
 
     architectural_only_field = BooleanField('Architectural-Only', description=tooltips['architectural-only'])
@@ -90,79 +90,6 @@ def view(model):
 
 @bp.route('/create', methods=["GET"])
 def createModel():
-    """
-    options = lib.get_cli_json()
-
-    run_args = None
-    make_features_args = None
-    for cmd in options['commands']:
-        if cmd['name'] == "run":
-            run_args = cmd['args']
-        if cmd['name'] == 'make-features':
-            make_features_args = cmd['args']
-
-    if run_args is None or make_features_args is None:
-        return render_template('error.html')
-
-    # append make-features args
-    run_args.extend(make_features_args)
-
-    to_ignore = [
-        'test-study', # no need in this GUI
-        'store-model', # will be on by default
-        'target-model-path', # will be set JIT
-        'file', # will be set JIT
-        'peregrine', # not in scope
-        'save-trained-generator', # will probably override anyway
-        'ontology-classes', # preset. maybe change later to allow editing. for now set JIT
-        'force-regenerate-data', # forced on for model saving
-    ]
-
-    args = []
-    for arg in run_args:
-        if arg['style'] == 'positional':
-            arg['required'] = True
-
-        if arg['name'] in to_ignore:
-            continue
-
-        if arg['name'] in ['stacking-meta-classifier','classifier']:
-            arg['type'] = 'enum'
-            arg['options'] = lib.get_models_strlist()
-            arg['help'] = arg['help'].split('.')[0] + '.'
-
-        if arg['name'] == 'input-mode':
-            arg['type'] = 'enum'
-            arg['options'] = lib.get_input_modes()
-            arg['help'] = arg['help'].split('.')[0] + '.'
-        
-        if arg['name'] == 'output-mode':
-            arg['type'] = 'enum'
-            arg['options'] = lib.get_output_modes()
-            arg['help'] = arg['help'].split('.')[0] + '.'
-
-        if arg['name'] == 'params':
-            arg['help'] += " Please find the Parameter Help page in the navbar to correctly format this section."
-
-        if arg['name'] == 'combination-strategy':
-            arg['help'] = arg['help'].split('.')[0] + ". Please find the Combination Strategy Help page in the navbar for more information about this section."
-
-        if 'hyper-param' in arg['name']:
-            arg['help'] += ' Please find the Hyper Parameter Help page in the navbar to correctly format this section.'
-
-        if 'default' in arg:
-            arg['help'] += f" Default: {arg['default']}."
-        else:
-            arg['default'] = ''
-
-        if 'required' not in arg:
-            arg['required'] = False
-
-        args.append(arg)
-
-    return render_template("models/create.html", args=args)
-    """
-    
     form = CreateModelForm()
     hyper_params = lib.get_hyper_params()
     inmode_params = lib.get_input_mode_params_raw()
@@ -174,15 +101,40 @@ def postModel():
     # - including does this name already exist?
 
     model_obj = {}
+    hparams = {}
+    params = {}
+    bools = lib.get_cli_json_bools()
+
     for element in request.form:
-        if element != "modelname":
-            if request.form[element]:
-                model_obj[element] = request.form[element]
-                if model_obj[element] == 'on':
-                    model_obj[element] = True
-    
+        if element in ['csrf_token', 'model_name_field']: # don't need to take these into account
+            continue
+        if not request.form[element]: # ignore empties
+            continue
+
+        name = element.replace('_', '-')
+
+        if name.startswith('param-'):
+            value = request.form.get(element)
+            if value == 'on':
+                value = True
+            params[name[6:]] = value
+        elif name.startswith('hparam-'):
+            value = request.form.get(element)
+            if value == 'on':
+                value = True
+            hparams[name[7:]] = value
+        else:
+            name = name[:-6] # remove the '_field'
+            if name in bools:
+                model_obj[name] = True
+            else:
+                model_obj[name] = request.form.get(element)
+
+    model_obj['params'] = params
+    model_obj['hyper_params'] = hparams
+
     # save
-    with open(f'app/models/{request.form["modelname"]}.json', 'w') as f:
+    with open(f'app/models/{request.form["model_name_field"]}.json', 'w') as f:
         json.dump(model_obj, f)
 
     return redirect(url_for('models.viewall'))

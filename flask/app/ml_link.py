@@ -61,6 +61,28 @@ def get_cli_json_tooltips():
 
     return tips
 
+def get_cli_json_bools():
+    bools = []
+    options = get_cli_json()
+    run_args = None
+    make_features_args = None
+    for cmd in options['commands']:
+        if cmd['name'] == "run":
+            run_args = cmd['args']
+        if cmd['name'] == 'make-features':
+            make_features_args = cmd['args']
+
+    if run_args is None or make_features_args is None:
+        return None
+
+    # append make-features args
+    run_args.extend(make_features_args)
+
+    for arg in run_args:
+        if arg['style'] == 'flag':
+            bools.append(arg['name'])
+    return bools
+
 def get_models_strlist():
     return list(classifiers.models)
 
