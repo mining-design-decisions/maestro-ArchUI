@@ -7,3 +7,8 @@ def rec_del(path):
         os.rmdir(path)
     else:
         os.remove(path)
+
+
+def rec_del_safe(path):
+    if os.path.exists(path):
+        rec_del(path)

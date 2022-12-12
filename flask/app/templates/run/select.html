@@ -4,21 +4,52 @@
 
 {% block margin_content %}
 <form method="POST" id="run" action="{{ url_for('run.postSelect') }}">
-    <h3>Select Models to Run:</h3>
-    {% for model in models %}
-        <div class="form-group">
-            <label for="run_{{model}}">{{model}}: </label>
-            <input name="run_{{model}}" id="run_{{model}}" type="checkbox">
+    <div class="card my-2">
+        <div class="card-body">
+            <h4>Select Models to Run:</h3>
+            {% for model in models %}
+                <div class="form-group">
+                    <label for="run_{{model}}">{{model}}: </label>
+                    <input name="run_{{model}}" id="run_{{model}}" type="checkbox">
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-    <h3>Enter Apache Project Key:</h3>
-    <div class="form-group">
-        <label for="projectkey">Project Key: </label>
-        <input name="projectkey" id="projectkey" required
-            title="Can be found as prefix in issue IDs, such as CASSANDRA (with issue keys such as CASSANDRA-1234)">
     </div>
 
-    <input type="submit" value="Train and Run Models on Target Project">
+    <div class="card my-2">
+        <div class="card-body">
+            <div class="form-group">
+                <input name="regenerate_test_data" id="regenerate_test_data" type="checkbox">
+                <label for="regenerate_test_data">Regenerate Test Data?</label>
+            </div>
+            <div id="projectkey_group">
+                <h4 class="mt-2">Enter Apache Project Key:</h3>
+                <div class="form-group">
+                    <label for="projectkey">Project Key: </label>
+                    <input name="projectkey" id="projectkey"
+                        title="Can be found as prefix in issue IDs, such as CASSANDRA (with issue keys such as CASSANDRA-1234)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="submit" value="Train and Run Models on Target Project" class="my-2">
 </form>
 
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.getElementById('regenerate_test_data').onchange = function() {
+    toChange = document.getElementById('projectkey_group')
+    if (this.checked) {
+        toChange.setAttribute('class', '')
+    }
+    else {
+        toChange.setAttribute('class', 'd-none')
+    }
+}
+document.getElementById('regenerate_test_data').onchange()
+</script>
 {% endblock %}

@@ -5,8 +5,8 @@ from flask import request
 import os
 from app.jira_link import load_issues_for
 import json
-from app.ml_link import train_and_run
-from app.util import rec_del
+from app.ml_link import predict_with
+from app.util import rec_del_safe
 
 bp = Blueprint('run', __name__, url_prefix='/run')
 
@@ -22,6 +22,7 @@ def select():
 
 @bp.route('/select', methods=['POST'])
 def postSelect():
+    print(request.form)
 
     # - grab input
     target_proj = request.form['projectkey']
@@ -35,16 +36,16 @@ def postSelect():
     if len(models_to_run) == 0:
         return render_template('error.html')
 
-    # - download the target issues and save them in data/testing.json
-    #proj_issues = load_issues_for(target_proj)
-    #with open('app/data/testing.json', 'w+') as f:
-    #    json.dump(proj_issues, f)
-
-    # todo: generate the training.json directly from working db
+    if request.form.get('regenerate_test_data', False):
+        print('Regenerating testing data')
+        # - download the target issues and save them in data/testing.json
+        proj_issues = load_issues_for(target_proj)
+        with open('app/data/testing.json', 'w+') as f:
+            json.dump(proj_issues, f)
     
     # - train the models and use the predict functionality on the new project
     for model in models_to_run:
-        train_and_run(model) # todo split up!
+        predict_with(model)
 
         # - save the results
         with open('predictions.csv', 'r') as f:
@@ -81,12 +82,8 @@ def postSelect():
             continue
         if file not in ['README.md', 'requirements.txt']:
             os.remove(file)
-    
-    # model data files
-    for modeldir in os.listdir('app/data/models'):
-        rec_del('app/data/models/'+modeldir)
 
     # features
-    rec_del('./features')
+    rec_del_safe('./features')
 
     return 'ok - post'

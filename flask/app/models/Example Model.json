@@ -1,18 +1,1 @@
-{
-    "classifier": "FullyConnectedModel",
-    "epochs": "1000",
-    "quick-cross": true,
-    "hyper-params": {
-        "number-of-hidden-layers": "1",
-        "hidden-layer-1-size": "16",
-        "optimizer": "adam",
-        "loss": "crossentropy"
-    },
-    "use-early-stopping": true,
-    "early-stopping-patience": "30",
-    "input-mode": "BOWFrequency",
-    "output-mode": "Detection",
-    "params": {
-        "max-len": "400"
-    }
-}
+{"classifier": "FullyConnectedModel", "epochs": "1000", "quick-cross": true, "hyper-params": {"number-of-hidden-layers": "1", "hidden-layer-1-size": "16", "optimizer": "adam", "loss": "crossentropy"}, "use-early-stopping": true, "early-stopping-patience": "30", "input-mode": "BOWFrequency", "output-mode": "Detection", "params": {"max-len": "400"}, "last-trained": "12/12/2022 20:21:01"}

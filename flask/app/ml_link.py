@@ -2,6 +2,7 @@ import json
 import os
 from os import path
 import sys
+from app.util import rec_del_safe
 
 ml_path = path.abspath('../../mining-design-decisions')
 sys.path.append(ml_path)
@@ -163,19 +164,24 @@ def get_possible_ontologies():
 def get_combination_strategies():
     return cli.STRATEGIES
 
-def train_and_run(model_name):
 
-    # step 1: train
+def train_model(model_name):
+    # todo: generate the training.json directly from working db
+
     print(f"Training {model_name}...")
+
+    target_model_path = f"app/data/models/{model_name}"
+
+    rec_del_safe(target_model_path)
 
     with open(f'app/models/{model_name}.json', 'r') as f:
         model_params = json.load(f)
 
     additional_params = {
-        "file": "app/data/training.json", # todo load from db
+        "file": "app/data/training.json",
         "force-regenerate-data": True,
         "store-model": True,
-        "target-model-path": f"app/data/models/{model_name}"
+        "target-model-path": target_model_path
     }
 
     if 'apply-ontology-classes' in model_params:
@@ -183,8 +189,10 @@ def train_and_run(model_name):
 
     args = ['__main__.py', 'run', model_params['classifier']]
 
+    ignore = ['classifier', 'last-trained']
+
     for param in model_params:
-        if param == 'classifier':
+        if param in ignore:
             continue
 
         args.append('--' + param)
@@ -207,12 +215,24 @@ def train_and_run(model_name):
 
     cli.main()
 
+    # clean up features
+    rec_del_safe('./features')
+
+def predict_with(model_name):
+    # step 1: verify that trained exists
+    with open(f'app/models/{model_name}.json', 'r') as f:
+        model_params = json.load(f)
+    if not 'last-trained' in model_params:
+        train_model(model_name)
+
     # step 2: test
     print(f"Predicting with {model_name}...")
 
     args = ['__main__.py', 'predict', '--model', 
         f'app/data/models/{model_name}', '--data', 
         'app/data/testing.json']
+
+    import sys
     sys.argv = args
 
     cli.main()

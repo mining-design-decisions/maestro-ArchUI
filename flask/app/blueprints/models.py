@@ -7,6 +7,7 @@ from flask import redirect
 from flask import url_for
 import json
 import os
+import datetime
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, DecimalField, BooleanField
@@ -85,8 +86,25 @@ def view(model):
         
     with open(f'app/models/{model}.json', 'r') as f:
         model_obj = json.load(f)
+
+    last_trained = 'Never'
+    if 'last-trained' in model_obj:
+        last_trained = model_obj['last-trained']
+        del model_obj['last-trained']
     
-    return render_template('models/view.html', name=model, params=model_obj)
+    return render_template('models/view.html', name=model, params=model_obj, last_trained=last_trained)
+
+@bp.route('/view/<model>', methods=["POST"])
+def trainModel(model):
+    lib.train_model(model)
+
+    with open(f'app/models/{model}.json', 'r') as f:
+        model_obj = json.load(f)
+    model_obj['last-trained'] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    with open(f'app/models/{model}.json', 'w') as f:
+        json.dump(model_obj, f)
+
+    return redirect(url_for('models.view', model=model))
 
 @bp.route('/create', methods=["GET"])
 def createModel():
