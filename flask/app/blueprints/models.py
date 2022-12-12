@@ -35,7 +35,7 @@ class CreateModelForm(FlaskForm):
     # todo look into above
 
     # tab: training
-    epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)], description=tooltips['epochs'])
+    epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)], description=tooltips['epochs'], default=1000)
     split_size_field = DecimalField('Split-Size', validators=[NumberRange(min=0.01, max=0.5)], description=tooltips['split-size'])
     max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)], description=tooltips['max-train'])
     quick_cross_field = BooleanField('Quick Cross', description=tooltips['quick-cross'])
