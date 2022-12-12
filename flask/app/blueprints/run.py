@@ -36,9 +36,9 @@ def postSelect():
         return render_template('error.html')
 
     # - download the target issues and save them in data/testing.json
-    proj_issues = load_issues_for(target_proj)
-    with open('app/data/testing.json', 'w+') as f:
-        json.dump(proj_issues, f)
+    #proj_issues = load_issues_for(target_proj)
+    #with open('app/data/testing.json', 'w+') as f:
+    #    json.dump(proj_issues, f)
 
     # todo: generate the training.json directly from working db
     

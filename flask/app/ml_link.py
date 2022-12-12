@@ -178,12 +178,20 @@ def train_and_run(model_name):
         "target-model-path": f"app/data/models/{model_name}"
     }
 
-    args = ['__main__.py', 'run']
+    args = ['__main__.py', 'run', model_params['classifier']]
 
     for param in model_params:
-        if param != 'classifier':
-            args.append('--' + param)
-        if type(model_params[param]) != bool:
+        if param == 'classifier':
+            continue
+
+        args.append('--' + param)
+
+        if param in ['params', 'hyper-params']:
+            param_options = []
+            for name in model_params[param]:
+                param_options.append(f"{name}={model_params[param][name]}")
+            args.extend(param_options)
+        elif type(model_params[param]) != bool:
             args.extend(str(model_params[param]).split())
 
     for param in additional_params:

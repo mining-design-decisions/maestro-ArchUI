@@ -130,8 +130,10 @@ def postModel():
             else:
                 model_obj[name] = request.form.get(element)
 
-    model_obj['params'] = params
-    model_obj['hyper_params'] = hparams
+    if len(params)>0:
+        model_obj['params'] = params
+    if len(hparams)>0:
+        model_obj['hyper-params'] = hparams
 
     # save
     with open(f'app/models/{request.form["model_name_field"]}.json', 'w') as f:
