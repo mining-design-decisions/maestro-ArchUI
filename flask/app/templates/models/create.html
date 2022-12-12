@@ -199,19 +199,21 @@ document.getElementById('input_mode_field').onchange = function() {
     new_html = ''
 
     params.forEach(param => {
+        if (param.name.startsWith('pretrained-')) return;
+            
         new_html += '<div class="form-group py-2">\n'
         switch(param.type) {
             case 'str':
-                new_html += `<label for="param_${param.name}">${param.name} </label>\n`
-                new_html += `<input type="text" size="30" name="param_${param.name}" id="param_${param.name}">\n`
+                new_html += `<label title="${param.desc}" for="param_${param.name}">${param.name} </label>\n`
+                new_html += `<input title="${param.desc}" type="text" size="30" name="param_${param.name}" id="param_${param.name}">\n`
                 break;
             case 'int':
-                new_html += `<label for="param_${param.name}">${param.name} </label>\n`
-                new_html += `<input type="number" size="10" name="param_${param.name}" id="param_${param.name}">\n`
+                new_html += `<label title="${param.desc}" for="param_${param.name}">${param.name} </label>\n`
+                new_html += `<input title="${param.desc}" type="number" size="10" name="param_${param.name}" id="param_${param.name}">\n`
                 break;
             case 'bool':
-                new_html += `<input type="checkbox" size="1" name="param_${param.name}" id="param_${param.name}">\n`
-                new_html += `<label for="param_${param.name}"> ${param.name}</label>\n`
+                new_html += `<input title="${param.desc}" type="checkbox" size="1" name="param_${param.name}" id="param_${param.name}">\n`
+                new_html += `<label title="${param.desc}" for="param_${param.name}"> ${param.name}</label>\n`
                 break;
             default:
                 console.log('ERROR: unhandled type: ' + param.type)
