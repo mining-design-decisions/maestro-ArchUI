@@ -40,7 +40,7 @@ class CreateModelForm(FlaskForm):
     test_project_field = StringField('Test-Project', description=tooltips['test-project'])
 
     architectural_only_field = BooleanField('Architectural-Only', description=tooltips['architectural-only'])
-    class_balancer_field = StringField('Class-Balancer', description=tooltips['class-balancer'])
+    class_balancer_field = SelectField('Class-Balancer', choices=['', 'class-weight', 'upsample'], description=tooltips['class-balancer'])
     batch_size_field = IntegerField('Batch-Size', validators=[NumberRange(min=1)], description=tooltips['batch-size'])
     use_early_stopping_field = BooleanField('Use-Early-Stopping', description=tooltips['use-early-stopping'])
     early_stopping_patience_field = IntegerField('Early-Stopping-Patience', validators=[NumberRange(min=1)], description=tooltips['early-stopping-patience'])
