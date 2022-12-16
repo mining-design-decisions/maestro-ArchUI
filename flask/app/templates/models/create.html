@@ -106,24 +106,38 @@ document.getElementById('classifier_select').onchange = function() {
     new_html = ''
 
     hp.forEach(hparam => {
+        console.log(hparam)
         tooltip = `[min, max] = [${hparam.min}, ${hparam.max}] -- default = ${hparam.default}`
         new_html += '<div class="form-group py-2">\n'
-        switch(hparam.type) {
-            case 'str':
-                new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-                new_html += `<input title="${tooltip}" type="text" size="30" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                break;
-            case 'int':
-                new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-                new_html += `<input title="${tooltip}" type="number" size="10" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                break;
-            case 'bool':
-                new_html += `<input title="${tooltip}" type="checkbox" size="1" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                new_html += `<label title="${tooltip}" for="hparam_${hparam.name}"> ${hparam.name}</label>\n`
-                break;
-            default:
-                console.log('ERROR: unhandled type: ' + hparam.type)
+
+        if (hparam.name == 'loss') {
+            new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
+            new_html += `<select title="${tooltip}" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
+            options = ['crossentropy', 'hinge']
+            options.forEach(option => {
+                new_html += `<option value="${option}">${option}</option>\n`
+            })
+            new_html += `</select>\n`
         }
+        else {
+            switch(hparam.type) {
+                case 'str':
+                    new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
+                    new_html += `<input title="${tooltip}" type="text" size="30" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
+                    break;
+                case 'int':
+                    new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
+                    new_html += `<input title="${tooltip}" type="number" size="10" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
+                    break;
+                case 'bool':
+                    new_html += `<input title="${tooltip}" type="checkbox" size="1" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
+                    new_html += `<label title="${tooltip}" for="hparam_${hparam.name}"> ${hparam.name}</label>\n`
+                    break;
+                default:
+                    console.log('ERROR: unhandled type: ' + hparam.type)
+            }
+        }
+
         new_html += '</div>\n'
     });
 
