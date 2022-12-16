@@ -26,10 +26,10 @@
             <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pre-processing-tab" data-bs-toggle="tab" data-bs-target="#pre-processing" type="button" role="tab" aria-controls="pre-processing" aria-selected="false">Pre-Processing</button>
+            <button class="nav-link" id="classifier-tab" data-bs-toggle="tab" data-bs-target="#classifier" type="button" role="tab" aria-controls="classifier" aria-selected="false">Classifier</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="classifier-tab" data-bs-toggle="tab" data-bs-target="#classifier" type="button" role="tab" aria-controls="classifier" aria-selected="false">Classifier</button>
+            <button class="nav-link" id="pre-processing-tab" data-bs-toggle="tab" data-bs-target="#pre-processing" type="button" role="tab" aria-controls="pre-processing" aria-selected="false">Pre-Processing</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="training-tab" data-bs-toggle="tab" data-bs-target="#training" type="button" role="tab" aria-controls="training" aria-selected="false">Training</button>
@@ -45,20 +45,18 @@
             {{ render_field(form.model_name_field, 'size_30') }}
             {{ render_field(form.output_mode_field) }}
         </div>
-        <div class="tab-pane fade" id="pre-processing" role="tabpanel" aria-labelledby="pre-processing-tab">
-            <!-- tab: pre-processing -->
-            {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
-            {{ render_field(form.input_mode_field) }}
-            <hr/>
-            <div id="input_mode_parameters">
-
-            </div>
-        </div>
         <div class="tab-pane fade" id="classifier" role="tabpanel" aria-labelledby="classifier-tab">
             <!-- tab: classifier -->
             {{ render_field(form.classifier_field) }}
             <hr/>
             <div id="classifier_hyper_parameters"></div>
+        </div>
+        <div class="tab-pane fade" id="pre-processing" role="tabpanel" aria-labelledby="pre-processing-tab">
+            <!-- tab: pre-processing -->
+            {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
+            {{ render_field(form.input_mode_field) }}
+            <hr/>
+            <div id="input_mode_parameters"></div>
         </div>
         <div class="tab-pane fade" id="training" role="tabpanel" aria-labelledby="training-tab">
             <!-- tab: training -->
@@ -99,9 +97,16 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
+
+{# classifier select changes #}
 <script>
 document.getElementById('classifier_select').onchange = function() {
     c_selected = this.value
+    generate_hparams(c_selected)
+    toggle_valid_input_modes(c_selected)
+}
+
+function generate_hparams(c_selected) {
     hp = {{hyper_params|tojson|safe}}[c_selected]
     new_html = ''
 
@@ -168,24 +173,21 @@ document.getElementById('classifier_select').onchange = function() {
 
     document.getElementById('classifier_hyper_parameters').innerHTML = new_html
 }
+
+function toggle_valid_input_modes(c_selected) {
+    valid_im = {{inmode_per_classifier|tojson|safe}}[c_selected]
+    new_html = ''
+    valid_im.forEach(mode => {
+        new_html += `<option value="${mode}">${mode}</option>\n`
+    })
+    document.getElementById('input_mode_field').innerHTML = new_html
+    document.getElementById('input_mode_field').onchange()
+}
+
 document.getElementById('classifier_select').onchange() // run once to init
 </script>
 
-<script>
-function optimizerChange() {
-    elementToChange = document.getElementById('hparam_optimizer_sgd_container')
-    selected = document.getElementById('hparam_optimizer').value.toLowerCase()
-    switch(selected) {
-        case 'sgd':
-            elementToChange.setAttribute('class', 'ps-4')
-            break;
-        default:
-            elementToChange.setAttribute('class', 'ps-4 d-none')
-            break;
-    }
-}
-</script>
-
+{# input select changes #}
 <script>
 document.getElementById('input_mode_field').onchange = function() {
     selected = this.value
@@ -220,6 +222,7 @@ document.getElementById('input_mode_field').onchange = function() {
 document.getElementById('input_mode_field').onchange()
 </script>
 
+{# interactive form hiding/showing of subfields #}
 <script>
 document.getElementById('project_mode_field').onchange = function() {
     selected = this.value.toLowerCase()
@@ -243,5 +246,18 @@ document.getElementById('use_early_stopping_field').onchange = function() {
     }
 }
 document.getElementById('use_early_stopping_field').onchange()
+
+function optimizerChange() {
+    elementToChange = document.getElementById('hparam_optimizer_sgd_container')
+    selected = document.getElementById('hparam_optimizer').value.toLowerCase()
+    switch(selected) {
+        case 'sgd':
+            elementToChange.setAttribute('class', 'ps-4')
+            break;
+        default:
+            elementToChange.setAttribute('class', 'ps-4 d-none')
+            break;
+    }
+}
 </script>
 {% endblock %}

@@ -107,7 +107,17 @@ def createModel():
     form = CreateModelForm()
     hyper_params = lib.get_hyper_params()
     inmode_params = lib.get_input_mode_params_raw()
-    return render_template('models/create.html', form=form, hyper_params=hyper_params, inmode_params=inmode_params)
+    inmode_per_classifier = {
+        "FullyConnectedModel": ["Doc2Vec","BOWFrequency","BOWNormalized","TfidfGenerator","Metadata","OntologyFeatures"],
+        "LinearConv1Model": ["Word2Vec1D"],
+        "LinearRNNModel": ["Word2Vec1D"],
+        "Bert": ["Bert"]
+    }
+    return render_template('models/create.html', 
+        form=form, 
+        hyper_params=hyper_params, 
+        inmode_params=inmode_params,
+        inmode_per_classifier=inmode_per_classifier)
 
 @bp.route('/create', methods=["POST"])
 def postModel():
