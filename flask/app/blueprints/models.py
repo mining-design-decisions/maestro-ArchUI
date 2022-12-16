@@ -49,8 +49,13 @@ class CreateModelForm(FlaskForm):
 
     # tab: ensemble
     # todo
-    combination_strategy_field = SelectField('Combination-Strategy', choices = [''] + [], description=tooltips['combination-strategy']) # todo
-    ensemble_strategy_field = SelectField('Ensemble-Strategy', choices = [''] + [], description=tooltips['ensemble-strategy']) # todo
+    combination_strategies = {
+        "Simple Strategies": # combination-strategy
+        ["concat","add","subtract","multiply","max","min","dot"],
+        "Complex Strategies": # ensemble-strategy
+        ["stacking","voting"]
+    }
+    combination_strategy_field = SelectField('Combination Strategy', choices=combination_strategies, description="Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.")
     stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices = [''] + lib.get_models_strlist(), description=tooltips['stacking-meta-classifier'])
     stacking_meta_classifier_hyper_params_field = StringField('Stacking-Meta-Classifier-Hyper-Parameters', description=tooltips['stacking-meta-classifier-hyper-parameters']) # todo see other hyper param field
     stacking_use_concat_field = BooleanField('Stacking-Use-Concat', description=tooltips['stacking-use-concat'])
