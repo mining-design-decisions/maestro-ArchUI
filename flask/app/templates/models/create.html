@@ -109,40 +109,81 @@ document.getElementById('classifier_select').onchange = function() {
         tooltip = `[min, max] = [${hparam.min}, ${hparam.max}] -- default = ${hparam.default}`
         new_html += '<div class="form-group py-2">\n'
 
-        if (hparam.name == 'loss') {
-            new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-            new_html += `<select title="${tooltip}" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-            options = ['crossentropy', 'hinge']
-            options.forEach(option => {
-                new_html += `<option value="${option}">${option}</option>\n`
-            })
-            new_html += `</select>\n`
-        }
-        else {
-            switch(hparam.type) {
-                case 'str':
-                    new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-                    new_html += `<input title="${tooltip}" type="text" size="30" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                    break;
-                case 'int':
-                    new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-                    new_html += `<input title="${tooltip}" type="number" size="10" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                    break;
-                case 'bool':
-                    new_html += `<input title="${tooltip}" type="checkbox" size="1" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                    new_html += `<label title="${tooltip}" for="hparam_${hparam.name}"> ${hparam.name}</label>\n`
-                    break;
-                default:
-                    console.log('ERROR: unhandled type: ' + hparam.type)
-            }
-        }
+        switch(hparam.name) {
+            case 'loss':
+                new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
+                new_html += `<select title="${tooltip}" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
+                options = ['crossentropy', 'hinge']
+                options.forEach(option => {
+                    new_html += `<option value="${option}">${option}</option>\n`
+                })
+                new_html += `</select>\n`
+                new_html += '</div>\n'
+                break;
 
-        new_html += '</div>\n'
+            case 'optimizer':
+                new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
+                new_html += `<select title="${tooltip}" name="hparam_${hparam.name}" id="hparam_${hparam.name}" onchange="optimizerChange()">\n`
+                options = ['adam', 'sgd']
+                options.forEach(option => {
+                    new_html += `<option value="${option}">${option}</option>\n`
+                })
+                new_html += `</select>\n`
+                new_html += '</div>\n'
+
+                // need to allow users to input a float for the sgd
+                new_html += `<div class='ps-4 d-none' id='hparam_optimizer_sgd_container'>\n`
+                new_html += `<div class='form-group py-2'\n`
+                // got below from https://keras.io/api/optimizers/sgd/
+                tooltip = "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent."
+                name = "hparam_optimizer_sgdvalue"
+                new_html += `<label title="${tooltip}" for="${name}">SGD Momentum</label>\n`
+                new_html += `<input title="${tooltip}" type="number" size="10" name="${name}" id="${name}" value="0.0">\n`
+                new_html += `</div>\n`
+                new_html += `</div>\n`
+                break;
+
+            default:
+                switch(hparam.type) {
+                    case 'str':
+                        new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
+                        new_html += `<input title="${tooltip}" type="text" size="30" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
+                        break;
+                    case 'int':
+                        new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
+                        new_html += `<input title="${tooltip}" type="number" size="10" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
+                        break;
+                    case 'bool':
+                        new_html += `<input title="${tooltip}" type="checkbox" size="1" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
+                        new_html += `<label title="${tooltip}" for="hparam_${hparam.name}"> ${hparam.name}</label>\n`
+                        break;
+                    default:
+                        console.log('ERROR: unhandled type: ' + hparam.type)
+                        break;
+                }
+                new_html += '</div>\n'
+                break;
+        }
     });
 
     document.getElementById('classifier_hyper_parameters').innerHTML = new_html
 }
 document.getElementById('classifier_select').onchange() // run once to init
+</script>
+
+<script>
+function optimizerChange() {
+    elementToChange = document.getElementById('hparam_optimizer_sgd_container')
+    selected = document.getElementById('hparam_optimizer').value.toLowerCase()
+    switch(selected) {
+        case 'sgd':
+            elementToChange.setAttribute('class', 'ps-4')
+            break;
+        default:
+            elementToChange.setAttribute('class', 'ps-4 d-none')
+            break;
+    }
+}
 </script>
 
 <script>
