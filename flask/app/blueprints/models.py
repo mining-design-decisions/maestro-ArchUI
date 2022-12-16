@@ -16,7 +16,6 @@ from wtforms.validators import DataRequired, NumberRange
 tooltips = lib.get_cli_json_tooltips()
 
 class CreateModelForm(FlaskForm):
-    # todo put tooltips back
 
     # no tab - general?
     model_name_field = StringField('Model Name', validators=[DataRequired()], description='Name by which to identify this model configuration.')
@@ -24,13 +23,14 @@ class CreateModelForm(FlaskForm):
 
     # tab: preprocessing
     input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], description=tooltips['input-mode'], choices=lib.get_input_modes())
-    params_field = StringField('Params') # todo generate table input-mode-specific
     apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes', description=tooltips['apply-ontology-classes'])
     # todo: other preprocessor things that are currently hardcoded in jira_link
     # todo (stretch goal): target language (current is configured for java)
 
     # tab: classifier
-    classifier_field = SelectField('Classifier', validators=[DataRequired()], description=tooltips['classifier'], id='classifier_select', choices=lib.get_models_strlist())
+    classifier_options = lib.get_models_strlist()
+    classifier_options.remove('NonlinearConv2Model')
+    classifier_field = SelectField('Classifier', validators=[DataRequired()], description=tooltips['classifier'], id='classifier_select', choices=classifier_options)
 
     # tab: training
     epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)], description=tooltips['epochs'], default=1000)
@@ -48,6 +48,7 @@ class CreateModelForm(FlaskForm):
     early_stopping_attribute_field = StringField('Early-Stopping-Attribute', description=tooltips['early-stopping-attribute']) # todo possible values? selectfield?
 
     # tab: ensemble
+    # todo
     combination_strategy_field = SelectField('Combination-Strategy', choices = [''] + [], description=tooltips['combination-strategy']) # todo
     ensemble_strategy_field = SelectField('Ensemble-Strategy', choices = [''] + [], description=tooltips['ensemble-strategy']) # todo
     stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices = [''] + lib.get_models_strlist(), description=tooltips['stacking-meta-classifier'])
