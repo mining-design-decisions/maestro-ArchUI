@@ -31,16 +31,11 @@ class CreateModelForm(FlaskForm):
 
     # tab: classifier
     classifier_field = SelectField('Classifier', validators=[DataRequired()], description=tooltips['classifier'], id='classifier_select', choices=lib.get_models_strlist())
-    # hyper_params_field = StringField('Hyper-Params') # todo generate table input-mode-specific
-    # hyper_params_field = FieldList(FormField(HyperParameterForm), min_entries=2, max_entries=18)
-    # todo look into above
 
     # tab: training
     epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)], description=tooltips['epochs'], default=1000)
     split_size_field = DecimalField('Split-Size', validators=[NumberRange(min=0.01, max=0.5)], description=tooltips['split-size'])
     max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)], description=tooltips['max-train'])
-    quick_cross_field = BooleanField('Quick Cross', description=tooltips['quick-cross'])
-    # cross_project_field = BooleanField('Cross-Project')
     project_mode_field = SelectField('Project Mode', choices=['','Cross-Project', 'Test-Project'], description='Run cross project validation, use a specific project as test set, or neither.')
     test_project_field = StringField('Test-Project', description=tooltips['test-project'])
 
