@@ -106,7 +106,6 @@ document.getElementById('classifier_select').onchange = function() {
     new_html = ''
 
     hp.forEach(hparam => {
-        console.log(hparam)
         tooltip = `[min, max] = [${hparam.min}, ${hparam.max}] -- default = ${hparam.default}`
         new_html += '<div class="form-group py-2">\n'
 
