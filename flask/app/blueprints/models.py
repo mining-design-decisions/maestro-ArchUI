@@ -17,10 +17,18 @@ tooltips = lib.get_cli_json_tooltips()
 
 class CreateModelForm(FlaskForm):
 
-    # no tab - general?
+    # tab: general
     model_name_field = StringField('Model Name', validators=[DataRequired()], description='Name by which to identify this model configuration.')
     output_mode_field = SelectField('Output-Mode', validators=[DataRequired()], description=tooltips['output-mode'], choices=lib.get_output_modes())
-
+    model_mode_field = SelectField('Model Mode', validators=[DataRequired()], description='Is this a single model or does it use ensemble learning?', choices=['Single', 'Ensemble'])
+    combination_strategies = {
+        "Simple Strategies": # combination-strategy
+        ["concat","add","subtract","multiply","max","min","dot"],
+        "Complex Strategies": # ensemble-strategy
+        ["stacking","voting"]
+    }
+    combination_strategy_field = SelectField('Combination Strategy', choices=combination_strategies, description="Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.")
+    
     # tab: preprocessing
     input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], description=tooltips['input-mode'], choices=lib.get_input_modes())
     apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes', description=tooltips['apply-ontology-classes'])
@@ -48,19 +56,8 @@ class CreateModelForm(FlaskForm):
     early_stopping_attribute_field = StringField('Early-Stopping-Attribute', description=tooltips['early-stopping-attribute']) # todo possible values? selectfield?
 
     # tab: ensemble
-    # todo
-    combination_strategies = {
-        "Simple Strategies": # combination-strategy
-        ["concat","add","subtract","multiply","max","min","dot"],
-        "Complex Strategies": # ensemble-strategy
-        ["stacking","voting"]
-    }
-    combination_strategy_field = SelectField('Combination Strategy', choices=combination_strategies, description="Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.")
     stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices = [''] + lib.get_models_strlist(), description=tooltips['stacking-meta-classifier'])
-    stacking_meta_classifier_hyper_params_field = StringField('Stacking-Meta-Classifier-Hyper-Parameters', description=tooltips['stacking-meta-classifier-hyper-parameters']) # todo see other hyper param field
-    stacking_use_concat_field = BooleanField('Stacking-Use-Concat', description=tooltips['stacking-use-concat'])
-    stacking_no_matrix_field = BooleanField('Stacking-No-Matrix', description=tooltips['stacking-no-matrix'])
-    boosting_rounds_field = IntegerField('Boosting Rounds', validators=[NumberRange(min=1)], description=tooltips['boosting-rounds'])
+
 
 
 bp = Blueprint("models", __name__, url_prefix="/models")

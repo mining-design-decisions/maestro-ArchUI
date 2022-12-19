@@ -17,48 +17,51 @@
     </div>
 {% endmacro %}
 
+{% macro render_tab_header(name, title, active = false) %}
+<li class="nav-item" role="presentation" id="{{name}}-tab-header">
+    {% if active %}
+    <button class="nav-link active" id="{{name}}-tab" data-bs-toggle="tab" data-bs-target="#{{name}}" type="button" role="tab" aria-controls="{{name}}" aria-selected="true">{{title}}</button>
+    {% else %}
+    <button class="nav-link" id="{{name}}-tab" data-bs-toggle="tab" data-bs-target="#{{name}}" type="button" role="tab" aria-controls="{{name}}" aria-selected="false">{{title}}</button>
+    {% endif %}
+</li>
+{% endmacro %}
+
+{% macro render_tab_div(name, active=false) %}
+    {% if active %}
+        <div class="tab-pane fade show active" id="{{name}}" role="tabpanel" aria-labelledby="{{name}}-tab">
+    {% else %}
+        <div class="tab-pane fade" id="{{name}}" role="tabpanel" aria-labelledby="{{name}}-tab">
+    {% endif %}
+{% endmacro %}
+
+
 {% block margin_content %}
 <form method="POST" id ="newmodel" action="{{ url_for('models.postModel') }}">
     {{ form.csrf_token }}
 
     <ul class="nav nav-tabs" id="paramCats" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="classifier-tab" data-bs-toggle="tab" data-bs-target="#classifier" type="button" role="tab" aria-controls="classifier" aria-selected="false">Classifier</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pre-processing-tab" data-bs-toggle="tab" data-bs-target="#pre-processing" type="button" role="tab" aria-controls="pre-processing" aria-selected="false">Pre-Processing</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="training-tab" data-bs-toggle="tab" data-bs-target="#training" type="button" role="tab" aria-controls="training" aria-selected="false">Training</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="ensemble-tab" data-bs-toggle="tab" data-bs-target="#ensemble" type="button" role="tab" aria-controls="ensemble" aria-selected="false">Ensemble Learning</button>
-        </li>
+        {{ render_tab_header('general', 'General', true) }}
+        {{ render_tab_header('training', 'Training') }}
+
+        {{ render_tab_header('classifier', 'Classifier') }}
+        {{ render_tab_header('pre-processing', 'Pre-Processing') }}
+
+        {{ render_tab_header('classifiers', 'Ensemble Classifiers') }}
+        {{ render_tab_header('meta-classifier', 'Ensemble Meta Classifier') }}
     </ul>
 
     <div class="tab-content" id="paramCatsContent">
-        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+        {{ render_tab_div('general', true) }}
             <!-- tab: general -->
             {{ render_field(form.model_name_field, 'size_30') }}
             {{ render_field(form.output_mode_field) }}
+            {{ render_field(form.model_mode_field) }}
+            <div class="ps-4" id="combination_strategy_field_div">
+                {{ render_field(form.combination_strategy_field) }}
+            </div>
         </div>
-        <div class="tab-pane fade" id="classifier" role="tabpanel" aria-labelledby="classifier-tab">
-            <!-- tab: classifier -->
-            {{ render_field(form.classifier_field) }}
-            <hr/>
-            <div id="classifier_hyper_parameters"></div>
-        </div>
-        <div class="tab-pane fade" id="pre-processing" role="tabpanel" aria-labelledby="pre-processing-tab">
-            <!-- tab: pre-processing -->
-            {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
-            {{ render_field(form.input_mode_field) }}
-            <hr/>
-            <div id="input_mode_parameters"></div>
-        </div>
-        <div class="tab-pane fade" id="training" role="tabpanel" aria-labelledby="training-tab">
+        {{ render_tab_div('training') }}
             <!-- tab: training -->
             {{ render_field(form.epochs_field) }}
             {{ render_field(form.split_size_field) }}
@@ -76,16 +79,29 @@
                 {{ render_field(form.early_stopping_min_delta_field) }}
                 {{ render_field(form.early_stopping_attribute_field) }}
             </div>
-            
         </div>
-        <div class="tab-pane fade" id="ensemble" role="tabpanel" aria-labelledby="ensemble-tab">
+
+        {{ render_tab_div('classifier') }}
+            <!-- tab: classifier -->
+            {{ render_field(form.classifier_field) }}
+            <hr/>
+            <div id="classifier_hyper_parameters"></div>
+        </div>
+        {{ render_tab_div('pre-processing') }}
+            <!-- tab: pre-processing -->
+            {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
+            {{ render_field(form.input_mode_field) }}
+            <hr/>
+            <div id="input_mode_parameters"></div>
+        </div>
+
+        {{ render_tab_div('classifiers') }}
+            <p>todo</p>
+        </div>
+        {{ render_tab_div('meta-classifier')}}
             <!-- tab: ensemble -->
-            {{ render_field(form.combination_strategy_field) }}
             {{ render_field(form.stacking_meta_classifier_field) }}
-            {{ render_field(form.stacking_meta_classifier_hyper_params_field, 'size_30') }}
-            {{ render_field(form.stacking_use_concat_field, 'inverted') }}
-            {{ render_field(form.stacking_no_matrix_field, 'inverted') }}
-            {{ render_field(form.boosting_rounds_field) }}
+            <div id="meta_classifier_hparams"></div>
         </div>
     </div>
 
@@ -219,6 +235,42 @@ document.getElementById('input_mode_field').onchange = function() {
     document.getElementById('input_mode_parameters').innerHTML = new_html
 }
 document.getElementById('input_mode_field').onchange()
+</script>
+
+{# model mode select changes #}
+<script>
+document.getElementById('model_mode_field').onchange = function() {
+    selected = this.value
+    single_exclusive_tabs = ['classifier', 'pre-processing']
+    ensemble_exclusive_tabs = ['classifiers', 'meta-classifier']
+    switch (this.value.toLowerCase()) {
+        case 'single':
+            // enable single-exclusive
+            single_exclusive_tabs.forEach(tab => {
+                document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item')
+            })
+            // disable ensemble-exclusive
+            ensemble_exclusive_tabs.forEach(tab => {
+                document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item d-none')
+            })
+            // disable combination_strategy_field_div
+            document.getElementById('combination_strategy_field_div').setAttribute('class', 'ps-4 d-none')
+            break;
+        case 'ensemble':
+            // enable ensemble-exclusive
+            ensemble_exclusive_tabs.forEach(tab => {
+                document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item')
+            })
+            // disable single-exclusive
+            single_exclusive_tabs.forEach(tab => {
+                document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item d-none')
+            })
+            // enable combination_strategy_field_div
+            document.getElementById('combination_strategy_field_div').setAttribute('class', 'ps-4')
+            break;
+    }
+}
+document.getElementById('model_mode_field').onchange() // run once to init
 </script>
 
 {# interactive form hiding/showing of subfields #}
