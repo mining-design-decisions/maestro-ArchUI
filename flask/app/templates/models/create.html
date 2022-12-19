@@ -101,8 +101,20 @@
         </div>
         {{ render_tab_div('meta-classifier')}}
             <!-- tab: ensemble -->
-            {{ render_field(form.stacking_meta_classifier_field) }}
-            <div id="meta_classifier_hparams"></div>
+            <h4>Meta-Classifier</h4>
+            <div class="row">
+                <div class="col-sm card"><div class="card-body">
+                    <h4>Classifier</h4>
+                    {{ render_field(form.stacking_meta_classifier_field) }}
+                    <div id="meta_classifier_hparams_div"></div>
+                </div></div>
+                <!--
+                <div class="col-sm card"><div class="card-body">
+                    <h4>Pre-Processing</h4>
+                    <div id="meta_classifier_params_div"></div>
+                </div></div>-->
+            </div>
+            
         </div>
     </div>
 
@@ -246,6 +258,15 @@ function toggle_valid_input_modes(c_selected) {
 }
 
 document.getElementById('classifier_select').onchange() // run once to init
+
+// also: the stacking one
+document.getElementById('stacking_meta_classifier_field').onchange = function() {
+    c_selected = this.value
+    hparams = {{hyper_params|tojson|safe}}[c_selected]
+    new_hp_html = generate_hparam_html(hparams, 'stacker_')
+    document.getElementById('meta_classifier_hparams_div').innerHTML = new_hp_html
+}
+document.getElementById('stacking_meta_classifier_field').onchange()
 </script>
 
 {# model mode select changes #}
