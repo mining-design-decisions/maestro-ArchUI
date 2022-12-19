@@ -72,6 +72,7 @@
                 {{ render_field(form.test_project_field, 'size_30') }}
             </div>
             {{ render_field(form.class_balancer_field) }}
+            {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
             {{ render_field(form.batch_size_field) }}
             {{ render_field(form.use_early_stopping_field, 'inverted') }}
             <div id="early_stopping_div" class="ps-4">
@@ -89,14 +90,14 @@
         </div>
         {{ render_tab_div('pre-processing') }}
             <!-- tab: pre-processing -->
-            {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
             {{ render_field(form.input_mode_field) }}
             <hr/>
             <div id="input_mode_parameters"></div>
         </div>
 
         {{ render_tab_div('classifiers') }}
-            <p>todo</p>
+            {{ render_field(form.ensemble_classifier_count_field) }}
+            <div id="ensemble_classifiers_div" class="accordion"></div>
         </div>
         {{ render_tab_div('meta-classifier')}}
             <!-- tab: ensemble -->
@@ -112,6 +113,41 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
+
+{# input select changes #}
+<script>
+document.getElementById('input_mode_field').onchange = function() {
+    selected = this.value
+    params = {{inmode_params|tojson|safe}}[selected]
+    new_html = ''
+
+    params.forEach(param => {
+        if (param.name.startsWith('pretrained-')) return;
+            
+        new_html += '<div class="form-group py-2">\n'
+        switch(param.type) {
+            case 'str':
+                new_html += `<label title="${param.desc}" for="param_${param.name}">${param.name} </label>\n`
+                new_html += `<input title="${param.desc}" type="text" size="30" name="param_${param.name}" id="param_${param.name}">\n`
+                break;
+            case 'int':
+                new_html += `<label title="${param.desc}" for="param_${param.name}">${param.name} </label>\n`
+                new_html += `<input title="${param.desc}" type="number" size="10" name="param_${param.name}" id="param_${param.name}">\n`
+                break;
+            case 'bool':
+                new_html += `<input title="${param.desc}" type="checkbox" size="1" name="param_${param.name}" id="param_${param.name}">\n`
+                new_html += `<label title="${param.desc}" for="param_${param.name}"> ${param.name}</label>\n`
+                break;
+            default:
+                console.log('ERROR: unhandled type: ' + param.type)
+        }
+        new_html += '</div>\n'
+    })
+
+    document.getElementById('input_mode_parameters').innerHTML = new_html
+}
+document.getElementById('input_mode_field').onchange()
+</script>
 
 {# classifier select changes #}
 <script>
@@ -202,40 +238,7 @@ function toggle_valid_input_modes(c_selected) {
 document.getElementById('classifier_select').onchange() // run once to init
 </script>
 
-{# input select changes #}
-<script>
-document.getElementById('input_mode_field').onchange = function() {
-    selected = this.value
-    params = {{inmode_params|tojson|safe}}[selected]
-    new_html = ''
 
-    params.forEach(param => {
-        if (param.name.startsWith('pretrained-')) return;
-            
-        new_html += '<div class="form-group py-2">\n'
-        switch(param.type) {
-            case 'str':
-                new_html += `<label title="${param.desc}" for="param_${param.name}">${param.name} </label>\n`
-                new_html += `<input title="${param.desc}" type="text" size="30" name="param_${param.name}" id="param_${param.name}">\n`
-                break;
-            case 'int':
-                new_html += `<label title="${param.desc}" for="param_${param.name}">${param.name} </label>\n`
-                new_html += `<input title="${param.desc}" type="number" size="10" name="param_${param.name}" id="param_${param.name}">\n`
-                break;
-            case 'bool':
-                new_html += `<input title="${param.desc}" type="checkbox" size="1" name="param_${param.name}" id="param_${param.name}">\n`
-                new_html += `<label title="${param.desc}" for="param_${param.name}"> ${param.name}</label>\n`
-                break;
-            default:
-                console.log('ERROR: unhandled type: ' + param.type)
-        }
-        new_html += '</div>\n'
-    })
-
-    document.getElementById('input_mode_parameters').innerHTML = new_html
-}
-document.getElementById('input_mode_field').onchange()
-</script>
 
 {# model mode select changes #}
 <script>
@@ -271,6 +274,30 @@ document.getElementById('model_mode_field').onchange = function() {
     }
 }
 document.getElementById('model_mode_field').onchange() // run once to init
+</script>
+
+{# generate ensemble classifier form based on amt #}
+<script>
+document.getElementById('ensemble_classifier_count_field').onchange = function() {
+    newCount = this.value
+    new_html = ''
+    for (i = 0; i < newCount; i++) {
+        div_id = `ensemble_classifier_${i}`
+
+        new_html += `<div class="accordion-item">\n`
+        new_html += `<h2 class="accordion-header" id="header_${div_id}">`
+        new_html += `<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#${div_id}" aria-expanded="false" aria-controls="${div_id}">`
+        new_html += `Ensemble Classifier ${i+1}`
+        new_html += `</button>`
+        new_html += `</h2>`
+        new_html += `<div id="${div_id}" class="accordion-collapse collapse" area-labelledby="header_${div_id}" data-bs-parent="#ensemble_classifiers_div">`
+        new_html += `<div class="accordion-body">`
+        new_html += `<p>todo :) ${div_id}</p>` // content
+        new_html += `</div></div></div>\n`
+    }
+    document.getElementById('ensemble_classifiers_div').innerHTML = new_html
+}
+document.getElementById('ensemble_classifier_count_field').onchange() // run once to init
 </script>
 
 {# interactive form hiding/showing of subfields #}

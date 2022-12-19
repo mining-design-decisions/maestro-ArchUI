@@ -31,7 +31,6 @@ class CreateModelForm(FlaskForm):
     
     # tab: preprocessing
     input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], description=tooltips['input-mode'], choices=lib.get_input_modes())
-    apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes', description=tooltips['apply-ontology-classes'])
     # todo: other preprocessor things that are currently hardcoded in jira_link
     # todo (stretch goal): target language (current is configured for java)
 
@@ -46,7 +45,7 @@ class CreateModelForm(FlaskForm):
     max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)], description=tooltips['max-train'])
     project_mode_field = SelectField('Project Mode', choices=['','Cross-Project', 'Test-Project'], description='Run cross project validation, use a specific project as test set, or neither.')
     test_project_field = StringField('Test-Project', description=tooltips['test-project'])
-
+    apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes', description=tooltips['apply-ontology-classes'])
     architectural_only_field = BooleanField('Architectural-Only', description=tooltips['architectural-only'])
     class_balancer_field = SelectField('Class-Balancer', choices=['', 'class-weight', 'upsample'], description=tooltips['class-balancer'])
     batch_size_field = IntegerField('Batch-Size', validators=[NumberRange(min=1)], description=tooltips['batch-size'])
@@ -55,7 +54,10 @@ class CreateModelForm(FlaskForm):
     early_stopping_min_delta_field = DecimalField('Early-Stopping-Min-Delta', validators=[NumberRange(min=0.001)], description=tooltips['early-stopping-min-delta'])
     early_stopping_attribute_field = StringField('Early-Stopping-Attribute', description=tooltips['early-stopping-attribute']) # todo possible values? selectfield?
 
-    # tab: ensemble
+    # tab: classifiers (ensemble)
+    ensemble_classifier_count_field = IntegerField('Amount of Classifiers', validators=[DataRequired()], default=2, description="How many classifiers should there be in this ensemble model?")
+
+    # tab: meta-classifier
     stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices = [''] + lib.get_models_strlist(), description=tooltips['stacking-meta-classifier'])
 
 
