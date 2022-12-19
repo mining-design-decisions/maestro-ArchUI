@@ -114,36 +114,108 @@
 {% block scripts %}
 {{ super() }}
 
+{# shared lib #}
+<script>
+function generate_hparam_html(hp, prefix="") {
+    new_html = ''
+
+    hp.forEach(hparam => {
+        tooltip = `[min, max] = [${hparam.min}, ${hparam.max}] -- default = ${hparam.default}`
+        new_html += '<div class="form-group py-2">\n'
+
+        switch(hparam.name) {
+            case 'loss':
+                new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                new_html += `<select title="${tooltip}" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}">\n`
+                options = ['crossentropy', 'hinge']
+                options.forEach(option => {
+                    new_html += `<option value="${option}">${option}</option>\n`
+                })
+                new_html += `</select>\n`
+                new_html += '</div>\n'
+                break;
+
+            case 'optimizer':
+                new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                new_html += `<select title="${tooltip}" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}" onchange="optimizerChange('${prefix}')">\n`
+                options = ['adam', 'sgd']
+                options.forEach(option => {
+                    new_html += `<option value="${option}">${option}</option>\n`
+                })
+                new_html += `</select>\n`
+                new_html += '</div>\n'
+
+                // need to allow users to input a float for the sgd
+                new_html += `<div class='ps-4 d-none' id='${prefix}hparam_optimizer_sgd_container'>\n`
+                new_html += `<div class='form-group py-2'\n`
+                // got below from https://keras.io/api/optimizers/sgd/
+                tooltip = "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent."
+                name = "hparam_optimizer_sgdvalue"
+                new_html += `<label title="${tooltip}" for="${prefix}${name}">SGD Momentum</label>\n`
+                new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}${name}" id="${prefix}${name}" value="0.0">\n`
+                new_html += `</div>\n`
+                new_html += `</div>\n`
+                break;
+
+            default:
+                switch(hparam.type) {
+                    case 'str':
+                        new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                        new_html += `<input title="${tooltip}" type="text" size="30" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}">\n`
+                        break;
+                    case 'int':
+                        new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                        new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}">\n`
+                        break;
+                    case 'bool':
+                        new_html += `<input title="${tooltip}" type="checkbox" size="1" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}">\n`
+                        new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}"> ${hparam.name}</label>\n`
+                        break;
+                    default:
+                        console.log('ERROR: unhandled type: ' + hparam.type)
+                        break;
+                }
+                new_html += '</div>\n'
+                break;
+        }
+    });
+    return new_html
+}
+
+function generate_inmode_param_html(params, prefix="") {
+    result = ''
+    params.forEach(param => {
+        if (param.name.startsWith('pretrained-')) return;
+            
+        result += '<div class="form-group py-2">\n'
+        switch(param.type) {
+            case 'str':
+                result += `<label title="${param.desc}" for="${prefix}param_${param.name}">${param.name} </label>\n`
+                result += `<input title="${param.desc}" type="text" size="30" name="${prefix}param_${param.name}" id="${prefix}param_${param.name}">\n`
+                break;
+            case 'int':
+                result += `<label title="${param.desc}" for="${prefix}param_${param.name}">${param.name} </label>\n`
+                result += `<input title="${param.desc}" type="number" size="10" name="${prefix}param_${param.name}" id="${prefix}param_${param.name}">\n`
+                break;
+            case 'bool':
+                result += `<input title="${param.desc}" type="checkbox" size="1" name="${prefix}param_${param.name}" id="${prefix}param_${param.name}">\n`
+                result += `<label title="${param.desc}" for="${prefix}param_${param.name}"> ${param.name}</label>\n`
+                break;
+            default:
+                console.log('ERROR: unhandled type: ' + param.type)
+        }
+        result += '</div>\n'
+    })
+    return result
+}
+</script>
+
 {# input select changes #}
 <script>
 document.getElementById('input_mode_field').onchange = function() {
     selected = this.value
     params = {{inmode_params|tojson|safe}}[selected]
-    new_html = ''
-
-    params.forEach(param => {
-        if (param.name.startsWith('pretrained-')) return;
-            
-        new_html += '<div class="form-group py-2">\n'
-        switch(param.type) {
-            case 'str':
-                new_html += `<label title="${param.desc}" for="param_${param.name}">${param.name} </label>\n`
-                new_html += `<input title="${param.desc}" type="text" size="30" name="param_${param.name}" id="param_${param.name}">\n`
-                break;
-            case 'int':
-                new_html += `<label title="${param.desc}" for="param_${param.name}">${param.name} </label>\n`
-                new_html += `<input title="${param.desc}" type="number" size="10" name="param_${param.name}" id="param_${param.name}">\n`
-                break;
-            case 'bool':
-                new_html += `<input title="${param.desc}" type="checkbox" size="1" name="param_${param.name}" id="param_${param.name}">\n`
-                new_html += `<label title="${param.desc}" for="param_${param.name}"> ${param.name}</label>\n`
-                break;
-            default:
-                console.log('ERROR: unhandled type: ' + param.type)
-        }
-        new_html += '</div>\n'
-    })
-
+    new_html = generate_inmode_param_html(params)
     document.getElementById('input_mode_parameters').innerHTML = new_html
 }
 document.getElementById('input_mode_field').onchange()
@@ -159,69 +231,7 @@ document.getElementById('classifier_select').onchange = function() {
 
 function generate_hparams(c_selected) {
     hp = {{hyper_params|tojson|safe}}[c_selected]
-    new_html = ''
-
-    hp.forEach(hparam => {
-        tooltip = `[min, max] = [${hparam.min}, ${hparam.max}] -- default = ${hparam.default}`
-        new_html += '<div class="form-group py-2">\n'
-
-        switch(hparam.name) {
-            case 'loss':
-                new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-                new_html += `<select title="${tooltip}" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                options = ['crossentropy', 'hinge']
-                options.forEach(option => {
-                    new_html += `<option value="${option}">${option}</option>\n`
-                })
-                new_html += `</select>\n`
-                new_html += '</div>\n'
-                break;
-
-            case 'optimizer':
-                new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-                new_html += `<select title="${tooltip}" name="hparam_${hparam.name}" id="hparam_${hparam.name}" onchange="optimizerChange()">\n`
-                options = ['adam', 'sgd']
-                options.forEach(option => {
-                    new_html += `<option value="${option}">${option}</option>\n`
-                })
-                new_html += `</select>\n`
-                new_html += '</div>\n'
-
-                // need to allow users to input a float for the sgd
-                new_html += `<div class='ps-4 d-none' id='hparam_optimizer_sgd_container'>\n`
-                new_html += `<div class='form-group py-2'\n`
-                // got below from https://keras.io/api/optimizers/sgd/
-                tooltip = "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent."
-                name = "hparam_optimizer_sgdvalue"
-                new_html += `<label title="${tooltip}" for="${name}">SGD Momentum</label>\n`
-                new_html += `<input title="${tooltip}" type="number" size="10" name="${name}" id="${name}" value="0.0">\n`
-                new_html += `</div>\n`
-                new_html += `</div>\n`
-                break;
-
-            default:
-                switch(hparam.type) {
-                    case 'str':
-                        new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-                        new_html += `<input title="${tooltip}" type="text" size="30" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                        break;
-                    case 'int':
-                        new_html += `<label title="${tooltip}" for="hparam_${hparam.name}">${hparam.name} </label>\n`
-                        new_html += `<input title="${tooltip}" type="number" size="10" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                        break;
-                    case 'bool':
-                        new_html += `<input title="${tooltip}" type="checkbox" size="1" name="hparam_${hparam.name}" id="hparam_${hparam.name}">\n`
-                        new_html += `<label title="${tooltip}" for="hparam_${hparam.name}"> ${hparam.name}</label>\n`
-                        break;
-                    default:
-                        console.log('ERROR: unhandled type: ' + hparam.type)
-                        break;
-                }
-                new_html += '</div>\n'
-                break;
-        }
-    });
-
+    new_html = generate_hparam_html(hp)
     document.getElementById('classifier_hyper_parameters').innerHTML = new_html
 }
 
@@ -237,8 +247,6 @@ function toggle_valid_input_modes(c_selected) {
 
 document.getElementById('classifier_select').onchange() // run once to init
 </script>
-
-
 
 {# model mode select changes #}
 <script>
@@ -278,6 +286,77 @@ document.getElementById('model_mode_field').onchange() // run once to init
 
 {# generate ensemble classifier form based on amt #}
 <script>
+function ensemble_classifier_generate_classifier(idx) {
+    result = ''
+    id=`ens_class_${idx}`
+
+    // select field with dropdown
+    result += `<select id="${id}_select" name="${id}_select" required title="" onchange="ens_class_onchange(${idx})">`
+    options = {{form.classifier_options|tojson|safe}}
+    options.forEach(option => {
+        result += `<option value=${option}>${option}</option>`
+    })
+    result += `</select>`
+
+    // hparams
+    result += `<div id="${id}_hparams_div">`
+    hp = {{hyper_params|tojson|safe}}[options[0]]
+    result += generate_hparam_html(hp, `ens${idx}_`)
+    result += `</div>`
+
+    return result
+}
+function ens_class_onchange(idx) {
+    // change hparams
+    id=`ens_class_${idx}`
+    selected_classifier = document.getElementById(`${id}_select`).value
+    hp = {{hyper_params|tojson|safe}}[selected_classifier]
+    new_hp_html = generate_hparam_html(hp, `ens${idx}_`)
+    document.getElementById(`${id}_hparams_div`).innerHTML = new_hp_html
+
+    // change input generator thingy
+    target_element = document.getElementById(`ens_input_${idx}_select`)
+    valid_im = {{inmode_per_classifier|tojson|safe}}[selected_classifier]
+    new_im_html = ''
+    valid_im.forEach(mode => {
+        new_im_html += `<option value="${mode}">${mode}</option>`
+    })
+    target_element.innerHTML = new_im_html
+    // trigger onchange
+    ens_input_onchange(idx)
+}
+function ensemble_classifier_generate_input(idx) {
+    id = `ens_input_${idx}`
+    result = ''
+
+    // data
+    classifier = {{form.classifier_options|tojson|safe}}[0]
+    valid_im = {{inmode_per_classifier|tojson|safe}}[classifier]
+    params = {{inmode_params|tojson|safe}}[valid_im[0]]
+
+    // select field with dropdown
+    result += `<select id="${id}_select" name="${id}_select" required title="" onchange="ens_input_onchange(${idx})">`
+    valid_im.forEach(mode => {
+        result += `<option value="${mode}">${mode}</option>`
+    })
+    result += `</select>`
+
+    // params
+    result += `<div id="${id}_params_div">`
+    result += generate_inmode_param_html(params, `ens${idx}_`)
+    result += `</div>`
+
+    return result
+}
+function ens_input_onchange(idx) {
+    // todo change params
+    id = `ens_input_${idx}`
+    selected_inmode = document.getElementById(`${id}_select`).value
+    params = {{inmode_params|tojson|safe}}[selected_inmode]
+    new_param_html = generate_inmode_param_html(params, `ens${idx}_`)
+    document.getElementById(`${id}_params_div`).innerHTML = new_param_html
+}
+
 document.getElementById('ensemble_classifier_count_field').onchange = function() {
     newCount = this.value
     new_html = ''
@@ -286,13 +365,14 @@ document.getElementById('ensemble_classifier_count_field').onchange = function()
 
         new_html += `<div class="accordion-item">\n`
         new_html += `<h2 class="accordion-header" id="header_${div_id}">`
-        new_html += `<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#${div_id}" aria-expanded="false" aria-controls="${div_id}">`
+        new_html += `<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${div_id}" aria-expanded="false" aria-controls="${div_id}">`
         new_html += `Ensemble Classifier ${i+1}`
         new_html += `</button>`
         new_html += `</h2>`
         new_html += `<div id="${div_id}" class="accordion-collapse collapse" area-labelledby="header_${div_id}" data-bs-parent="#ensemble_classifiers_div">`
-        new_html += `<div class="accordion-body">`
-        new_html += `<p>todo :) ${div_id}</p>` // content
+        new_html += `<div class="accordion-body row">`
+        new_html += `<div class="col-sm card"><div class="card-body"><h4>Classifier</h4>${ensemble_classifier_generate_classifier(i)}</div></div>`
+        new_html += `<div class="col-sm card"><div class="card-body"><h4>Pre-Processing</h4>${ensemble_classifier_generate_input(i)}</div></div>`
         new_html += `</div></div></div>\n`
     }
     document.getElementById('ensemble_classifiers_div').innerHTML = new_html
@@ -325,9 +405,9 @@ document.getElementById('use_early_stopping_field').onchange = function() {
 }
 document.getElementById('use_early_stopping_field').onchange()
 
-function optimizerChange() {
-    elementToChange = document.getElementById('hparam_optimizer_sgd_container')
-    selected = document.getElementById('hparam_optimizer').value.toLowerCase()
+function optimizerChange(prefix='') {
+    elementToChange = document.getElementById(`${prefix}hparam_optimizer_sgd_container`)
+    selected = document.getElementById(`${prefix}hparam_optimizer`).value.toLowerCase()
     switch(selected) {
         case 'sgd':
             elementToChange.setAttribute('class', 'ps-4')
