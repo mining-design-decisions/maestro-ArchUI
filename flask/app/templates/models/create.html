@@ -349,7 +349,7 @@ function ensemble_classifier_generate_input(idx) {
     return result
 }
 function ens_input_onchange(idx) {
-    // todo change params
+    // change params
     id = `ens_input_${idx}`
     selected_inmode = document.getElementById(`${id}_select`).value
     params = {{inmode_params|tojson|safe}}[selected_inmode]
