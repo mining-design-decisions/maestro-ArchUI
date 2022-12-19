@@ -58,9 +58,9 @@ class CreateModelForm(FlaskForm):
     ensemble_classifier_count_field = IntegerField('Amount of Classifiers', validators=[DataRequired()], default=2, description="How many classifiers should there be in this ensemble model?")
 
     # tab: meta-classifier
-    stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices=classifier_options, description=tooltips['stacking-meta-classifier'])
-
-
+    # stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices=classifier_options, description=tooltips['stacking-meta-classifier'])
+    stacking_meta_classifier_field = SelectField('Stacking Meta Classifier', choices=['FullyConnectedModel'], description=tooltips['stacking-meta-classifier'])
+    # note: always nomatrix and never useconcat.
 
 bp = Blueprint("models", __name__, url_prefix="/models")
 
