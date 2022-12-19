@@ -2,17 +2,27 @@
 
 {% block subtitle %}New Model{% endblock %}
 
-{% macro render_field(field, type='default') %}
-    <div class="form-group py-2 ">
+{% macro render_field(field, type='default', indent=false) %}
+    {% set field_label = "col-sm-2 col-form-label" %}
+    {% if indent %}
+    {% set field_label = "col-sm-2 col-form-label ps-4" %}
+    {% endif %}
+    <div class="form-group row">
         {% if type == 'size_30' %}
-            <label for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
-            {{ field(title=field.description, size=30) }}
+            <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+            <div class="col-sm-10">
+                {{ field(title=field.description, size=30) }}
+            </div>
         {% elif type == 'default' %}
-        <label for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
-            {{ field(title=field.description) }}
+            <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+            <div class="col-sm-10">
+                {{ field(title=field.description) }}
+            </div>
         {% elif type == 'inverted' %}
-            {{ field(title=field.description) }}
-            <label for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+            <div class="col-sm-10 offset-sm-2">
+                {{ field(title=field.description) }}
+                <label for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+            </div>
         {% endif %}
     </div>
 {% endmacro %}
@@ -61,8 +71,8 @@
             {{ render_field(form.model_name_field, 'size_30') }}
             {{ render_field(form.output_mode_field) }}
             {{ render_field(form.model_mode_field) }}
-            <div class="ps-4" id="combination_strategy_field_div">
-                {{ render_field(form.combination_strategy_field) }}
+            <div id="combination_strategy_field_div">
+                {{ render_field(form.combination_strategy_field, indent=true) }}
             </div>
         </div>
         {{ render_tab_div('training') }}
@@ -72,17 +82,17 @@
             {{ render_field(form.max_train_field) }}
             {{ render_field(form.architectural_only_field, 'inverted') }}
             {{ render_field(form.project_mode_field) }}
-            <div class="ps-4" id="test_project_field_div">
-                {{ render_field(form.test_project_field, 'size_30') }}
+            <div id="test_project_field_div">
+                {{ render_field(form.test_project_field, 'size_30', indent=true) }}
             </div>
             {{ render_field(form.class_balancer_field) }}
             {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
             {{ render_field(form.batch_size_field) }}
             {{ render_field(form.use_early_stopping_field, 'inverted') }}
-            <div id="early_stopping_div" class="ps-4">
-                {{ render_field(form.early_stopping_patience_field) }}
-                {{ render_field(form.early_stopping_min_delta_field) }}
-                {{ render_field(form.early_stopping_attribute_field) }}
+            <div id="early_stopping_div">
+                {{ render_field(form.early_stopping_patience_field, indent=true) }}
+                {{ render_field(form.early_stopping_min_delta_field, indent=true) }}
+                {{ render_field(form.early_stopping_attribute_field, indent=true) }}
             </div>
         </div>
 
@@ -132,60 +142,75 @@
 
 {# shared lib #}
 <script>
-function generate_hparam_html(hp, prefix="") {
+function generate_hparam_html(hp, prefix="", size="small") {
     new_html = ''
+    col_a = "sm-2"
+    col_b = "sm-10"
+    if (size == "large") {
+        col_a = "sm-4"
+        col_b = "sm-8"
+    }
 
     hp.forEach(hparam => {
         tooltip = `[min, max] = [${hparam.min}, ${hparam.max}] -- default = ${hparam.default}`
-        new_html += '<div class="form-group py-2">\n'
+        new_html += '<div class="form-group row">\n'
 
         switch(hparam.name) {
             case 'loss':
-                new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                new_html += `<label class="col-${col_a}" col-form-label" title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                new_html += `<div class="col-${col_b}">`
                 new_html += `<select title="${tooltip}" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}">\n`
                 options = ['crossentropy', 'hinge']
                 options.forEach(option => {
                     new_html += `<option value="${option}">${option}</option>\n`
                 })
                 new_html += `</select>\n`
-                new_html += '</div>\n'
+                new_html += '</div></div>\n'
                 break;
 
             case 'optimizer':
-                new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                new_html += `<label class="col-${col_a} col-form-label" title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                new_html += `<div class="col-${col_b}">`
                 new_html += `<select title="${tooltip}" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}" onchange="optimizerChange('${prefix}')">\n`
                 options = ['adam', 'sgd']
                 options.forEach(option => {
                     new_html += `<option value="${option}">${option}</option>\n`
                 })
                 new_html += `</select>\n`
-                new_html += '</div>\n'
+                new_html += '</div></div>\n'
 
                 // need to allow users to input a float for the sgd
-                new_html += `<div class='ps-4 d-none' id='${prefix}hparam_optimizer_sgd_container'>\n`
-                new_html += `<div class='form-group py-2'\n`
+                new_html += `<div class='d-none' id='${prefix}hparam_optimizer_sgd_container'>\n`
+                new_html += `<div class='form-group row'>\n`
                 // got below from https://keras.io/api/optimizers/sgd/
                 tooltip = "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent."
                 name = "hparam_optimizer_sgdvalue"
-                new_html += `<label title="${tooltip}" for="${prefix}${name}">SGD Momentum</label>\n`
+                new_html += `<label class="col-${col_a} col-form-label ps-4" title="${tooltip}" for="${prefix}${name}">SGD Momentum</label>\n`
+                new_html += `<div class="col-${col_b}">`
                 new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}${name}" id="${prefix}${name}" value="0.0">\n`
-                new_html += `</div>\n`
+                new_html += `</div></div>\n`
                 new_html += `</div>\n`
                 break;
 
             default:
                 switch(hparam.type) {
                     case 'str':
-                        new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                        new_html += `<label class="col-${col_a} col-form-label" title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                        new_html += `<div class="col-${col_b}">`
                         new_html += `<input title="${tooltip}" type="text" size="30" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}">\n`
+                        new_html += `</div>`
                         break;
                     case 'int':
-                        new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                        new_html += `<label class="col-${col_a} col-form-label" title="${tooltip}" for="${prefix}hparam_${hparam.name}">${hparam.name} </label>\n`
+                        new_html += `<div class="col-${col_b}">`
                         new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}">\n`
+                        new_html += `</div>`
                         break;
                     case 'bool':
+                        new_html += `<div class="col-${col_b} offset-${col_a}">`
                         new_html += `<input title="${tooltip}" type="checkbox" size="1" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}">\n`
                         new_html += `<label title="${tooltip}" for="${prefix}hparam_${hparam.name}"> ${hparam.name}</label>\n`
+                        new_html += `</div>`
                         break;
                     default:
                         console.log('ERROR: unhandled type: ' + hparam.type)
@@ -198,24 +223,37 @@ function generate_hparam_html(hp, prefix="") {
     return new_html
 }
 
-function generate_inmode_param_html(params, prefix="") {
+function generate_inmode_param_html(params, prefix="", size="small") {
+    col_a = "sm-2"
+    col_b = "sm-10"
+    if (size == "large") {
+        col_a = "sm-4"
+        col_b = "sm-8"
+    }
+
     result = ''
     params.forEach(param => {
         if (param.name.startsWith('pretrained-')) return;
             
-        result += '<div class="form-group py-2">\n'
+        result += '<div class="form-group row">\n'
         switch(param.type) {
             case 'str':
-                result += `<label title="${param.desc}" for="${prefix}param_${param.name}">${param.name} </label>\n`
+                result += `<label class="col-${col_a} col-form-label" title="${param.desc}" for="${prefix}param_${param.name}">${param.name} </label>\n`
+                result += `<div class="col-${col_b}">`
                 result += `<input title="${param.desc}" type="text" size="30" name="${prefix}param_${param.name}" id="${prefix}param_${param.name}">\n`
+                result += `</div>`
                 break;
             case 'int':
-                result += `<label title="${param.desc}" for="${prefix}param_${param.name}">${param.name} </label>\n`
+                result += `<label class="col-${col_a} col-form-label" title="${param.desc}" for="${prefix}param_${param.name}">${param.name} </label>\n`
+                result += `<div class="col-${col_b}">`
                 result += `<input title="${param.desc}" type="number" size="10" name="${prefix}param_${param.name}" id="${prefix}param_${param.name}">\n`
+                result += `</div>`
                 break;
             case 'bool':
+                result += `<div class="col-${col_b} offset-${col_a}">`
                 result += `<input title="${param.desc}" type="checkbox" size="1" name="${prefix}param_${param.name}" id="${prefix}param_${param.name}">\n`
                 result += `<label title="${param.desc}" for="${prefix}param_${param.name}"> ${param.name}</label>\n`
+                result += `</div>`
                 break;
             default:
                 console.log('ERROR: unhandled type: ' + param.type)
@@ -291,7 +329,7 @@ document.getElementById('model_mode_field').onchange = function() {
             })
             document.getElementById('meta-classifier-tab-header').setAttribute('class', 'nav-item d-none')
             // disable combination_strategy_field_div
-            document.getElementById('combination_strategy_field_div').setAttribute('class', 'ps-4 d-none')
+            document.getElementById('combination_strategy_field_div').setAttribute('class', 'd-none')
             break;
         case 'ensemble':
             // enable ensemble-exclusive
@@ -306,7 +344,7 @@ document.getElementById('model_mode_field').onchange = function() {
                 document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item d-none')
             })
             // enable combination_strategy_field_div
-            document.getElementById('combination_strategy_field_div').setAttribute('class', 'ps-4')
+            document.getElementById('combination_strategy_field_div').setAttribute('class', '')
             break;
     }
 }
@@ -330,7 +368,7 @@ function ensemble_classifier_generate_classifier(idx) {
     // hparams
     result += `<div id="${id}_hparams_div">`
     hp = {{hyper_params|tojson|safe}}[options[0]]
-    result += generate_hparam_html(hp, `ens${idx}_`)
+    result += generate_hparam_html(hp, `ens${idx}_`, size="large")
     result += `</div>`
 
     return result
@@ -340,7 +378,7 @@ function ens_class_onchange(idx) {
     id=`ens_class_${idx}`
     selected_classifier = document.getElementById(`${id}_select`).value
     hp = {{hyper_params|tojson|safe}}[selected_classifier]
-    new_hp_html = generate_hparam_html(hp, `ens${idx}_`)
+    new_hp_html = generate_hparam_html(hp, `ens${idx}_`, size="large")
     document.getElementById(`${id}_hparams_div`).innerHTML = new_hp_html
 
     // change input generator thingy
@@ -372,7 +410,7 @@ function ensemble_classifier_generate_input(idx) {
 
     // params
     result += `<div id="${id}_params_div">`
-    result += generate_inmode_param_html(params, `ens${idx}_`)
+    result += generate_inmode_param_html(params, `ens${idx}_`, size="large")
     result += `</div>`
 
     return result
@@ -382,7 +420,7 @@ function ens_input_onchange(idx) {
     id = `ens_input_${idx}`
     selected_inmode = document.getElementById(`${id}_select`).value
     params = {{inmode_params|tojson|safe}}[selected_inmode]
-    new_param_html = generate_inmode_param_html(params, `ens${idx}_`)
+    new_param_html = generate_inmode_param_html(params, `ens${idx}_`, size="large")
     document.getElementById(`${id}_params_div`).innerHTML = new_param_html
 }
 
@@ -415,10 +453,10 @@ document.getElementById('project_mode_field').onchange = function() {
     selected = this.value.toLowerCase()
     switch (selected) {
         case 'test-project':
-            document.getElementById('test_project_field_div').setAttribute('class', 'ps-4')
+            document.getElementById('test_project_field_div').setAttribute('class', '')
             break;
         default:
-            document.getElementById('test_project_field_div').setAttribute('class', 'ps-4 d-none')
+            document.getElementById('test_project_field_div').setAttribute('class', 'd-none')
     }
 }
 document.getElementById('project_mode_field').onchange()
@@ -426,10 +464,10 @@ document.getElementById('project_mode_field').onchange()
 document.getElementById('use_early_stopping_field').onchange = function() {
     toChange = document.getElementById('early_stopping_div')
     if (this.checked) {
-        toChange.setAttribute('class', 'ps-4')
+        toChange.setAttribute('class', '')
     }
     else {
-        toChange.setAttribute('class', 'ps-4 d-none')
+        toChange.setAttribute('class', 'd-none')
     }
 }
 document.getElementById('use_early_stopping_field').onchange()
@@ -439,10 +477,10 @@ function optimizerChange(prefix='') {
     selected = document.getElementById(`${prefix}hparam_optimizer`).value.toLowerCase()
     switch(selected) {
         case 'sgd':
-            elementToChange.setAttribute('class', 'ps-4')
+            elementToChange.setAttribute('class', '')
             break;
         default:
-            elementToChange.setAttribute('class', 'ps-4 d-none')
+            elementToChange.setAttribute('class', 'd-none')
             break;
     }
 }
