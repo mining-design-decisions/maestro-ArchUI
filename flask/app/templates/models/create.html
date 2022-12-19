@@ -17,8 +17,12 @@
     </div>
 {% endmacro %}
 
-{% macro render_tab_header(name, title, active = false) %}
+{% macro render_tab_header(name, title, active=false, visible=true) %}
+{% if visible %}
 <li class="nav-item" role="presentation" id="{{name}}-tab-header">
+{% else %}
+<li class="nav-item d-none" role="presentation" id="{{name}}-tab-header">
+{% endif %}
     {% if active %}
     <button class="nav-link active" id="{{name}}-tab" data-bs-toggle="tab" data-bs-target="#{{name}}" type="button" role="tab" aria-controls="{{name}}" aria-selected="true">{{title}}</button>
     {% else %}
@@ -48,7 +52,7 @@
         {{ render_tab_header('pre-processing', 'Pre-Processing') }}
 
         {{ render_tab_header('classifiers', 'Ensemble Classifiers') }}
-        {{ render_tab_header('meta-classifier', 'Ensemble Meta Classifier') }}
+        {{ render_tab_header('meta-classifier', 'Ensemble Meta Classifier', visible=false) }}
     </ul>
 
     <div class="tab-content" id="paramCatsContent">
@@ -274,7 +278,7 @@ document.getElementById('stacking_meta_classifier_field').onchange()
 document.getElementById('model_mode_field').onchange = function() {
     selected = this.value
     single_exclusive_tabs = ['classifier', 'pre-processing']
-    ensemble_exclusive_tabs = ['classifiers', 'meta-classifier']
+    ensemble_exclusive_tabs = ['classifiers']
     switch (this.value.toLowerCase()) {
         case 'single':
             // enable single-exclusive
@@ -285,6 +289,7 @@ document.getElementById('model_mode_field').onchange = function() {
             ensemble_exclusive_tabs.forEach(tab => {
                 document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item d-none')
             })
+            document.getElementById('meta-classifier-tab-header').setAttribute('class', 'nav-item d-none')
             // disable combination_strategy_field_div
             document.getElementById('combination_strategy_field_div').setAttribute('class', 'ps-4 d-none')
             break;
@@ -293,6 +298,9 @@ document.getElementById('model_mode_field').onchange = function() {
             ensemble_exclusive_tabs.forEach(tab => {
                 document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item')
             })
+            if (document.getElementById('combination_strategy_field').value == "stacking") {
+                document.getElementById('meta-classifier-tab-header').setAttribute('class', 'nav-item')
+            }
             // disable single-exclusive
             single_exclusive_tabs.forEach(tab => {
                 document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item d-none')
@@ -435,6 +443,18 @@ function optimizerChange(prefix='') {
             break;
         default:
             elementToChange.setAttribute('class', 'ps-4 d-none')
+            break;
+    }
+}
+
+document.getElementById('combination_strategy_field').onchange = function() {
+    element_to_change = document.getElementById('meta-classifier-tab-header')
+    switch(this.value) {
+        case 'stacking':
+            element_to_change.setAttribute('class', 'nav-item')
+            break;
+        default:
+            element_to_change.setAttribute('class', 'nav-item d-none')
             break;
     }
 }
