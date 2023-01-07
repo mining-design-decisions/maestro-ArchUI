@@ -13,6 +13,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, NumberRange
 
+from app.services.modelconfig import raw_to_config
+
 tooltips = lib.get_cli_json_tooltips()
 
 class CreateModelForm(FlaskForm):
@@ -129,6 +131,8 @@ def postModel():
     # todo validity checking
     # - including does this name already exist?
 
+    """
+
     model_obj = {}
     hparams = {}
     params = {}
@@ -167,6 +171,12 @@ def postModel():
     # save
     with open(f'app/models/{request.form["model_name_field"]}.json', 'w') as f:
         json.dump(model_obj, f)
+
+    """
+    model_name = request.form['model_name_field']
+    model_data = raw_to_config(request.form)
+    with open(f'app/models/{model_name}.json', 'w') as f:
+        json.dump(model_data, f)
 
     return redirect(url_for('models.viewall'))
 

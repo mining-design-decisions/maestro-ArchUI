@@ -1,0 +1,39 @@
+{
+    "general": {
+        "output-mode": "Detection",
+        "mode": "Ensemble",
+        "combination-strategy": "concat"
+    },
+    "ensemble classifiers": [
+        {
+            "classifier": "FullyConnectedModel",
+            "hyper-params": {
+                "optimizer": "adam",
+                "optimizer_sgdvalue": "0.0",
+                "loss": "crossentropy"
+            },
+            "input-mode": "Doc2Vec",
+            "pre-processing": {
+                "use-stemming": "on",
+                "use-lemmatization": "on"
+            }
+        },
+        {
+            "classifier": "FullyConnectedModel",
+            "hyper-params": {
+                "optimizer": "adam",
+                "optimizer_sgdvalue": "0.0",
+                "loss": "crossentropy"
+            },
+            "input-mode": "Doc2Vec",
+            "pre-processing": {
+                "disable-lowercase": "on",
+                "disable-stopwords": "on"
+            }
+        }
+    ],
+    "training": {
+        "epochs": "1000",
+        "use-early-stopping": true
+    }
+}

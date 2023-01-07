@@ -21,7 +21,7 @@
         {% elif type == 'inverted' %}
             <div class="col-sm-10 offset-sm-2">
                 {{ field(title=field.description) }}
-                <label for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+                <label class="col-form-label" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
             </div>
         {% endif %}
     </div>
@@ -188,7 +188,7 @@ function generate_hparam_html(hp, prefix="", size="small") {
                 name = "hparam_optimizer_sgdvalue"
                 new_html += `<label class="col-${col_a} col-form-label ps-4" title="${tooltip}" for="${prefix}${name}">SGD Momentum</label>\n`
                 new_html += `<div class="col-${col_b}">`
-                new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}${name}" id="${prefix}${name}" value="0.0">\n`
+                new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}${name}" id="${prefix}${name}" value="0.0" step=any>\n`
                 new_html += `</div></div>\n`
                 new_html += `</div>\n`
                 break;

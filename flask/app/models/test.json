@@ -1,1 +1,0 @@
-{"output-mode": "Detection", "input-mode": "BOWFrequency", "classifier": "FullyConnectedModel", "epochs": "1000", "quick-cross": true, "use-early-stopping": true, "early-stopping-patience": "30", "hyper-params": {"number-of-hidden-layers": "1", "hidden-layer-1-size": "16", "optimizer": "adam", "loss": "crossentropy"}, "last-trained": "12/12/2022 20:19:06"}
