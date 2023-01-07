@@ -130,50 +130,7 @@ def createModel():
 def postModel():
     # todo validity checking
     # - including does this name already exist?
-
-    """
-
-    model_obj = {}
-    hparams = {}
-    params = {}
-    bools = lib.get_cli_json_bools()
-
-    for element in request.form:
-        if element in ['csrf_token', 'model_name_field']: # don't need to take these into account
-            continue
-        if not request.form[element]: # ignore empties
-            continue
-
-        name = element.replace('_', '-')
-
-        if name.startswith('param-'):
-            value = request.form.get(element)
-            if value == 'on':
-                value = True
-            params[name[6:]] = value
-        elif name.startswith('hparam-'):
-            value = request.form.get(element)
-            if value == 'on':
-                value = True
-            hparams[name[7:]] = value
-        else:
-            name = name[:-6] # remove the '_field'
-            if name in bools:
-                model_obj[name] = True
-            else:
-                model_obj[name] = request.form.get(element)
-
-    if len(params)>0:
-        model_obj['params'] = params
-    if len(hparams)>0:
-        model_obj['hyper-params'] = hparams
-
-    # save
-    with open(f'app/models/{request.form["model_name_field"]}.json', 'w') as f:
-        json.dump(model_obj, f)
-
-    """
-    model_name = request.form['model_name_field']
+    model_name = request.form.get('model_name_field')
     model_data = raw_to_config(request.form)
     with open(f'app/models/{model_name}.json', 'w') as f:
         json.dump(model_data, f)
