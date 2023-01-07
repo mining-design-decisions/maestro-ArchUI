@@ -22,16 +22,16 @@ def select():
 
 @bp.route('/select', methods=['POST'])
 def postSelect():
-    print(request.form)
 
     # - grab input
     target_proj = request.form['projectkey']
     models_to_run = []
 
     for el in request.form:
-        if not el.startswith('run_'):
+        prefix = 'run_classifier_'
+        if not el.startswith(prefix):
             continue
-        models_to_run.append(el[4:])
+        models_to_run.append(request.form[el])
 
     if len(models_to_run) == 0:
         return render_template('error.html')

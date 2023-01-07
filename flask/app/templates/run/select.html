@@ -6,24 +6,25 @@
 <form method="POST" id="run" action="{{ url_for('run.postSelect') }}">
     <div class="card my-2">
         <div class="card-body">
-            <h4>Select Models to Run:</h3>
-            {% for model in models %}
-                <div class="form-group">
-                    <label for="run_{{model}}">{{model}}: </label>
-                    <input name="run_{{model}}" id="run_{{model}}" type="checkbox">
-                </div>
-            {% endfor %}
+            <h4>Select Models to Run</h3>
+            <div class="form-group my-2">
+                <label for="run_amt" class="col-form-label">Amount of classifiers to run: </label>
+                <input name="run_amt" id="run_amt" type="number" value="1" size="2">
+            </div>
+            <div id="run_classifiers_div"></div>
         </div>
     </div>
 
     <div class="card my-2">
         <div class="card-body">
+            <h4>Select Test Data</h4>
             <div class="form-group">
                 <input name="regenerate_test_data" id="regenerate_test_data" type="checkbox">
                 <label for="regenerate_test_data">Regenerate Test Data?</label>
             </div>
             <div id="projectkey_group">
                 <h4 class="mt-2">Enter Apache Project Key:</h3>
+                    <p><a href="https://issues.apache.org/jira/projects" target="_blank">Find all available project keys here</a></p>
                 <div class="form-group">
                     <label for="projectkey">Project Key: </label>
                     <input name="projectkey" id="projectkey"
@@ -51,5 +52,29 @@ document.getElementById('regenerate_test_data').onchange = function() {
     }
 }
 document.getElementById('regenerate_test_data').onchange()
+</script>
+
+<script>
+document.getElementById('run_amt').onchange = function() {
+    amt = parseInt(this.value)
+    new_html = ''
+    for (i = 0; i < amt; i++) {
+        element_id = `run_classifier_${i}`
+
+        new_html += `<div class='form-group row'>`
+        new_html += `<label for='${element_id}' class='col-sm-1 col-form-label ps-4'>Classifier ${i}: </label>`
+        new_html += `<div class='col-sm-11'>`
+        new_html += `<select name='${element_id}' id='${element_id}'>`
+        options = {{models|tojson|safe}}
+        options.forEach(option => {
+            new_html += `<option value='${option}'>${option}</option>`
+        })
+        new_html += `</select>`
+        new_html += `</div>`
+        new_html += `</div>`
+    }
+    document.getElementById('run_classifiers_div').innerHTML = new_html
+}
+document.getElementById('run_amt').onchange()
 </script>
 {% endblock %}
