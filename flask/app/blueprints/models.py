@@ -37,6 +37,7 @@ class CreateModelForm(FlaskForm):
     # tab: classifier
     classifier_options = lib.get_models_strlist()
     classifier_options.remove('NonlinearConv2Model')
+    classifier_options.remove('Bert')
     classifier_field = SelectField('Classifier', validators=[DataRequired()], description=tooltips['classifier'], id='classifier_select', choices=classifier_options)
 
     # tab: training

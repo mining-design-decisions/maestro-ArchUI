@@ -56,13 +56,14 @@
 
     <ul class="nav nav-tabs" id="paramCats" role="tablist">
         {{ render_tab_header('general', 'General', true) }}
-        {{ render_tab_header('training', 'Training') }}
 
-        {{ render_tab_header('classifier', 'Classifier') }}
         {{ render_tab_header('pre-processing', 'Pre-Processing') }}
+        {{ render_tab_header('classifier', 'Classifier') }}
 
         {{ render_tab_header('classifiers', 'Ensemble Classifiers') }}
         {{ render_tab_header('meta-classifier', 'Ensemble Meta Classifier', visible=false) }}
+        
+        {{ render_tab_header('training', 'Training') }}
     </ul>
 
     <div class="tab-content" id="paramCatsContent">
