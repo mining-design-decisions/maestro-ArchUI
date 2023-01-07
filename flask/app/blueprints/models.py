@@ -15,6 +15,7 @@ from wtforms.validators import DataRequired, NumberRange
 
 from app.services.modelconfig import raw_to_config
 
+
 tooltips = lib.get_cli_json_tooltips()
 
 class CreateModelForm(FlaskForm):
@@ -63,7 +64,6 @@ class CreateModelForm(FlaskForm):
     # tab: meta-classifier
     # stacking_meta_classifier_field = SelectField('Stacking-Meta-Classifier', choices=classifier_options, description=tooltips['stacking-meta-classifier'])
     stacking_meta_classifier_field = SelectField('Stacking Meta Classifier', choices=['FullyConnectedModel'], description=tooltips['stacking-meta-classifier'])
-    # note: always nomatrix and never useconcat.
 
 bp = Blueprint("models", __name__, url_prefix="/models")
 
@@ -138,7 +138,8 @@ def postModel():
     # todo validity checking
     # - including does this name already exist?
     model_name = request.form.get('model_name_field')
-    model_data = raw_to_config(request.form)
+    bools = lib.get_cli_json_bools()
+    model_data = raw_to_config(request.form, bools)
     with open(f'app/models/{model_name}.json', 'w') as f:
         json.dump(model_data, f)
 

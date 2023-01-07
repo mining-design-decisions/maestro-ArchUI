@@ -27,7 +27,7 @@
         "run.split_size": 0.2,
         "run.max_train": -1,
         "run.k_cross": 0,
-        "run.quick_cross": true,
+        "run.quick_cross": false,
         "run.cross_project": false,
         "run.force_regenerate_data": true,
         "run.architectural_only": false,
@@ -35,8 +35,8 @@
             "default": {
                 "number-of-hidden-layers": "1",
                 "hidden-layer-1-size": "16",
-                "optimizer": "adam",
-                "loss": "crossentropy"
+                "loss": "crossentropy",
+                "optimizer": "adam"
             }
         },
         "run.test_project": "None",

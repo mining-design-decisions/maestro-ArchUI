@@ -3,8 +3,9 @@ from flask import Blueprint
 from flask import redirect
 from flask import request
 import os
-from app.jira_link import load_issues_for
 import json
+
+from app.jira_link import load_issues_for
 from app.ml_link import predict_with
 from app.util import rec_del_safe
 
@@ -36,14 +37,15 @@ def postSelect():
     if len(models_to_run) == 0:
         return render_template('error.html')
 
+    # - download the target issues and save them in data/testing.json
+    # (if the user indicated this is desirable)
     if request.form.get('regenerate_test_data', False):
         print('Regenerating testing data')
-        # - download the target issues and save them in data/testing.json
         proj_issues = load_issues_for(target_proj)
         with open('app/data/testing.json', 'w+') as f:
             json.dump(proj_issues, f)
     
-    # - train the models and use the predict functionality on the new project
+    # - use the predict functionality on the new project
     for model in models_to_run:
         predict_with(model)
 
@@ -86,4 +88,5 @@ def postSelect():
     # features
     rec_del_safe('./features')
 
+    # todo: change below into displaying the results
     return 'ok - post'

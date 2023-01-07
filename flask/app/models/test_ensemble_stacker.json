@@ -2,7 +2,7 @@
     "general": {
         "output-mode": "Detection",
         "mode": "Ensemble",
-        "combination-strategy": "concat"
+        "combination-strategy": "stacking"
     },
     "ensemble classifiers": [
         {
@@ -13,10 +13,7 @@
                 "loss": "crossentropy"
             },
             "input-mode": "Doc2Vec",
-            "params": {
-                "use-stemming": true,
-                "use-lemmatization": true
-            }
+            "params": {}
         },
         {
             "classifier": "FullyConnectedModel",
@@ -26,15 +23,20 @@
                 "loss": "crossentropy"
             },
             "input-mode": "Doc2Vec",
-            "params": {
-                "disable-lowercase": true,
-                "disable-stopwords": true
-            }
+            "params": {}
         }
     ],
+    "ensemble meta classifier": {
+        "classifier": "FullyConnectedModel",
+        "hyper-params": {
+            "number-of-hidden-layers": "1",
+            "hidden-layer-1-size": "16",
+            "optimizer": "adam",
+            "optimizer_sgdvalue": "0.0",
+            "loss": "crossentropy"
+        }
+    },
     "training": {
-        "epochs": "1000",
-        "use-early-stopping": true,
-        "early-stopping-patience": "30"
+        "epochs": "1000"
     }
 }

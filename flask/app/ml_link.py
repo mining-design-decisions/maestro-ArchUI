@@ -2,7 +2,9 @@ import json
 import os
 from os import path
 import sys
+
 from app.util import rec_del_safe
+from app.services.modelconfig import config_to_cli
 
 ml_path = path.abspath('../../mining-design-decisions')
 sys.path.append(ml_path)
@@ -172,51 +174,21 @@ def train_model(model_name):
 
     target_model_path = f"app/data/models/{model_name}"
 
+    # clean up previous iteration if exists
     rec_del_safe(target_model_path)
 
+    # generate the args
     with open(f'app/models/{model_name}.json', 'r') as f:
-        model_params = json.load(f)
+        model_config = json.load(f)
+    args = config_to_cli(model_config, target_model_path)
 
-    additional_params = {
-        "file": "app/data/training.json",
-        "force-regenerate-data": True,
-        "store-model": True,
-        "target-model-path": target_model_path
-    }
-
-    if 'apply-ontology-classes' in model_params:
-        additional_params['ontology-classes'] = 'app/data/ontologies.json'
-
-    args = ['__main__.py', 'run', model_params['classifier']]
-
-    ignore = ['classifier', 'last-trained']
-
-    for param in model_params:
-        if param in ignore:
-            continue
-
-        args.append('--' + param)
-
-        if param in ['params', 'hyper-params']:
-            param_options = []
-            for name in model_params[param]:
-                param_options.append(f"{name}={model_params[param][name]}")
-            args.extend(param_options)
-        elif type(model_params[param]) != bool:
-            args.extend(str(model_params[param]).split())
-
-    for param in additional_params:
-        args.append('--' + param)
-        if type(additional_params[param]) != bool:
-            args.append(str(additional_params[param]))
-
-    import sys
+    # use the CLI
     sys.argv = args
-
     cli.main()
 
     # clean up features
     rec_del_safe('./features')
+    # todo also root things
 
 def predict_with(model_name):
     # step 1: verify that trained exists
