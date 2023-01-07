@@ -71,11 +71,9 @@ bp = Blueprint("models", __name__, url_prefix="/models")
 def viewall():
     # show all models
     models = []
-    dir = os.fsencode('app/models')
-    for file in os.listdir(dir):
-        filename = os.fsdecode(file)
-        if filename.endswith('.json'):
-            modelname = filename[:-5]
+    for file in os.listdir('app/models'):
+        if file.endswith('.json'):
+            modelname = file[:-5]
             models.append(modelname)
 
     return render_template("models/viewall.html", models=models)
@@ -93,9 +91,18 @@ def view(model):
     last_trained = 'Never'
     if 'last-trained' in model_obj:
         last_trained = model_obj['last-trained']
-        del model_obj['last-trained']
+        del model_obj['last-trained'] # don't need to display this
+
+    valid_tabs = [
+        'general',
+        'pre-processing',
+        'classifier',
+        'ensemble classifiers',
+        'ensemble stacking classifier',
+        'training'
+    ]
     
-    return render_template('models/view.html', name=model, params=model_obj, last_trained=last_trained)
+    return render_template('models/view.html', tabs=valid_tabs, name=model, model=model_obj, last_trained=last_trained)
 
 @bp.route('/view/<model>', methods=["POST"])
 def trainModel(model):

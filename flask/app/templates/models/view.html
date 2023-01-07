@@ -4,26 +4,78 @@
 
 {% block margin_content %}
 <h3>Viewing Model: {{name}}</h3>
-<div class="card m-2">
-    <div class="card-body">
-        <h4>Configuration:</h4>
-        <ul>
-        {% for p in params %}
-            {% if 'params' in p: %}
-                <li>{{p}}:
+
+{% for key in model %}
+    {% if key == 'ensemble classifiers' %}
+    <div class="card m-2">
+        <div class="card-body">
+            <h3>{{key.title()}}</h3>
+            {% for e_model in model[key] %}
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4>Pre-Processing</h4>
+                    <div>Input Mode: {{e_model['input-mode']}}</div>
+                    <div>Input Mode Parameters:</div>
                     <ul>
-                    {% for name in params[p] %}
-                        <li>{{name}}: {{params[p][name]}}</li>
-                    {% endfor %}
+                        {% for param in e_model['params'] %}
+                        <li>{{param}}: {{e_model['params'][param]}}</li>
+                        {% endfor %}
                     </ul>
-                </li>
-            {% else %}
-                <li>{{p}}: {{params[p]}}</li>
-            {% endif %}
-        {% endfor %}
-        </ul>
+                </div>
+                <div class="col-sm-6">
+                    <h4>Classifier</h4>
+                    <div>Classifier: {{e_model['classifier']}}</div>
+                    <div>Classifier Hyper-Parameters:</div>
+                    <ul>
+                        {% for hparam in e_model['hyper-params'] %}
+                        <li>{{hparam}}: {{e_model['hyper-params'][hparam]}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <hr />
+            {% endfor %}
+        </div>
     </div>
-</div>
+    {% elif key == 'classifier' %}
+    <div class="card m-2">
+        <div class="card-body">
+            <h3>{{key.title()}}</h3>
+            <div>Classifier: {{model[key]['classifier']}}</div>
+            <div>Hyper-Parameters:</div>
+            <ul>
+                {% for hparam in model[key]['hyper-params'] %}
+                <li>{{hparam}}: {{model[key]['hyper-params'][hparam]}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% elif key == 'pre-processing' %}
+    <div class="card m-2">
+        <div class="card-body">
+            <h3>{{key.title()}}</h3>
+            <div>Input Mode: {{model[key]['input-mode']}}</div>
+            <div>Input Mode Parameters:</div>
+            <ul>
+                {% for param in model[key]['params'] %}
+                <li>{{param}}: {{model[key]['params'][param]}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% elif key in tabs %}
+    <div class="card m-2">
+        <div class="card-body">
+            <h3>{{key.title()}}</h3>
+            <ul>
+                {% for option in model[key] %}
+                <li>{{option}}: {{model[key][option]}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
 
 <div>
     <p class="my-2">Last trained: {{ last_trained }}</p>

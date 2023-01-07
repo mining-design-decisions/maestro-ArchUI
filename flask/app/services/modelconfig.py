@@ -70,7 +70,7 @@ def raw_to_config(formdata):
                 'classifier': formdata.get(f'ens_class_{i}_select'),
                 'hyper-params': hparams, 
                 'input-mode': formdata.get(f'ens_input_{i}_select'),
-                'pre-processing': params
+                'params': params
             })
         model['ensemble classifiers'] = ens_class
 
