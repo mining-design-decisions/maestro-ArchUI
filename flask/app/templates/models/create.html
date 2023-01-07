@@ -54,7 +54,7 @@
 <form method="POST" id ="newmodel" action="{{ url_for('models.postModel') }}">
     {{ form.csrf_token }}
 
-    <ul class="nav nav-tabs" id="paramCats" role="tablist">
+    <ul class="nav nav-tabs my-2" id="paramCats" role="tablist">
         {{ render_tab_header('general', 'General', true) }}
 
         {{ render_tab_header('pre-processing', 'Pre-Processing') }}
