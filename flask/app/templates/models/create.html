@@ -123,11 +123,6 @@
                     {{ render_field(form.stacking_meta_classifier_field) }}
                     <div id="meta_classifier_hparams_div"></div>
                 </div></div>
-                <!--
-                <div class="col-sm card"><div class="card-body">
-                    <h4>Pre-Processing</h4>
-                    <div id="meta_classifier_params_div"></div>
-                </div></div>-->
             </div>
             
         </div>
@@ -140,7 +135,6 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-
 <script src="{{url_for('static', filename='lib.js')}}"></script>
 
 {# input select changes #}
@@ -158,17 +152,13 @@ document.getElementById('input_mode_field').onchange()
 <script>
 document.getElementById('classifier_select').onchange = function() {
     c_selected = this.value
-    generate_hparams(c_selected)
-    toggle_valid_input_modes(c_selected)
-}
 
-function generate_hparams(c_selected) {
+    // set new hyper parameters
     hp = {{hyper_params|tojson|safe}}[c_selected]
     new_html = generate_hparam_html(hp)
     document.getElementById('classifier_hyper_parameters').innerHTML = new_html
-}
 
-function toggle_valid_input_modes(c_selected) {
+    // toggle valid input modes
     valid_im = {{inmode_per_classifier|tojson|safe}}[c_selected]
     new_html = ''
     valid_im.forEach(mode => {
@@ -177,7 +167,6 @@ function toggle_valid_input_modes(c_selected) {
     document.getElementById('input_mode_field').innerHTML = new_html
     document.getElementById('input_mode_field').onchange()
 }
-
 document.getElementById('classifier_select').onchange() // run once to init
 
 // also: the stacking one
