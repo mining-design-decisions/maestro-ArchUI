@@ -25,9 +25,8 @@ In order for ArchUI to work correctly, it needs the `mining-design-decisions` pr
 git checkout model-saving
 ```
 
-You also need to run `pip install -r requirements.txt` in the `mining-design-decisions` project's `deep_learning` folder, as well as `git clone https://github.com/jmaarleveld/visualkeras`, as in its own readme.
 
-The requirements for the mining-design-decisions' deep-learning code are included in the requirements for ArchUI, so normally, you installed them previously. In mining-design-decisions, a `visualkeras` repository is mentionoing to take adva
+The requirements for the mining-design-decisions' deep-learning code are included in the requirements for ArchUI, so normally, you installed them previously. In mining-design-decisions, a `visualkeras` repository is mentionoing to take advantage of visualization, but since ArchUI does not use it, it is not required if you do not want to make use of the CLI itself to visualize some data.
 
 
 ## Running
