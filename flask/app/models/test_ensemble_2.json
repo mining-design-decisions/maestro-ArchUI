@@ -1,1 +1,35 @@
-{"general": {"output-mode": "Detection", "mode": "Ensemble", "combination-strategy": "concat"}, "ensemble classifiers": [{"classifier": "FullyConnectedModel", "hyper-params": {"optimizer": "adam", "optimizer_sgdvalue": "0.0", "loss": "crossentropy"}, "input-mode": "BOWFrequency", "params": {}}, {"classifier": "FullyConnectedModel", "hyper-params": {"optimizer": "adam", "optimizer_sgdvalue": "0.0", "loss": "crossentropy"}, "input-mode": "BOWFrequency", "params": {}}], "training": {"epochs": "1000", "use-early-stopping": true, "early-stopping-patience": "30"}, "last-trained": "08/01/2023 12:47:28"}
+{
+    "general": {
+        "output-mode": "Detection",
+        "mode": "Ensemble",
+        "combination-strategy": "concat"
+    },
+    "ensemble classifiers": [
+        {
+            "classifier": "FullyConnectedModel",
+            "hyper-params": {
+                "optimizer": "adam",
+                "optimizer_sgdvalue": "0.0",
+                "loss": "crossentropy"
+            },
+            "input-mode": "BOWFrequency",
+            "params": {}
+        },
+        {
+            "classifier": "FullyConnectedModel",
+            "hyper-params": {
+                "optimizer": "adam",
+                "optimizer_sgdvalue": "0.0",
+                "loss": "crossentropy"
+            },
+            "input-mode": "BOWFrequency",
+            "params": {}
+        }
+    ],
+    "training": {
+        "epochs": "1000",
+        "use-early-stopping": true,
+        "early-stopping-patience": "30"
+    },
+    "last-trained": "08/01/2023 12:47:28"
+}

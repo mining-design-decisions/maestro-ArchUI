@@ -122,7 +122,15 @@ def _config_to_cli_hparams(hparams, prefix=''):
 def _config_to_cli_params(params, prefix=''):
     command = ''
     for param in params:
-        command += f' {prefix}{param}={params[param]}'
+        if param == 'stemming_lemma':
+            match params[param]:
+                case 'Stemming':
+                    command += ' use-stemming=true'
+                    break
+                case 'Lemmatization':
+                    command += ' use-lemmatization=true'
+        else:
+            command += f' {prefix}{param}={params[param]}'
 
     return command
 

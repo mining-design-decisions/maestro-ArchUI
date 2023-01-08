@@ -233,8 +233,19 @@ function generate_inmode_param_html(params, prefix="", size="small") {
     }
 
     result = ''
+    use_stemming_lemma = false
     params.forEach(param => {
-        if (param.name.startsWith('pretrained-')) return;
+        // can't support pretrained anything with --store-model/--force-regenerate-etc forced on
+        if (param.name.startsWith('pretrained-')) 
+            return; 
+
+        // cannot use these two at the same time, make a special case for them
+        switch (param.name) {
+            case 'use-stemming':
+            case 'use-lemmatization':
+                use_stemming_lemma = true;
+                return
+        }
             
         result += '<div class="form-group row">\n'
         switch(param.type) {
@@ -261,6 +272,23 @@ function generate_inmode_param_html(params, prefix="", size="small") {
         }
         result += '</div>\n'
     })
+    
+    if (use_stemming_lemma) {
+        tooltip = "Stem the words in the text, use lemmatization on them, or neither."
+        name = `${prefix}param_stemming_lemma`
+        result += '<div class="form-group row">\n'
+        result += `<label class="col-${col_a} col-form-label" title="${tooltip}" for="${name}">Stemming or Lemmatization </label>\n`
+        result += `<div class="col-${col_b}">`
+        result += `<select title="${tooltip}" id="${name}" name="${name}">`
+        options = ["", "Stemming", "Lemmatization"]
+        options.forEach(option => {
+            result += `<option value="${option}">${option}</option>`
+        })
+        result += `</select>`
+        result += `</div>`
+        result += '</div>\n'
+    }
+    
     return result
 }
 </script>
