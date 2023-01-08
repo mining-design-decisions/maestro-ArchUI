@@ -14,8 +14,7 @@
             },
             "input-mode": "Doc2Vec",
             "params": {
-                "use-stemming": true,
-                "use-lemmatization": true
+                "use-stemming": true
             }
         },
         {

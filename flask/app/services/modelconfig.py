@@ -105,24 +105,24 @@ def raw_to_config(formdata, bools):
     return model
 
 # helper for below fn
-def _config_to_cli_hparams(hparams, suffix=''):
+def _config_to_cli_hparams(hparams, prefix=''):
     command = ''
     hyper_param_keys = [x for x in hparams if not 'optimizer' in x]
     for hparam in hyper_param_keys:
-        command += f" {hparam}{suffix}={hparams[hparam]}"
+        command += f" {prefix}{hparam}={hparams[hparam]}"
     if 'optimizer' in hparams:
         if hparams['optimizer'] == 'sgd':
-            command += f" optimizer{suffix}=sgd_{hparams['optimizer_sgdvalue']}"
+            command += f" {prefix}optimizer=sgd_{hparams['optimizer_sgdvalue']}"
         else:
-            command += f" optimizer{suffix}={hparams['optimizer']}"
+            command += f" {prefix}optimizer={hparams['optimizer']}"
 
     return command
 
 # helper for below fn
-def _config_to_cli_params(params, suffix=''):
+def _config_to_cli_params(params, prefix=''):
     command = ''
     for param in params:
-        command += f' {param}{suffix}={params[param]}'
+        command += f' {prefix}{param}={params[param]}'
 
     return command
 
@@ -135,38 +135,62 @@ def config_to_cli(model_config, target_model_path):
         command += " " + model_config['classifier']['classifier']
 
         # hyper-parameters
-        command += ' --hyper-params'
-        command += _config_to_cli_hparams(model_config['classifier']['hyper-params'])
+        hparams = model_config['classifier']['hyper-params']
+        if len(hparams) > 0:
+            command += ' --hyper-params'
+            command += _config_to_cli_hparams(hparams)
 
         # pre-processor parameters
         command += ' --input-mode ' + model_config['pre-processing']['input-mode']
-        command += ' --params'
-        command += _config_to_cli_params(model_config['pre-processing']['params'])
+        params = model_config['pre-processing']['params']
+        if len(params) > 0:
+            command += ' --params'
+            command += _config_to_cli_params(params)
 
     else:
-        # classifiers, hyper-parameters, pre-processor parameters
+        # setup
         classifiers = []
-        hparams = []
+        hparams = {}
         input_modes = []
-        params = []
+        params = {}
         for c in model_config['ensemble classifiers']:
             classifiers.append(c['classifier'])
-            hparams.append(c['hyper-params'])
+            if not c['classifier'] in hparams:
+                hparams[c['classifier']] = []
+            hparams[c['classifier']].append(c['hyper-params'])
             input_modes.append(c['input-mode'])
-            params.append(c['params'])
+            if not c['input-mode'] in params:
+                params[c['input-mode']] = []
+            params[c['input-mode']].append(c['params'])
 
-        command += ' ' + ','.join(classifiers)
+        # classifiers
+        command += ' ' + ' '.join(classifiers)
         
-        command += ' --hyper-params'
-        for i in range(len(hparams)):
-            command += _config_to_cli_hparams(hparams[i], f'[{i}]')
+        # hparams
+        hyper_params_part = ' --hyper-params'
+        hyper_params_count = 0
+        for classifier_set in hparams:
+            for i in range(len(hparams[classifier_set])):
+                this_hparams = hparams[classifier_set][i]
+                hyper_params_part += _config_to_cli_hparams(this_hparams, f'{classifier_set}[{i}].')
+                hyper_params_count += len(this_hparams)
+        if hyper_params_count > 0:
+            command += hyper_params_part
         
+        # input modes
         command += ' --input-mode '
-        command += ','.join(input_modes)
+        command += ' '.join(input_modes)
 
-        command += ' --params'
-        for i in range(len(params)):
-            command += _config_to_cli_params(params[i], f'[{i}]')
+        # params
+        params_part = ' --params'
+        params_count = 0
+        for input_mode_set in params:
+            for i in range(len(params[input_mode_set])):
+                this_params = params[input_mode_set][i]
+                params_part += _config_to_cli_params(this_params, f'{input_mode_set}[{i}].')
+                params_count += len(this_params)
+        if params_count > 0:
+            command += params_part
         
         # combination strategy
         strat = model_config['general']['combination-strategy']

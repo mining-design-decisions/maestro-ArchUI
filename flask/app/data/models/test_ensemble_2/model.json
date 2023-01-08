@@ -1,0 +1,138 @@
+{
+    "model_type": "single",
+    "model_path": "0",
+    "feature_generators": [
+        "BOWFrequency__.json",
+        "x_BOWFrequency__.json"
+    ],
+    "feature_settings": {
+        "make_features.input_mode": [
+            "BOWFrequency",
+            "BOWFrequency"
+        ],
+        "make_features.output_mode": "Detection",
+        "make_features.file": "app\\data\\training.json",
+        "make_features.params": {},
+        "make_features.ontology_classes": "",
+        "make_features.apply_ontology_classes": false,
+        "make_features.save_trained_generator": false
+    },
+    "model_settings": {
+        "run.classifier": [
+            "FullyConnectedModel",
+            "FullyConnectedModel"
+        ],
+        "run.epochs": 1000,
+        "run.split_size": 0.2,
+        "run.max_train": -1,
+        "run.k_cross": 0,
+        "run.quick_cross": false,
+        "run.cross_project": false,
+        "run.force_regenerate_data": true,
+        "run.architectural_only": false,
+        "run.hyper_params": {
+            "FullyConnectedModel[0]": {
+                "loss": "crossentropy",
+                "optimizer": "adam"
+            },
+            "FullyConnectedModel[1]": {
+                "loss": "crossentropy",
+                "optimizer": "adam"
+            }
+        },
+        "run.test_project": "None",
+        "run.test_study": "None",
+        "run.class_balancer": "None",
+        "run.batch_size": 32,
+        "run.peregrine": false,
+        "run.combination_strategy": "concat",
+        "run.ensemble_strategy": "none",
+        "run.stacking_meta_classifier": null,
+        "run.stacking_meta_classifier_hyper_parameters": {},
+        "run.stacking_use_concat": false,
+        "run.stacking_no_matrix": false,
+        "run.boosting_rounds": 10,
+        "run.use_early_stopping": true,
+        "run.early_stopping_patience": 30,
+        "run.early_stopping_min_delta": [
+            0.001
+        ],
+        "run.early_stopping_attribute": [
+            "loss"
+        ],
+        "run.test_separately": false,
+        "run.store_model": true,
+        "run.target_model_path": "app/data/models/test_ensemble_2",
+        "run.input_mode": [
+            "BOWFrequency",
+            "BOWFrequency"
+        ],
+        "run.output_mode": "Detection",
+        "run.file": "app\\data\\training.json",
+        "run.params": {},
+        "run.ontology_classes": "",
+        "run.apply_ontology_classes": false,
+        "run.save_trained_generator": false,
+        "run_analysis.summarize.short": false,
+        "run_analysis.summarize.trim": false,
+        "run_analysis.summarize.patience": 1,
+        "run_analysis.summarize.min_index": 0,
+        "run_analysis.summarize.min_delta": [
+            0.001
+        ],
+        "run_analysis.summarize.trimming_attribute": [
+            "val-loss"
+        ],
+        "run_analysis.summarize.max_attribute": "None",
+        "run_analysis.plot.plot_type": "line",
+        "run_analysis.plot.include_maxima": false,
+        "run_analysis.plot.tolerance": 0.1,
+        "run_analysis.plot.trim": false,
+        "run_analysis.plot.patience": 1,
+        "run_analysis.plot.min_index": 0,
+        "run_analysis.plot.min_delta": [
+            0.001
+        ],
+        "run_analysis.plot.trimming_attribute": [
+            "val-loss"
+        ],
+        "run_analysis.compare.trim": false,
+        "run_analysis.compare.patience": 1,
+        "run_analysis.compare.min_index": 0,
+        "run_analysis.compare.min_delta": [
+            0.001
+        ],
+        "run_analysis.compare.trimming_attribute": [
+            "val-loss"
+        ],
+        "run_analysis.compare.max_attribute": "None",
+        "run_analysis.plot_attributes.trim": false,
+        "run_analysis.plot_attributes.patience": 1,
+        "run_analysis.plot_attributes.min_index": 0,
+        "run_analysis.plot_attributes.min_delta": [
+            0.001
+        ],
+        "run_analysis.plot_attributes.trimming_attribute": [
+            "val-loss"
+        ],
+        "run_analysis.confusion.trim": false,
+        "run_analysis.confusion.patience": 1,
+        "run_analysis.confusion.min_index": 0,
+        "run_analysis.confusion.min_delta": [
+            0.001
+        ],
+        "run_analysis.confusion.trimming_attribute": [
+            "val-loss"
+        ],
+        "run_analysis.compare_stats.trim": false,
+        "run_analysis.compare_stats.patience": 1,
+        "run_analysis.compare_stats.min_index": 0,
+        "run_analysis.compare_stats.min_delta": [
+            0.001
+        ],
+        "run_analysis.compare_stats.trimming_attribute": [
+            "val-loss"
+        ],
+        "run_analysis.compare_stats.max_attribute": "None"
+    }
+}
