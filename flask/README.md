@@ -1,9 +1,9 @@
 # Using this project
 Launching the web server needs to be done through commandline. Open a command terminal in the root directory of this project.
 
-## First time running
+## First time running - Install
 
-First, ensure that you have a suitable Python version installed: as noted below in this document, the only version that will be able to run this project correctly is 3.10.
+First, ensure that you have a suitable Python version installed: as noted below in this document, the only version that will be able to run this project correctly is 3.10. The developer used 3.10.0 to be exact.
 
 You can check your current Python version with `python -V`.
 
@@ -21,8 +21,14 @@ cd ..
 git clone https://github.com/mining-design-decisions/mining-design-decisions
 ```
 In order for ArchUI to work correctly, it needs the `mining-design-decisions` project to be on the `model-saving` branch.
+```
+git checkout model-saving
+```
 
 You also need to run `pip install -r requirements.txt` in the `mining-design-decisions` project's `deep_learning` folder, as well as `git clone https://github.com/jmaarleveld/visualkeras`, as in its own readme.
+
+The requirements for the mining-design-decisions' deep-learning code are included in the requirements for ArchUI, so normally, you installed them previously. In mining-design-decisions, a `visualkeras` repository is mentionoing to take adva
+
 
 ## Running
 
