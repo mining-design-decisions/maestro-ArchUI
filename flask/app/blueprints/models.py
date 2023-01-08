@@ -106,11 +106,12 @@ def view(model):
 
 @bp.route('/view/<model>', methods=["POST"])
 def trainModel(model):
-    lib.train_model(model)
+    performance = lib.train_model(model)
 
     with open(f'app/models/{model}.json', 'r') as f:
         model_obj = json.load(f)
     model_obj['last-trained'] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    model_obj['performance'] = performance
     with open(f'app/models/{model}.json', 'w') as f:
         json.dump(model_obj, f)
 

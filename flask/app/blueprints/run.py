@@ -78,12 +78,6 @@ def postSelect():
     # todo: combine separate results files into one? for list view purposes?
 
     # - cleanup
-    # root dir files
-    for file in os.listdir('.'):
-        if os.path.isdir(file):
-            continue
-        if file not in ['README.md', 'requirements.txt']:
-            os.remove(file)
 
     # features
     rec_del_safe('./features')

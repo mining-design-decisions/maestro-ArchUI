@@ -62,6 +62,7 @@
         "run.test_separately": false,
         "run.store_model": true,
         "run.target_model_path": "app/data/models/Example Model",
+        "run.analyze_keywords": false,
         "run.input_mode": [
             "BOWFrequency"
         ],

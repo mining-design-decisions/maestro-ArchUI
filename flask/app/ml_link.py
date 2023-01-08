@@ -186,9 +186,22 @@ def train_model(model_name):
     sys.argv = args
     cli.main()
 
+    # grab performance
+    with open('most_recent_run.txt', 'r') as f:
+        latest_run_filename = f.read()
+    with open(latest_run_filename, 'r') as f:
+        latest_run_data = json.load(f)[0]
+        performance = latest_run_data['f-score'][-1]
+
     # clean up features
     rec_del_safe('./features')
-    # todo also root things
+    # root dir files
+    for file in os.listdir('.'):
+        if os.path.isdir(file):
+            continue
+        if file not in ['README.md', 'requirements.txt']:
+            os.remove(file)
+    return performance
 
 def predict_with(model_name):
     # step 1: verify that trained exists

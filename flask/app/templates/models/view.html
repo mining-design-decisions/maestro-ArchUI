@@ -79,6 +79,9 @@
 
 <div>
     <p class="my-2">Last trained: {{ last_trained }}</p>
+    {% if last_trained != 'Never' %}
+    <p class="my-2">Performance: {{model['performance']}}</p>
+    {% endif %}
     <form method="POST" id="trainmodel" action="{{ url_for('models.trainModel', model=name) }}">
         <input type="submit" value="(Re)train Model" class="my-2">
     </form>
