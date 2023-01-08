@@ -258,7 +258,11 @@ function generate_inmode_param_html(params, prefix="", size="small") {
             case 'int':
                 result += `<label class="col-${col_a} col-form-label" title="${param.desc}" for="${prefix}param_${param.name}">${param.name} </label>\n`
                 result += `<div class="col-${col_b}">`
-                result += `<input title="${param.desc}" type="number" size="10" name="${prefix}param_${param.name}" id="${prefix}param_${param.name}">\n`
+                ending = ''
+                if (param.name == 'vector-length') {
+                    ending = ' required value=400'
+                }
+                result += `<input title="${param.desc}" type="number" size="10" name="${prefix}param_${param.name}" id="${prefix}param_${param.name}" ${ending}>\n`
                 result += `</div>`
                 break;
             case 'bool':
