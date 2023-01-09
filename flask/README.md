@@ -28,6 +28,8 @@ git checkout model-saving
 
 The requirements for the mining-design-decisions' deep-learning code are included in the requirements for ArchUI, so normally, you installed them previously. In mining-design-decisions, a `visualkeras` repository is mentionoing to take advantage of visualization, but since ArchUI does not use it, it is not required if you do not want to make use of the CLI itself to visualize some data.
 
+In addition to python modules, the ML code also requires a few nltk packages. In order to ensure these are all installed on your system, please run the script `setup_dependencies.py` found in the `setup` folder in the project root.
+
 
 ## Running
 
