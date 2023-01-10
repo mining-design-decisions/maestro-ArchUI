@@ -118,7 +118,7 @@ def trainModel(model):
     return redirect(url_for('models.view', model=model))
 
 @bp.route('/create', methods=["GET"])
-def createModel():
+def createNewModel():
     form = CreateModelForm()
     hyper_params = lib.get_hyper_params()
     inmode_params = lib.get_input_mode_params_raw()
@@ -128,14 +128,15 @@ def createModel():
         "LinearRNNModel": ["Word2Vec1D"],
         "Bert": ["Bert"]
     }
-    return render_template('models/create.html', 
+    return render_template('models/editable_form.html',
+        action='create',
         form=form, 
         hyper_params=hyper_params, 
         inmode_params=inmode_params,
         inmode_per_classifier=inmode_per_classifier)
 
 @bp.route('/create', methods=["POST"])
-def postModel():
+def createModel():
     # todo validity checking
     # - including does this name already exist?
     model_name = request.form.get('model_name_field')

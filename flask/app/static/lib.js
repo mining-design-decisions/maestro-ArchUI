@@ -1,3 +1,4 @@
+// todo defaults!
 function generate_hparam_html(hp, prefix="", size="small") {
     new_html = ''
     col_a = "sm-2"
@@ -79,6 +80,7 @@ function generate_hparam_html(hp, prefix="", size="small") {
     return new_html
 }
 
+// todo defaults!
 function generate_inmode_param_html(params, prefix="", size="small") {
     col_a = "sm-2"
     col_b = "sm-10"

@@ -1,0 +1,376 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}{{action.title()}} Model{% endblock %}
+
+{% macro render_field(field, type='default', indent=false) %}
+    {% set field_label = "col-sm-2 col-form-label" %}
+    {% if indent %}
+    {% set field_label = "col-sm-2 col-form-label ps-4" %}
+    {% endif %}
+    <div class="form-group row">
+        {% if type == 'size_30' %}
+            <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+            <div class="col-sm-10">
+                {{ field(title=field.description, size=30) }}
+            </div>
+        {% elif type == 'default' %}
+            <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+            <div class="col-sm-10">
+                {{ field(title=field.description) }}
+            </div>
+        {% elif type == 'inverted' %}
+            <div class="col-sm-10 offset-sm-2">
+                {{ field(title=field.description) }}
+                <label class="col-form-label" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro render_tab_header(name, title, active=false, visible=true) %}
+    {% if visible %}
+    <li class="nav-item" role="presentation" id="{{name}}-tab-header">
+    {% else %}
+    <li class="nav-item d-none" role="presentation" id="{{name}}-tab-header">
+    {% endif %}
+        {% if active %}
+        <button class="nav-link active" id="{{name}}-tab" data-bs-toggle="tab" data-bs-target="#{{name}}" type="button" role="tab" aria-controls="{{name}}" aria-selected="true">{{title}}</button>
+        {% else %}
+        <button class="nav-link" id="{{name}}-tab" data-bs-toggle="tab" data-bs-target="#{{name}}" type="button" role="tab" aria-controls="{{name}}" aria-selected="false">{{title}}</button>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+{% macro render_tab_div(name, active=false) %}
+    {% set show_active = "show active" %}
+    {% if not active %}
+    {% set show_active = '' %}
+    {% endif %}
+    <div class="tab-pane fade {{show_active}}" id="{{name}}" role="tabpanel" aria-labelledby="{{name}}-tab">
+{% endmacro %}
+
+{% macro render_tab_end() %}
+    </div>
+{% endmacro %}
+
+
+{% block margin_content %}
+<form method="POST" id="modelconfig" action="/models/{{action}}">
+    {{ form.csrf_token }}
+
+    <ul class="nav nav-tabs my-2" id="paramCats" role="tablist">
+        {{ render_tab_header('general', 'General', true) }}
+
+        {{ render_tab_header('pre-processing', 'Pre-Processing') }}
+        {{ render_tab_header('classifier', 'Classifier') }}
+
+        {{ render_tab_header('classifiers', 'Ensemble Classifiers') }}
+        {{ render_tab_header('meta-classifier', 'Ensemble Meta Classifier', visible=false) }}
+        
+        {{ render_tab_header('training', 'Training') }}
+    </ul>
+
+    <div class="tab-content" id="paramCatsContent">
+        {{ render_tab_div('general', true) }}
+            <!-- tab: general -->
+            {{ render_field(form.model_name_field, 'size_30') }}
+            {{ render_field(form.output_mode_field) }}
+            {{ render_field(form.model_mode_field) }}
+            <div id="combination_strategy_field_div">
+                {{ render_field(form.combination_strategy_field, indent=true) }}
+            </div>
+        {{ render_tab_end() }}
+
+        {{ render_tab_div('training') }}
+            <!-- tab: training -->
+            {{ render_field(form.epochs_field) }}
+            {{ render_field(form.split_size_field) }}
+            {{ render_field(form.max_train_field) }}
+            {{ render_field(form.architectural_only_field, 'inverted') }}
+            {{ render_field(form.project_mode_field) }}
+            <div id="test_project_field_div">
+                {{ render_field(form.test_project_field, 'size_30', indent=true) }}
+            </div>
+            {{ render_field(form.class_balancer_field) }}
+            {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
+            {{ render_field(form.batch_size_field) }}
+            {{ render_field(form.use_early_stopping_field, 'inverted') }}
+            <div id="early_stopping_div">
+                {{ render_field(form.early_stopping_patience_field, indent=true) }}
+                {{ render_field(form.early_stopping_min_delta_field, indent=true) }}
+                {{ render_field(form.early_stopping_attribute_field, indent=true) }}
+            </div>
+        {{ render_tab_end() }}
+
+        {{ render_tab_div('classifier') }}
+            <!-- tab: classifier -->
+            {{ render_field(form.classifier_field) }}
+            <hr/>
+            <div id="classifier_hyper_parameters"></div>
+        {{ render_tab_end() }}
+
+        {{ render_tab_div('pre-processing') }}
+            <!-- tab: pre-processing -->
+            {{ render_field(form.input_mode_field) }}
+            <hr/>
+            <div id="input_mode_parameters"></div>
+        {{ render_tab_end() }}
+
+        {{ render_tab_div('classifiers') }}
+            {{ render_field(form.ensemble_classifier_count_field) }}
+            <div id="ensemble_classifiers_div" class="accordion"></div>
+        {{ render_tab_end() }}
+
+        {{ render_tab_div('meta-classifier')}}
+            <!-- tab: ensemble -->
+            <h4>Meta-Classifier</h4>
+            <div class="row">
+                <div class="col-sm card">
+                    <div class="card-body">
+                        <h4>Classifier</h4>
+                        {{ render_field(form.stacking_meta_classifier_field) }}
+                        <div id="meta_classifier_hparams_div"></div>
+                    </div>
+                </div>
+            </div>
+        {{ render_tab_end() }}
+    </div>
+
+    <hr/>
+    <input type="submit" value="Save Configuration" class="my-2">
+
+</form>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{url_for('static', filename='lib.js')}}"></script>
+
+{# input select changes #}
+<script>
+document.getElementById('input_mode_field').onchange = function() {
+    selected = this.value
+    params = {{inmode_params|tojson|safe}}[selected]
+    new_html = generate_inmode_param_html(params)
+    document.getElementById('input_mode_parameters').innerHTML = new_html
+}
+document.getElementById('input_mode_field').onchange()
+</script>
+
+{# classifier select changes #}
+<script>
+document.getElementById('classifier_select').onchange = function() {
+    c_selected = this.value
+
+    // set new hyper parameters
+    hp = {{hyper_params|tojson|safe}}[c_selected]
+    new_html = generate_hparam_html(hp)
+    document.getElementById('classifier_hyper_parameters').innerHTML = new_html
+
+    // toggle valid input modes
+    valid_im = {{inmode_per_classifier|tojson|safe}}[c_selected]
+    new_html = ''
+    valid_im.forEach(mode => {
+        new_html += `<option value="${mode}">${mode}</option>\n`
+    })
+    document.getElementById('input_mode_field').innerHTML = new_html
+    document.getElementById('input_mode_field').onchange()
+}
+document.getElementById('classifier_select').onchange() // run once to init
+
+// also: the stacking one
+document.getElementById('stacking_meta_classifier_field').onchange = function() {
+    c_selected = this.value
+    hparams = {{hyper_params|tojson|safe}}[c_selected]
+    new_hp_html = generate_hparam_html(hparams, 'stacker_')
+    document.getElementById('meta_classifier_hparams_div').innerHTML = new_hp_html
+}
+document.getElementById('stacking_meta_classifier_field').onchange()
+</script>
+
+{# model mode select changes #}
+<script>
+document.getElementById('model_mode_field').onchange = function() {
+    selected = this.value
+    single_exclusive_tabs = ['classifier', 'pre-processing']
+    ensemble_exclusive_tabs = ['classifiers']
+    switch (this.value.toLowerCase()) {
+        case 'single':
+            // enable single-exclusive
+            single_exclusive_tabs.forEach(tab => {
+                document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item')
+            })
+            // disable ensemble-exclusive
+            ensemble_exclusive_tabs.forEach(tab => {
+                document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item d-none')
+            })
+            document.getElementById('meta-classifier-tab-header').setAttribute('class', 'nav-item d-none')
+            // disable combination_strategy_field_div
+            document.getElementById('combination_strategy_field_div').setAttribute('class', 'd-none')
+            break;
+        case 'ensemble':
+            // enable ensemble-exclusive
+            ensemble_exclusive_tabs.forEach(tab => {
+                document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item')
+            })
+            if (document.getElementById('combination_strategy_field').value == "stacking") {
+                document.getElementById('meta-classifier-tab-header').setAttribute('class', 'nav-item')
+            }
+            // disable single-exclusive
+            single_exclusive_tabs.forEach(tab => {
+                document.getElementById(tab+'-tab-header').setAttribute('class', 'nav-item d-none')
+            })
+            // enable combination_strategy_field_div
+            document.getElementById('combination_strategy_field_div').setAttribute('class', '')
+            break;
+    }
+}
+document.getElementById('model_mode_field').onchange() // run once to init
+</script>
+
+{# generate ensemble classifier form based on amt #}
+<script>
+function ensemble_classifier_generate_classifier(idx) {
+    result = ''
+    id=`ens_class_${idx}`
+
+    // select field with dropdown
+    result += `<select id="${id}_select" name="${id}_select" required title="" onchange="ens_class_onchange(${idx})">`
+    options = {{form.classifier_options|tojson|safe}}
+    options.forEach(option => {
+        result += `<option value=${option}>${option}</option>`
+    })
+    result += `</select>`
+
+    // hparams
+    result += `<div id="${id}_hparams_div">`
+    hp = {{hyper_params|tojson|safe}}[options[0]]
+    result += generate_hparam_html(hp, `ens${idx}_`, size="large")
+    result += `</div>`
+
+    return result
+}
+function ens_class_onchange(idx) {
+    // change hparams
+    id=`ens_class_${idx}`
+    selected_classifier = document.getElementById(`${id}_select`).value
+    hp = {{hyper_params|tojson|safe}}[selected_classifier]
+    new_hp_html = generate_hparam_html(hp, `ens${idx}_`, size="large")
+    document.getElementById(`${id}_hparams_div`).innerHTML = new_hp_html
+
+    // change input generator thingy
+    target_element = document.getElementById(`ens_input_${idx}_select`)
+    valid_im = {{inmode_per_classifier|tojson|safe}}[selected_classifier]
+    new_im_html = ''
+    valid_im.forEach(mode => {
+        new_im_html += `<option value="${mode}">${mode}</option>`
+    })
+    target_element.innerHTML = new_im_html
+    // trigger onchange
+    ens_input_onchange(idx)
+}
+function ensemble_classifier_generate_input(idx) {
+    id = `ens_input_${idx}`
+    result = ''
+
+    // data
+    classifier = {{form.classifier_options|tojson|safe}}[0]
+    valid_im = {{inmode_per_classifier|tojson|safe}}[classifier]
+    params = {{inmode_params|tojson|safe}}[valid_im[0]]
+
+    // select field with dropdown
+    result += `<select id="${id}_select" name="${id}_select" required title="" onchange="ens_input_onchange(${idx})">`
+    valid_im.forEach(mode => {
+        result += `<option value="${mode}">${mode}</option>`
+    })
+    result += `</select>`
+
+    // params
+    result += `<div id="${id}_params_div">`
+    result += generate_inmode_param_html(params, `ens${idx}_`, size="large")
+    result += `</div>`
+
+    return result
+}
+function ens_input_onchange(idx) {
+    // change params
+    id = `ens_input_${idx}`
+    selected_inmode = document.getElementById(`${id}_select`).value
+    params = {{inmode_params|tojson|safe}}[selected_inmode]
+    new_param_html = generate_inmode_param_html(params, `ens${idx}_`, size="large")
+    document.getElementById(`${id}_params_div`).innerHTML = new_param_html
+}
+
+document.getElementById('ensemble_classifier_count_field').onchange = function() {
+    newCount = this.value
+    new_html = ''
+    for (i = 0; i < newCount; i++) {
+        div_id = `ensemble_classifier_${i}`
+
+        new_html += `<div class="accordion-item">\n`
+        new_html += `<h2 class="accordion-header" id="header_${div_id}">`
+        new_html += `<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${div_id}" aria-expanded="false" aria-controls="${div_id}">`
+        new_html += `Ensemble Classifier ${i+1}`
+        new_html += `</button>`
+        new_html += `</h2>`
+        new_html += `<div id="${div_id}" class="accordion-collapse collapse" area-labelledby="header_${div_id}" data-bs-parent="#ensemble_classifiers_div">`
+        new_html += `<div class="accordion-body row">`
+        new_html += `<div class="col-sm card"><div class="card-body"><h4>Classifier</h4>${ensemble_classifier_generate_classifier(i)}</div></div>`
+        new_html += `<div class="col-sm card"><div class="card-body"><h4>Pre-Processing</h4>${ensemble_classifier_generate_input(i)}</div></div>`
+        new_html += `</div></div></div>\n`
+    }
+    document.getElementById('ensemble_classifiers_div').innerHTML = new_html
+}
+document.getElementById('ensemble_classifier_count_field').onchange() // run once to init
+</script>
+
+{# interactive form hiding/showing of subfields #}
+<script>
+document.getElementById('project_mode_field').onchange = function() {
+    selected = this.value.toLowerCase()
+    switch (selected) {
+        case 'test-project':
+            document.getElementById('test_project_field_div').setAttribute('class', '')
+            break;
+        default:
+            document.getElementById('test_project_field_div').setAttribute('class', 'd-none')
+    }
+}
+document.getElementById('project_mode_field').onchange()
+
+document.getElementById('use_early_stopping_field').onchange = function() {
+    toChange = document.getElementById('early_stopping_div')
+    if (this.checked) {
+        toChange.setAttribute('class', '')
+    }
+    else {
+        toChange.setAttribute('class', 'd-none')
+    }
+}
+document.getElementById('use_early_stopping_field').onchange()
+
+function optimizerChange(prefix='') {
+    elementToChange = document.getElementById(`${prefix}hparam_optimizer_sgd_container`)
+    selected = document.getElementById(`${prefix}hparam_optimizer`).value.toLowerCase()
+    switch(selected) {
+        case 'sgd':
+            elementToChange.setAttribute('class', '')
+            break;
+        default:
+            elementToChange.setAttribute('class', 'd-none')
+            break;
+    }
+}
+
+document.getElementById('combination_strategy_field').onchange = function() {
+    element_to_change = document.getElementById('meta-classifier-tab-header')
+    switch(this.value) {
+        case 'stacking':
+            element_to_change.setAttribute('class', 'nav-item')
+            break;
+        default:
+            element_to_change.setAttribute('class', 'nav-item d-none')
+            break;
+    }
+}
+</script>
+{% endblock %}
