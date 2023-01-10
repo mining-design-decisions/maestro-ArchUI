@@ -86,4 +86,10 @@
         <input type="submit" value="(Re)train Model" class="my-2">
     </form>
 </div>
+<div>
+    <h3>Actions</h3>
+    <form method="GET" id="editmodel" action="{{ url_for('models.editExistingModel', model=name) }}">
+        <input type="submit" value="Edit Model Configuration" class="my-2">
+    </form>
+</div>
 {% endblock %}

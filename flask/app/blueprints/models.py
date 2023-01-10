@@ -117,17 +117,19 @@ def trainModel(model):
 
     return redirect(url_for('models.view', model=model))
 
+inmode_per_classifier = {
+    "FullyConnectedModel": ["Doc2Vec","BOWFrequency","BOWNormalized","TfidfGenerator","Metadata","OntologyFeatures"],
+    "LinearConv1Model": ["Word2Vec1D"],
+    "LinearRNNModel": ["Word2Vec1D"],
+    "Bert": ["Bert"]
+}
+
 @bp.route('/create', methods=["GET"])
 def createNewModel():
     form = CreateModelForm()
     hyper_params = lib.get_hyper_params()
     inmode_params = lib.get_input_mode_params_raw()
-    inmode_per_classifier = {
-        "FullyConnectedModel": ["Doc2Vec","BOWFrequency","BOWNormalized","TfidfGenerator","Metadata","OntologyFeatures"],
-        "LinearConv1Model": ["Word2Vec1D"],
-        "LinearRNNModel": ["Word2Vec1D"],
-        "Bert": ["Bert"]
-    }
+
     return render_template('models/editable_form.html',
         action='create',
         form=form, 
@@ -146,6 +148,34 @@ def createModel():
         json.dump(model_data, f)
 
     return redirect(url_for('models.viewall'))
+
+@bp.route('/edit/<model>', methods=["GET"])
+def editExistingModel(model):
+    form = CreateModelForm()
+    hyper_params = lib.get_hyper_params()
+    inmode_params = lib.get_input_mode_params_raw()
+
+    with open(f'app/models/{model}.json', 'r') as f:
+        existing_config = json.load(f)
+    
+    return render_template('models/editable_form.html',
+        action='edit',
+        form=form, 
+        defaults=existing_config,
+        hyper_params=hyper_params, 
+        inmode_params=inmode_params,
+        inmode_per_classifier=inmode_per_classifier)
+
+@bp.route('/edit', methods=["POST"])
+def editModel():
+    model_name = request.form.get('model_name_field')
+    bools = lib.get_cli_json_bools()
+    model_data = raw_to_config(request.form, bools)
+    with open(f'app/models/{model_name}.json', 'w') as f:
+        json.dump(model_data, f)
+
+    return redirect(url_for('models.viewall'))
+
 
 @bp.route('/hyperparams', methods=['GET'])
 def hyperParamHelp():
