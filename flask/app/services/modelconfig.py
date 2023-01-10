@@ -100,7 +100,7 @@ def raw_to_config(formdata, bools):
     # tab: training
     training = {}
     for config_not,raw_not in training_tab_fields.items():
-        add_id_relevant(formdata, raw_not, config_not, training, bools)
+        add_if_relevant(formdata, raw_not, config_not, training, bools)
     if 'project-mode' in training and training['project-mode'].lower() == 'test-project':
         training['test-project'] = formdata['test_project_field']
     if 'use_early_stopping_field' in formdata:

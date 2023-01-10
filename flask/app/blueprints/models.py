@@ -30,7 +30,11 @@ class CreateModelForm(FlaskForm):
         "Complex Strategies": # ensemble-strategy
         ["stacking","voting"]
     }
-    combination_strategy_field = SelectField('Combination Strategy', choices=combination_strategies, description="Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.")
+    combo_strats = [
+        "concat","add","subtract","multiply","max","min","dot",
+        "stacking","voting"
+    ]
+    combination_strategy_field = SelectField('Combination Strategy', choices=combo_strats, description="Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.")
     
     # tab: preprocessing
     input_mode_field = SelectField('Input-Mode', validators=[DataRequired()], description=tooltips['input-mode'], choices=lib.get_input_modes())
@@ -140,6 +144,7 @@ def createNewModel():
 
 @bp.route('/create', methods=["POST"])
 def createModel():
+    print(':)')
     # todo validity checking
     # - including does this name already exist?
     model_name = request.form.get('model_name_field')

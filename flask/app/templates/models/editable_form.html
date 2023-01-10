@@ -7,7 +7,7 @@
     {% if indent %}
     {% set field_label = "col-sm-2 col-form-label ps-4" %}
     {% endif %}
-    {% set def = null %}
+    {% set def = field.default if field.default else null %}
     {% if field.id in defaults %}
     {% set def = defaults[field.id] %}
     {% endif %}
@@ -21,6 +21,16 @@
             <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
             <div class="col-sm-10">
                 {{ field(title=field.description, value=def, disabled=disabled) }}
+            </div>
+        {% elif type == 'select' %}
+            <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
+            <div class="col-sm-10">
+                <select title="{{field.description}}" name="{{field.id}}" id="{{field.id}}">
+                    {% for option in field.choices %}
+                    {% set selected='selected' if (field.id in defaults and defaults[field.id] == option) else '' %}
+                    <option value="{{option}}" {{selected}}>{{option}}</option>
+                    {% endfor %}
+                </select>
             </div>
         {% elif type == 'inverted' %}
             <div class="col-sm-10 offset-sm-2">
@@ -82,10 +92,10 @@
         {{ render_tab_div('general', true) }}
             <!-- tab: general -->
             {{ render_field(form.model_name_field, 'size_30', disabled=(action=='edit')) }}
-            {{ render_field(form.output_mode_field) }}
-            {{ render_field(form.model_mode_field) }}
+            {{ render_field(form.output_mode_field, 'select') }}
+            {{ render_field(form.model_mode_field, 'select') }}
             <div id="combination_strategy_field_div">
-                {{ render_field(form.combination_strategy_field, indent=true) }}
+                {{ render_field(form.combination_strategy_field, 'select', indent=true) }}
             </div>
         {{ render_tab_end() }}
 
@@ -95,11 +105,11 @@
             {{ render_field(form.split_size_field) }}
             {{ render_field(form.max_train_field) }}
             {{ render_field(form.architectural_only_field, 'inverted') }}
-            {{ render_field(form.project_mode_field) }}
+            {{ render_field(form.project_mode_field, 'select') }}
             <div id="test_project_field_div">
                 {{ render_field(form.test_project_field, 'size_30', indent=true) }}
             </div>
-            {{ render_field(form.class_balancer_field) }}
+            {{ render_field(form.class_balancer_field, 'select') }}
             {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
             {{ render_field(form.batch_size_field) }}
             {{ render_field(form.use_early_stopping_field, 'inverted') }}
@@ -112,14 +122,14 @@
 
         {{ render_tab_div('classifier') }}
             <!-- tab: classifier -->
-            {{ render_field(form.classifier_field) }}
+            {{ render_field(form.classifier_field, 'select') }}
             <hr/>
             <div id="classifier_hyper_parameters"></div>
         {{ render_tab_end() }}
 
         {{ render_tab_div('pre-processing') }}
             <!-- tab: pre-processing -->
-            {{ render_field(form.input_mode_field) }}
+            {{ render_field(form.input_mode_field, 'select') }}
             <hr/>
             <div id="input_mode_parameters"></div>
         {{ render_tab_end() }}
@@ -136,7 +146,7 @@
                 <div class="col-sm card">
                     <div class="card-body">
                         <h4>Classifier</h4>
-                        {{ render_field(form.stacking_meta_classifier_field) }}
+                        {{ render_field(form.stacking_meta_classifier_field, 'select') }}
                         <div id="meta_classifier_hparams_div"></div>
                     </div>
                 </div>
@@ -186,8 +196,18 @@ document.getElementById('classifier_select').onchange = function() {
     // toggle valid input modes
     valid_im = {{inmode_per_classifier|tojson|safe}}[c_selected]
     new_html = ''
+
+    default_inmode = ''
+    if ('input_mode_field' in defaults) {
+        default_inmode = defaults['input_mode_field']
+    }
+
     valid_im.forEach(mode => {
-        new_html += `<option value="${mode}">${mode}</option>\n`
+        selected = ''
+        if (mode == default_inmode) {
+            selected = 'selected'
+        }
+        new_html += `<option value="${mode}" ${selected}>${mode}</option>\n`
     })
     document.getElementById('input_mode_field').innerHTML = new_html
     document.getElementById('input_mode_field').onchange()
@@ -253,18 +273,34 @@ function ensemble_classifier_generate_classifier(idx) {
     // select field with dropdown
     result += `<select id="${id}_select" name="${id}_select" required title="" onchange="ens_class_onchange(${idx})">`
     options = {{form.classifier_options|tojson|safe}}
+
+    default_option = ''
+    if (`${id}_select` in defaults) {
+        default_option = defaults[`${id}_select`]
+    }
+
+    selected_classifier = options[0]
+
     options.forEach(option => {
-        result += `<option value=${option}>${option}</option>`
+        selected = ''
+        if (option == default_option) {
+            selected = 'selected'
+            selected_classifier = option
+        }
+        result += `<option value="${option}" ${selected}>${option}</option>`
     })
     result += `</select>`
 
     // hparams
     result += `<div id="${id}_hparams_div">`
-    hp = {{hyper_params|tojson|safe}}[options[0]]
+    hp = {{hyper_params|tojson|safe}}[selected_classifier]
     result += generate_hparam_html_helper(hp, `ens${idx}_`, size="large")
     result += `</div>`
 
-    return result
+    return {
+        'result': result,
+        'classifier': selected_classifier
+    }
 }
 function ens_class_onchange(idx) {
     // change hparams
@@ -279,27 +315,41 @@ function ens_class_onchange(idx) {
     valid_im = {{inmode_per_classifier|tojson|safe}}[selected_classifier]
     new_im_html = ''
     valid_im.forEach(mode => {
-        new_im_html += `<option value="${mode}">${mode}</option>`
+        selected = ''
+        if (`ens_input_${idx}_select` in defaults) {
+            if (mode == defaults[`ens_input_${idx}_select`]) {
+                selected = 'selected'
+            }
+        }
+        new_im_html += `<option value="${mode}" ${selected}>${mode}</option>`
     })
     target_element.innerHTML = new_im_html
     // trigger onchange
     ens_input_onchange(idx)
 }
-function ensemble_classifier_generate_input(idx) {
+function ensemble_classifier_generate_input(idx, classifier) {
     id = `ens_input_${idx}`
     result = ''
 
     // data
-    classifier = {{form.classifier_options|tojson|safe}}[0]
     valid_im = {{inmode_per_classifier|tojson|safe}}[classifier]
-    params = {{inmode_params|tojson|safe}}[valid_im[0]]
+    selected_im = valid_im[0]
 
     // select field with dropdown
     result += `<select id="${id}_select" name="${id}_select" required title="" onchange="ens_input_onchange(${idx})">`
     valid_im.forEach(mode => {
-        result += `<option value="${mode}">${mode}</option>`
+        selected = ''
+        if (`${id}_select` in defaults) {
+            if (mode == defaults[`${id}_select`]) {
+                selected = 'selected'
+                selected_im = mode
+            }
+        }
+        result += `<option value="${mode}" ${selected}>${mode}</option>`
     })
     result += `</select>`
+    
+    params = {{inmode_params|tojson|safe}}[selected_im]
 
     // params
     result += `<div id="${id}_params_div">`
@@ -316,6 +366,26 @@ function ens_input_onchange(idx) {
     new_param_html = generate_inmode_param_html_helper(params, `ens${idx}_`, size="large")
     document.getElementById(`${id}_params_div`).innerHTML = new_param_html
 }
+function generate_ens_classifier_section(idx) {
+    classifier_info = ensemble_classifier_generate_classifier(i)
+
+    new_html = `<div class="col-sm card"><div class="card-body"><h4>Classifier</h4>${classifier_info['result']}</div></div>`
+    new_html += `<div class="col-sm card"><div class="card-body"><h4>Pre-Processing</h4>${ensemble_classifier_generate_input(i, classifier_info['classifier'])}</div></div>`
+    return new_html
+}
+
+function optimizerChange(prefix='') {
+    elementToChange = document.getElementById(`${prefix}hparam_optimizer_sgd_container`)
+    selected = document.getElementById(`${prefix}hparam_optimizer`).value.toLowerCase()
+    switch(selected) {
+        case 'sgd':
+            elementToChange.setAttribute('class', '')
+            break;
+        default:
+            elementToChange.setAttribute('class', 'd-none')
+            break;
+    }
+}
 
 document.getElementById('ensemble_classifier_count_field').onchange = function() {
     newCount = this.value
@@ -331,11 +401,14 @@ document.getElementById('ensemble_classifier_count_field').onchange = function()
         new_html += `</h2>`
         new_html += `<div id="${div_id}" class="accordion-collapse collapse" area-labelledby="header_${div_id}" data-bs-parent="#ensemble_classifiers_div">`
         new_html += `<div class="accordion-body row">`
-        new_html += `<div class="col-sm card"><div class="card-body"><h4>Classifier</h4>${ensemble_classifier_generate_classifier(i)}</div></div>`
-        new_html += `<div class="col-sm card"><div class="card-body"><h4>Pre-Processing</h4>${ensemble_classifier_generate_input(i)}</div></div>`
+        new_html += generate_ens_classifier_section(i)
         new_html += `</div></div></div>\n`
     }
     document.getElementById('ensemble_classifiers_div').innerHTML = new_html
+
+    for (i = 0; i < newCount; i++) {
+        optimizerChange(`ens${i}_`)
+    }
 }
 document.getElementById('ensemble_classifier_count_field').onchange() // run once to init
 </script>
@@ -364,19 +437,6 @@ document.getElementById('use_early_stopping_field').onchange = function() {
     }
 }
 document.getElementById('use_early_stopping_field').onchange()
-
-function optimizerChange(prefix='') {
-    elementToChange = document.getElementById(`${prefix}hparam_optimizer_sgd_container`)
-    selected = document.getElementById(`${prefix}hparam_optimizer`).value.toLowerCase()
-    switch(selected) {
-        case 'sgd':
-            elementToChange.setAttribute('class', '')
-            break;
-        default:
-            elementToChange.setAttribute('class', 'd-none')
-            break;
-    }
-}
 
 document.getElementById('combination_strategy_field').onchange = function() {
     element_to_change = document.getElementById('meta-classifier-tab-header')

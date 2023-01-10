@@ -1,0 +1,1 @@
+{"general": {"output-mode": "Detection", "mode": "Single"}, "pre-processing": {"input-mode": "Doc2Vec", "params": {"vector-length": "400", "stemming_lemma": "Stemming"}}, "classifier": {"classifier": "FullyConnectedModel", "hyper-params": {"optimizer": "adam", "optimizer_sgdvalue": "0.0", "loss": "crossentropy"}}, "training": {"epochs": "1000"}}

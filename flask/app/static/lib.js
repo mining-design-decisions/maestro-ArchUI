@@ -1,25 +1,41 @@
 // helpers for below
 function render_field_str(col_a, col_b, tooltip, prefix, name, defaults) {
+    default_str = ''
+    if (`${prefix}${name}` in defaults) {
+        default_str = `value="${defaults[`${prefix}${name}`]}"`
+    }
     new_html = `<label class="col-${col_a} col-form-label" title="${tooltip}" for="${prefix}${name}">${name} </label>\n`
     new_html += `<div class="col-${col_b}">`
-    new_html += `<input title="${tooltip}" type="text" size="30" name="${prefix}${name}" id="${prefix}${name}">\n`
+    new_html += `<input title="${tooltip}" type="text" size="30" name="${prefix}${name}" id="${prefix}${name}" ${default_str}>\n`
     new_html += `</div>`
     return new_html
 }
 function render_field_int(col_a, col_b, tooltip, prefix, name, defaults) {
+    default_int = ''
+    if (`${prefix}${name}` in defaults) {
+        default_int = `value=${defaults[`${prefix}${name}`]}`
+    }
     new_html = `<label class="col-${col_a} col-form-label" title="${tooltip}" for="${prefix}${name}">${name} </label>\n`
     new_html += `<div class="col-${col_b}">`
-    ending = ''
     if (name == 'vector-length') {
-        ending = ' required value=400'
+        if (default_int.length > 0) {
+            default_int += ' required'
+        }
+        else {
+            default_int = ' required value=400'
+        }
     }
-    new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}${name}" id="${prefix}${name}" ${ending}>\n`
+    new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}${name}" id="${prefix}${name}" ${default_int}>\n`
     new_html += `</div>`
     return new_html
 }
 function render_field_bool(col_a, col_b, tooltip, prefix, name, defaults) {
+    default_bool = ''
+    if (`${prefix}${name}` in defaults && defaults[`${prefix}${name}`]) {
+        default_bool = `checked=checked`
+    }
     new_html = `<div class="col-${col_b} offset-${col_a}">`
-    new_html += `<input title="${tooltip}" type="checkbox" size="1" name="${prefix}${name}" id="${prefix}${name}">\n`
+    new_html += `<input title="${tooltip}" type="checkbox" size="1" name="${prefix}${name}" id="${prefix}${name}" ${default_bool}>\n`
     new_html += `<label title="${tooltip}" for="${prefix}${name}"> ${name}</label>\n`
     new_html += `</div>`
     return new_html
@@ -30,11 +46,19 @@ function render_field_select(col_a, col_b, tooltip, prefix, name, options, defau
         label = specific_label
     }
 
+    default_option = ''
+    if (`${prefix}${name}` in defaults) {
+        default_option = defaults[`${prefix}${name}`]
+    }
+
     new_html = `<label class="col-${col_a}" col-form-label" title="${tooltip}" for="${prefix}${name}">${label} </label>\n`
     new_html += `<div class="col-${col_b}">`
     new_html += `<select title="${tooltip}" name="${prefix}${name}" id="${prefix}${name}">\n`
     options.forEach(option => {
-        new_html += `<option value="${option}">${option}</option>\n`
+        selected = ''
+        if (option == default_option)
+            selected = 'selected'
+        new_html += `<option value="${option}" ${selected}>${option}</option>\n`
     })
     new_html += `</select>\n`
     new_html += '</div></div>\n'
@@ -66,8 +90,18 @@ function generate_hparam_html(hp, prefix="", size="small", defaults={}) {
                 new_html += `<div class="col-${col_b}">`
                 new_html += `<select title="${tooltip}" name="${prefix}hparam_${hparam.name}" id="${prefix}hparam_${hparam.name}" onchange="optimizerChange('${prefix}')">\n`
                 options = ['adam', 'sgd']
+
+                default_option = ''
+                if (`${prefix}hparam_${hparam.name}` in defaults) {
+                    default_option = defaults[`${prefix}hparam_${hparam.name}`]
+                }
+
                 options.forEach(option => {
-                    new_html += `<option value="${option}">${option}</option>\n`
+                    select_str = ''
+                    if (option == default_option) {
+                        select_str = 'selected'
+                    }
+                    new_html += `<option value="${option}" ${select_str}>${option}</option>\n`
                 })
                 new_html += `</select>\n`
                 new_html += '</div></div>\n'
@@ -77,10 +111,16 @@ function generate_hparam_html(hp, prefix="", size="small", defaults={}) {
                 new_html += `<div class='form-group row'>\n`
                 // got below from https://keras.io/api/optimizers/sgd/
                 tooltip = "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent."
-                name = "hparam_optimizer_sgdvalue"
+                name = `hparam_optimizer_sgdvalue`
                 new_html += `<label class="col-${col_a} col-form-label ps-4" title="${tooltip}" for="${prefix}${name}">SGD Momentum</label>\n`
                 new_html += `<div class="col-${col_b}">`
-                new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}${name}" id="${prefix}${name}" value="0.0" step=any>\n`
+
+                default_val = '0.0'
+                if (`${prefix}${name}` in defaults) {
+                    default_val = defaults[`${prefix}${name}`]
+                }
+
+                new_html += `<input title="${tooltip}" type="number" size="10" name="${prefix}${name}" id="${prefix}${name}" value="${default_val}" step=any>\n`
                 new_html += `</div></div>\n`
                 new_html += `</div>\n`
                 break;
