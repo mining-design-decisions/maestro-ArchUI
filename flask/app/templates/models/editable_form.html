@@ -15,12 +15,12 @@
         {% if type == 'size_30' %}
             <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
             <div class="col-sm-10">
-                {{ field(title=field.description, size=30, value=def, disabled=disabled) }}
+                {{ field(title=field.description, size=30, value=def, readonly=disabled) }}
             </div>
         {% elif type == 'default' %}
             <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
             <div class="col-sm-10">
-                {{ field(title=field.description, value=def, disabled=disabled) }}
+                {{ field(title=field.description, value=def, readonly=disabled) }}
             </div>
         {% elif type == 'select' %}
             <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
@@ -35,9 +35,9 @@
         {% elif type == 'inverted' %}
             <div class="col-sm-10 offset-sm-2">
                 {% if def == null %}
-                {{ field(title=field.description, disabled=disabled) }}
+                {{ field(title=field.description, readonly=disabled) }}
                 {% else %}
-                {{ field(title=field.description, checked=True, disabled=disabled)}}
+                {{ field(title=field.description, checked=True, readonly=disabled)}}
                 {% endif %}
                 <label class="col-form-label" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
             </div>
