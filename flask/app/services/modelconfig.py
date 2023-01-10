@@ -1,4 +1,19 @@
 # util for in this file
+training_tab_fields = { # config notation -> raw notation
+    'epochs': 'epochs_field',
+    'split-size': 'split_size_field',
+    'max-train': 'max_train_field',
+    'architectural-only': 'architectural_only_field',
+    'project-mode': 'project_mode_field',
+    # test-project: test_project_field
+    'class-balancer': 'class_balancer_field',
+    'apply-ontology-classes': 'apply_ontology_classes_field',
+    'batch-size': 'batch_size_field',
+    'use-early-stopping': 'use_early_stopping_field',
+    # other ES fields: patience, min-delta, attribute
+}
+
+# util for in this file
 def add_if_relevant(formdata, key, targetkey, target, bools):
     if key in formdata:
         if ('param_' in key and formdata[key] == 'on') or targetkey in bools:
@@ -84,16 +99,10 @@ def raw_to_config(formdata, bools):
 
     # tab: training
     training = {}
-    training['epochs'] = formdata.get('epochs_field')
-    add_if_relevant(formdata, 'split_size_field', 'split-size', training, bools)
-    add_if_relevant(formdata, 'max_train_field', 'max-train', training, bools)
-    add_if_relevant(formdata, 'architectural_only_field', 'architectural-only', training, bools)
-    add_if_relevant(formdata, 'project_mode_field', 'project-mode', training, bools)
+    for config_not,raw_not in training_tab_fields.items():
+        add_id_relevant(formdata, raw_not, config_not, training, bools)
     if 'project-mode' in training and training['project-mode'].lower() == 'test-project':
         training['test-project'] = formdata['test_project_field']
-    add_if_relevant(formdata, 'class_balancer_field', 'class-balancer', training, bools)
-    add_if_relevant(formdata, 'apply_ontology_classes_field', 'apply-ontology-classes', training, bools)
-    add_if_relevant(formdata, 'batch_size_field', 'batch-size', training, bools)
     if 'use_early_stopping_field' in formdata:
         training['use-early-stopping'] = True
         add_if_relevant(formdata, 'early_stopping_patience_field', 'early-stopping-patience', training, bools)
@@ -101,6 +110,7 @@ def raw_to_config(formdata, bools):
         add_if_relevant(formdata, 'early_stopping_attribute_field', 'early-stopping-attribute', training, bools)
 
     model['training'] = training
+
 
     return model
 
@@ -247,7 +257,82 @@ def config_to_cli(model_config, target_model_path):
 
     return args
 
-# to be used in edit model. convert a config to default values for the form
-def config_to_raw():
-    # todo
-    return {}
+# used in edit model. convert a config to default values for the form
+def config_to_raw(model_config):
+    formdata = {}
+
+    # tab: general
+    general = model_config['general']
+    formdata['output_mode_field'] = general['output-mode']
+    formdata['model_mode_field'] = general['mode'] 
+    if general['mode'] == 'Single':
+        pass # nothing else really
+    else:
+        # ensemble
+        formdata['combination_strategy_field'] = general['combination-strategy']
+
+    # if single:
+    if general['mode'] == 'Single':
+        # tab: pre-processing
+        prepro = model_config['pre-processing']
+        formdata['input_mode_field'] = prepro['input-mode']
+        
+        # all params
+        for param in prepro['params']:
+            formdata[f"param_{param}"] = prepro['params'][param]
+        
+        # tab: classifier
+        classifier = model_config['classifier']
+        formdata['classifier_field'] = classifier['classifier']
+        
+        # all hyper-params
+        for hp in classifier['hyper-params']:
+            formdata[f"hparam_{hp}"] = classifier['hyper-params'][hp]
+    # if ensemble:
+    else: 
+        ens_class = model_config['ensemble classifiers']
+        count = len(ens_class)
+        formdata['ensemble_classifier_count_field'] = count
+
+        for i in range(count):
+            # classifier & hparams
+            formdata[f'ens_class_{i}_select'] = ens_class[i]['classifier']
+
+            hparam_prefix = f'ens{i}_hparam_'
+            hparams = ens_class[i]['hyper-params']
+            for hp in hparams:
+                formdata[f'{hparam_prefix}{hp}'] = hparams[hp]
+            
+            # input mode & params
+            formdata[f'ens_input_{i}_select'] = ens_class[i]['input-mode']
+
+            param_prefix = f'ens{i}_param_'
+            params = ens_class[i]['params']
+            for p in params:
+                formdata[f'{param_prefix}{p}'] = params[p]
+
+        if general['combination-strategy'] == 'stacking':
+            # tab: ensemble meta classifier
+            meta_class = model_config['ensemble meta classifier']
+            formdata['stacking_meta_classifier_field'] = meta_class['classifier']
+            prefix = 'stacker_hparam_'
+            hparams = meta_class['hyper-params']
+            for hp in hparams:
+                formdata[f'{prefix}{hp}'] = hparams[hp]
+
+    # tab: training
+    training = model_config['training']
+    for config_not,raw_not in training_tab_fields.items():
+        if config_not in training:
+            formdata[raw_not] = training[config_not]
+    if 'project-mode' in training and training['project-mode'].lower() == 'test-project':
+        formdata['test_project_field'] = training['test-project']
+    if 'use-early-stopping' in training:
+        es_fields = ['patience', 'min_delta', 'attribute']
+        for field in es_fields:
+            fieldname_raw = f'early_stopping_{field}_field'
+            fieldname_config = f'early-stopping-{field}'
+            if fieldname_config in training:
+                formdata[fieldname_raw] = training[fieldname_config]
+
+    return formdata

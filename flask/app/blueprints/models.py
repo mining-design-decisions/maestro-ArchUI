@@ -13,7 +13,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, NumberRange
 
-from app.services.modelconfig import raw_to_config
+from app.services.modelconfig import raw_to_config, config_to_raw
 
 
 tooltips = lib.get_cli_json_tooltips()
@@ -98,7 +98,7 @@ def view(model):
         'pre-processing',
         'classifier',
         'ensemble classifiers',
-        'ensemble stacking classifier',
+        'ensemble meta classifier',
         'training'
     ]
     
@@ -157,11 +157,13 @@ def editExistingModel(model):
 
     with open(f'app/models/{model}.json', 'r') as f:
         existing_config = json.load(f)
+    form_defaults = config_to_raw(existing_config)
+    print(form_defaults)
     
     return render_template('models/editable_form.html',
         action='edit',
         form=form, 
-        defaults=existing_config,
+        defaults=form_defaults,
         hyper_params=hyper_params, 
         inmode_params=inmode_params,
         inmode_per_classifier=inmode_per_classifier)

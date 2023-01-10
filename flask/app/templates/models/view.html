@@ -63,6 +63,19 @@
             </ul>
         </div>
     </div>
+    {% elif key == 'ensemble meta classifier' %}
+    <div class="card m-2">
+        <div class="card-body">
+            <h3>{{key.title()}}</h3>
+            <div>Classifier: {{model[key]['classifier']}}</div>
+            <div>Hyper-Parameters:</div>
+            <ul>
+                {% for hp in model[key]['hyper-params'] %}
+                <li>{{hp}}: {{model[key]['hyper-params'][hp]}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
     {% elif key in tabs %}
     <div class="card m-2">
         <div class="card-body">
