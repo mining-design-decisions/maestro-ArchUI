@@ -2,25 +2,33 @@
 
 {% block subtitle %}{{action.title()}} Model{% endblock %}
 
-{% macro render_field(field, type='default', indent=false) %}
+{% macro render_field(field, type='default', indent=false, disabled=False) %}
     {% set field_label = "col-sm-2 col-form-label" %}
     {% if indent %}
     {% set field_label = "col-sm-2 col-form-label ps-4" %}
+    {% endif %}
+    {% set def = null %}
+    {% if field.id in defaults %}
+    {% set def = defaults[field.id] %}
     {% endif %}
     <div class="form-group row">
         {% if type == 'size_30' %}
             <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
             <div class="col-sm-10">
-                {{ field(title=field.description, size=30) }}
+                {{ field(title=field.description, size=30, value=def, disabled=disabled) }}
             </div>
         {% elif type == 'default' %}
             <label class="{{field_label}}" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
             <div class="col-sm-10">
-                {{ field(title=field.description) }}
+                {{ field(title=field.description, value=def, disabled=disabled) }}
             </div>
         {% elif type == 'inverted' %}
             <div class="col-sm-10 offset-sm-2">
-                {{ field(title=field.description) }}
+                {% if def == null %}
+                {{ field(title=field.description, disabled=disabled) }}
+                {% else %}
+                {{ field(title=field.description, checked=True, disabled=disabled)}}
+                {% endif %}
                 <label class="col-form-label" for="{{field.id}}" title="{{field.description}}">{{field.label.text}}</label>
             </div>
         {% endif %}
@@ -73,7 +81,7 @@
     <div class="tab-content" id="paramCatsContent">
         {{ render_tab_div('general', true) }}
             <!-- tab: general -->
-            {{ render_field(form.model_name_field, 'size_30') }}
+            {{ render_field(form.model_name_field, 'size_30', disabled=(action=='edit')) }}
             {{ render_field(form.output_mode_field) }}
             {{ render_field(form.model_mode_field) }}
             <div id="combination_strategy_field_div">

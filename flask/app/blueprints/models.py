@@ -158,7 +158,7 @@ def editExistingModel(model):
     with open(f'app/models/{model}.json', 'r') as f:
         existing_config = json.load(f)
     form_defaults = config_to_raw(existing_config)
-    print(form_defaults)
+    form_defaults['model_name_field'] = model
     
     return render_template('models/editable_form.html',
         action='edit',
