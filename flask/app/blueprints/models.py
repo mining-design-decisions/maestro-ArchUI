@@ -133,6 +133,7 @@ def createNewModel():
     return render_template('models/editable_form.html',
         action='create',
         form=form, 
+        defaults={},
         hyper_params=hyper_params, 
         inmode_params=inmode_params,
         inmode_per_classifier=inmode_per_classifier)

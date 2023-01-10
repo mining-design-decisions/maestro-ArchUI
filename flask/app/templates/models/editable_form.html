@@ -154,10 +154,10 @@
 <script src="{{url_for('static', filename='lib.js')}}"></script>
 <script>
 function generate_inmode_param_html_helper(params, prefix='', size='small') {
-    generate_inmode_param_html(params, prefix=prefix, size=size, defaults={{defaults|tojson|safe}})
+    return generate_inmode_param_html(params, prefix=prefix, size=size, defaults={{defaults|tojson|safe}})
 }
 function generate_hparam_html_helper(hparams, prefix='', size='small') {
-    generate_hparam_html(hparams, prefix=prefix, size=size, defaults={{defaults|tojson|safe}})
+    return generate_hparam_html(hparams, prefix=prefix, size=size, defaults={{defaults|tojson|safe}})
 }
 </script>
 
