@@ -1,5 +1,8 @@
-// todo defaults!
-function generate_hparam_html(hp, prefix="", size="small") {
+// helpers for below
+
+
+
+function generate_hparam_html(hp, prefix="", size="small", defaults={}) {
     new_html = ''
     col_a = "sm-2"
     col_b = "sm-10"
@@ -81,7 +84,7 @@ function generate_hparam_html(hp, prefix="", size="small") {
 }
 
 // todo defaults!
-function generate_inmode_param_html(params, prefix="", size="small") {
+function generate_inmode_param_html(params, prefix="", size="small", defaults={}) {
     col_a = "sm-2"
     col_b = "sm-10"
     if (size == "large") {

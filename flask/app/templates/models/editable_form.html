@@ -152,13 +152,22 @@
 {% block scripts %}
 {{ super() }}
 <script src="{{url_for('static', filename='lib.js')}}"></script>
+<script>
+function generate_inmode_param_html_helper(params, prefix='', size='small') {
+    generate_inmode_param_html(params, prefix=prefix, size=size, defaults={{defaults|tojson|safe}})
+}
+function generate_hparam_html_helper(hparams, prefix='', size='small') {
+    generate_hparam_html(hparams, prefix=prefix, size=size, defaults={{defaults|tojson|safe}})
+}
+</script>
+
 
 {# input select changes #}
 <script>
 document.getElementById('input_mode_field').onchange = function() {
     selected = this.value
     params = {{inmode_params|tojson|safe}}[selected]
-    new_html = generate_inmode_param_html(params)
+    new_html = generate_inmode_param_html_helper(params)
     document.getElementById('input_mode_parameters').innerHTML = new_html
 }
 document.getElementById('input_mode_field').onchange()
@@ -171,7 +180,7 @@ document.getElementById('classifier_select').onchange = function() {
 
     // set new hyper parameters
     hp = {{hyper_params|tojson|safe}}[c_selected]
-    new_html = generate_hparam_html(hp)
+    new_html = generate_hparam_html_helper(hp)
     document.getElementById('classifier_hyper_parameters').innerHTML = new_html
 
     // toggle valid input modes
@@ -189,7 +198,7 @@ document.getElementById('classifier_select').onchange() // run once to init
 document.getElementById('stacking_meta_classifier_field').onchange = function() {
     c_selected = this.value
     hparams = {{hyper_params|tojson|safe}}[c_selected]
-    new_hp_html = generate_hparam_html(hparams, 'stacker_')
+    new_hp_html = generate_hparam_html_helper(hparams, 'stacker_')
     document.getElementById('meta_classifier_hparams_div').innerHTML = new_hp_html
 }
 document.getElementById('stacking_meta_classifier_field').onchange()
@@ -252,7 +261,7 @@ function ensemble_classifier_generate_classifier(idx) {
     // hparams
     result += `<div id="${id}_hparams_div">`
     hp = {{hyper_params|tojson|safe}}[options[0]]
-    result += generate_hparam_html(hp, `ens${idx}_`, size="large")
+    result += generate_hparam_html_helper(hp, `ens${idx}_`, size="large")
     result += `</div>`
 
     return result
@@ -262,7 +271,7 @@ function ens_class_onchange(idx) {
     id=`ens_class_${idx}`
     selected_classifier = document.getElementById(`${id}_select`).value
     hp = {{hyper_params|tojson|safe}}[selected_classifier]
-    new_hp_html = generate_hparam_html(hp, `ens${idx}_`, size="large")
+    new_hp_html = generate_hparam_html_helper(hp, `ens${idx}_`, size="large")
     document.getElementById(`${id}_hparams_div`).innerHTML = new_hp_html
 
     // change input generator thingy
@@ -294,7 +303,7 @@ function ensemble_classifier_generate_input(idx) {
 
     // params
     result += `<div id="${id}_params_div">`
-    result += generate_inmode_param_html(params, `ens${idx}_`, size="large")
+    result += generate_inmode_param_html_helper(params, `ens${idx}_`, size="large")
     result += `</div>`
 
     return result
@@ -304,7 +313,7 @@ function ens_input_onchange(idx) {
     id = `ens_input_${idx}`
     selected_inmode = document.getElementById(`${id}_select`).value
     params = {{inmode_params|tojson|safe}}[selected_inmode]
-    new_param_html = generate_inmode_param_html(params, `ens${idx}_`, size="large")
+    new_param_html = generate_inmode_param_html_helper(params, `ens${idx}_`, size="large")
     document.getElementById(`${id}_params_div`).innerHTML = new_param_html
 }
 
