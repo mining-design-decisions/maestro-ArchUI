@@ -7,7 +7,7 @@ import json
 
 from app.jira_link import load_issues_for
 from app.ml_link import predict_with
-from app.util import rec_del_safe
+from app.util import rec_del_safe, get_default_run_name
 
 bp = Blueprint('run', __name__, url_prefix='/run')
 
@@ -27,6 +27,9 @@ def postSelect():
     # - grab input
     target_proj = request.form['projectkey']
     models_to_run = []
+    run_name = get_default_run_name()
+    if '_run_name' in request.form and len(request.form['_run_name']) > 0:
+        run_name = request.form['_run_name']
 
     for el in request.form:
         prefix = 'run_classifier_'
@@ -46,6 +49,7 @@ def postSelect():
             json.dump(proj_issues, f)
     
     # - use the predict functionality on the new project
+    results_all = {}
     for model in models_to_run:
         predict_with(model)
 
@@ -69,15 +73,36 @@ def postSelect():
                 'result': predictions.pop(0)
             })
 
-        with open(f'app/data/results/{model}.json', 'w+') as f:
-            json.dump({
-                'header': header,
-                'results': results,
-            }, f)
+        results_obj = {
+            'header': header,
+            'results': results,
+        }
+        results_all[model] = results_obj
 
-    # todo: combine separate results files into one? for list view purposes?
+        with open(f'app/data/results/{model}.json', 'w+') as f:
+            json.dump(results_obj, f)
+
+    # combine separate results files into one for list view purposes
+    # save in file: run_name.json
+    final_results = {}
+    for model in results_all:
+        headers = results_all[model]['header'].split(',')
+        for issue in results_all[model]['results']:
+            key = issue['key']
+            if not key in final_results:
+                final_results[key] = {}
+            verdict = issue['result'].split(',')
+            for i in range(len(headers)):
+                final_results[key][f'{model}: {headers[i]}'] = verdict[i]
+    
+    filename_to_save = f'app/data/runs/{run_name}.json'
+    with open(filename_to_save, 'w') as f:
+        json.dump(final_results, f)
+
+    print(filename_to_save)
 
     # - cleanup
+    # rec_del_safe('app/data/results')
 
     # features
     rec_del_safe('./features')

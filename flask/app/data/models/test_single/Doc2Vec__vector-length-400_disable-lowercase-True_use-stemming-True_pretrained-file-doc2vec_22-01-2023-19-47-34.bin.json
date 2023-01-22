@@ -1,0 +1,1 @@
+{"settings": {"pretrained-file": "doc2vec_22-01-2023-19-47-34.bin", "disable-lowercase": "True", "use-stemming": "True"}, "generator": "Doc2Vec"}
