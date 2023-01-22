@@ -2,6 +2,7 @@ from flask import render_template
 from flask import Blueprint
 from flask import redirect
 from flask import request
+from flask import url_for
 import os
 import json
 
@@ -108,4 +109,4 @@ def postSelect():
     rec_del_safe('./features')
 
     # todo: change below into displaying the results
-    return 'ok - post'
+    return redirect(url_for('issues.view', list=run_name))
