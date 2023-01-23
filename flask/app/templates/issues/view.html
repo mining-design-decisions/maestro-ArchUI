@@ -3,5 +3,40 @@
 {% block subtitle %}View Issue List{% endblock %}
 
 {% block margin_content %}
-<div>todo</div>
+<div>
+    <table id="data" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Action</th>
+                {% for header in headers %}
+                    <th>{{header}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for issue in issues %}
+            <tr>
+                <td>{{issue}}</td>
+                <td>(buttons)</td>
+                    {% for header in headers %}
+                        <td>{{issues[issue][header]}}</td>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+<script>
+    $(document).ready(function() {
+        // $('#data').DataTable()
+    })
+</script>
 {% endblock %}

@@ -10,8 +10,8 @@ def viewall():
     issue_lists = [x[:-5] for x in os.listdir('app/data/runs')]
     return render_template("issues/viewall.html", lists=issue_lists)
 
-@bp.route('/view/<list>', methods=["GET"])
-def view(list):
+@bp.route('/view/<list_name>', methods=["GET"])
+def view(list_name):
     # BIG TODO WITH THE WHOLE TABLE
     # AND THE PAGINATION
     issues = { # temp test data
@@ -28,4 +28,6 @@ def view(list):
             "Example Model: Probability Architectural": "0.00000"
         }
     }
-    return render_template("issues/view.html", issues=issues)
+    first_issue = list(issues.values())[0]
+    headers = list(first_issue.keys())
+    return render_template("issues/view.html", issues=issues, headers=headers)

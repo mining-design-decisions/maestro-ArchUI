@@ -5,7 +5,7 @@
 {% block margin_content %}
 <ul>
     {% for l in lists %}
-    <li><a href="{{ url_for('issues.view', list=l) }}">{{ l }}</a></li>
+    <li><a href="{{ url_for('issues.view', list_name=l) }}">{{ l }}</a></li>
     {% endfor %}
 </ul>
 {% endblock %}
