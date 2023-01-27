@@ -17,6 +17,7 @@
         <thead>
             <tr>
                 <th>Key</th>
+                <th>Issue Link</th>
                 <th>Action</th>
                 {% for header in headers %}
                     <th>{{header}}</th>
@@ -27,6 +28,7 @@
             {% for issue in issues %}
             <tr>
                 <td>{{issue}}</td>
+                <td><a href="https://issues.apache.org/jira/browse/{{issue}}" target="_blank">Issue</a></td>
                 <td>(buttons)</td>
                     {% for header in headers %}
                         <td>{{issues[issue][header]}}</td>
