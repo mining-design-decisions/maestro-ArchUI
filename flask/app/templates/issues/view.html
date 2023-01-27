@@ -74,6 +74,16 @@
         }
 
         console.log(user_input.split(','))
+        const target_url = {{url_for("issues.classify")|tojson}}
+        const body = {
+            "issue": issueKey,
+            "classification": user_input.toLowerCase().split(',')
+        }
+        fetch(target_url, {
+            "method": "POST",
+            "headers": {"Content-Type": "application/json"},
+            "body": JSON.stringify(body)
+        })
     }
 </script>
 {% endblock %}
