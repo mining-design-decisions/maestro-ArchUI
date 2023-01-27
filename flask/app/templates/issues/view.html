@@ -27,7 +27,7 @@
             {% for issue in issues %}
             <tr>
                 <td><a href="https://issues.apache.org/jira/browse/{{issue}}" target="_blank">{{issue}}</a></td>
-                <td>(buttons)</td>
+                <td><button onClick="displayDialog( '{{issue}}' )">Classify</button></td>
                     {% for header in headers %}
                         <td>{{issues[issue][header]}}</td>
                     {% endfor %}
@@ -49,5 +49,31 @@
         $.fn.dataTable.numString(/\d+/);
         $('#data').DataTable()
     })
+
+    function validateInput(input) {
+        const classifications = ["property","existence","executive"]
+        const nonarch = "non-architectural"
+        if (input.toLowerCase() === nonarch) return true // only nonarchitectural - that's fine
+        const in_split = input.toLowerCase().split(',')
+        if (in_split.length > 3) return false // we only process three different values
+        var valid = true
+        var processed = []
+        in_split.forEach(element => {
+            if (!classifications.includes(element)) valid = false // if one of the values is invalid, we reject
+            if (processed.includes(element)) valid=false // if one of the values is there multiple times, we reject
+            processed.push(element)
+        });
+        return valid
+    }
+
+    function displayDialog(issueKey) {
+        const prompt_q = "Enter your classification:\n(Examples: 'Existence', 'Executive,Property', 'Non-architectural')"
+        var user_input = prompt(prompt_q)
+        while (!validateInput(user_input)) {
+            user_input = prompt("Oops, that wasn't valid input. Try again:\n"+prompt_q)
+        }
+
+        console.log(user_input.split(','))
+    }
 </script>
 {% endblock %}
