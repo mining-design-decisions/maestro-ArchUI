@@ -29,6 +29,41 @@ def _get_issue_var(fields, path, field_type):
         return [item.name for item in value]
     return value
 
+def _get_issue_data(issue):
+    fields = issue.fields
+
+    comments = []
+    if hasattr(fields, 'comment') and  fields.comment is not None:
+        comments = [comment.body for comment in fields.comment.comments]
+
+    attachments = []
+    if hasattr(fields, 'attachment') and fields.attachment is not None:
+        attachments = len(fields.attachment)
+
+    
+    dictionary = {
+        'key': issue.key,
+        'n_attachments': attachments,
+        'n_comments': len(comments),
+        'comments': comments,
+        'n_components': len(_get_issue_var(fields, ['components'], list)),
+        'components': _get_issue_var(fields, ['components'], list),
+        'description': _get_issue_var(fields, ['description'], str),
+        'n_issuelinks': len(_get_issue_var(fields, ['issuelinks'], list)),
+        'issuetype': _get_issue_var(fields, ['issuetype', 'name'], str),
+        'n_labels': len(_get_issue_var(fields, ['labels'], list)),
+        'labels': _get_issue_var(fields, ['labels'], list),
+        'parent': _get_issue_var(fields, ['parent'], bool),
+        'priority': _get_issue_var(fields, ['priority', 'name'], str),
+        'resolution': _get_issue_var(fields, ['resolution', 'name'], str),
+        'status': _get_issue_var(fields, ['status', 'name'], str),
+        'n_subtasks': len(_get_issue_var(fields, ['subtasks'], list)),
+        'summary': _get_issue_var(fields, ['summary'], str),
+        'n_votes': _get_issue_var(fields, ['votes', 'votes'], int),
+        'n_watches': _get_issue_var(fields, ['watches', 'watchCount'], int),
+    }
+    return dictionary
+
 def _get_detailed_issues_for(project: str):
     fields = 'key, parent, summary, description, ' \
              'attachment, comment, issuelinks, ' \
@@ -49,38 +84,7 @@ def _get_detailed_issues_for(project: str):
     json_issues = []
 
     for issue in issues:
-        fields = issue.fields
-
-        comments = []
-        if hasattr(fields, 'comment') and  fields.comment is not None:
-            comments = [comment.body for comment in fields.comment.comments]
-
-        attachments = []
-        if hasattr(fields, 'attachment') and fields.attachment is not None:
-            attachments = len(fields.attachment)
-
-        
-        dictionary = {
-            'key': issue.key,
-            'n_attachments': attachments,
-            'n_comments': len(comments),
-            'comments': comments,
-            'n_components': len(_get_issue_var(fields, ['components'], list)),
-            'components': _get_issue_var(fields, ['components'], list),
-            'description': _get_issue_var(fields, ['description'], str),
-            'n_issuelinks': len(_get_issue_var(fields, ['issuelinks'], list)),
-            'issuetype': _get_issue_var(fields, ['issuetype', 'name'], str),
-            'n_labels': len(_get_issue_var(fields, ['labels'], list)),
-            'labels': _get_issue_var(fields, ['labels'], list),
-            'parent': _get_issue_var(fields, ['parent'], bool),
-            'priority': _get_issue_var(fields, ['priority', 'name'], str),
-            'resolution': _get_issue_var(fields, ['resolution', 'name'], str),
-            'status': _get_issue_var(fields, ['status', 'name'], str),
-            'n_subtasks': len(_get_issue_var(fields, ['subtasks'], list)),
-            'summary': _get_issue_var(fields, ['summary'], str),
-            'n_votes': _get_issue_var(fields, ['votes', 'votes'], int),
-            'n_watches': _get_issue_var(fields, ['watches', 'watchCount'], int),
-        }
+        issue_data = _get_issue_data(issue)
         json_issues.append(dictionary)
 
     return json_issues
@@ -200,15 +204,15 @@ def _format_issues(issues, labels):
     {
         "key": str,
         "is-design": bool,
-        "is_cat1": {
+        "is-cat1": {
             "name": str, # Existence, Executive, Property
             "value": bool
         },
-        "is_cat2": {
+        "is-cat2": {
             "name": str, # Existence, Executive, Property
             "value": bool
         },
-        "is_cat3": {
+        "is-cat3": {
             "name": str, # Existence, Executive, Property
             "value": bool
         }
@@ -220,3 +224,4 @@ def _format_issues(issues, labels):
 def load_issues_for(project: str, labels = []):
     issues = _get_detailed_issues_for(project)
     return _format_issues(issues, labels)
+

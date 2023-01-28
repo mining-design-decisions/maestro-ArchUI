@@ -23,4 +23,31 @@ def view(list_name):
 @bp.route('/classify', methods=["POST"])
 def classify():
     print(request.get_json())
+    reqbody = request.get_json()
+    issue_key = reqbody['issue']
+    labels = [x for x in reqbody['classification'] if x is not "non-architectural"]
+    label_obj = {
+        "key": issue_key,
+        "is-design": str(len(labels)>0),
+        "is-cat1": {
+            "name": "Existence",
+            "value": str("existence" in labels)
+        },
+        "is-cat2": {
+            "name": "Executive",
+            "value": str("executive" in labels)
+        },
+        "is-cat3": {
+            "name": "Property",
+            "value": str("property" in labels)
+        }
+    }
+
+    
+    with open('app/data/training_labels.json', 'r') as f:
+        label_data = json.load(f)
+    label_data.append(label_obj)
+    with open('app/data/training_labels.json', 'w') as f:
+        json.dump(label_data, f)
+    
     return 'ok'
