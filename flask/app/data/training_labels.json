@@ -59694,5 +59694,21 @@
             "name": "Ban",
             "value": "False"
         }
+    },
+    {
+        "key": "TAJO-1",
+        "is-design": "False",
+        "is-cat1": {
+            "name": "Existence",
+            "value": "False"
+        },
+        "is-cat2": {
+            "name": "Executive",
+            "value": "False"
+        },
+        "is-cat3": {
+            "name": "Property",
+            "value": "False"
+        }
     }
 ]

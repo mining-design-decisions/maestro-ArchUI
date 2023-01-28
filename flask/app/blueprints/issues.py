@@ -25,7 +25,8 @@ def classify():
     print(request.get_json())
     reqbody = request.get_json()
     issue_key = reqbody['issue']
-    labels = [x for x in reqbody['classification'] if x is not "non-architectural"]
+    labels = [x for x in reqbody['classification'] if x != "non-architectural"]
+    print(labels)
     label_obj = {
         "key": issue_key,
         "is-design": str(len(labels)>0),
@@ -46,8 +47,14 @@ def classify():
     
     with open('app/data/training_labels.json', 'r') as f:
         label_data = json.load(f)
+    for i in range(len(label_data)):
+        this_label = label_data[i]
+        if this_label['key'] == issue_key:
+            del label_data[i]
+            break
+            
     label_data.append(label_obj)
     with open('app/data/training_labels.json', 'w') as f:
-        json.dump(label_data, f)
+        json.dump(label_data, f, indent=4)
     
     return 'ok'
