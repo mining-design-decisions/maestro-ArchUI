@@ -109,4 +109,4 @@ def postSelect():
     rec_del_safe('./features')
 
     # todo: change below into displaying the results
-    return redirect(url_for('issues.view', list=run_name))
+    return redirect(url_for('issues.view', list_name=run_name))

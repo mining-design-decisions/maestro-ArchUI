@@ -217,6 +217,8 @@ def predict_with(model_name):
         f'app/data/models/{model_name}', '--data', 
         'app/data/testing.json']
 
+    print(' '.join(args))
+
     import sys
     sys.argv = args
 

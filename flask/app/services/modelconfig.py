@@ -51,7 +51,7 @@ def raw_to_config(formdata, bools):
 
         # tab: classifier
         classifier = {}
-        classifier['classifier'] = formdata.get('classifier_field')
+        classifier['classifier'] = formdata.get('classifier_select')
         hyper_params = [x for x in formdata if x.startswith('hparam_')]
         hparams = {}
         for p in hyper_params:
@@ -233,9 +233,13 @@ def config_to_cli(model_config, target_model_path):
 
     # training
     for param in model_config['training']:
-        command += f" --{param}"
-        if type(model_config['training'][param]) != bool:
-            command += f" {model_config['training'][param]}"
+        match param: 
+            case 'project-mode':
+                pass
+            case _:
+                command += f" --{param}"
+                if type(model_config['training'][param]) != bool:
+                    command += f" {model_config['training'][param]}"
 
     # finalize with some always-set parameters
     additional_params = {

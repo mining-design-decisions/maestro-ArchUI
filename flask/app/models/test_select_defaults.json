@@ -1,1 +1,0 @@
-{"general": {"output-mode": "Detection", "mode": "Single"}, "pre-processing": {"input-mode": "Word2Vec1D", "params": {"vector-length": "400"}}, "classifier": {"classifier": "LinearConv1Model", "hyper-params": {"optimizer": "adam", "optimizer_sgdvalue": "0.0", "loss": "crossentropy"}}, "training": {"epochs": "1000"}}

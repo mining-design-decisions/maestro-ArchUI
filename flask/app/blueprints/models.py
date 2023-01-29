@@ -51,8 +51,8 @@ class CreateModelForm(FlaskForm):
     epochs_field = IntegerField('Epochs', validators=[DataRequired(), NumberRange(min=1)], description=tooltips['epochs'], default=1000)
     split_size_field = DecimalField('Split-Size', validators=[NumberRange(min=0.01, max=0.5)], description=tooltips['split-size'])
     max_train_field = IntegerField('Max-Train', validators=[NumberRange(min=-1)], description=tooltips['max-train'])
-    project_mode_field = SelectField('Project Mode', choices=['','Cross-Project', 'Test-Project'], description='Run cross project validation, use a specific project as test set, or neither.')
-    test_project_field = StringField('Test-Project', description=tooltips['test-project'])
+    # project_mode_field = SelectField('Project Mode', choices=['','Cross-Project', 'Test-Project'], description='Run cross project validation, use a specific project as test set, or neither.')
+    # test_project_field = StringField('Test-Project', description=tooltips['test-project'])
     apply_ontology_classes_field = BooleanField('Apply-Ontology-Classes', description=tooltips['apply-ontology-classes'])
     architectural_only_field = BooleanField('Architectural-Only', description=tooltips['architectural-only'])
     class_balancer_field = SelectField('Class-Balancer', choices=['', 'class-weight', 'upsample'], description=tooltips['class-balancer'])
@@ -144,7 +144,6 @@ def createNewModel():
 
 @bp.route('/create', methods=["POST"])
 def createModel():
-    print(':)')
     # todo validity checking
     # - including does this name already exist?
     model_name = request.form.get('model_name_field')

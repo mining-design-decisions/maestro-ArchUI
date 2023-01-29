@@ -18,6 +18,7 @@
             <tr>
                 <th>Key</th>
                 <th>Action</th>
+                <th>Classification</th>
                 {% for header in headers %}
                     <th>{{header}}</th>
                 {% endfor %}
@@ -28,6 +29,7 @@
             <tr>
                 <td><a href="https://issues.apache.org/jira/browse/{{issue}}" target="_blank">{{issue}}</a></td>
                 <td><button onClick="displayDialog( '{{issue}}' )">Classify</button></td>
+                <td>{{classifications[issue]}}</td>
                     {% for header in headers %}
                         <td>{{issues[issue][header]}}</td>
                     {% endfor %}

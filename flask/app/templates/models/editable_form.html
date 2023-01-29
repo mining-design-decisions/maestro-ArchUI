@@ -105,10 +105,12 @@
             {{ render_field(form.split_size_field) }}
             {{ render_field(form.max_train_field) }}
             {{ render_field(form.architectural_only_field, 'inverted') }}
-            {{ render_field(form.project_mode_field, 'select') }}
+            <!--
+            {# render_field(form.project_mode_field, 'select') #}
             <div id="test_project_field_div">
-                {{ render_field(form.test_project_field, 'size_30', indent=true) }}
+                {# render_field(form.test_project_field, 'size_30', indent=true) #}
             </div>
+            -->
             {{ render_field(form.class_balancer_field, 'select') }}
             {{ render_field(form.apply_ontology_classes_field, 'inverted') }}
             {{ render_field(form.batch_size_field) }}
@@ -415,6 +417,7 @@ document.getElementById('ensemble_classifier_count_field').onchange() // run onc
 
 {# interactive form hiding/showing of subfields #}
 <script>
+/*
 document.getElementById('project_mode_field').onchange = function() {
     selected = this.value.toLowerCase()
     switch (selected) {
@@ -426,6 +429,7 @@ document.getElementById('project_mode_field').onchange = function() {
     }
 }
 document.getElementById('project_mode_field').onchange()
+*/
 
 document.getElementById('use_early_stopping_field').onchange = function() {
     toChange = document.getElementById('early_stopping_div')
