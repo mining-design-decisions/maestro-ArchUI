@@ -85,7 +85,7 @@ def _get_detailed_issues_for(project: str):
 
     for issue in issues:
         issue_data = _get_issue_data(issue)
-        json_issues.append(dictionary)
+        json_issues.append(issue_data)
 
     return json_issues
 
@@ -225,3 +225,17 @@ def load_issues_for(project: str, labels = []):
     issues = _get_detailed_issues_for(project)
     return _format_issues(issues, labels)
 
+def regenerate_training_data(labels):
+    fields = 'key, parent, summary, description, ' \
+             'attachment, comment, issuelinks, ' \
+             'issuetype, labels, priority, ' \
+             'resolution, status, subtasks, ' \
+             'votes, watches, components'
+    jira = JIRA(APACHE_JIRA_SERVER) # no auth because no account? todo
+    issues = []
+    for label in labels:
+        key = label['key']
+        issue_raw = jira.search_issues(f'key={key}', fields=fields)[0]
+        issue_data = _get_issue_data(issue_raw)
+        issues.append(issue_data)
+    return _format_issues(issues, labels)

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}Training Data{% endblock %}
+
+{% block margin_content %}
+<div>
+    <P>Amount of issues in the active training data: {{ amt_data }}</P>
+    <p>Amount of labeled issues: {{ amt_labels }}</p>
+    <button onClick="regenerateData()">Regenerate Training Data from Labels</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+function regenerateData() {
+    target_url = {{url_for("training.regenerate")|tojson}}
+    fetch(target_url, {
+        "method": "POST"
+    })
+}
+</script>
+{% endblock %}
