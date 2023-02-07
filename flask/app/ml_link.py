@@ -13,6 +13,7 @@ from deep_learning.dl_manager import cli
 from deep_learning.dl_manager import feature_generators
 from deep_learning.dl_manager import classifiers
 from deep_learning.issuedata_extractor.text_cleaner import remove_formatting, fix_punctuation, FormattingHandling
+from deep_learning.dl_manager.config import conf
 
 
 def get_cli_json():
@@ -184,6 +185,7 @@ def train_model(model_name):
 
     # use the CLI
     sys.argv = args
+    conf.reset()
     cli.main()
 
     # grab performance
@@ -222,4 +224,5 @@ def predict_with(model_name):
     import sys
     sys.argv = args
 
+    conf.reset()
     cli.main()

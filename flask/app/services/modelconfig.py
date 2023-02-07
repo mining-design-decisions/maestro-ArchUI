@@ -248,7 +248,7 @@ def config_to_cli(model_config, target_model_path):
         "store-model": True,
         "target-model-path": target_model_path
     }
-    if 'apply-ontology-classes' in model_config['training']:
+    if 'apply-ontology-classes' in model_config['training'] or model_config['pre-processing']['input-mode'].lower() == "ontologyfeatures":
         additional_params['ontology-classes'] = 'app/data/ontologies.json'
 
     args = command.split(' ')

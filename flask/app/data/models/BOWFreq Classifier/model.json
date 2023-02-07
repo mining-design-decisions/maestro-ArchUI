@@ -2,8 +2,9 @@
     "model_type": "single",
     "model_path": "0",
     "feature_generators": [
-        "BOWFrequency__max-len-400_disable-lowercase-True_disable-stopwords-True_use-pos-True.json"
+        "BOWFrequency__disable-lowercase-True_disable-stopwords-True.json"
     ],
+    "auxiliary_files": {},
     "feature_settings": {
         "make_features.input_mode": [
             "BOWFrequency"
@@ -12,10 +13,8 @@
         "make_features.file": "app\\data\\training.json",
         "make_features.params": {
             "default": {
-                "max-len": "400",
                 "disable-lowercase": "True",
-                "disable-stopwords": "True",
-                "use-pos": "True"
+                "disable-stopwords": "True"
             }
         },
         "make_features.ontology_classes": "",
@@ -33,7 +32,7 @@
         "run.quick_cross": false,
         "run.cross_project": false,
         "run.force_regenerate_data": true,
-        "run.architectural_only": true,
+        "run.architectural_only": false,
         "run.hyper_params": {
             "default": {
                 "number-of-hidden-layers": "2",
@@ -56,7 +55,7 @@
         "run.stacking_no_matrix": false,
         "run.boosting_rounds": 10,
         "run.use_early_stopping": true,
-        "run.early_stopping_patience": 30,
+        "run.early_stopping_patience": 5,
         "run.early_stopping_min_delta": [
             0.001
         ],
@@ -74,75 +73,12 @@
         "run.file": "app\\data\\training.json",
         "run.params": {
             "default": {
-                "max-len": "400",
                 "disable-lowercase": "True",
-                "disable-stopwords": "True",
-                "use-pos": "True"
+                "disable-stopwords": "True"
             }
         },
         "run.ontology_classes": "",
         "run.apply_ontology_classes": false,
-        "run.save_trained_generator": false,
-        "run_analysis.summarize.short": false,
-        "run_analysis.summarize.trim": false,
-        "run_analysis.summarize.patience": 1,
-        "run_analysis.summarize.min_index": 0,
-        "run_analysis.summarize.min_delta": [
-            0.001
-        ],
-        "run_analysis.summarize.trimming_attribute": [
-            "val-loss"
-        ],
-        "run_analysis.summarize.max_attribute": "None",
-        "run_analysis.plot.plot_type": "line",
-        "run_analysis.plot.include_maxima": false,
-        "run_analysis.plot.tolerance": 0.1,
-        "run_analysis.plot.trim": false,
-        "run_analysis.plot.patience": 1,
-        "run_analysis.plot.min_index": 0,
-        "run_analysis.plot.min_delta": [
-            0.001
-        ],
-        "run_analysis.plot.trimming_attribute": [
-            "val-loss"
-        ],
-        "run_analysis.compare.trim": false,
-        "run_analysis.compare.patience": 1,
-        "run_analysis.compare.min_index": 0,
-        "run_analysis.compare.min_delta": [
-            0.001
-        ],
-        "run_analysis.compare.trimming_attribute": [
-            "val-loss"
-        ],
-        "run_analysis.compare.max_attribute": "None",
-        "run_analysis.plot_attributes.trim": false,
-        "run_analysis.plot_attributes.patience": 1,
-        "run_analysis.plot_attributes.min_index": 0,
-        "run_analysis.plot_attributes.min_delta": [
-            0.001
-        ],
-        "run_analysis.plot_attributes.trimming_attribute": [
-            "val-loss"
-        ],
-        "run_analysis.confusion.trim": false,
-        "run_analysis.confusion.patience": 1,
-        "run_analysis.confusion.min_index": 0,
-        "run_analysis.confusion.min_delta": [
-            0.001
-        ],
-        "run_analysis.confusion.trimming_attribute": [
-            "val-loss"
-        ],
-        "run_analysis.compare_stats.trim": false,
-        "run_analysis.compare_stats.patience": 1,
-        "run_analysis.compare_stats.min_index": 0,
-        "run_analysis.compare_stats.min_delta": [
-            0.001
-        ],
-        "run_analysis.compare_stats.trimming_attribute": [
-            "val-loss"
-        ],
-        "run_analysis.compare_stats.max_attribute": "None"
+        "run.save_trained_generator": false
     }
 }
