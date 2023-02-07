@@ -219,6 +219,16 @@ def predict_with(model_name):
         f'app/data/models/{model_name}', '--data', 
         'app/data/testing.json']
 
+    """
+    match model_params["pre-processing"]["input-mode"].lower():
+        case "ontologyfeatures":
+            args.append("--ontology-classes")
+            args.append("app/data/ontologies.json")
+        case "doc2vec":
+            args.append("vector-length")
+            args.append(model_params["pre-processing"]["params"]["vector-length"])
+    """
+    
     print(' '.join(args))
 
     import sys

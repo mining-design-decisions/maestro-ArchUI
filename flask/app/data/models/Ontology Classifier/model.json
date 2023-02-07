@@ -19,7 +19,7 @@
         },
         "make_features.ontology_classes": "app/data/ontologies.json",
         "make_features.apply_ontology_classes": false,
-        "make_features.save_trained_generator": false
+        "make_features.save_trained_generator": true
     },
     "model_settings": {
         "run.classifier": [
@@ -79,6 +79,6 @@
         },
         "run.ontology_classes": "app/data/ontologies.json",
         "run.apply_ontology_classes": false,
-        "run.save_trained_generator": false
+        "run.save_trained_generator": true
     }
 }
