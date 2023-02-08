@@ -116,7 +116,7 @@ def trainModel(model):
     model_obj['last-trained'] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     model_obj['performance'] = performance
     with open(f'app/models/{model}.json', 'w') as f:
-        json.dump(model_obj, f)
+        json.dump(model_obj, f, indent=4)
 
     return redirect(url_for('models.view', model=model))
 
@@ -149,9 +149,9 @@ def createModel():
     bools = lib.get_cli_json_bools()
     model_data = raw_to_config(request.form, bools)
     with open(f'app/models/{model_name}.json', 'w') as f:
-        json.dump(model_data, f)
+        json.dump(model_data, f, indent=4)
 
-    return redirect(url_for('models.viewall'))
+    return redirect(url_for('models.view', model=model_name))
 
 @bp.route('/edit/<model>', methods=["GET"])
 def editExistingModel(model):
@@ -178,7 +178,7 @@ def editModel():
     bools = lib.get_cli_json_bools()
     model_data = raw_to_config(request.form, bools)
     with open(f'app/models/{model_name}.json', 'w') as f:
-        json.dump(model_data, f)
+        json.dump(model_data, f, indent=4)
 
     return redirect(url_for('models.viewall'))
 

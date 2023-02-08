@@ -197,6 +197,7 @@ def train_model(model_name):
 
     # clean up features
     rec_del_safe('./features')
+    rec_del_safe('./raw_words')
     # root dir files
     for file in os.listdir('.'):
         if os.path.isdir(file):
@@ -236,3 +237,6 @@ def predict_with(model_name):
 
     conf.reset()
     cli.main()
+
+    rec_del_safe('./features')
+    rec_del_safe('./raw_words')

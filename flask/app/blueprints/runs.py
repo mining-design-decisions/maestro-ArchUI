@@ -4,13 +4,13 @@ import os
 import json
 from flask import request
 
-bp = Blueprint("issues", __name__, url_prefix="/issues")
+bp = Blueprint("runs", __name__, url_prefix="/runs")
 
 @bp.route('/viewall', methods=["GET"])
 def viewall():
     # show all
     issue_lists = [x[:-5] for x in os.listdir('app/data/runs')]
-    return render_template("issues/viewall.html", lists=issue_lists)
+    return render_template("runs/viewall.html", lists=issue_lists)
 
 def _format_label(label):
     if not label['is-design']:
@@ -40,7 +40,7 @@ def view(list_name):
         else:
             classifications[issue] = key_to_label[issue]
 
-    return render_template("issues/view.html", issues=issues, headers=headers, classifications=classifications)
+    return render_template("runs/view.html", issues=issues, headers=headers, classifications=classifications)
 
 @bp.route('/classify', methods=["POST"])
 def classify():
@@ -79,4 +79,4 @@ def classify():
     with open('app/data/training_labels.json', 'w') as f:
         json.dump(label_data, f, indent=4)
     
-    return 'ok'
+    return 'ok' # todo

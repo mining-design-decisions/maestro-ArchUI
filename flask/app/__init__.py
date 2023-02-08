@@ -20,11 +20,11 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from .blueprints import models, run, issues, training
+    from .blueprints import models, predict, runs, training
 
     app.register_blueprint(models.bp)
-    app.register_blueprint(run.bp)
-    app.register_blueprint(issues.bp)
+    app.register_blueprint(predict.bp)
+    app.register_blueprint(runs.bp)
     app.register_blueprint(training.bp)
 
     @app.route("/hello")

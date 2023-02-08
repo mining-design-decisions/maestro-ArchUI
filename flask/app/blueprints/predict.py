@@ -10,7 +10,7 @@ from app.jira_link import load_issues_for
 from app.ml_link import predict_with
 from app.util import rec_del_safe, get_default_run_name
 
-bp = Blueprint('run', __name__, url_prefix='/run')
+bp = Blueprint('predict', __name__, url_prefix='/predict')
 
 @bp.route('/select', methods=['GET'])
 def select():
@@ -20,7 +20,7 @@ def select():
         if file.endswith('.json'):
             models.append(file[:-5])
 
-    return render_template('run/select.html', models=models)
+    return render_template('predict/select.html', models=models)
 
 @bp.route('/select', methods=['POST'])
 def postSelect():
@@ -47,7 +47,7 @@ def postSelect():
         print('Regenerating testing data')
         proj_issues = load_issues_for(target_proj)
         with open('app/data/testing.json', 'w+') as f:
-            json.dump(proj_issues, f)
+            json.dump(proj_issues, f, indent=4)
     
     # - use the predict functionality on the new project
     results_all = {}
@@ -81,7 +81,7 @@ def postSelect():
         results_all[model] = results_obj
 
         with open(f'app/data/results/{model}.json', 'w+') as f:
-            json.dump(results_obj, f)
+            json.dump(results_obj, f, indent=4)
 
     # combine separate results files into one for list view purposes
     # save in file: run_name.json
@@ -98,15 +98,11 @@ def postSelect():
     
     filename_to_save = f'app/data/runs/{run_name}.json'
     with open(filename_to_save, 'w') as f:
-        json.dump(final_results, f)
+        json.dump(final_results, f, indent=4)
 
     print(filename_to_save)
 
     # - cleanup
-    # rec_del_safe('app/data/results')
+    rec_del_safe('app/data/results')
 
-    # features
-    rec_del_safe('./features')
-
-    # todo: change below into displaying the results
-    return redirect(url_for('issues.view', list_name=run_name))
+    return redirect(url_for('runs.view', list_name=run_name))

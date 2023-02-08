@@ -3,10 +3,45 @@
 {% block subtitle %} Home{% endblock %}
 
 {% block margin_content %}
-<div id="content">
+<div>
     <h3>Home page</h3>
-    <p>ArchUI is a tool to facilitate using Deep Learning Models to identify and classify software design decisions.</p>
-    <p>Use the tabs in the navbar to view currently available models, create new ones, or run them on a project.</p>
-    <p>See the tabs under Help for more information about various more convoluted elements.</p>
+    <p>ArchUI is a tool to facilitate using Deep Learning Models to identify and classify software design decisions in the Apache Jira issue tracking system.</p>
+    <p>Use the tabs in the navbar to view currently available models, create new ones, or run them on a project. More detailed information is available under the divider, or in the readme.</p>
+    <p>The tabs under Help in the navbar provide detailed information also available in the model config editor, but in one place outside of tooltips.</p>
+
+    <hr />
+    <div class="container">
+        <div class="row my-3">
+            <div class="col-sm">
+                <div class="mx-2">
+                    <h4>Managing Models</h4>
+                    <p>In this application, the term 'model' can refer to two things: either the model configuration, which is used to generate the CLI command, or the trained model data files.</p>
+                    <p>The page 'Create a new model' allows you to create a new model configuration. Hover over the input fields/dropdowns/checkboxes to see a tooltip. Once you are done, click the button at the bottom to save the configuration.</p>
+                    <p>Clicking this button will create the config and redirect you to the view page for your new config. There, you can see all available model configs, and select one for more detailed action.</p>
+                    <p>Available actions on model configurations are currently to train and to edit the configuration. Training a model uses the CLI's <code>run</code> command, saving the trained model to be used for prediction later on. While editing the configuration, you can change any of the previously entered options, except for the model config's name.</p>
+                    <p>In the default version of this project, all models from the 'mining-design-decisions' report table 17 are available pre-made and pre-trained.</p>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="mx-2">
+                    <h4>Predicting with Models</h4>
+                    <p>In the 'Predict With Models' tab, you will see options to select any number of models, and select the project they will be run on. Running these models means that they will be used to predict the design decision content of all issues in the target project. This action will create a file called a 'run'. Upon completion of the prediction, you will be redirected to the table view of the freshly-completed run. Additionally, in the 'View Runs' tab, you can also see all previously saved runs.</p>
+                    <p>In the table view, every issue has its own row. In this row, you will find first a link to the issue which automatically opens in a new tab, the current classification of this issue in the training data, and the predictions of all selected models regarding this issue.</p>
+                    <p>Classifying an issue in this view will put relevant information into the training labels file. In order to formalize these changes into the actual training data, you must go to the Training Data tab.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-sm">
+                <div class="mx-2">
+                    <h4>Managing Training Data</h4>
+                    <p>Currently, in the Training Data tab, you can only generate a new training data file from the training labels file. More functions, including insights about the training data, are planned.</p>
+                </div>
+            </div>
+            <div class="col-sm">
+
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

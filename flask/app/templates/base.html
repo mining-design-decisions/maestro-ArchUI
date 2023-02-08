@@ -27,10 +27,10 @@
                             <a href="{{ url_for('models.createNewModel') }}" class="nav-link">Create New Model</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url_for('run.select') }}" class="nav-link">Run Model(s)</a>
+                            <a href="{{ url_for('predict.select') }}" class="nav-link">Predict With Models</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url_for('issues.viewall') }}" class="nav-link">View all Issue Lists</a>
+                            <a href="{{ url_for('runs.viewall') }}" class="nav-link">View All Runs</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url_for('training.view') }}" class="nav-link">Training Data</a>
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </nav>
-        <div class="padding-y-md">
+        <div class="py-2 px-4">
             {% block margin_content %}{% endblock %}
         </div>
         {% block scripts %}

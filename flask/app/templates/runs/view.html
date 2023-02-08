@@ -76,7 +76,7 @@
         }
 
         console.log(user_input.split(','))
-        const target_url = {{url_for("issues.classify")|tojson}}
+        const target_url = {{url_for("runs.classify")|tojson}}
         const body = {
             "issue": issueKey,
             "classification": user_input.toLowerCase().split(',')
