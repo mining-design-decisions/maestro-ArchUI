@@ -49,12 +49,13 @@ def postSelect():
         with open('app/data/testing.json', 'w+') as f:
             json.dump(proj_issues, f, indent=4)
     
-    # - use the predict functionality on the new project
+    # - use the predict functionality on the new project and format/save the results
+    # todo: stop using intermediary files, just use one object
     results_all = {}
     for model in models_to_run:
         predict_with(model)
 
-        # - save the results
+        # - format and save the results
         with open('predictions.csv', 'r') as f:
             predictions_raw = f.readlines()
         header = predictions_raw.pop(0).strip()
@@ -96,11 +97,8 @@ def postSelect():
             for i in range(len(headers)):
                 final_results[key][f'{model}: {headers[i]}'] = verdict[i]
     
-    filename_to_save = f'app/data/runs/{run_name}.json'
-    with open(filename_to_save, 'w') as f:
+    with open(f'app/data/runs/{run_name}.json', 'w') as f:
         json.dump(final_results, f, indent=4)
-
-    print(filename_to_save)
 
     # - cleanup
     rec_del_safe('app/data/results')

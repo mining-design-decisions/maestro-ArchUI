@@ -18,9 +18,7 @@ def view():
 def regenerate():
     with open('app/data/training_labels.json') as f:
         labels = json.load(f)
-    print('a')
     new_training_data = regenerate_training_data(labels)
     with open('app/data/training.json', 'w') as f:
         json.dump(new_training_data, f, indent=4)
-    print('b')
     return "ok"

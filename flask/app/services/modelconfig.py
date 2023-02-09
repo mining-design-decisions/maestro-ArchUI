@@ -5,12 +5,12 @@ training_tab_fields = { # config notation -> raw notation
     'max-train': 'max_train_field',
     'architectural-only': 'architectural_only_field',
     'project-mode': 'project_mode_field',
-    # test-project: test_project_field
+    # test-project: test_project_field, # commented because this is a conditional parameter and is not always there
     'class-balancer': 'class_balancer_field',
     'apply-ontology-classes': 'apply_ontology_classes_field',
     'batch-size': 'batch_size_field',
     'use-early-stopping': 'use_early_stopping_field',
-    # other ES fields: patience, min-delta, attribute
+    # other ES fields: patience, min-delta, attribute, commented because see test-project
 }
 
 # util for in this file
@@ -22,6 +22,7 @@ def add_if_relevant(formdata, key, targetkey, target, bools):
             target[targetkey] = formdata[key]
 
 # used in creating (& editing) models
+# convert a model configuration from the raw straight-from-the-form format into a nice readable json format
 def raw_to_config(formdata, bools):
     model = {}
 
@@ -35,7 +36,7 @@ def raw_to_config(formdata, bools):
         general['combination-strategy'] = formdata.get('combination_strategy_field')
     model['general'] = general
 
-    # if single:
+    # if single model mode:
     if general['mode'] == "Single":
         # tab: pre-processing
         prepro = {}
@@ -58,7 +59,7 @@ def raw_to_config(formdata, bools):
             add_if_relevant(formdata, p, p[7:], hparams, bools)
         classifier['hyper-params'] = hparams
         model['classifier'] = classifier
-    else: # ensemble
+    else: # ensemble model mode
         # tab: ensemble classifiers
         ens_class = []
         ens_classifiers_count = int(formdata.get('ensemble_classifier_count_field', 0))
@@ -111,10 +112,9 @@ def raw_to_config(formdata, bools):
 
     model['training'] = training
 
-
     return model
 
-# helper for below fn
+# helper: transform config format json hyperparameters into CLI format
 def _config_to_cli_hparams(hparams, prefix=''):
     command = ''
     hyper_param_keys = [x for x in hparams if not 'optimizer' in x]
@@ -128,7 +128,7 @@ def _config_to_cli_hparams(hparams, prefix=''):
 
     return command
 
-# helper for below fn
+# helper: transform config format json inputmode parameters into CLI format
 def _config_to_cli_params(params, prefix=''):
     command = ''
     for param in params:
@@ -144,7 +144,7 @@ def _config_to_cli_params(params, prefix=''):
 
     return command
 
-# used in training models
+# used in training models: convert json configs into CLI command strings
 def config_to_cli(model_config, target_model_path):
     command = "__main__.py run"
 
@@ -224,7 +224,7 @@ def config_to_cli(model_config, target_model_path):
             command += ' --stacking-meta-classifier-hyper-parameters'
             command += _config_to_cli_hparams(model_config['ensemble meta classifier']['hyper-params'])
 
-            # todo change if we ever get more stackers available than just fullyconnectedmodel
+            # todo change for more complex stacking
             command += ' --stacking-no-matrix'
             # never --use-concat!
 
@@ -262,7 +262,7 @@ def config_to_cli(model_config, target_model_path):
 
     return args
 
-# used in edit model. convert a config to default values for the form
+# used in edit model. convert a json config back into its raw form data format to use as defaults
 def config_to_raw(model_config):
     formdata = {}
 
@@ -271,7 +271,7 @@ def config_to_raw(model_config):
     formdata['output_mode_field'] = general['output-mode']
     formdata['model_mode_field'] = general['mode'] 
     if general['mode'] == 'Single':
-        pass # nothing else really
+        pass # nothing else needs to happen here (yet)
     else:
         # ensemble
         formdata['combination_strategy_field'] = general['combination-strategy']

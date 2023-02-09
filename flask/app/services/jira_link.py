@@ -40,7 +40,6 @@ def _get_issue_data(issue):
     if hasattr(fields, 'attachment') and fields.attachment is not None:
         attachments = len(fields.attachment)
 
-    
     dictionary = {
         'key': issue.key,
         'n_attachments': attachments,
@@ -73,7 +72,7 @@ def _get_detailed_issues_for(project: str):
     limit = 100
 
     # jira = JIRA(APACHE_JIRA_SERVER, basic_auth=(config.username, config.password))
-    jira = JIRA(APACHE_JIRA_SERVER) # no auth because no account? todo
+    jira = JIRA(APACHE_JIRA_SERVER) # no auth because no account? todo implement config option
 
     issues = []
     raw = jira.search_issues(f'project={project} order by key desc', maxResults=limit, fields=fields)
@@ -173,18 +172,18 @@ def _format_issues(issues, labels):
         label_dict[label['key']] = label
 
     empty_label = {
-        "is-design": False,
+        "is-design": "False",
         "is-cat1": {
         "name": "Existence",
-        "value": False
+        "value": "False"
         },
         "is-cat2": {
         "name": "Executive",
-        "value": False
+        "value": "False"
         },
         "is-cat3": {
         "name": "Property",
-        "value": False
+        "value": "False"
         }
     }
     
