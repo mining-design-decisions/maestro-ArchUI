@@ -91,7 +91,7 @@ def _get_detailed_issues_for(project: str):
 
 
 # -- Formatting issue data for ML
-from app.ml_link import remove_formatting, fix_punctuation, FormattingHandling
+from app.services.ml_link import remove_formatting, fix_punctuation, FormattingHandling
 
 def _clean_issue_text(text: str, key: str, formatting_handling) -> list[str]:
     text = fix_punctuation(remove_formatting(text, key, formatting_handling))

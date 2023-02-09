@@ -2,7 +2,7 @@ from flask import render_template
 from flask import Blueprint
 import json
 
-from app.jira_link import regenerate_training_data
+from app.services.jira_link import regenerate_training_data
 
 bp = Blueprint('training', __name__, url_prefix="/training")
 

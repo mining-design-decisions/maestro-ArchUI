@@ -3,7 +3,7 @@ import os
 from os import path
 import sys
 
-from app.util import rec_del_safe
+from app.services.util import rec_del_safe
 from app.services.modelconfig import config_to_cli
 
 ml_path = path.abspath('../../mining-design-decisions')
@@ -167,6 +167,9 @@ def get_possible_ontologies():
 def get_combination_strategies():
     return cli.STRATEGIES
 
+def _clean_directories():
+    rec_del_safe('../features')
+    rec_del_safe('../raw_words')
 
 def train_model(model_name):
     # todo: generate the training.json directly from working db
@@ -196,8 +199,8 @@ def train_model(model_name):
         performance = latest_run_data['f-score'][-1]
 
     # clean up features
-    rec_del_safe('./features')
-    rec_del_safe('./raw_words')
+    _clean_directories()
+
     # root dir files
     for file in os.listdir('.'):
         if os.path.isdir(file):
@@ -238,5 +241,4 @@ def predict_with(model_name):
     conf.reset()
     cli.main()
 
-    rec_del_safe('./features')
-    rec_del_safe('./raw_words')
+    _clean_directories()

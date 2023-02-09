@@ -6,9 +6,9 @@ from flask import url_for
 import os
 import json
 
-from app.jira_link import load_issues_for
-from app.ml_link import predict_with
-from app.util import rec_del_safe, get_default_run_name
+from app.services.jira_link import load_issues_for
+from app.services.ml_link import predict_with
+from app.services.util import rec_del_safe, get_default_run_name
 
 bp = Blueprint('predict', __name__, url_prefix='/predict')
 
