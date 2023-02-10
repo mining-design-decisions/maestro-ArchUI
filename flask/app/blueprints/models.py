@@ -4,15 +4,13 @@ import app.services.ml_link as lib
 from flask import request
 from flask import redirect
 from flask import url_for
-import json
-import os
-import datetime
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, IntegerField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, NumberRange
 
 from app.services.modelconfig import raw_to_config, config_to_raw
+from app.services import data
 
 
 tooltips = lib.get_cli_json_tooltips()
@@ -69,23 +67,16 @@ bp = Blueprint("models", __name__, url_prefix="/models")
 @bp.route('/viewall', methods=["GET"])
 def viewall():
     # show all models
-    models = []
-    for file in os.listdir('app/models'):
-        if file.endswith('.json'):
-            modelname = file[:-5]
-            models.append(modelname)
+    models = data.get_all_model_config_names()
 
     return render_template("models/viewall.html", models=models)
 
 @bp.route('/view/<model>', methods=['GET'])
 def view(model):
     # is model name valid?
-    models = os.listdir('app/models')
-    if model+'.json' not in models:
+    model_obj = data.get_model_config(model)
+    if not model_obj:
         return render_template('error.html')
-        
-    with open(f'app/models/{model}.json', 'r') as f:
-        model_obj = json.load(f)
 
     last_trained = 'Never'
     if 'last-trained' in model_obj:
@@ -107,12 +98,7 @@ def view(model):
 def trainModel(model):
     performance = lib.train_model(model)
 
-    with open(f'app/models/{model}.json', 'r') as f:
-        model_obj = json.load(f)
-    model_obj['last-trained'] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    model_obj['performance'] = performance
-    with open(f'app/models/{model}.json', 'w') as f:
-        json.dump(model_obj, f, indent=4)
+    data.mark_model_trained(model, performance)
 
     return redirect(url_for('models.view', model=model))
 
@@ -144,8 +130,7 @@ def createModel():
     model_name = request.form.get('model_name_field')
     bools = lib.get_cli_json_bools()
     model_data = raw_to_config(request.form, bools)
-    with open(f'app/models/{model_name}.json', 'w') as f:
-        json.dump(model_data, f, indent=4)
+    data.save_model_config(model_name, model_data)
 
     return redirect(url_for('models.view', model=model_name))
 
@@ -155,8 +140,8 @@ def editExistingModel(model):
     hyper_params = lib.get_hyper_params()
     inmode_params = lib.get_input_mode_params_raw()
 
-    with open(f'app/models/{model}.json', 'r') as f:
-        existing_config = json.load(f)
+    existing_config = data.get_model_config(model)
+
     form_defaults = config_to_raw(existing_config)
     form_defaults['model_name_field'] = model
     
@@ -173,11 +158,9 @@ def editModel():
     model_name = request.form.get('model_name_field')
     bools = lib.get_cli_json_bools()
     model_data = raw_to_config(request.form, bools)
-    with open(f'app/models/{model_name}.json', 'w') as f:
-        json.dump(model_data, f, indent=4)
+    data.save_model_config(model_name, model_data)
 
     return redirect(url_for('models.viewall'))
-
 
 @bp.route('/hyperparams', methods=['GET'])
 def hyperParamHelp():

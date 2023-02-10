@@ -3,22 +3,17 @@ from flask import Blueprint
 from flask import redirect
 from flask import request
 from flask import url_for
-import os
-import json
 
 from app.services.jira_link import load_issues_for
 from app.services.ml_link import predict_with
 from app.services.util import rec_del_safe, get_default_run_name
+from app.services import data
 
 bp = Blueprint('predict', __name__, url_prefix='/predict')
 
 @bp.route('/select', methods=['GET'])
 def select():
-    dir = 'app/models'
-    models = []
-    for file in os.listdir(dir):
-        if file.endswith('.json'):
-            models.append(file[:-5])
+    models = data.get_all_model_config_names()
 
     return render_template('predict/select.html', models=models)
 
@@ -46,11 +41,10 @@ def postSelect():
     if request.form.get('regenerate_test_data', False):
         print('Regenerating testing data')
         proj_issues = load_issues_for(target_proj)
-        with open('app/data/testing.json', 'w+') as f:
-            json.dump(proj_issues, f, indent=4)
+        data.save_test_data(proj_issues)
     
     # - use the predict functionality on the new project and format/save the results
-    # todo: stop using intermediary files, just use one object
+
     results_all = {}
     for model in models_to_run:
         predictions_raw = predict_with(model)
@@ -62,8 +56,7 @@ def postSelect():
             if line.strip():
                 predictions.append(line.strip())
 
-        with open('app/data/testing.json', 'r') as f:
-            issues = json.load(f)
+        issues = data.load_test_data()
         
         results = []
 
@@ -79,9 +72,6 @@ def postSelect():
         }
         results_all[model] = results_obj
 
-        with open(f'app/data/results/{model}.json', 'w+') as f:
-            json.dump(results_obj, f, indent=4)
-
     # combine separate results files into one for list view purposes
     # save in file: run_name.json
     final_results = {}
@@ -95,8 +85,7 @@ def postSelect():
             for i in range(len(headers)):
                 final_results[key][f'{model}: {headers[i]}'] = verdict[i]
     
-    with open(f'app/data/runs/{run_name}.json', 'w') as f:
-        json.dump(final_results, f, indent=4)
+    data.save_run(run_name, final_results)
 
     # - cleanup
     rec_del_safe('app/data/results')
