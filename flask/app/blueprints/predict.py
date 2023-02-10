@@ -53,11 +53,9 @@ def postSelect():
     # todo: stop using intermediary files, just use one object
     results_all = {}
     for model in models_to_run:
-        predict_with(model)
+        predictions_raw = predict_with(model)
 
         # - format and save the results
-        with open('predictions.csv', 'r') as f:
-            predictions_raw = f.readlines()
         header = predictions_raw.pop(0).strip()
         predictions = []
         for line in predictions_raw:

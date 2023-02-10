@@ -1,1 +1,29 @@
-{"general": {"output-mode": "Detection", "mode": "Single"}, "pre-processing": {"input-mode": "BOWFrequency", "params": {"disable-lowercase": true, "disable-stopwords": true}}, "classifier": {"classifier": "FullyConnectedModel", "hyper-params": {"number-of-hidden-layers": "1", "hidden-layer-1-size": "2", "optimizer": "adam", "optimizer_sgdvalue": "0.0", "loss": "crossentropy"}}, "training": {"epochs": "1000", "use-early-stopping": true}, "last-trained": "07/02/2023 15:31:17", "performance": 0.8366299867630005}
+{
+    "general": {
+        "output-mode": "Detection",
+        "mode": "Single"
+    },
+    "pre-processing": {
+        "input-mode": "BOWFrequency",
+        "params": {
+            "disable-lowercase": true,
+            "disable-stopwords": true
+        }
+    },
+    "classifier": {
+        "classifier": "FullyConnectedModel",
+        "hyper-params": {
+            "number-of-hidden-layers": "1",
+            "hidden-layer-1-size": "2",
+            "optimizer": "adam",
+            "optimizer_sgdvalue": "0.0",
+            "loss": "crossentropy"
+        }
+    },
+    "training": {
+        "epochs": "1000",
+        "use-early-stopping": true
+    },
+    "last-trained": "10/02/2023 09:37:19",
+    "performance": 0.8182476162910461
+}

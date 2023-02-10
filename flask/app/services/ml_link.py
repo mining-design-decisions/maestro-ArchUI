@@ -168,8 +168,15 @@ def get_combination_strategies():
     return cli.STRATEGIES
 
 def _clean_directories():
-    rec_del_safe('../features')
-    rec_del_safe('../raw_words')
+    rec_del_safe('./features')
+    rec_del_safe('./raw_words')
+
+    # root dir files
+    for file in os.listdir('.'):
+        if os.path.isdir(file):
+            continue
+        if file not in ['README.md', 'requirements.txt']:
+            os.remove(file)
 
 def train_model(model_name):
     # todo: generate the training.json directly from working db
@@ -201,12 +208,6 @@ def train_model(model_name):
     # clean up features
     _clean_directories()
 
-    # root dir files
-    for file in os.listdir('.'):
-        if os.path.isdir(file):
-            continue
-        if file not in ['README.md', 'requirements.txt']:
-            os.remove(file)
     return performance
 
 def predict_with(model_name):
@@ -241,4 +242,9 @@ def predict_with(model_name):
     conf.reset()
     cli.main()
 
+    with open('predictions.csv', 'r') as f:
+        predictions_raw = f.readlines()
+
     _clean_directories()
+
+    return predictions_raw
