@@ -13,7 +13,7 @@ def viewall():
     return render_template("runs/viewall.html", lists=issue_lists)
 
 def _format_label(label):
-    if not label['is-design']:
+    if label['is-design'] == "False":
         return 'Non-Arch.'
     tags = [f"is-cat{i+1}" for i in range(3)]
     result = []
