@@ -17,7 +17,7 @@ def get_default_run_name():
     runs_path = "app/data/runs"
     prev_highest_run = 0
     if not os.path.exists(runs_path):
-        os.mkdir(os.path.join()) #todo!!
+        os.mkdir(os.path.join('app/data', 'runs'))
         return 'run_0'
     for item in os.listdir(runs_path):
         if item.startswith('run_'):

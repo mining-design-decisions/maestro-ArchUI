@@ -1,10 +1,11 @@
-import json
-import os
 from os import path
 import sys
+import os
+import json
 
 from app.services.util import rec_del_safe
 from app.services.modelconfig import config_to_cli
+from app.services import data
 
 ml_path = path.abspath('../../mining-design-decisions')
 sys.path.append(ml_path)
@@ -12,13 +13,14 @@ sys.path.append(ml_path)
 from deep_learning.dl_manager import cli
 from deep_learning.dl_manager import feature_generators
 from deep_learning.dl_manager import classifiers
-from deep_learning.issuedata_extractor.text_cleaner import remove_formatting, fix_punctuation, FormattingHandling
 from deep_learning.dl_manager.config import conf
+from deep_learning.issuedata_extractor.text_cleaner import remove_formatting, fix_punctuation, FormattingHandling # vscode thinks these are redundant but i promise they are not. they are imported by something else - they're just here to keep everything CLI-related in one place
 
 
 def get_cli_json():
     file_path = path.abspath('../../mining-design-decisions/deep_learning/dl_manager/cli.json')
     with open(file_path, 'r') as f:
+        import json # local import only needed here
         return json.load(f)
 
 def get_cli_json_tooltips():
@@ -189,8 +191,7 @@ def train_model(model_name):
     rec_del_safe(target_model_path)
 
     # generate the args
-    with open(f'app/models/{model_name}.json', 'r') as f:
-        model_config = json.load(f)
+    model_config = data.get_model_config(model_name)
     args = config_to_cli(model_config, target_model_path)
 
     # use the CLI
@@ -212,8 +213,7 @@ def train_model(model_name):
 
 def predict_with(model_name):
     # step 1: verify that trained exists
-    with open(f'app/models/{model_name}.json', 'r') as f:
-        model_params = json.load(f)
+    model_params = data.get_model_config(model_name)
     if not 'last-trained' in model_params:
         train_model(model_name)
 
@@ -224,16 +224,6 @@ def predict_with(model_name):
         f'app/data/models/{model_name}', '--data', 
         'app/data/testing.json']
 
-    """
-    match model_params["pre-processing"]["input-mode"].lower():
-        case "ontologyfeatures":
-            args.append("--ontology-classes")
-            args.append("app/data/ontologies.json")
-        case "doc2vec":
-            args.append("vector-length")
-            args.append(model_params["pre-processing"]["params"]["vector-length"])
-    """
-    
     print(' '.join(args))
 
     import sys
