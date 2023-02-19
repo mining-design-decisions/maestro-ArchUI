@@ -1,1 +1,1 @@
-{"settings": {"disable-lowercase": "True", "disable-stopwords": "True"}, "generator": "OntologyFeatures"}
+{"settings": {"ontologies": "app/data/ontologies.json", "disable-lowercase": "True", "disable-stopwords": "True", "ontology-classes": "app/data/ontologies.json"}, "generator": "OntologyFeatures"}

@@ -4,7 +4,9 @@
     "feature_generators": [
         "OntologyFeatures__disable-lowercase-True_disable-stopwords-True.json"
     ],
-    "auxiliary_files": {},
+    "auxiliary_files": {
+        "app/data/ontologies.json": "auxiliary\\app/data/ontologies.json"
+    },
     "feature_settings": {
         "make_features.input_mode": [
             "OntologyFeatures"
@@ -19,7 +21,7 @@
         },
         "make_features.ontology_classes": "app/data/ontologies.json",
         "make_features.apply_ontology_classes": false,
-        "make_features.save_trained_generator": true
+        "make_features.save_trained_generator": false
     },
     "model_settings": {
         "run.classifier": [
@@ -79,6 +81,6 @@
         },
         "run.ontology_classes": "app/data/ontologies.json",
         "run.apply_ontology_classes": false,
-        "run.save_trained_generator": true
+        "run.save_trained_generator": false
     }
 }

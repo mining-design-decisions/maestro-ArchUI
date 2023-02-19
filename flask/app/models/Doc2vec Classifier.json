@@ -25,6 +25,6 @@
         "epochs": "1000",
         "use-early-stopping": true
     },
-    "last-trained": "07/02/2023 16:15:20",
-    "performance": 0.37634018063545227
+    "last-trained": "19/02/2023 15:52:30",
+    "performance": 0.3645481467247009
 }

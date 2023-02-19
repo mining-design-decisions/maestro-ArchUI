@@ -1,1 +1,30 @@
-{"general": {"output-mode": "Classification3Simplified", "mode": "Single"}, "pre-processing": {"input-mode": "OntologyFeatures", "params": {"disable-lowercase": true, "disable-stopwords": true}}, "classifier": {"classifier": "FullyConnectedModel", "hyper-params": {"number-of-hidden-layers": "2", "hidden-layer-1-size": "64", "hidden-layer-2-size": "32", "optimizer": "adam", "optimizer_sgdvalue": "0.0", "loss": "crossentropy"}}, "training": {"epochs": "1000", "use-early-stopping": true}, "last-trained": "07/02/2023 16:40:10", "performance": 0.2879984974861145}
+{
+    "general": {
+        "output-mode": "Classification3Simplified",
+        "mode": "Single"
+    },
+    "pre-processing": {
+        "input-mode": "OntologyFeatures",
+        "params": {
+            "disable-lowercase": true,
+            "disable-stopwords": true
+        }
+    },
+    "classifier": {
+        "classifier": "FullyConnectedModel",
+        "hyper-params": {
+            "number-of-hidden-layers": "2",
+            "hidden-layer-1-size": "64",
+            "hidden-layer-2-size": "32",
+            "optimizer": "adam",
+            "optimizer_sgdvalue": "0.0",
+            "loss": "crossentropy"
+        }
+    },
+    "training": {
+        "epochs": "1000",
+        "use-early-stopping": true
+    },
+    "last-trained": "19/02/2023 15:54:57",
+    "performance": 0.272762656211853
+}

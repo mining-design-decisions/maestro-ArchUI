@@ -2,10 +2,10 @@
     "model_type": "single",
     "model_path": "0",
     "feature_generators": [
-        "Doc2Vec__vector-length-25_disable-lowercase-True_disable-stopwords-True_pretrained-file-doc2vec_07-02-2023-16-13-31.bin.json"
+        "Doc2Vec__vector-length-25_disable-lowercase-True_disable-stopwords-True_pretrained-file-doc2vec_19-02-2023-15-50-07.bin.json"
     ],
     "auxiliary_files": {
-        "doc2vec_07-02-2023-16-13-31.bin": "auxiliary\\doc2vec_07-02-2023-16-13-31.bin"
+        "doc2vec_19-02-2023-15-50-07.bin": "auxiliary\\doc2vec_19-02-2023-15-50-07.bin"
     },
     "feature_settings": {
         "make_features.input_mode": [

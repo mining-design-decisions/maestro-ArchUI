@@ -1,0 +1,1 @@
+{"settings": {"pretrained-file": "doc2vec_19-02-2023-15-50-07.bin", "vector-length": 25, "disable-lowercase": "True", "disable-stopwords": "True"}, "generator": "Doc2Vec"}
