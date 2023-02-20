@@ -114,6 +114,7 @@ def createNewModel():
     form = CreateModelForm()
     hyper_params = lib.get_hyper_params()
     inmode_params = lib.get_input_mode_params_raw()
+    field_configs = data.get_field_configs()
 
     return render_template('models/editable_form.html',
         action='create',
@@ -121,18 +122,23 @@ def createNewModel():
         defaults={},
         hyper_params=hyper_params, 
         inmode_params=inmode_params,
-        inmode_per_classifier=inmode_per_classifier)
+        inmode_per_classifier=inmode_per_classifier,
+        field_configs=field_configs)
 
 @bp.route('/create', methods=["POST"])
 def createModel():
     # todo validity checking
     # - including does this name already exist?
-    model_name = request.form.get('model_name_field')
-    bools = lib.get_cli_json_bools()
-    model_data = raw_to_config(request.form, bools)
-    data.save_model_config(model_name, model_data)
 
-    return redirect(url_for('models.view', model=model_name))
+    #model_name = request.form.get('model_name_field')
+    #bools = lib.get_cli_json_bools()
+    #model_data = raw_to_config(request.form, bools)
+    #data.save_model_config(model_name, model_data)
+    #return redirect(url_for('models.view', model=model_name))
+
+    print(request.form)
+
+    return "ok!"
 
 @bp.route('/edit/<model>', methods=["GET"])
 def editExistingModel(model):
