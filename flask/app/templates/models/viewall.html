@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
 
-{% block subtitle %}Available Models{% endblock %}
+{% block subtitle %}ML Models{% endblock %}
 
 {% block margin_content %}
-<ul>
-    {% for m in models %}
-    <li><a href="{{ url_for('models.view', model=m) }}">{{ m }}</a></li>
-    {% endfor %}
-</ul>
+<form action="{{ url_for('models.viewform') }}", method="GET">
+    <input type="submit" value="Create New Model" class="btn btn-primary my-2"/>
+</form>
+
+<div class="card my-2">
+    <div class="card-body">
+        <h4>Machine Learning Models</h4>
+        <ul>
+            {% for m in models %}
+            <li><a href="{{ url_for('models.view', model=m) }}">{{ m }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock %}

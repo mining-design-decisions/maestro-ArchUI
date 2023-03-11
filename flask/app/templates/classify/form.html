@@ -7,16 +7,10 @@
 
 {% extends 'base.html' %}
 
-{% block subtitle %}ML Predict{% endblock %}
+{% block subtitle %}Classify Issues{% endblock %}
 
 {% block margin_content %}
-<form method="POST" id="predict" action="{{ url_for('predict.predict') }}">
-    {{ card_start() }}
-    <h4>Select ML Models</h4>
-    <div id="ml_models_div"></div>
-    <button onclick="add_model()" type="button" class="btn btn-primary">Add ML Model Option</button>
-    {{ card_end() }}
-    
+<form method="POST" id="create_query" action="{{ url_for('classify.create') }}">
     {{ card_start() }}
     <h4>Select Target Projects</h4>
     <div id="target_projects_div"></div>
@@ -24,15 +18,21 @@
     {{ card_end() }}
     
     {{ card_start() }}
-    <h4>Start Predicting</h4>
+    <h4>Select ML Models</h4>
+    <div id="ml_models_div"></div>
+    <button onclick="add_model()" type="button" class="btn btn-primary">Add ML Model Option</button>
+    {{ card_end() }}
+    
+    {{ card_start() }}
+    <h4>Create Query</h4>
     <div class="form-group">
-        <input name="predict_generate_query" id="predict_generate_query" type="checkbox">
         <label for="predict_generate_query" class="col-form-label">
-            Create a query for this prediction?
+            Query Name: 
         </label>
+        <input name="predict_generate_query" id="predict_generate_query" type="text">
     </div>
-
-    <input class="btn btn-primary my-2" type="submit" value="Run Model(s) Prediction on Target Project(s)"/>
+    
+    <input class="btn btn-primary my-2" type="submit" value="Create Query"/>
     {{ card_end() }}
 </form>
 {% endblock %}

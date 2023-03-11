@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}Classify Queries{% endblock %}
+
+{% block margin_content %}
+<form action="{{ url_for('classify.viewform') }}", method="GET">
+    <input type="submit" value="Create New Query" class="btn btn-primary my-2"/>
+</form>
+<div class="card my-2">
+    <div class="card-body">
+        <h4>Available Issue Queries</h4>
+        <ul>
+            {% for q in queries %}
+            <li><a href="{{ url_for('classify.view', query=q)}}">{{ q }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script>
+
+</script>
+{% endblock%}
