@@ -1,0 +1,137 @@
+{% macro card_start() %}
+<div class="card my-2"><div class="card-body">
+{% endmacro %}
+{% macro card_end() %}
+</div></div>
+{% endmacro %}
+
+{% extends 'base.html' %}
+
+{% block subtitle %}ML Predict{% endblock %}
+
+{% block margin_content %}
+<form method="POST" id="predict" action="{{ url_for('predict.predict') }}">
+    {{ card_start() }}
+    <h4>Select ML Models</h4>
+    <div id="ml_models_div"></div>
+    <button onclick="add_model()" type="button" class="btn btn-primary">Add ML Model Option</button>
+    {{ card_end() }}
+    
+    {{ card_start() }}
+    <h4>Select Target Projects</h4>
+    <div id="target_projects_div"></div>
+    <button onclick="add_project()" type="button" class="btn btn-primary">Add Project Option</button>
+    {{ card_end() }}
+    
+    {{ card_start() }}
+    <h4>Start Predicting</h4>
+    <div class="form-group">
+        <input name="predict_generate_query" id="predict_generate_query" type="checkbox">
+        <label for="predict_generate_query" class="col-form-label">
+            Generate a query for this prediction?
+        </label>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Run Model(s) Prediction on Target Project(s)" class="my-2">
+    {{ card_end() }}
+</form>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+function add_project() {
+    target_div = document.getElementById('target_projects_div')
+
+    // find next ID
+    max_id = 0;
+    target_div.childNodes.forEach(child => {
+        this_id = parseInt(child.id.split('_')[2])
+        if (this_id >= max_id) max_id = this_id + 1;
+    })
+
+    // generate new element HTML
+    new_id = `target_project_${max_id}`
+    new_html = `<div class="form-group my-2" id="${new_id}_div">`
+    new_html += `<label for="${new_id}" class="col-form-label">Project: </label>`
+    new_html += `<select id="${new_id}" name="${new_id}" class="mx-3">`
+    projects = {{projects|tojson|safe}}
+    projects.forEach(project => {
+        new_html += `<option value="${project}">${project}</option>`
+    })
+    new_html += `</select>`
+    new_html += `<button onclick="remove_project('${new_id}_div')" type="button" class="btn btn-secondary">Remove this Project Option</button>`
+    new_html += `</div>`
+
+    // read old values
+    old_selections = {}
+    target_div.childNodes.forEach(child => {
+        select_id = child.id.split('_')
+        select_id.pop()
+        select_id = select_id.join('_')
+        old_selections[select_id] = document.getElementById(select_id).value
+    })
+
+    // append new element HTML
+    target_div.innerHTML += new_html
+
+    // restore old values
+    Object.keys(old_selections).forEach(field => {
+        document.getElementById(field).value = old_selections[field]
+    })
+}
+add_project(); // initial option
+
+function remove_project(id) {
+    document.getElementById(id).remove();
+}
+</script>
+
+<script>
+function add_model() {
+    target_div = document.getElementById('ml_models_div')
+
+    // find next ID
+    max_id = 0;
+    target_div.childNodes.forEach(child => {
+        this_id = parseInt(child.id.split('_')[1])
+        if (this_id >= max_id) max_id = this_id + 1;
+    })
+
+    // generate new element HTML
+    new_id = `model_${max_id}`
+    new_html = `<div class="form-group my-2" id="${new_id}_div">`
+    new_html += `<label for="${new_id}" class="col-form-label">ML Model: </label>`
+    new_html += `<select id="${new_id}" name="${new_id}" class="mx-3">`
+    models = {{models|tojson|safe}}
+    models.forEach(model => {
+        new_html += `<option value="${model}">${model}</option>`
+    })
+    new_html += `</select>`
+    new_html += `<button onclick="remove_model('${new_id}_div')" type="button" class="btn btn-secondary">Remove this ML Model Option</button>`
+    new_html += `</div>`
+
+    // read old values
+    old_selections = {}
+    target_div.childNodes.forEach(child => {
+        select_id = child.id.split('_')
+        select_id.pop()
+        select_id = select_id.join('_')
+        old_selections[select_id] = document.getElementById(select_id).value
+    })
+
+    // append new element HTML
+    target_div.innerHTML += new_html
+
+    // restore old values
+    Object.keys(old_selections).forEach(field => {
+        document.getElementById(field).value = old_selections[field]
+    })
+}
+add_model(); // initial option
+
+function remove_model(id) {
+    document.getElementById(id).remove();
+}
+</script>
+{% endblock %}
