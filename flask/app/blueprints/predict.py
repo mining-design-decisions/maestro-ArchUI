@@ -4,7 +4,7 @@ from flask import redirect
 from flask import request
 from flask import url_for
 
-from app.services.jira_link import load_issues_for
+# from app.services.jira_link import load_issues_for
 from app.services.ml_link import predict_with
 from app.services.util import rec_del_safe, get_default_run_name
 from app.services import data
@@ -20,6 +20,8 @@ def select():
 @bp.route('/select', methods=['POST'])
 def postSelect():
 
+    # database overhaul temporarily disabled
+    """
     # - grab input
     target_proj = request.form['projectkey']
     models_to_run = []
@@ -86,8 +88,7 @@ def postSelect():
                 final_results[key][f'{model}: {headers[i]}'] = verdict[i]
     
     data.save_run(run_name, final_results)
-
-    # - cleanup
-    rec_del_safe('app/data/results')
-
-    return redirect(url_for('runs.view', list_name=run_name))
+    """
+    
+    return "under construction!" # todo
+    # return redirect(url_for('runs.view', list_name=run_name))

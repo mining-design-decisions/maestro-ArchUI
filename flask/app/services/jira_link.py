@@ -2,6 +2,8 @@ from jira import JIRA
 import nltk
 import gensim
 
+# phasing this out with the arrival of the bigger database
+"""
 
 APACHE_JIRA_SERVER = 'https://issues.apache.org/jira/'
 
@@ -198,7 +200,7 @@ def _format_issues(issues, labels):
 
 # -- Main function of this file
 # Structure of labels list:
-"""
+
 [
     {
         "key": str,
@@ -217,7 +219,7 @@ def _format_issues(issues, labels):
         }
     }
 ]
-"""
+
 # The labels are OPTIONAL! Provide them to generate a TRAINING FILE
 # and do not provide them to generate a PREDICTION TASK FILE
 def load_issues_for(project: str, labels = []):
@@ -238,3 +240,5 @@ def regenerate_training_data(labels):
         issue_data = _get_issue_data(issue_raw)
         issues.append(issue_data)
     return _format_issues(issues, labels)
+
+"""

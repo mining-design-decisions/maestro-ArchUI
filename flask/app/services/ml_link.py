@@ -14,8 +14,10 @@ from deep_learning.dl_manager import cli
 from deep_learning.dl_manager import feature_generators
 from deep_learning.dl_manager import classifiers
 from deep_learning.dl_manager.config import conf
-from deep_learning.issuedata_extractor.text_cleaner import remove_formatting, fix_punctuation, FormattingHandling # vscode thinks these are redundant but i promise they are not. they are imported by something else - they're just here to keep everything CLI-related in one place
-
+# from deep_learning.issuedata_extractor.text_cleaner import remove_formatting, fix_punctuation, FormattingHandling 
+# vscode thinks these are redundant but i promise they are not. they are imported by something else - they're just here to keep everything CLI-related in one place
+# 3 march 2023 note - commenting these as i will try to implement the CLI's text cleaner for these
+# after some clarification from Arjan & Jesse
 
 def get_cli_json():
     file_path = path.abspath('../../mining-design-decisions/deep_learning/dl_manager/cli.json')
@@ -27,18 +29,19 @@ def get_cli_json_tooltips():
     tips = {}
     options = get_cli_json()
     run_args = None
-    make_features_args = None
+    #make_features_args = None
     for cmd in options['commands']:
         if cmd['name'] == "run":
             run_args = cmd['args']
-        if cmd['name'] == 'make-features':
-            make_features_args = cmd['args']
+        #if cmd['name'] == 'make-features':
+        #    make_features_args = cmd['args']
 
-    if run_args is None or make_features_args is None:
-        return None
+    #if run_args is None or make_features_args is None:
+    #    print("ERROR: Was unable to find tooltips for either run or make_features")
+    #    return None
 
     # append make-features args
-    run_args.extend(make_features_args)
+    #run_args.extend(make_features_args)
 
     def rem_last_sentence(string):
         return string.split('.')[0] + '.'

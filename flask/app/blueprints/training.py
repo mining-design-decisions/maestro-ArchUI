@@ -1,7 +1,7 @@
 from flask import render_template
 from flask import Blueprint
 
-from app.services.jira_link import regenerate_training_data
+# from app.services.jira_link import regenerate_training_data
 from app.services import data
 
 bp = Blueprint('training', __name__, url_prefix="/training")
@@ -14,7 +14,7 @@ def view():
 
 @bp.route('/regenerate', methods=["POST"])
 def regenerate():
-    labels = data.get_known_labels()
-    new_training_data = regenerate_training_data(labels)
-    data.save_training_data(new_training_data)
-    return "ok"
+    # labels = data.get_known_labels()
+    # new_training_data = regenerate_training_data(labels)
+    # data.save_training_data(new_training_data)
+    return "under construction!"
