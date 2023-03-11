@@ -1,10 +1,9 @@
-from flask import render_template
+from flask import render_template_string
 from flask import Blueprint
 
-bp = Blueprint('models', __name__, url_prefix="/models")
+bp = Blueprint('classify', __name__, url_prefix="/classify")
 
 @bp.route('/', methods=["GET"])
 def viewall():
     # todo
-    
     return 'under construction'
