@@ -115,3 +115,10 @@ def get_amt_in_training():
 def save_training_data(new_training_data):
     with open('app/data/training.json', 'w') as f:
         json.dump(new_training_data, f, indent=4)
+
+
+# other
+def get_field_configs():
+    with open('app/data/field_configs.json', 'r') as f:
+        data = json.load(f)
+    return data

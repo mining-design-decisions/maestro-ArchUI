@@ -1,0 +1,195 @@
+{
+    "gen_model_name": {
+        "name": "model_name",
+        "label": "Model Name",
+        "type": "str",
+        "tooltip": "Name of this model configuration.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required"
+            },
+            {
+                "type": "disabled_if_default"
+            }
+        ]
+    },
+    "gen_output_mode": {
+        "name": "output_mode",
+        "label": "Output Mode",
+        "type": "select",
+        "tooltip": "Output mode to use.",
+        "options": ["Detection", "Classification3", "Classification3Simplified", "Classification8"],
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required"
+            }
+        ]
+    },
+    "gen_model_mode": {
+        "name": "model_mode",
+        "label": "Model Mode",
+        "type": "select",
+        "tooltip": "Is this a single model or does it use ensemble learning?",
+        "options": ["Single", "Ensemble"],
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"modelModeChanged()\""
+            }
+        ]
+    },
+    "gen_combination_strategy": {
+        "name": "combination_strategy",
+        "label": "Combination Strategy",
+        "type": "select",
+        "tooltip": "Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.",
+        "options": ["concat","add","subtract","multiply","max","min","dot","stacking","voting"],
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required"
+            },
+            {
+                "type": "in_div"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+
+    "train_epochs": {
+        "name": "epochs",
+        "label": "Epochs",
+        "type": "number",
+        "tooltip": "Amount of training epochs.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required"
+            },
+            {
+                "type": "attribute",
+                "value": "min=1"
+            },
+            {
+                "type": "default",
+                "value": 1000
+            }
+        ]
+    },
+    "train_split_size": {
+        "name": "split_size",
+        "label": "Split Size",
+        "type": "number",
+        "tooltip": "Size of testing and validation splits.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=0.01 max=0.5 step=0.01"
+            }
+        ]
+    },
+    "train_max_train": {
+        "name": "max_train",
+        "label": "Max Train",
+        "type": "number",
+        "tooltip": "Maximum amount of training items. Do not specify for infinite.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=1"
+            }
+        ]
+    },
+    "train_apply_ontology_classes": {
+        "name": "apply_ontology_classes",
+        "label": "Apply Ontology Classes",
+        "type": "bool",
+        "tooltip": "Enable application of ontology classes."
+    },
+    "train_architectural_only": {
+        "name": "architectural_only",
+        "label": "Architectural Only",
+        "type": "bool",
+        "tooltip": "If specified, only architectural issues are used in training."
+    },
+    "train_class_balancer": {
+        "name": "class_balancer",
+        "label": "Class Balancer",
+        "type": "select",
+        "tooltip": "Enable class-balancing.",
+        "options": ["", "class-weight", "upsample"]
+    },
+    "train_batch_size": {
+        "name": "batch_size",
+        "label": "Batch Size",
+        "type": "number",
+        "tooltip": "Specify the batch size used during training.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=1"
+            }
+        ]
+    },
+    "train_use_early_stopping": {
+        "name": "use_early_stopping",
+        "label": "Use Early Stopping",
+        "type": "bool",
+        "tooltip": "Stop the training early in case of diminishing returns.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "onchange=\"useEarlyStoppingChanged()\""
+            }
+        ]
+    },
+    "train_early_stopping_patience": {
+        "name": "early_stopping_patience",
+        "label": "Early stopping patience",
+        "type": "number",
+        "tooltip": "Patience used when using early stopping.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=1"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "train_early_stopping_min_delta": {
+        "name": "early_stopping_min_delta",
+        "label": "Early stopping min delta",
+        "type": "number",
+        "tooltip": "Minimum delta used when using early stopping. One entry for every attribute used.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=0.001 min=0.001"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "train_early_stopping_attribute": {
+        "name": "early_stopping_attribute",
+        "label": "Early stopping attribute",
+        "type": "str",
+        "tooltip": "Attribute(s) to use for early stopping (from the validation set).",
+        "extra": [
+            {
+                "type": "indent"
+            }
+        ]
+    }
+}

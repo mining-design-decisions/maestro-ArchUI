@@ -1,4 +1,7 @@
 import os
+# fix windows registry stuff
+import mimetypes
+mimetypes.add_type('application/javascript', '.js')
 from flask import Flask
 from flask import render_template
 from flask_session import Session
