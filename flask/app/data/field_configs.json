@@ -53,7 +53,7 @@
         "extra": [
             {
                 "type": "attribute",
-                "value": "required"
+                "value": "required onchange=\"combiStratChanged($(this))\""
             },
             {
                 "type": "in_div"
@@ -282,6 +282,9 @@
             },
             {
                 "type": "indent"
+            },
+            {
+                "type": "in_div"
             }
         ]
     },

@@ -73,11 +73,73 @@ onDocReady()
 <script>
 // these are linked up through the field_configs.json
 function modelModeChanged() {
-    console.log("model mode changed, is now: " + document.getElementById("gen_model_mode").value)
+    newVal = document.getElementById("gen_model_mode").value
+
+    combi_strat_el = document.getElementById("gen_combination_strategy_div")
+
+    single_exclusive_tabs = ['classifier', 'pre-processing']
+    ensemble_exclusive_tabs = ['classifiers', 'meta-classifier']
+    switch(newVal) {
+        case "Ensemble":
+            // disable single-exclusive
+            single_exclusive_tabs.forEach(tab => {
+                document.getElementById(`${tab}-tab-header`).setAttribute('class', 'nav-item d-none')
+            })
+
+            // enable ensemble-exclusive
+            ensemble_exclusive_tabs.forEach(tab => {
+                document.getElementById(`${tab}-tab-header`).setAttribute('class', 'nav-item')
+            })
+            // enable combi strat field
+            combi_strat_el.setAttribute('class', '')
+
+            switch(document.getElementById("gen_combination_strategy").value) {
+                case 'stacking':
+                    document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item')
+                    break;
+                default:
+                    document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item d-none')
+            }
+            break;
+        case "Single":
+            // disable ensemble-exclusive
+            ensemble_exclusive_tabs.forEach(tab => {
+                document.getElementById(`${tab}-tab-header`).setAttribute('class', 'nav-item d-none')
+            })
+
+            // enable single-exclusive
+            single_exclusive_tabs.forEach(tab => {
+                document.getElementById(`${tab}-tab-header`).setAttribute('class', 'nav-item')
+            })
+
+            // disable combi strat field
+            combi_strat_el.setAttribute('class', 'd-none')
+            break;
+    }
 }
+modelModeChanged()
+
+function combiStratChanged(combi_strat_el) {
+    switch(combi_strat_el[0].value) {
+        case 'stacking':
+            document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item')
+            break;
+        default:
+            document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item d-none')
+    }
+}
+combiStratChanged(document.getElementById("gen_combination_strategy_div"))
+
 function useEarlyStoppingChanged() {
-    console.log("use early stopping changed, is now: " + document.getElementById("train_use_early_stopping").checked)
+    el = document.getElementById("train_early_stopping_div")
+    if (document.getElementById("train_use_early_stopping").checked) {
+        el.setAttribute('class', '')
+    } else {
+        el.setAttribute('class', 'd-none')
+    }
 }
+useEarlyStoppingChanged();
+
 function classifierChanged(classifier_element) {
     // get prefix
     prefix = classifier_element[0].id.split('_')
@@ -96,20 +158,95 @@ function classifierChanged(classifier_element) {
     if (prefix == "single") size = "small";
     if (prefix == "stacker") size = "small";
 
-    div_element.innerHTML = get_hparams_for(class_selected, prefix, size, defaults)
+    div_element.innerHTML = get_hparams_for(class_selected, prefix+'_', size, defaults)
 }
+_all_classifiers = $("select[id$='_classifier']")
+for (let i = 0; i < _all_classifiers.length; i++) {
+    classifierChanged([_all_classifiers[i]])
+}
+
 function nrHiddenLayersChanged(nr_element) {
-    // todo
-    console.log(nr_element)
+    // get prefix
+    prefix = nr_element[0].id.split('_')
+    prefix.pop() // layers
+    prefix.pop() // hidden
+    prefix.pop() // of
+    prefix.pop() // number
+    prefix = prefix.join('_')
+
+    // get amount
+    amt = nr_element[0].value
+    
+    // get div
+    div_id = prefix + "_hidden_layers_div"
+    div_el = document.getElementById(div_id)
+
+    // size
+    size = "large"
+    if (prefix == "single") size = "small";
+    if (prefix == "stacker") size = "small";
+
+    // generate
+    div_el.innerHTML = generate_count_fields(amt, 'hparam_hidden_layer_size', prefix+'_', size, defaults)
 }
+_all_hidden_layers = $("input[id$='_number_of_hidden_layers']")
+for (let i = 0; i < _all_hidden_layers.length; i++) {
+    nrHiddenLayersChanged([_all_hidden_layers[i]])
+}
+
 function optimizerChanged(optimizer_element) {
-    // todo
-    console.log(optimizer_element)
+    // get prefix
+    prefix = optimizer_element[0].id.split('_')
+    prefix.pop()
+    prefix = prefix.join('_')
+
+    // get div
+    div_id = prefix + "_optimizer_sgdvalue_div"
+    div_el = document.getElementById(div_id)
+
+    // set
+    switch (optimizer_element[0].value) {
+        case "adam":
+            div_el.setAttribute('class', 'd-none')
+            break;
+        case "sgd":
+            div_el.setAttribute('class', '')
+            break;
+    }
 }
+_all_optimizers = $("select[id$='_optimizer']")
+for (let i = 0; i < _all_optimizers.length; i++) {
+    optimizerChanged([_all_optimizers[i]])
+}
+
 function nrOfConvChanged(nr_element) {
-    // todo
-    console.log(nr_element)
+    // get prefix
+    prefix = nr_element[0].id.split('_')
+    prefix.pop() // convolutions
+    prefix.pop() // of
+    prefix.pop() // number
+    prefix = prefix.join('_')
+
+    // get amt
+    amt = nr_element[0].value
+
+    // get div
+    div_id = prefix + "_convolutions_div"
+    div_el = document.getElementById(div_id)
+
+    // size
+    size = "large"
+    if (prefix == "single") size = "small";
+    if (prefix == "stacker") size = "small";
+
+    // generate
+    div_el.innerHTML = generate_count_fields(amt, 'hparam_kernel_size', prefix+'_', size, defaults)
 }
+_all_convolutions = $("input[id$='_number_of_convolutions']")
+for (let i = 0; i < _all_convolutions.length; i++) {
+    nrOfConvChanged([_all_convolutions[i]])
+}
+
 function inmodeChanged(inmode_element) {
     // get prefix
     prefix = inmode_element[0].id.split('_')
@@ -131,10 +268,22 @@ function inmodeChanged(inmode_element) {
 
     div_element.innerHTML = get_params_for(inmode_selected, prefix, size, defaults)
 }
-function ensClassCountChanged(count_element) {
-    // todo
-    console.log(count_element)
+_all_inmodes = $("select[id$='_inmode']")
+for (let i = 0; i < _all_inmodes.length; i++) {
+    inmodeChanged([_all_inmodes[i]])
 }
+
+function ensClassCountChanged(count_element) {
+    // amt
+    amt = count_element[0].value
+
+    // div
+    div_el = document.getElementById("ens_classifiers")
+    
+    // generate
+    div_el.innerHTML = generate_ens_classifiers(amt, defaults)
+}
+ensClassCountChanged(document.getElementById("ens_classifier_count"))
 </script>
 
 {% endblock %}

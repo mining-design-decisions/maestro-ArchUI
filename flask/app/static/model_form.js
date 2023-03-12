@@ -301,6 +301,16 @@ function deep_copy(obj) {
 }
 
 // hparam helpers
+function generate_count_fields(count, field, prefix, size, defaults) {
+    result = ""
+    for (let i = 0; i < count; i++) {
+        config = deep_copy(data[field])
+        config['label'] += ` ${i+1}`
+        result += render_field(config, prefix, size, defaults)
+    }
+    return result
+}
+
 function get_hparams_for(classifier, prefix, size, defaults) {
     result = ""
     switch(classifier) {
@@ -308,9 +318,8 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             // hidden layers
             result += render_field(data['hparam_number_of_hidden_layers'], prefix, size, defaults)
             result += `<div id="${prefix}hidden_layers_div">`
-            hidden_layer_size_config = deep_copy(data['hparam_hidden_layer_size'])
-            hidden_layer_size_config['label'] += ' 1'
-            result += render_field(hidden_layer_size_config, prefix, size, defaults)
+            // todo should probably be pulled from somewhere
+            result += generate_count_fields(1, 'hparam_hidden_layer_size', prefix, size, defaults)
             result += `</div>`
             
             // optimizer, loss, use-trainable-embedding
@@ -325,9 +334,7 @@ function get_hparams_for(classifier, prefix, size, defaults) {
                 result += render_field(data[field], prefix, size, defaults)
             })
             result += `<div id="${prefix}convolutions_div">`
-            kernel_size_config = deep_copy(data['hparam_kernel_size'])
-            kernel_size_config['label'] += ' 1'
-            result += render_field(kernel_size_config, prefix, size, defaults)
+            result += generate_count_fields(1, 'hparam_kernel_size', prefix, size, defaults)
             result += `</div>`
 
             // optimizer, loss, use-trainable-embedding
@@ -534,32 +541,38 @@ function generate_tab_training(defaults, data) {
     return result
 }
 
-function generate_tab_ensemble(defaults, data) {
+// helper for ens
+function generate_ens_classifiers(amt, defaults) {
     result = ""
-
-    result += render_field(data['ens_classifier_count'], "ens_", "small", defaults)
-    result += `<div id="ens_classifiers" class="accordion">`
-
-    amt_class = 2
-    for (let i = 0; i < amt_class; i++) {
-        prefix = `ens_${i}`
+    for (let i = 0; i < amt; i++) {
+        prefix = `ens_${i}_`
         result += `<div class="accordion-item">`
-        result += `<h2 class="accordion-header" id="${prefix}_header">`
-        result += `<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${prefix}_div" aria-expanded="false" aria-controls="${prefix}_div">`
+        result += `<h2 class="accordion-header" id="${prefix}header">`
+        result += `<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${prefix}div" aria-expanded="false" aria-controls="${prefix}div">`
         result += `Ensemble Classifier ${i+1}</button></h2>`
 
-        result += `<div id="${prefix}_div" class="accordion-collapse collapse" area-labelledby="${prefix}_header" data-bs-parent="#ens_classifiers">`
+        result += `<div id="${prefix}div" class="accordion-collapse collapse" area-labelledby="${prefix}header" data-bs-parent="#ens_classifiers">`
         result += `<div class="accordion-body row">`
 
         result += `<div class="col-sm-6 card"><div class="card-body"><h4>Classifier</h4>${generate_classifier(prefix, "large", defaults)}</div></div>`
         
         result += `<div class="col-sm-6 card"><div class="card-body"><h4>Input Mode</h4>${generate_inmode(prefix, "large", defaults)}</div></div>`
 
-        result += `</div>`
-        result += `</div>`
+        result += `</div>` // accordion-body row
+        result += `</div>` // accordion-collapse
 
         result += `</div>` // accordion-item
     }
+    return result
+}
+
+function generate_tab_ensemble(defaults, data) {
+    result = ""
+
+    result += render_field(data['ens_classifier_count'], "ens_", "small", defaults)
+    result += `<div id="ens_classifiers" class="accordion">`
+    
+    result += generate_ens_classifiers(2, defaults)
 
     result += `</div>`
 
