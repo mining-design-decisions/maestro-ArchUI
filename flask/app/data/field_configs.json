@@ -505,5 +505,22 @@
         "label": "Minimum Document Count",
         "type": "number",
         "tooltip": "Minimum number of document occurrences for a word to be included"
+    },
+
+    "ens_classifier_count": {
+        "name": "classifier_count",
+        "label": "Amount of Ensemble Classifiers",
+        "type": "number",
+        "tooltip": "Amount of Ensemble Classifiers to combine",
+        "extra": [
+            {
+                "type": "default",
+                "value": 2
+            },
+            {
+                "type": "attribute",
+                "value": "required onchange=\"ensClassCountChanged($(this))\""
+            }
+        ]
     }
 }

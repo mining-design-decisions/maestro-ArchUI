@@ -535,8 +535,35 @@ function generate_tab_training(defaults, data) {
 }
 
 function generate_tab_ensemble(defaults, data) {
-    // todo
-    return ""
+    result = ""
+
+    result += render_field(data['ens_classifier_count'], "ens_", "small", defaults)
+    result += `<div id="ens_classifiers" class="accordion">`
+
+    amt_class = 2
+    for (let i = 0; i < amt_class; i++) {
+        prefix = `ens_${i}`
+        result += `<div class="accordion-item">`
+        result += `<h2 class="accordion-header" id="${prefix}_header">`
+        result += `<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${prefix}_div" aria-expanded="false" aria-controls="${prefix}_div">`
+        result += `Ensemble Classifier ${i+1}</button></h2>`
+
+        result += `<div id="${prefix}_div" class="accordion-collapse collapse" area-labelledby="${prefix}_header" data-bs-parent="#ens_classifiers">`
+        result += `<div class="accordion-body row">`
+
+        result += `<div class="col-sm-6 card"><div class="card-body"><h4>Classifier</h4>${generate_classifier(prefix, "large", defaults)}</div></div>`
+        
+        result += `<div class="col-sm-6 card"><div class="card-body"><h4>Input Mode</h4>${generate_inmode(prefix, "large", defaults)}</div></div>`
+
+        result += `</div>`
+        result += `</div>`
+
+        result += `</div>` // accordion-item
+    }
+
+    result += `</div>`
+
+    return result
 }
 
 function generate_tab_stacker(defaults, data) {
