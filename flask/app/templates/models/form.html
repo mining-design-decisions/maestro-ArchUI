@@ -110,6 +110,27 @@ function nrOfConvChanged(nr_element) {
     // todo
     console.log(nr_element)
 }
+function inmodeChanged(inmode_element) {
+    // get prefix
+    prefix = inmode_element[0].id.split('_')
+    prefix.pop()
+    prefix = prefix.join('_')
+
+    // get input mode
+    inmode_selected = inmode_element[0].value
+
+    // get div with the params
+    div_id = prefix + "_params_div"
+    div_element = document.getElementById(div_id)
+
+    // size
+    size = "large"
+    if (prefix == "single") size = "small";
+    // stacker input mode is currently not supported
+    // if (prefix == "stacker") size = "small";
+
+    div_element.innerHTML = get_params_for(inmode_selected, prefix, size, defaults)
+}
 </script>
 
 {% endblock %}

@@ -364,6 +364,96 @@ function get_hparams_for(classifier, prefix, size, defaults) {
     return result
 }
 
+function get_params_for(inmode, prefix, size, defaults) {
+    result = ""
+
+    const params_per_inmode = {
+        "Word2Vec1D": [
+            "param_vector_length",
+            "param_min_count",
+            "param_max_len",
+            "param_disable_lowercase",
+            "param_disable_stopwords",
+            "param_use_stemming",
+            "param_use_lemmatization",
+            "param_use_pos",
+            "param_class_limit"
+        ],
+        "Doc2Vec": [
+            "param_vector_length",
+            "param_max_len",
+            "param_disable_lowercase",
+            "param_disable_stopwords",
+            "param_use_stemming",
+            "param_use_lemmatization",
+            "param_use_pos",
+            "param_class_limit"
+        ],
+        "BOWFrequency": [
+            "param_min_doc_count",
+            "param_max_len",
+            "param_disable_lowercase",
+            "param_disable_stopwords",
+            "param_use_stemming",
+            "param_use_lemmatization",
+            "param_use_pos",
+            "param_class_limit"
+        ],
+        "BOWNormalized": [
+            "param_min_doc_count",
+            "param_max_len",
+            "param_disable_lowercase",
+            "param_disable_stopwords",
+            "param_use_stemming",
+            "param_use_lemmatization",
+            "param_use_pos",
+            "param_class_limit"
+        ],
+        "Bert": [
+            "param_max_len",
+            "param_disable_lowercase",
+            "param_disable_stopwords",
+            "param_use_stemming",
+            "param_use_lemmatization",
+            "param_use_pos",
+            "param_class_limit"
+        ],
+        "TfidfGenerator": [
+            "param_max_len",
+            "param_disable_lowercase",
+            "param_disable_stopwords",
+            "param_use_stemming",
+            "param_use_lemmatization",
+            "param_use_pos",
+            "param_class_limit"
+        ],
+        "Metadata": [
+            "param_max_len",
+            "param_disable_lowercase",
+            "param_disable_stopwords",
+            "param_use_stemming",
+            "param_use_lemmatization",
+            "param_use_pos",
+            "param_class_limit"
+        ],
+        "OntologyFeatures": [
+            "param_max_len",
+            "param_disable_lowercase",
+            "param_disable_stopwords",
+            "param_use_stemming",
+            "param_use_lemmatization",
+            "param_use_pos",
+            "param_class_limit"
+        ]
+    }
+
+    params_per_inmode[inmode].forEach(field => {
+        result += render_field(data[field], prefix, size, defaults)
+    })
+
+    return result;
+}
+
 // subtab generators
 function generate_classifier(prefix="", size="small", defaults={}) {
     result = ""
@@ -378,8 +468,16 @@ function generate_classifier(prefix="", size="small", defaults={}) {
     return result
 }
 function generate_inmode(prefix="", size="small", defaults={}) {
-    // todo
-    return ""
+    result = ""
+
+    inmode_config = data['prepro_inmode']
+    result += render_field(inmode_config, prefix, size, defaults)
+    result += `<hr />`
+
+    result += `<div id="${prefix}params_div">`
+    result += get_params_for(inmode_config['extra'][0]["value"], prefix, size, defaults)
+
+    return result
 }
 
 // tab generators
@@ -399,7 +497,7 @@ function generate_tab_general(defaults, data) {
 }
 
 function generate_tab_prepro(defaults, data) {
-    return generate_inmode("prepro_", "large", defaults)
+    return generate_inmode("single_", "small", defaults)
 }
 
 function generate_tab_classifier(defaults, data) {

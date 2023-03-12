@@ -1,0 +1,542 @@
+{
+    "Word2Vec1D": [
+        {
+            "name": "vector-length",
+            "desc": "specify the length of the output vector",
+            "type": "int"
+        },
+        {
+            "name": "min-count",
+            "desc": "minimum occurrence for a word to be in the word2vec",
+            "type": "int"
+        },
+        {
+            "name": "pretrained-file",
+            "desc": "specify path to the pretrained word2vec model",
+            "type": "str"
+        },
+        {
+            "name": "pretrained-binary",
+            "desc": "specify is pretrained word2vec is binary",
+            "type": "str"
+        },
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        }
+    ],
+    "Doc2Vec": [
+        {
+            "name": "vector-length",
+            "desc": "specify the length of the output vector",
+            "type": "int"
+        },
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        }
+    ],
+    "BOWFrequency": [
+        {
+            "name": "min-doc-count",
+            "desc": "Minimum number of document occurrences for a word to be included",
+            "type": "int"
+        },
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        }
+    ],
+    "BOWNormalized": [
+        {
+            "name": "min-doc-count",
+            "desc": "Minimum number of document occurrences for a word to be included",
+            "type": "int"
+        },
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        }
+    ],
+    "Bert": [
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        }
+    ],
+    "TfidfGenerator": [
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        }
+    ],
+    "Metadata": [
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        }
+    ],
+    "OntologyFeatures": [
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        }
+    ],
+    "AutoEncoder": [
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        },
+        {
+            "name": "training-data-query",
+            "desc": "Query to retrieve data used to train the auto-encoder",
+            "type": "str"
+        },
+        {
+            "name": "bow-min-count",
+            "desc": "Minimum document count for bag of words",
+            "type": "int"
+        },
+        {
+            "name": "inner-generator",
+            "desc": "Feature generator to transform issues to text",
+            "type": "str"
+        },
+        {
+            "name": "hidden-layer-1-size",
+            "desc": "Size of layer 1",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-2-size",
+            "desc": "Size of layer 2",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-3-size",
+            "desc": "Size of layer 3",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-4-size",
+            "desc": "Size of layer 4",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-5-size",
+            "desc": "Size of layer 5",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-6-size",
+            "desc": "Size of layer 6",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-7-size",
+            "desc": "Size of layer 7",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-8-size",
+            "desc": "Size of layer 8",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-9-size",
+            "desc": "Size of layer 9",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-10-size",
+            "desc": "Size of layer 10",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-11-size",
+            "desc": "Size of layer 11",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-12-size",
+            "desc": "Size of layer 12",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-13-size",
+            "desc": "Size of layer 13",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-14-size",
+            "desc": "Size of layer 14",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-15-size",
+            "desc": "Size of layer 15",
+            "type": "int"
+        },
+        {
+            "name": "hidden-layer-16-size",
+            "desc": "Size of layer 16",
+            "type": "int"
+        },
+        {
+            "name": "number-of-hidden-layers",
+            "desc": "Number of hidden layers",
+            "type": "int"
+        },
+        {
+            "name": "target-feature-size",
+            "desc": "Target feature size",
+            "type": "int"
+        },
+        {
+            "name": "activation-function",
+            "desc": "Activation function to use in the auto encoder",
+            "type": "str"
+        }
+    ],
+    "KateAutoEncoder": [
+        {
+            "name": "max-len",
+            "desc": "words limit of the issue text",
+            "type": "int"
+        },
+        {
+            "name": "disable-lowercase",
+            "desc": "transform words to lowercase",
+            "type": "bool"
+        },
+        {
+            "name": "disable-stopwords",
+            "desc": "remove stopwords from text",
+            "type": "bool"
+        },
+        {
+            "name": "use-stemming",
+            "desc": "stem the words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-lemmatization",
+            "desc": "Use lemmatization on words in the text",
+            "type": "bool"
+        },
+        {
+            "name": "use-pos",
+            "desc": "Enhance words in the text with part of speech information",
+            "type": "bool"
+        },
+        {
+            "name": "class-limit",
+            "desc": "limit the amount of items per class",
+            "type": "int"
+        },
+        {
+            "name": "training-data-query",
+            "desc": "Query to retrieve data used to train the auto-encoder",
+            "type": "str"
+        },
+        {
+            "name": "bow-min-count",
+            "desc": "Minimum document count for bag of words",
+            "type": "int"
+        },
+        {
+            "name": "inner-generator",
+            "desc": "Feature generator to transform issues to text",
+            "type": "str"
+        },
+        {
+            "name": "hidden-layer-size",
+            "desc": "Size of the hidden layer",
+            "type": "int"
+        },
+        {
+            "name": "k-competitive",
+            "desc": "Size of the K-Competitive layer",
+            "type": "int"
+        }
+    ]
+}

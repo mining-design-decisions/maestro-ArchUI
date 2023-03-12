@@ -388,5 +388,122 @@
                 "value": "onchange=\"nrHiddenLayersChanged($(this))\""
             }
         ]
+    },
+
+    "prepro_inmode": {
+        "name": "inmode",
+        "label": "Input Mode",
+        "type": "select",
+        "tooltip": "Feature Generator to use.",
+        "options": [
+            "BOWFrequency",
+            "BOWNormalized",
+            "Doc2Vec",
+            "Metadata",
+            "OntologyFeatures",
+            "TfidfGenerator",
+            "Word2Vec1D",
+            "Bert"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "BOWFrequency"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"inmodeChanged($(this))\""
+            }
+        ]
+    },
+    "param_vector_length": {
+        "name": "vector_length",
+        "label": "Vector Length",
+        "type": "number",
+        "tooltip": "Specify the length of the output vector",
+        "extra": [
+            {
+                "type": "default",
+                "value": 400
+            },
+            {
+                "type": "attribute",
+                "value": "required"
+            }
+        ]
+    },
+    "param_min_count": {
+        "name": "min_count",
+        "label": "Minimum Count",
+        "type": "number",
+        "tooltip": "Minimum occurrence for a word to be in the Word2Vec",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "required"
+            }
+        ]
+    },
+    "param_max_len": {
+        "name": "max_len",
+        "label": "Maximum Length",
+        "type": "number",
+        "tooltip": "Words limit of the issue text",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1000
+            },
+            {
+                "type": "attribute",
+                "value": "required"
+            }
+        ]
+    },
+    "param_disable_lowercase": {
+        "name": "disable_lowercase",
+        "label": "Disable Lowercase",
+        "type": "bool",
+        "tooltip": "Transform words to lowercase"
+    },
+    "param_disable_stopwords": {
+        "name": "disable_stopwords",
+        "label": "Disable Stopwords",
+        "type": "bool",
+        "tooltip": "Remove stopwords from text"
+    },
+    "param_use_stemming": {
+        "name": "use_stemming",
+        "label": "Use Stemming",
+        "type": "bool",
+        "tooltip": "Stem the words in the text"
+    },
+    "param_use_lemmatization": {
+        "name": "use_lemmatization",
+        "label": "Use Lemmatization",
+        "type": "bool",
+        "tooltip": "Use lemmatization on words in the text"
+    },
+    "param_use_pos": {
+        "name": "use_pos",
+        "label": "Use POS",
+        "type": "bool",
+        "tooltip": "Enhance words in the text with part of speech information"
+    },
+    "param_class_limit": {
+        "name": "class_limit",
+        "label": "Class Limit",
+        "type": "number",
+        "tooltip": "Limit the amount of items per class"
+    },
+    "param_min_doc_count": {
+        "name": "min_doc_count",
+        "label": "Minimum Document Count",
+        "type": "number",
+        "tooltip": "Minimum number of document occurrences for a word to be included"
     }
 }
