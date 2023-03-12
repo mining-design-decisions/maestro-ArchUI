@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 from flask import render_template
+from flask_session import Session
+import secrets
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -19,13 +21,21 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    
+    app.secret_key = secrets.token_hex(16)
+    app.config['SESSION_TYPE'] = 'filesystem'
 
-    from .blueprints import models, predict, classify, statistics
+    Session(app)
+
+    app.debug = True
+
+    from .blueprints import models, predict, classify, statistics, login
 
     app.register_blueprint(models.bp)
     app.register_blueprint(predict.bp)
     app.register_blueprint(classify.bp)
     app.register_blueprint(statistics.bp)
+    app.register_blueprint(login.bp)
 
     @app.route("/hello")
     def hello():
