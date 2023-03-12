@@ -191,5 +191,202 @@
                 "type": "indent"
             }
         ]
+    },
+
+    "class_classifier": {
+        "name": "classifier",
+        "label": "Classifier",
+        "type": "select",
+        "tooltip": "Classifier to use.",
+        "options": [
+            "FullyConnectedModel", 
+            "LinearConv1Model", 
+            "LinearRNNModel",
+            "Bert"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "FullyConnectedModel"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"classifierChanged($(this))\""
+            }
+        ]
+    },
+
+    "hparam_number_of_hidden_layers": {
+        "name": "number_of_hidden_layers",
+        "label": "Number of Hidden Layers",
+        "type": "number",
+        "tooltip": "[min, max] = [0, 11] -- default = 1",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"nrHiddenLayersChanged($(this))\""
+            }
+        ]
+    },
+    "hparam_hidden_layer_size": {
+        "name": "hidden_layer_size",
+        "label": "Size of Hidden Layer",
+        "type": "number",
+        "tooltip": "[min, max] = [2, 16384] -- default = 32",
+        "extra": [
+            {
+                "type": "default",
+                "value": 32
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_optimizer": {
+        "name": "optimizer",
+        "label": "Optimizer",
+        "type": "select",
+        "tooltip": "Optimizer for the classifier. Default: adam.",
+        "options": [
+            "adam", "sgd"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "adam"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"optimizerChanged($(this))\""
+            }
+        ]
+    },
+    "hparam_optimizer_sgdvalue": {
+        "name": "optimizer_sgdvalue",
+        "label": "Optimizer SGD Momentum",
+        "type": "number",
+        "tooltip": "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent. See https://keras.io/api/optimizers/sgd/ for more information.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0.0
+            },
+            {
+                "type": "attribute",
+                "value": "step=any"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_loss": {
+        "name": "loss",
+        "label": "Loss",
+        "type": "select",
+        "tooltip": "Loss for the classifier. Default: crossentropy.",
+        "options": [
+            "crossentropy", "hinge"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "crossentropy"
+            }
+        ]
+    },
+    "hparam_use_trainable_embedding": {
+        "name": "use_trainable_embedding",
+        "label": "Use Trainable Embedding",
+        "type": "bool",
+        "tooltip": "Use trainable embedding for this classifier? Default: false."
+    },
+    "hparam_fully_connected_layer_size": {
+        "name": "fully_connected_layer_size",
+        "label": "Size of Fully Connected Layer",
+        "type": "number",
+        "tooltip": "[min, max] = [2, 16384] -- default = 32",
+        "extra": [
+            {
+                "type": "default",
+                "value": 32
+            }
+        ]
+    },
+    "hparam_filters": {
+        "name": "filters",
+        "label": "Filters",
+        "type": "number",
+        "tooltip": "[min, max] = [1, 64] -- default = 32",
+        "extra": [
+            {
+                "type": "default",
+                "value": 32
+            }
+        ]
+    },
+    "hparam_number_of_convolutions": {
+        "name": "number_of_convolutions",
+        "label": "Number of Convolutions",
+        "type": "number",
+        "tooltip": "[min, max] = [1, 11] -- default = 1",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"nrOfConvChanged($(this))\""
+            }
+        ]
+    },
+    "hparam_kernel_size": {
+        "name": "kernel_size",
+        "label": "Size of Kernel",
+        "type": "number",
+        "tooltip": "[min, max] = [1, 512] -- default = 4",
+        "extra": [
+            {
+                "type": "default",
+                "value": 4
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_bidirectional_layer_size": {
+        "name": "bidirectional_layer_size",
+        "label": "Size of the Bidirectional Layer",
+        "type": "number",
+        "tooltip": "[min, max] = [1, 128] -- default = 64",
+        "extra": [
+            {
+                "type": "default",
+                "value": 64
+            }
+        ]
+    },
+    "hparam_number_of_hidden_layers_rnn": {
+        "name": "number_of_hidden_layers",
+        "label": "Number of Hidden Layers",
+        "type": "number",
+        "tooltip": "[min, max] = [0, 5] -- default = 1",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"nrHiddenLayersChanged($(this))\""
+            }
+        ]
     }
 }

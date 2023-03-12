@@ -30,7 +30,8 @@ function generate_hparam_html(hp, prefix="", size="small", defaults={}) {
     }
 
     hp.forEach(hparam => {
-        tooltip = `[min, max] = [${hparam.min}, ${hparam.max}] -- default = ${hparam.default}`
+        // tooltip = `[min, max] = [${hparam.min}, ${hparam.max}] -- default = ${hparam.default}`
+        tooltip = hparam.tooltip
         new_html += '<div class="form-group row">\n'
 
         switch(hparam.name) {
@@ -225,7 +226,7 @@ function render_field_select(css_label, css_input, tooltip, name, options, defau
         new_html += `<option value="${option}" ${selected}>${option}</option>\n`
     })
     new_html += `</select>\n`
-    new_html += '</div></div>\n'
+    new_html += '</div>\n'
     return new_html
 }
 
@@ -247,7 +248,7 @@ function render_field(field_config, prefix="", size="small", defaults={}) {
 
     in_div = false
     
-    if ("extra" in field_config) {
+    if (field_config.hasOwnProperty("extra")) {
         field_config['extra'].forEach(extraObj => {
             switch(extraObj['type']) {
                 case "attribute":
@@ -295,10 +296,86 @@ function render_field(field_config, prefix="", size="small", defaults={}) {
     return field_html
 }
 
+function deep_copy(obj) {
+    return JSON.parse(JSON.stringify(obj))
+}
+
+// hparam helpers
+function get_hparams_for(classifier, prefix, size, defaults) {
+    result = ""
+    switch(classifier) {
+        case "FullyConnectedModel":
+            // hidden layers
+            result += render_field(data['hparam_number_of_hidden_layers'], prefix, size, defaults)
+            result += `<div id="${prefix}hidden_layers_div">`
+            hidden_layer_size_config = deep_copy(data['hparam_hidden_layer_size'])
+            hidden_layer_size_config['label'] += ' 1'
+            result += render_field(hidden_layer_size_config, prefix, size, defaults)
+            result += `</div>`
+            
+            // optimizer, loss, use-trainable-embedding
+            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss","hparam_use_trainable_embedding"]
+            remfields.forEach(field => {
+                result += render_field(data[field], prefix, size, defaults)
+            })
+            break;
+        case "LinearConv1Model":
+            fields = ["hparam_fully_connected_layer_size", "hparam_filters", "hparam_number_of_convolutions"]
+            fields.forEach(field => {
+                result += render_field(data[field], prefix, size, defaults)
+            })
+            result += `<div id="${prefix}convolutions_div">`
+            kernel_size_config = deep_copy(data['hparam_kernel_size'])
+            kernel_size_config['label'] += ' 1'
+            result += render_field(kernel_size_config, prefix, size, defaults)
+            result += `</div>`
+
+            // optimizer, loss, use-trainable-embedding
+            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss","hparam_use_trainable_embedding"]
+            remfields.forEach(field => {
+                result += render_field(data[field], prefix, size, defaults)
+            })
+            break;
+        case "LinearRNNModel":
+            fields = ["hparam_bidirectional_layer_size", "hparam_number_of_hidden_layers_rnn"]
+            fields.forEach(field => {
+                result += render_field(data[field], prefix, size, defaults)
+            })
+            result += `<div id="${prefix}hidden_layers_div">`
+            hidden_layer_size_config = deep_copy(data['hparam_hidden_layer_size'])
+            hidden_layer_size_config['label'] += ' 1'
+            result += render_field(hidden_layer_size_config, prefix, size, defaults)
+            result += `</div>`
+
+            // optimizer, loss, use-trainable-embedding
+            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss","hparam_use_trainable_embedding"]
+            remfields.forEach(field => {
+                result += render_field(data[field], prefix, size, defaults)
+            })
+            break;
+        case "Bert":
+            // optimizer, loss
+            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss"]
+            remfields.forEach(field => {
+                result += render_field(data[field], prefix, size, defaults)
+            })
+            break;
+    }
+    return result
+}
+
 // subtab generators
 function generate_classifier(prefix="", size="small", defaults={}) {
-    // todo
-    return ""
+    result = ""
+    classifier_config = data['class_classifier']
+    result += render_field(classifier_config, prefix, size, defaults)
+    result += `<hr />`
+
+    result += `<div id="${prefix}hparams_div">`
+    result += get_hparams_for(classifier_config["extra"][0]["value"], prefix, size, defaults)
+    result += `</div>`
+
+    return result
 }
 function generate_inmode(prefix="", size="small", defaults={}) {
     // todo
@@ -326,7 +403,7 @@ function generate_tab_prepro(defaults, data) {
 }
 
 function generate_tab_classifier(defaults, data) {
-    return generate_classifier("class_", "large", defaults)
+    return generate_classifier("single_", "small", defaults)
 }
 
 function generate_tab_training(defaults, data) {
@@ -365,8 +442,17 @@ function generate_tab_ensemble(defaults, data) {
 }
 
 function generate_tab_stacker(defaults, data) {
-    // todo
-    return ""
+    result = ""
+    classifier_config = deep_copy(data['class_classifier'])
+    classifier_config['options'] = ["FullyConnectedModel"]
+    result += render_field(classifier_config, "stacker_", "small", defaults)
+    result += `<hr />`
+
+    
+    result += `<div id="stacker_hparams_div">`
+    result += get_hparams_for("FullyConnectedModel", "stacker_", "small", defaults)
+    result += `</div>`
+    return result
 }
 
 function generate_tab(tabName, data, defaults={}) {

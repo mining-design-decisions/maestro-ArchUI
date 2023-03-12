@@ -28,8 +28,6 @@
 
 {% block margin_content %}
 <form method="POST" id="modelconfig" action="/models/{{action}}">
-    {{ form.csrf_token }}
-
     <ul class="nav nav-tabs my-2" id="paramCats" role="tablist">
         {{ render_tab_header('general', 'General', true) }}
 
@@ -37,7 +35,7 @@
         {{ render_tab_header('classifier', 'Classifier') }}
 
         {{ render_tab_header('classifiers', 'Ensemble Classifiers') }}
-        {{ render_tab_header('meta-classifier', 'Ensemble Meta Classifier', visible=false) }}
+        {{ render_tab_header('meta-classifier', 'Ensemble Meta Classifier') }}
         
         {{ render_tab_header('training', 'Training') }}
     </ul>
@@ -58,14 +56,15 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-<script src="{{url_for('static', filename='editable_form.js')}}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="{{url_for('static', filename='model_form.js')}}"></script>
 <script>
+const data = {{field_configs|tojson|safe}}
+const defaults = {{defaults|tojson|safe}}
 function onDocReady() {
-    // todo
     tabs = ["general", "training", "classifier", "pre-processing", "classifiers", "meta-classifier"]
-    data = {{field_configs|tojson|safe}}
     tabs.forEach(tab => {
-        document.getElementById(tab).innerHTML = generate_tab(tab, data)
+        document.getElementById(tab).innerHTML = generate_tab(tab, data, defaults)
     })
 }
 onDocReady()
@@ -78,6 +77,38 @@ function modelModeChanged() {
 }
 function useEarlyStoppingChanged() {
     console.log("use early stopping changed, is now: " + document.getElementById("train_use_early_stopping").checked)
+}
+function classifierChanged(classifier_element) {
+    // get prefix
+    prefix = classifier_element[0].id.split('_')
+    prefix.pop()
+    prefix = prefix.join('_')
+
+    // get classifier
+    class_selected = classifier_element[0].value
+
+    // get div with the hparams
+    div_id = prefix + "_hparams_div"
+    div_element = document.getElementById(div_id)
+
+    // size
+    size = "large"
+    if (prefix == "single") size = "small";
+    if (prefix == "stacker") size = "small";
+
+    div_element.innerHTML = get_hparams_for(class_selected, prefix, size, defaults)
+}
+function nrHiddenLayersChanged(nr_element) {
+    // todo
+    console.log(nr_element)
+}
+function optimizerChanged(optimizer_element) {
+    // todo
+    console.log(optimizer_element)
+}
+function nrOfConvChanged(nr_element) {
+    // todo
+    console.log(nr_element)
 }
 </script>
 
