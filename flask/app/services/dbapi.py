@@ -27,3 +27,15 @@ def is_logged_in():
 
 def get_username():
     return session['un']
+
+# models
+
+# returns false if failed to create (due to no auth)
+# returns new model ID if succeeded
+def create_model_config(config, name):
+    # todo
+    postbody = {
+        "config": config,
+        "name": name
+    }
+    return True

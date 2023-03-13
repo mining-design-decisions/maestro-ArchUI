@@ -68,6 +68,13 @@ function onDocReady() {
     })
 }
 onDocReady()
+
+function getSize(prefix) {
+    size = "large"
+    if (prefix == "single_hp") size = "small";
+    if (prefix == "stacker_hp") size = "small";
+    return size
+}
 </script>
 
 <script>
@@ -128,7 +135,7 @@ function combiStratChanged(combi_strat_el) {
             document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item d-none')
     }
 }
-combiStratChanged(document.getElementById("gen_combination_strategy_div"))
+combiStratChanged([document.getElementById("gen_combination_strategy_div")])
 
 function useEarlyStoppingChanged() {
     el = document.getElementById("train_early_stopping_div")
@@ -139,31 +146,6 @@ function useEarlyStoppingChanged() {
     }
 }
 useEarlyStoppingChanged();
-
-function classifierChanged(classifier_element) {
-    // get prefix
-    prefix = classifier_element[0].id.split('_')
-    prefix.pop()
-    prefix = prefix.join('_')
-
-    // get classifier
-    class_selected = classifier_element[0].value
-
-    // get div with the hparams
-    div_id = prefix + "_hparams_div"
-    div_element = document.getElementById(div_id)
-
-    // size
-    size = "large"
-    if (prefix == "single") size = "small";
-    if (prefix == "stacker") size = "small";
-
-    div_element.innerHTML = get_hparams_for(class_selected, prefix+'_', size, defaults)
-}
-_all_classifiers = $("select[id$='_classifier']")
-for (let i = 0; i < _all_classifiers.length; i++) {
-    classifierChanged([_all_classifiers[i]])
-}
 
 function nrHiddenLayersChanged(nr_element) {
     // get prefix
@@ -181,13 +163,8 @@ function nrHiddenLayersChanged(nr_element) {
     div_id = prefix + "_hidden_layers_div"
     div_el = document.getElementById(div_id)
 
-    // size
-    size = "large"
-    if (prefix == "single") size = "small";
-    if (prefix == "stacker") size = "small";
-
     // generate
-    div_el.innerHTML = generate_count_fields(amt, 'hparam_hidden_layer_size', prefix+'_', size, defaults)
+    div_el.innerHTML = generate_count_fields(amt, 'hparam_hidden_layer_size', prefix+'_', getSize(prefix), defaults)
 }
 _all_hidden_layers = $("input[id$='_number_of_hidden_layers']")
 for (let i = 0; i < _all_hidden_layers.length; i++) {
@@ -234,13 +211,8 @@ function nrOfConvChanged(nr_element) {
     div_id = prefix + "_convolutions_div"
     div_el = document.getElementById(div_id)
 
-    // size
-    size = "large"
-    if (prefix == "single") size = "small";
-    if (prefix == "stacker") size = "small";
-
     // generate
-    div_el.innerHTML = generate_count_fields(amt, 'hparam_kernel_size', prefix+'_', size, defaults)
+    div_el.innerHTML = generate_count_fields(amt, 'hparam_kernel_size', prefix+'_', getSize(prefix), defaults)
 }
 _all_convolutions = $("input[id$='_number_of_convolutions']")
 for (let i = 0; i < _all_convolutions.length; i++) {
@@ -273,6 +245,44 @@ for (let i = 0; i < _all_inmodes.length; i++) {
     inmodeChanged([_all_inmodes[i]])
 }
 
+function classifierChanged(classifier_element) {
+    // get prefix
+    prefix = classifier_element[0].id.split('_')
+    prefix.pop()
+    prefix = prefix.join('_')
+
+    // get classifier
+    class_selected = classifier_element[0].value
+
+    // get div with the hparams
+    div_id = prefix + "_hparams_div"
+    div_element = document.getElementById(div_id)
+
+    // size
+    size = "large"
+    if (prefix == "single") size = "small";
+    if (prefix == "stacker") size = "small";
+
+    div_element.innerHTML = get_hparams_for(class_selected, prefix+'_', size, defaults)
+    
+    // change relevant input mode
+    // get input mode select element
+    div_element = document.getElementById(prefix+"_inmode")
+    // can be null for stacker
+    if (div_element) {
+        // change it
+        inmode_per_class = {{inmode_per_classifier|tojson|safe}}
+        div_element.innerHTML = generate_select_options('prepro_inmode', inmode_per_class[class_selected], defaults)
+        // force changes
+        inmodeChanged([div_element])
+    }
+    
+}
+_all_classifiers = $("select[id$='_classifier']")
+for (let i = 0; i < _all_classifiers.length; i++) {
+    classifierChanged([_all_classifiers[i]])
+}
+
 function ensClassCountChanged(count_element) {
     // amt
     amt = count_element[0].value
@@ -282,6 +292,13 @@ function ensClassCountChanged(count_element) {
     
     // generate
     div_el.innerHTML = generate_ens_classifiers(amt, defaults)
+
+    // propagate changes to classifiers 
+    // (which will propagate to input modes)
+    ens_classifiers = $("[id^='ens_'][id$='_classifier']")
+    for (let i = 0; i < ens_classifiers.length; i++) {
+        classifierChanged([ens_classifiers[i]])
+    }
 }
 ensClassCountChanged([document.getElementById("ens_classifier_count")])
 </script>

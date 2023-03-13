@@ -1,0 +1,51 @@
+{
+    "input_mode": [
+        "BOWFrequency"
+    ],
+    "output_mode": "Detection",
+    "params": null,
+    "hyper_params": null,
+    "ontology_classes": "",
+    "apply_ontology_classes": false,
+    "classifier": [
+        "FullyConnectedModel"
+    ],
+    "epochs": 5,
+    "split_size": 0.2,
+    "max_train": -1,
+    "k_cross": 0,
+    "quick_cross": false,
+    "cross_project": false,
+    "cache_features": false,
+    "architectural_only": false,
+    "class_balancer": "None",
+    "batch_size": 32,
+    "peregrine": false,
+    "combination_strategy": "concat",
+    "ensemble_strategy": "none",
+    "stacking_meta_classifier": null,
+    "stacking_meta_classifier_hyper_parameters": null,
+    "stacking_use_concat": false,
+    "stacking_no_matrix": false,
+    "boosting_rounds": 10,
+    "use_early_stopping": false,
+    "early_stopping_patience": 5,
+    "early_stopping_min_delta": [
+        0.001
+    ],
+    "early_stopping_attribute": [
+        "loss"
+    ],
+    "test_separately": false,
+    "store_model": false,
+    "analyze_keywords": false,
+    "include_detection_performance": false,
+    "test_data_query": null,
+    "database_url": "x",
+    "test_with_training_data": false,
+    
+    "subcommand_name_0": "run",
+    "training_data_query": "{\"tags\":{\"$eq\":\"bottom-up\"}}",
+    "model_id": "",
+    "num_threads": 1,
+}
