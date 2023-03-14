@@ -95,18 +95,22 @@ def raw_to_config(formdata):
     # training
     config['ontology_classes'] = "app/dl_manager/feature_generators/util/ontologies.json"
     config['apply_ontology_classes'] = formdata.get('train_apply_ontology_classes', False)
-    config['epochs'] = formdata.get('training_epochs', 1000)
-    config['split_size'] = formdata.get('training_split_size', None)
-    config['max_train'] = formdata.get('training_max_train', -1)
-    config['architectural_only'] = formdata.get('training_architectural_only', False)
-    cb = formdata.get('training_class_balancer', "None")
+    config['epochs'] = formdata.get('train_epochs', 1000)
+    config['split_size'] = formdata.get('train_split_size', None)
+    config['max_train'] = formdata.get('train_max_train', -1)
+    config['architectural_only'] = formdata.get('train_architectural_only', False)
+    cb = formdata.get('train_class_balancer', "None")
     config['class_balancer'] = cb if len(cb) > 0 else "None"
-    config['batch_size'] = formdata.get('training_batch_size', 32)
+    config['batch_size'] = formdata.get('train_batch_size', 32)
     config['boosting_rounds'] = 0 # not used
-    config['use_early_stopping'] = formdata.get('training_use_early_stopping', False)
-    config['early_stopping_patience'] = formdata.get('training_early_stopping_patience', 5)
-    config['early_stopping_min_delta'] = [formdata.get('training_early_stopping_min_delta', 0.001)] # todo input these better
-    config['early_stopping_attribute'] = [formdata.get('training_early_stopping_attribute', "loss")]
+    config['use_early_stopping'] = formdata.get('train_use_early_stopping', False)
+    config['early_stopping_patience'] = formdata.get('train_early_stopping_patience', 5)
+    config['early_stopping_min_delta'] = []
+    config['early_stopping_attribute'] = []
+    if (formdata.get('train_early_stopping_min_delta', None) != None):
+        config['early_stopping_min_delta'] = [formdata.get('train_early_stopping_min_delta', None)] # todo input these better
+    if (formdata.get('train_early_stopping_attribute', None) != None):
+        config['early_stopping_attribute'] = [formdata.get('train_early_stopping_attribute', "loss")]
 
     # other assorted parameters
     config['store_model'] = True
@@ -259,6 +263,7 @@ def config_to_form(config):
                 for hp in display[tab]['hyper-params']:
                     if display[tab]['hyper-params'][hp]:
                         result[f'stacker_hp_{hp}'] = display[tab]['hyper-params'][hp]
-                        
+    print("\n\n\nmodel defaults:")
+    print(result)
 
     return result

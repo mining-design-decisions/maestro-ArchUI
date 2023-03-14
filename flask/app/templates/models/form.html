@@ -64,8 +64,6 @@ const defaults = {{defaults|tojson|safe}}
 function onDocReady() {
     tabs = ["general", "training", "classifier", "pre-processing", "classifiers", "meta-classifier"]
     tabs.forEach(tab => {
-        console.log(defaults)
-        console.log(tab)
         document.getElementById(tab).innerHTML = generate_tab(tab, data, defaults)
     })
 }

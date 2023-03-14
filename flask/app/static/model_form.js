@@ -130,10 +130,7 @@ function render_field(field_config, prefix="", size="small", defaults={}) {
                     css_label += ` ps-4`
                     break;
                 case "disabled_if_default":
-                    console.log(field_name)
-                    console.log(defaults)
                     if (field_name in defaults) 
-                        console.log("ough")
                         extra_attr += " readonly"
                     break;
                 case "default":
@@ -404,11 +401,11 @@ function generate_tab_training(defaults, data) {
 
     result = ""
     fields.forEach(field => {
-        result += render_field(data[field], "train_", defaults)
+        result += render_field(data[field], "train_", "small", defaults)
     })
     result += "<div id=\"train_early_stopping_div\">"
     early_stopping_fields.forEach(field => {
-        result += render_field(data[field], "train_", defaults)
+        result += render_field(data[field], "train_", "small", defaults)
     })
     result += "</div>"
 
