@@ -68,7 +68,8 @@ def editform(model):
     model_defaults["gen_model_name"] = name
     print(model_defaults)
 
-    return render_template('models/form.html',
+    return render_template('models/form_edit.html',
+        id=model,
         defaults=model_defaults,
         name=name,
         inmode_per_classifier=inmode_per_classifier,
