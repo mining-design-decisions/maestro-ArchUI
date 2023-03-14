@@ -130,7 +130,8 @@ function render_field(field_config, prefix="", size="small", defaults={}) {
                     css_label += ` ps-4`
                     break;
                 case "disabled_if_default":
-                    extra_attr += " disabled"
+                    if (field_name in defaults) 
+                        extra_attr += " disabled"
                     break;
                 case "default":
                     field_default = extraObj['value']

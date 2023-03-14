@@ -238,7 +238,7 @@ function inmodeChanged(inmode_element) {
     // stacker input mode is currently not supported
     // if (prefix == "stacker") size = "small";
 
-    div_element.innerHTML = get_params_for(inmode_selected, prefix, size, defaults)
+    div_element.innerHTML = get_params_for(inmode_selected, prefix+'_', size, defaults)
 }
 _all_inmodes = $("select[id$='_inmode']")
 for (let i = 0; i < _all_inmodes.length; i++) {
@@ -276,7 +276,6 @@ function classifierChanged(classifier_element) {
         // force changes
         inmodeChanged([div_element])
     }
-    
 }
 _all_classifiers = $("select[id$='_classifier']")
 for (let i = 0; i < _all_classifiers.length; i++) {

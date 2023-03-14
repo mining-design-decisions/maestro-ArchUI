@@ -3,6 +3,8 @@ from flask import session
 
 DB_WRAPPER_URL = "https://localhost:8000"
 
+# todo what's with the verify=false that's required?
+
 # auth
 def login(un: str, pw: str):
     x = requests.post(f"{DB_WRAPPER_URL}/token", files={
@@ -34,8 +36,20 @@ def get_username():
 # returns new model ID if succeeded
 def create_model_config(config, name):
     # todo
+    if not is_logged_in():
+        return False
     postbody = {
         "config": config,
         "name": name
     }
+
+    #import json
+    #with open("temp.json", 'w') as f:
+    #    json.dump(postbody, f)
+
+    x = requests.post(f"{DB_WRAPPER_URL}/models", json=postbody, headers={"Authorization": f"bearer {session['token']}"}, verify=False)
+
+    print("printing request response:")
+    print(x.status_code)
+    print(x.json())
     return True
