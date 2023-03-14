@@ -4,6 +4,8 @@ from flask import session
 DB_WRAPPER_URL = "https://localhost:8000"
 
 # todo what's with the verify=false that's required?
+def _auth_header():
+    return {"Authorization": f"bearer {session['token']}"}
 
 # auth
 def login(un: str, pw: str):
@@ -47,9 +49,14 @@ def create_model_config(config, name):
     #with open("temp.json", 'w') as f:
     #    json.dump(postbody, f)
 
-    x = requests.post(f"{DB_WRAPPER_URL}/models", json=postbody, headers={"Authorization": f"bearer {session['token']}"}, verify=False)
+    x = requests.post(f"{DB_WRAPPER_URL}/models", json=postbody, headers=_auth_header(), verify=False)
 
-    print("printing request response:")
-    print(x.status_code)
-    print(x.json())
-    return True
+    return x.json()['id']
+
+def get_model_ids_names():
+    model_ids = requests.get(f"{DB_WRAPPER_URL}/models", verify=False)
+    return model_ids.json()['models']
+
+def get_model_data(id):
+    data = requests.get(f"{DB_WRAPPER_URL}/models/{id}", verify=False)
+    return data.json()

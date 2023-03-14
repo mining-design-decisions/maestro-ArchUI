@@ -12,8 +12,7 @@ bp = Blueprint('models', __name__, url_prefix="/models")
 
 @bp.route('/', methods=["GET"])
 def viewall():
-    # todo
-    models = ["model1", "model2", "testmodel"]
+    models = dbapi.get_model_ids_names()
     return render_template("models/viewall.html", models=models)
 
 @bp.route('/create', methods=["GET"])
@@ -44,5 +43,17 @@ def create():
 
 @bp.route('/view/<model>', methods=["GET"])
 def view(model):
+    data = dbapi.get_model_data(model)
+    name = data['name']
+    config = modelconfig.config_to_display(data['config'])
+    return render_template('models/view.html', name=name, model=config, id=model, last_trained="Never")
+
+@bp.route('/train/<model>', methods=["POST"])
+def train(model):
     # todo
-    return "under construction - model ID is " + model
+    return "under construction"
+
+@bp.route('/edit/<model>', methods=["GET"])
+def edit(model):
+    # todo
+    return "under construction"

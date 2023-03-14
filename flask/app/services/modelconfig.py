@@ -52,20 +52,21 @@ def raw_to_config(formdata):
         amt = formdata.get('ens_classifier_count')
         for i in range(amt):
             # classifier
-            this_class = formdata.get("ens_{i}_classifier")
+            this_class = formdata.get(f"ens_{i}_classifier")
             config['classifier'].append(this_class)
 
             # inmode
-            this_inmode = formdata.get("ens_{i}_inmode")
+            this_inmode = formdata.get(f"ens_{i}_inmode")
             config['input_mode'].append(this_inmode)
             
             # hparams
             if this_class not in class_count:
                 class_count[this_class] = 0
 
-            hp_pref = "ens_{i}_hp_"
-
-            config['hyper_params'].extend([f"{this_class}[{class_count[this_class]}].{hp[len(hp_pref):].replace('_', '-')}={formdata.get(hp)}" for hp in get_by_prefix(formdata, hp_pref)])
+            hp_pref = f"ens_{i}_hp_"
+            for hp in get_by_prefix(formdata, hp_pref):
+                if (formdata.get(hp)):
+                    config['hyper_params'].append(f"{this_class}[{class_count[this_class]}].{hp[len(hp_pref):].replace('_', '-')}={formdata.get(hp)}")
 
             class_count[this_class] += 1
 
@@ -75,7 +76,9 @@ def raw_to_config(formdata):
 
             p_pref = "ens_{i}_p_"
 
-            config['params'].extend([f"{this_inmode}[{inmode_count[this_inmode]}].{p[len(p_pref):].replace('_', '-')}={formdata.get(p)}" for p in get_by_prefix(formdata, p_pref)])
+            for p in get_by_prefix(formdata, p_pref):
+                if (formdata.get(p)):
+                    config['params'].append(f"{this_inmode}[{inmode_count[this_inmode]}].{p[len(p_pref):].replace('_', '-')}={formdata.get(p)}")
 
             inmode_count[this_inmode] += 1
 
@@ -83,10 +86,14 @@ def raw_to_config(formdata):
         if config['ensemble_strategy'] == "stacking":
             config['stacking_meta_classifier'] = formdata.get('stacker_classifier', None)
             prefix = 'stacker_hp_'
-            config['stacking_meta_classifier_hyper_parameters'] = [f"{hp[len('stacker_hp_'):].replace('_','-')}={formdata.get(hp)}" for hp in get_by_prefix(formdata, prefix)]
+            config['stacking_meta_classifier_hyper_parameters'] = []
+
+            for hp in get_by_prefix(formdata, prefix):
+                if formdata.get(hp):
+                    config['stacking_meta_classifier_hyper_parameters'].append(f"{hp[len('stacker_hp_'):].replace('_','-')}={formdata.get(hp)}")
 
     # training
-    config['ontology_classes'] = "/app/dl_manager/feature_generators/util/ontologies.json"
+    config['ontology_classes'] = "app/dl_manager/feature_generators/util/ontologies.json"
     config['apply_ontology_classes'] = formdata.get('train_apply_ontology_classes', False)
     config['epochs'] = formdata.get('training_epochs', 1000)
     config['split_size'] = formdata.get('training_split_size', None)
@@ -105,3 +112,115 @@ def raw_to_config(formdata):
     config['store_model'] = True
 
     return config
+
+def config_to_display(config):
+    # two common tabs for single & ensemble
+    general = {
+        "output mode": config['output_mode'],
+        "combination strategy": config["combination_strategy"],
+        "ensemble strategy": config["ensemble_strategy"]
+    }
+
+    train_fields = [
+        "ontology_classes",
+        "apply_ontology_classes",
+        "epochs",
+        "split_size",
+        "max_train",
+        "architectural_only",
+        "class_balancer",
+        "batch_size",
+        "use_early_stopping",
+        "early_stopping_patience",
+        "early_stopping_min_delta",
+        "early_stopping_attribute"
+    ]
+
+    training = {}
+    for field in train_fields:
+        train_key = field.replace('_', ' ')
+        # if type(config[field]) == list:
+        #     training[train_key] = ', '.join(str(config[field]))
+        # else:
+        training[train_key] = config[field]
+
+    result = {
+        "general": general,
+        "training": training
+    }
+    print(result)
+        
+    if len(config['classifier']) == 1:
+        print("single")
+        # single
+        classifier = {
+            'classifier': config['classifier'][0],
+            'hyper-params': {}
+        }
+        for hp in config['hyper_params']:
+            split = hp.split('=')
+            classifier['hyper-params'][split[0]] = split[1]
+        
+        input_mode = {
+            'input-mode': config['input_mode'][0],
+            "params": {}
+        }
+        for p in config['params']:
+            split = p.split('=')
+            input_mode['params'][split[0]] = split[1]
+
+        result['classifier'] = classifier
+        result['pre-processing'] = input_mode
+        pass
+    else:
+        # ensemble
+        class_count = {}
+        inmode_count = {}
+        result['ensemble classifiers'] = []
+
+        for i in range(len(config['classifier'])):
+            this_classifier = config['classifier'][i]
+            this_inmode = config['input_mode'][i]
+            this_obj = {
+                'classifier': this_classifier,
+                'input-mode': this_inmode,
+                'params': {},
+                'hyper-params': {}
+            }
+            if not this_classifier in class_count:
+                class_count[this_classifier] = 0
+            if not this_inmode in inmode_count:
+                inmode_count[this_inmode] = 0
+
+            hp_pref = f"{this_classifier}[{class_count[this_classifier]}]."
+            
+            for hp in [x[len(hp_pref):] for x in config['hyper_params'] if x.startswith(hp_pref)]:
+                split = hp.split('=')
+                this_obj['hyper-params'][split[0]] = split[1]
+            
+            p_pref = f"{this_inmode}[{inmode_count[this_inmode]}]."
+            for p in [x[len(p_pref):] for x in config['params'] if x.startswith(p_pref)]:
+                split = p.split('=')
+                this_obj['params'][split[0]] = split[1]
+
+            class_count[this_classifier] += 1
+            inmode_count[this_inmode] += 1
+            result['ensemble classifiers'].append(this_obj)
+
+
+        # stacker?
+        if config['ensemble_strategy'] == "stacking":
+            result['meta classifier'] = {
+                "classifier": config['stacking_meta_classifier'],
+                "hyper-params": {}
+            }
+
+            for hp in config['stacking_meta_classifier_hyper_parameters']:
+                split = hp.split('=')
+                result['hyper-params'][split[0]] = split[1]
+
+    return result
+
+def config_to_form(config):
+    # todo
+    return {}

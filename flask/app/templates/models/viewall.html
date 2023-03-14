@@ -12,7 +12,7 @@
         <h4>Machine Learning Models</h4>
         <ul>
             {% for m in models %}
-            <li><a href="{{ url_for('models.view', model=m) }}">{{ m }}</a></li>
+            <li><a href="{{ url_for('models.view', model=m['id']) }}">{{ m['name'] }}</a></li>
             {% endfor %}
         </ul>
     </div>
