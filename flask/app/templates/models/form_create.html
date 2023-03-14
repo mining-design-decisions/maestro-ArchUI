@@ -1,0 +1,7 @@
+{% extends 'models/form.html' %}
+
+{% block subtitle %}Create ML Model{% endblock %}
+
+{% block formheader %}
+<form method="POST" id="createmodel" action="{{ url_for('models.create') }}">
+{% endblock %}

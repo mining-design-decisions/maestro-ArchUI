@@ -148,10 +148,8 @@ def config_to_display(config):
         "general": general,
         "training": training
     }
-    print(result)
         
     if len(config['classifier']) == 1:
-        print("single")
         # single
         classifier = {
             'classifier': config['classifier'][0],
@@ -222,5 +220,45 @@ def config_to_display(config):
     return result
 
 def config_to_form(config):
-    # todo
-    return {}
+    display = config_to_display(config)
+    result = {}
+    for tab in display:
+        match(tab):
+            case "general":
+                for field in display[tab]:
+                    result["gen_" + field.lower().replace(' ', '_')] = display[tab][field]
+
+            case "training":
+                for field in display[tab]:
+                    result["train_" + field.lower().replace(' ', '_')] = display[tab][field]
+
+            case "pre-processing":
+                result['single_inmode'] = display[tab]['input-mode']
+                for p in display[tab]['params']:
+                    if display[tab]['params'][p]:
+                        result[f"single_p_{p.replace('-', '_')}"] = display[tab]['params'][p]
+                        
+            case "classifier":
+                result['single_classifier'] = display[tab]['classifier']
+                for hp in display[tab]['hyper-params']:
+                    if display[tab]['hyper-params'][hp]:
+                        result[f"single_hp_{hp.replace('-','_')}"] = display[tab]['hyper-params'][hp]
+                        
+            case "ensemble classifiers":
+                for i in range(len(display[tab])):
+                    obj = display[tab][i]
+                    result[f"ens_{i}_classifier"] = obj['classifier']
+                    result[f"ens_{i}_inmode"] = obj['inmode']
+                    for hp in obj['hyper-params']:
+                        result[f"ens_{i}_hp_{hp}"] = obj["hyper-params"][hp]
+                    for p in obj["params"]:
+                        result[f"ens_{i}_p_{p}"] = obj["params"][p]
+                        
+            case "meta classifier":
+                result['stacker_classifier'] = display[tab]['classifier']
+                for hp in display[tab]['hyper-params']:
+                    if display[tab]['hyper-params'][hp]:
+                        result[f'stacker_hp_{hp}'] = display[tab]['hyper-params'][hp]
+                        
+
+    return result

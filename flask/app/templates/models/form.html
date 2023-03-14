@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% block subtitle %}{{action.title()}} Model{% endblock %}
-
 {% macro render_tab_header(name, title, active=false, visible=true) %}
     {% if visible %}
     <li class="nav-item" role="presentation" id="{{name}}-tab-header">
@@ -27,7 +25,9 @@
 
 
 {% block margin_content %}
-<form method="POST" id="modelconfig" action="/models/{{action}}">
+{% block formheader %}
+<form method="POST" id="" action="">
+{% endblock formheader %}
     <ul class="nav nav-tabs my-2" id="paramCats" role="tablist">
         {{ render_tab_header('general', 'General', true) }}
 
@@ -64,6 +64,8 @@ const defaults = {{defaults|tojson|safe}}
 function onDocReady() {
     tabs = ["general", "training", "classifier", "pre-processing", "classifiers", "meta-classifier"]
     tabs.forEach(tab => {
+        console.log(defaults)
+        console.log(tab)
         document.getElementById(tab).innerHTML = generate_tab(tab, data, defaults)
     })
 }

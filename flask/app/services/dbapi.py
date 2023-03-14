@@ -60,3 +60,7 @@ def get_model_ids_names():
 def get_model_data(id):
     data = requests.get(f"{DB_WRAPPER_URL}/models/{id}", verify=False)
     return data.json()
+
+def edit_model(id, name, config):
+    x = requests.post(f"{DB_WRAPPER_URL}/models/{id}", headers=_auth_header(), verify=False, json={"name": name, "config": config})
+    

@@ -25,8 +25,7 @@ def viewform():
     }
     field_configs = data.get_field_configs()
 
-    return render_template('models/form.html',
-        action='create',
+    return render_template('models/form_create.html',
         defaults={},
         inmode_per_classifier=inmode_per_classifier,
         field_configs=field_configs)
@@ -54,6 +53,30 @@ def train(model):
     return "under construction"
 
 @bp.route('/edit/<model>', methods=["GET"])
+def editform(model):
+    inmode_per_classifier = {
+        "FullyConnectedModel": ["Doc2Vec","BOWFrequency","BOWNormalized","TfidfGenerator","Metadata","OntologyFeatures"],
+        "LinearConv1Model": ["Word2Vec1D"],
+        "LinearRNNModel": ["Word2Vec1D"],
+        "Bert": ["Bert"]
+    }
+    field_configs = data.get_field_configs()
+
+    model_data = dbapi.get_model_data(model)
+    name = model_data["name"]
+    model_defaults = modelconfig.config_to_form(model_data['config'])
+    model_defaults["gen_model_name"] = name
+    print(model_defaults)
+
+    return render_template('models/form.html',
+        defaults=model_defaults,
+        name=name,
+        inmode_per_classifier=inmode_per_classifier,
+        field_configs=field_configs)
+
+@bp.route('/edit/<model>', methods=["POST"])
 def edit(model):
-    # todo
-    return "under construction"
+    model_name = request.form.get('gen_model_name', '')
+    model_data = modelconfig.raw_to_config(request.form)
+    dbapi.edit_model(model, model_name, model_data)
+    return redirect(url_for('models.view', model=model))

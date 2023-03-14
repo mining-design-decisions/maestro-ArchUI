@@ -130,8 +130,11 @@ function render_field(field_config, prefix="", size="small", defaults={}) {
                     css_label += ` ps-4`
                     break;
                 case "disabled_if_default":
+                    console.log(field_name)
+                    console.log(defaults)
                     if (field_name in defaults) 
-                        extra_attr += " disabled"
+                        console.log("ough")
+                        extra_attr += " readonly"
                     break;
                 case "default":
                     field_default = extraObj['value']
@@ -369,7 +372,7 @@ function generate_tab_general(defaults, data) {
 
     result = ""
     fields.forEach(field => {
-        result += render_field(data[field], "gen_", defaults)
+        result += render_field(data[field], "gen_", "small", defaults)
     })
     return result
 }
