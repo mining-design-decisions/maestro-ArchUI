@@ -1,7 +1,10 @@
 import requests
 from flask import session
 
-DB_WRAPPER_URL = "https://localhost:8000"
+IP = "192.168.178.248"
+# DB_WRAPPER_URL = f"https://{IP}:8000"
+DB_WRAPPER_URL = "https://163.158.246.99:8001"
+CLI_WRAPPER_URL = f"https://{IP}:9011"
 
 # todo what's with the verify=false that's required?
 def _auth_header():
@@ -63,4 +66,33 @@ def get_model_data(id):
 
 def edit_model(id, name, config):
     x = requests.post(f"{DB_WRAPPER_URL}/models/{id}", headers=_auth_header(), verify=False, json={"name": name, "config": config})
-    
+
+def train_model(id):
+    data = requests.get(f"{DB_WRAPPER_URL}/models/{id}", verify=False)
+    config = data.json()['config']
+    config['subcommand_name_0'] = 'run'
+    config['model-id'] = id
+    config['database-url'] = DB_WRAPPER_URL
+    config['num-threads'] = 1
+    config['training_data_query'] = "{\"tags\":{\"$eq\":\"has-label\"}}"
+    config['test_with_training_data'] = True
+    postbody = {
+        "auth":{"token": session['token']},
+        "config": config
+    }
+
+    with open('temp.json', 'w') as f:
+        import json
+        json.dump(postbody, f)
+
+    x = requests.post(f"{CLI_WRAPPER_URL}/invoke", json=postbody, verify=False)
+
+def get_model_performance(id):
+    performances = requests.get(f"{DB_WRAPPER_URL}/models/{id}/performances", verify=False).json()["performances"]
+    latest_version = "Never"
+    latest_performance = None
+    if len(performances)>0:
+        latest_version = max(performances)
+        latest_performance = requests.get(f"{DB_WRAPPER_URL}/models/{id}/performances/{latest_version}", verify=False).json()[f"{latest_version}"][0]["f-score"][0]
+
+    return (len(performances), latest_version, latest_performance)

@@ -45,12 +45,22 @@ def view(model):
     data = dbapi.get_model_data(model)
     name = data['name']
     config = modelconfig.config_to_display(data['config'])
-    return render_template('models/view.html', name=name, model=config, id=model, last_trained="Never")
+    version_count, latest_version, performance = dbapi.get_model_performance(model) 
+
+    return render_template(
+        'models/view.html', 
+        name=name, 
+        model=config, 
+        id=model, 
+        last_trained=latest_version,
+        version_count=version_count,
+        performance=performance)
 
 @bp.route('/train/<model>', methods=["POST"])
 def train(model):
     # todo
-    return "under construction"
+    dbapi.train_model(model)
+    return redirect(url_for('models.view', model=model))
 
 @bp.route('/edit/<model>', methods=["GET"])
 def editform(model):

@@ -176,6 +176,12 @@ function generate_count_fields(count, field, prefix, size, defaults) {
     for (let i = 0; i < count; i++) {
         config = deep_copy(data[field])
         config['label'] += ` ${i+1}`
+        new_name = config['name'].split('_')
+        new_name.pop()
+        new_name.push((i+1).toString())
+        new_name.push('size')
+        new_name = new_name.join('_')
+        config['name'] = new_name
         result += render_field(config, prefix, size, defaults)
     }
     return result

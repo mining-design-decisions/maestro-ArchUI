@@ -27,14 +27,18 @@ def raw_to_config(formdata):
         # pre-processing
         config['input_mode'] = [formdata.get('single_inmode')]
         p_prefix = "single_p_"
-        params = get_by_prefix(formdata, p_prefix)
-        config['params'] = [f"{p[len(p_prefix):].replace('_', '-')}={formdata.get(p)}" for p in params]
+        config['params'] = []
+        for p in get_by_prefix(formdata, p_prefix):
+            if formdata.get(p) and len(formdata.get(p).strip()) > 0:
+                config['params'].append(f"{p[len(p_prefix):].replace('_', '-')}={formdata.get(p)}")
 
         # classifier
         config['classifier'] = [formdata.get('single_classifier')]
         h_prefix = "single_hp_"
-        hparams = get_by_prefix(formdata, h_prefix)
-        config['hyper_params'] = [f"{hp[len(h_prefix):].replace('_', '-')}={formdata.get(hp)}" for hp in hparams]
+        config['hyper_params'] = []
+        for hp in get_by_prefix(formdata, h_prefix):
+            if formdata.get(hp) and len(formdata.get(hp).strip()) > 0:
+                config['hyper_params'].append(f"{hp[len(h_prefix):].replace('_', '-')}={formdata.get(hp)}")
 
     else:
         # ensemble mode tabs:
@@ -65,7 +69,7 @@ def raw_to_config(formdata):
 
             hp_pref = f"ens_{i}_hp_"
             for hp in get_by_prefix(formdata, hp_pref):
-                if (formdata.get(hp)):
+                if formdata.get(hp) and len(formdata.get(hp).strip()) > 0:
                     config['hyper_params'].append(f"{this_class}[{class_count[this_class]}].{hp[len(hp_pref):].replace('_', '-')}={formdata.get(hp)}")
 
             class_count[this_class] += 1
@@ -77,7 +81,7 @@ def raw_to_config(formdata):
             p_pref = "ens_{i}_p_"
 
             for p in get_by_prefix(formdata, p_pref):
-                if (formdata.get(p)):
+                if (formdata.get(p)) and len(formdata.get(p).strip()) > 0:
                     config['params'].append(f"{this_inmode}[{inmode_count[this_inmode]}].{p[len(p_pref):].replace('_', '-')}={formdata.get(p)}")
 
             inmode_count[this_inmode] += 1
@@ -89,27 +93,31 @@ def raw_to_config(formdata):
             config['stacking_meta_classifier_hyper_parameters'] = []
 
             for hp in get_by_prefix(formdata, prefix):
-                if formdata.get(hp):
+                if formdata.get(hp) and len(formdata.get(hp).strip()) > 0:
                     config['stacking_meta_classifier_hyper_parameters'].append(f"{hp[len('stacker_hp_'):].replace('_','-')}={formdata.get(hp)}")
 
     # training
-    config['ontology_classes'] = "app/dl_manager/feature_generators/util/ontologies.json"
+    config['ontology_classes'] = "./dl_manager/feature_generators/util/ontologies.json"
     config['apply_ontology_classes'] = formdata.get('train_apply_ontology_classes', False)
     config['epochs'] = formdata.get('train_epochs', 1000)
-    config['split_size'] = formdata.get('train_split_size', None)
-    config['max_train'] = formdata.get('train_max_train', -1)
+    if formdata.get('train_split_size', None):
+        config['split_size'] = formdata.get('train_split_size')
+    if formdata.get('train_max_train', None):
+        config['max_train'] = formdata.get('train_max_train', -1)
     config['architectural_only'] = formdata.get('train_architectural_only', False)
     cb = formdata.get('train_class_balancer', "None")
     config['class_balancer'] = cb if len(cb) > 0 else "None"
-    config['batch_size'] = formdata.get('train_batch_size', 32)
+    if formdata.get('train_batch_size', 32):
+        config['batch_size'] = formdata.get('train_batch_size', 32)
     config['boosting_rounds'] = 0 # not used
     config['use_early_stopping'] = formdata.get('train_use_early_stopping', False)
-    config['early_stopping_patience'] = formdata.get('train_early_stopping_patience', 5)
+    if formdata.get('train_early_stopping_patience', 5):
+        config['early_stopping_patience'] = formdata.get('train_early_stopping_patience', 5)
     config['early_stopping_min_delta'] = []
     config['early_stopping_attribute'] = []
-    if (formdata.get('train_early_stopping_min_delta', None) != None):
+    if (formdata.get('train_early_stopping_min_delta', None)):
         config['early_stopping_min_delta'] = [formdata.get('train_early_stopping_min_delta', None)] # todo input these better
-    if (formdata.get('train_early_stopping_attribute', None) != None):
+    if (formdata.get('train_early_stopping_attribute', None)):
         config['early_stopping_attribute'] = [formdata.get('train_early_stopping_attribute', "loss")]
 
     # other assorted parameters
@@ -142,11 +150,12 @@ def config_to_display(config):
 
     training = {}
     for field in train_fields:
-        train_key = field.replace('_', ' ')
-        # if type(config[field]) == list:
-        #     training[train_key] = ', '.join(str(config[field]))
-        # else:
-        training[train_key] = config[field]
+        if field in config:
+            train_key = field.replace('_', ' ')
+            # if type(config[field]) == list:
+            #     training[train_key] = ', '.join(str(config[field]))
+            # else:
+            training[train_key] = config[field]
 
     result = {
         "general": general,
