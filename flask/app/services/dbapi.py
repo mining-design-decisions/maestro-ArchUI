@@ -2,8 +2,7 @@ import requests
 from flask import session
 
 IP = "192.168.178.248"
-# DB_WRAPPER_URL = f"https://{IP}:8000"
-DB_WRAPPER_URL = "https://163.158.246.99:8001"
+DB_WRAPPER_URL = f"https://{IP}:8000"
 CLI_WRAPPER_URL = f"https://{IP}:9011"
 
 # todo what's with the verify=false that's required?
@@ -53,6 +52,7 @@ def create_model_config(config, name):
     #    json.dump(postbody, f)
 
     x = requests.post(f"{DB_WRAPPER_URL}/models", json=postbody, headers=_auth_header(), verify=False)
+    print(x.json())
 
     return x.json()['id']
 
@@ -81,11 +81,7 @@ def train_model(id):
         "config": config
     }
 
-    with open('temp.json', 'w') as f:
-        import json
-        json.dump(postbody, f)
-
-    x = requests.post(f"{CLI_WRAPPER_URL}/invoke", json=postbody, verify=False)
+    requests.post(f"{CLI_WRAPPER_URL}/invoke", json=postbody, verify=False)
 
 def get_model_performance(id):
     performances = requests.get(f"{DB_WRAPPER_URL}/models/{id}/performances", verify=False).json()["performances"]
@@ -96,3 +92,62 @@ def get_model_performance(id):
         latest_performance = requests.get(f"{DB_WRAPPER_URL}/models/{id}/performances/{latest_version}", verify=False).json()[f"{latest_version}"][0]["f-score"][0]
 
     return (len(performances), latest_version, latest_performance)
+
+def predict_models_projects(models, projects):
+    projects = [f"{{\"tags\": {{\"$eq\": \"{project}\"}} }}" for project in projects]
+    proj_query = f"{{ \"$or\": [ {','.join(projects)} ] }}"
+    
+    for model in models:
+        # data = requests.get(f"{DB_WRAPPER_URL}/models/{model}", verify=False)
+        # config = data.json()['config']
+        config = {}
+        config['subcommand_name_0'] = 'predict'
+        config['model'] = model
+        config['version'] = 'most-recent'
+        config['data-query'] = proj_query
+        config['database-url'] = DB_WRAPPER_URL
+        config['num-threads'] = 1
+
+        postbody = {
+            "auth":{"token": session['token']},
+            "config": config
+        }
+
+        requests.post(f"{CLI_WRAPPER_URL}/invoke", json=postbody, verify=False)
+
+# queries
+# temp
+def _query_dir():
+    import os
+    os.makedirs("app/data/queries", exist_ok=True)
+
+def create_query(models, projects, name):
+    # todo put these in the db eventually?
+    modelversions = {}
+    for model in models:
+        modelversions[model] = requests.get(f"{DB_WRAPPER_URL}/models/{model}/versions", verify=False).json()["versions"][0]["id"]
+    
+    _query_dir()
+    with open(f'app/data/queries/{name}.json', 'w') as f:
+        import json
+        json.dump({
+            "models": modelversions,
+            "projects": projects
+        }, f)
+
+def get_query_names():
+    from os import walk
+    results = []
+    _query_dir()
+    for (dirpath, dirnames, filenames) in walk('app/data/queries'):
+        for file in filenames:
+            results.append(file[:-5])
+    return results
+
+def get_query_info(query_name):
+    import json
+    results = {}
+    _query_dir()
+    with open(f'app/data/queries/{query_name}.json', 'r') as f:
+        results = json.load(f)
+    return results

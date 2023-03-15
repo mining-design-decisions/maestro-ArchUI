@@ -1,17 +1,19 @@
 from flask import render_template
 from flask import Blueprint
 
+from app.services import dbapi
+
 bp = Blueprint('classify', __name__, url_prefix="/classify")
 
 @bp.route('/', methods=["GET"])
 def viewall():
-    # todo
-    query_names = ["query1", "query2"]
+    query_names = dbapi.get_query_names()
     return render_template("classify/viewall.html", queries=query_names)
 
 @bp.route('/view/<query>', methods=["GET"])
 def view(query):
     # todo
+    qdata = dbapi.get_query_info(query)
     return render_template("classify/view.html") # todo
 
 @bp.route('/create', methods=["GET"])

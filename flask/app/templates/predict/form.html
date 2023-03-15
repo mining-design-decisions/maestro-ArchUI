@@ -26,10 +26,11 @@
     {{ card_start() }}
     <h4>Start Predicting</h4>
     <div class="form-group">
-        <input name="predict_generate_query" id="predict_generate_query" type="checkbox">
+        <input name="predict_generate_query" id="predict_generate_query" type="checkbox" onchange="generateQueryChanged()">
         <label for="predict_generate_query" class="col-form-label">
             Create a query for this prediction?
         </label>
+        <div id="query_name_div"></div>
     </div>
 
     <input class="btn btn-primary my-2" type="submit" value="Run Model(s) Prediction on Target Project(s)"/>
@@ -54,12 +55,15 @@ function add_project() {
     new_id = `target_project_${max_id}`
     new_html = `<div class="form-group my-2" id="${new_id}_div">`
     new_html += `<label for="${new_id}" class="col-form-label">Project: </label>`
+    /*
     new_html += `<select id="${new_id}" name="${new_id}" class="mx-3">`
-    projects = {{projects|tojson|safe}}
+    projects = []
     projects.forEach(project => {
         new_html += `<option value="${project}">${project}</option>`
     })
     new_html += `</select>`
+    */
+    new_html += `<input id=${new_id} name=${new_id} class="mx-3" type="text"/>`
     new_html += `<button onclick="remove_project('${new_id}_div')" type="button" class="btn btn-secondary">Remove this Project Option</button>`
     new_html += `</div>`
 
@@ -105,7 +109,7 @@ function add_model() {
     new_html += `<select id="${new_id}" name="${new_id}" class="mx-3">`
     models = {{models|tojson|safe}}
     models.forEach(model => {
-        new_html += `<option value="${model}">${model}</option>`
+        new_html += `<option value="${model['id']}">${model['name']}</option>`
     })
     new_html += `</select>`
     new_html += `<button onclick="remove_model('${new_id}_div')" type="button" class="btn btn-secondary">Remove this ML Model Option</button>`
@@ -132,6 +136,23 @@ add_model(); // initial option
 
 function remove_model(id) {
     document.getElementById(id).remove();
+}
+</script>
+
+<script>
+function generateQueryChanged() {
+    const toAdd = `
+    <div class="form-group">
+        <label for="query_name" class="col-form-label">Query Name: </label>
+        <input name="query_name" id="query_name" type="text" required />
+    </div>
+    `
+    el = document.getElementById("query_name_div")
+    if (document.getElementById("predict_generate_query").checked) {
+        el.innerHTML = toAdd
+    } else {
+        el.innerHTML = ""
+    }
 }
 </script>
 {% endblock %}
