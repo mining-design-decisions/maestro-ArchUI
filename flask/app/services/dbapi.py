@@ -93,10 +93,11 @@ def get_model_performance(id):
 
     return (len(performances), latest_version, latest_performance)
 
-def predict_models_projects(models, projects):
+def _get_proj_query(projects):
     projects = [f"{{\"tags\": {{\"$eq\": \"{project}\"}} }}" for project in projects]
-    proj_query = f"{{ \"$or\": [ {','.join(projects)} ] }}"
-    
+    return f"{{ \"$or\": [ {','.join(projects)} ] }}"
+
+def predict_models_projects(models, projects):
     for model in models:
         # data = requests.get(f"{DB_WRAPPER_URL}/models/{model}", verify=False)
         # config = data.json()['config']
@@ -104,7 +105,7 @@ def predict_models_projects(models, projects):
         config['subcommand_name_0'] = 'predict'
         config['model'] = model
         config['version'] = 'most-recent'
-        config['data-query'] = proj_query
+        config['data-query'] = _get_proj_query(projects)
         config['database-url'] = DB_WRAPPER_URL
         config['num-threads'] = 1
 
@@ -144,10 +145,110 @@ def get_query_names():
             results.append(file[:-5])
     return results
 
-def get_query_info(query_name):
-    import json
-    results = {}
+def get_query_data(query_name):
+    # things needed for each issue
+    # key/link. summary. description.
+    # manual labels.
+    # and automatic predictions. per model if possible.
     _query_dir()
     with open(f'app/data/queries/{query_name}.json', 'r') as f:
-        results = json.load(f)
-    return results
+        import json
+        qdata = json.load(f)
+        models = qdata['models']
+        projects = qdata['projects']
+
+    # first: regular issue data!
+    postbody = {"filter": {
+        "$or": [{"tags": {"$eq": project}} for project in projects]
+    }}
+    x = requests.get(f"{DB_WRAPPER_URL}/issue-ids", json=postbody, verify=False).json()
+    issue_ids = x["ids"]
+
+    issue_data = requests.get(f"{DB_WRAPPER_URL}/issue-data", json={"ids": issue_ids, "attributes": ["key", "summary", "description", "link"]}, verify=False).json()
+    if "data" in issue_data:
+        issue_data = issue_data["data"]
+    else:
+        issue_data = {}
+
+    # next, manual labels.
+    postbody["filter"] = {
+        "$and": [
+            postbody["filter"],
+            {"tags": {"$eq": "has-label"}}
+        ]
+    }
+    manual_issue_ids = requests.get(f"{DB_WRAPPER_URL}/issue-ids", json=postbody, verify=False).json()
+    manual_issue_ids = manual_issue_ids["ids"]
+    manual_labels_raw = requests.get(f"{DB_WRAPPER_URL}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
+    manual_labels = {}
+
+
+    labels = ["existence", "property", "executive"]
+    if "labels" in manual_labels_raw:
+        for key in manual_labels_raw['labels']:
+            classifications = []
+            for label in labels:
+                if manual_labels_raw["labels"][key][label]:
+                    classifications.append(label.title())
+            if len(classifications) == 0:
+                classifications.append("Non-Arch.")
+            
+            manual_labels[key] = ", ".join(classifications)
+
+    
+    
+    # finally: predictions!
+    predictions = {} # key -> { model -> predictions }
+    headers = {} # model -> [header]
+    # header format for detection-output:
+    """
+    "Apache-12639558": {
+        "architectural": {
+            "prediction": false,
+            "probability": 0.0
+        }
+    }
+    """
+    # header format for classification3simplified-output:
+    """
+    "Apache-12639558": {
+        "executive": {
+            "prediction": false,
+            "probability": 0.024279268458485603
+        },
+        "existence": {
+            "prediction": false,
+            "probability": 0.07352140545845032
+        },
+        "non-architectural": {
+            "prediction": false,
+            "probability": 0.8794219493865967
+        },
+        "property": {
+            "prediction": false,
+            "probability": 0.022777432575821877
+        }
+    }
+    """
+    for model in models:
+        version = models[model]
+        pred = requests.get(f"{DB_WRAPPER_URL}/models/{model}/versions/{version}/predictions", json={"ids": issue_ids}, verify=False).json()
+        if "predictions" in pred:
+            # add headers
+            first_issue = list(pred["predictions"].keys())[0]
+            first_issue = pred["predictions"][first_issue]
+            headers[model] = list(first_issue.keys())
+            # add issue predictions
+            for key in pred["predictions"]:
+                if not key in predictions:
+                    predictions[key] = {}
+                predictions[key][model] = pred["predictions"][key]
+        # don't really care otherwise
+    
+    
+    with open("temp.json", "w") as f:
+        import json
+        json.dump(predictions, f)
+
+    return (issue_data, manual_labels, predictions, headers)
+

@@ -2,6 +2,55 @@
 
 {% block subtitle %}View Query{% endblock %}
 
+{% block headerExtra %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css" />
+{% endblock %}
+
 {% block margin_content %}
-under construction
+<p class="my-2">
+    Use shift-click to order by multiple columns at the same time.
+</p>
+<table id="data" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>Action</th>
+            <th>Manual Label</th>
+            {% for m_id in headers %}
+                {% for h in headers[m_id] %}
+                <th>{{id_to_name[m_id]}}: {{h.title()}}</th>
+                {% endfor %}
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for id in issue_data %}
+        <tr>
+            <td><a href="{{issue_data[id]['link']}}" target="_blank">{{issue_data[id]['key']}}</a></td>
+            <td>CLASSIFY TODO</td>
+            <td>{{ manual[id] if id in manual else "" }}</td>
+
+            {% for m_id in headers %}
+                {% for h in headers[m_id] %}
+                    <td>{{predictions[id][m_id][h]['probability']}} ({{predictions[id][m_id][h]['prediction']}})</td>
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock%}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.13.1/sorting/numString.js"></script>
+<script>
+$(document).ready(function() {
+    $.fn.dataTable.numString(/\d+/);
+    $('#data').DataTable()
+})
+</script>
+{% endblock %}
