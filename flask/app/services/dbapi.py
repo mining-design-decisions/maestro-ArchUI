@@ -171,14 +171,19 @@ def get_query_data(query_name):
         issue_data = {}
 
     # next, manual labels.
-    postbody["filter"] = {
-        "$and": [
-            postbody["filter"],
-            {"tags": {"$eq": "has-label"}}
-        ]
+    # these are more complicated. we need both has-label (in training)
+    # and needs-review (in review)
+
+    # first the in-training ones
+    labelbody = {
+        "filter": {
+            "$and": [
+                postbody["filter"],
+                {"tags": {"$eq": "has-label"}}
+            ]
+        }
     }
-    manual_issue_ids = requests.get(f"{DB_WRAPPER_URL}/issue-ids", json=postbody, verify=False).json()
-    manual_issue_ids = manual_issue_ids["ids"]
+    manual_issue_ids = requests.get(f"{DB_WRAPPER_URL}/issue-ids", json=labelbody, verify=False).json()["ids"]
     manual_labels_raw = requests.get(f"{DB_WRAPPER_URL}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
     manual_labels = {}
 
@@ -195,6 +200,30 @@ def get_query_data(query_name):
             
             manual_labels[key] = ", ".join(classifications)
 
+    # then the in-review ones
+    reviewbody = {
+        "filter": {
+            "$and": [
+                postbody["filter"],
+                {"tags": {"$eq": "needs-review"}}
+            ]
+        }
+    }
+    manual_issue_ids = requests.get(f"{DB_WRAPPER_URL}/issue-ids", json=reviewbody, verify=False).json()["ids"]
+    print(manual_issue_ids)
+    manual_labels_raw = requests.get(f"{DB_WRAPPER_URL}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
+
+    if "labels" in manual_labels_raw:
+        for key in manual_labels_raw['labels']:
+            classifications = []
+            for label in labels:
+                if manual_labels_raw["labels"][key][label]:
+                    classifications.append(label.title())
+            if len(classifications) == 0:
+                classifications.append("Non-Arch.")
+            
+            # will override
+            manual_labels[key] = ", ".join(classifications) + " (In Review)"
     
     
     # finally: predictions!
@@ -252,3 +281,13 @@ def get_query_data(query_name):
 
     return (issue_data, manual_labels, predictions, headers)
 
+# labels
+
+def mark_review(id):
+    requests.post(f"{DB_WRAPPER_URL}/issues/{id}/mark-review", verify=False, headers=_auth_header())
+
+def mark_training(id):
+    requests.post(f"{DB_WRAPPER_URL}/issues/{id}/finish-review", verify=False, headers=_auth_header())
+
+def set_manual_label(issue, classifications):
+    requests.post(f"{DB_WRAPPER_URL}/manual-labels/{issue}", json=classifications, verify=False, headers=_auth_header())

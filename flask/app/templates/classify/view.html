@@ -10,14 +10,68 @@
 <p class="my-2">
     Use shift-click to order by multiple columns at the same time.
 </p>
+
+<div class="modal fade" id="classify_modal" tabindex="-1" aria-labelledby="classify_label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="classify_label">Classify Issue</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body row">
+                <div class="col-sm-6 card">
+                    <div class="card-body">
+                        <!--<form id="classify_modal_form" method="POST" action="">-->
+                            <h4>Set Issue Manual Label</h4>
+                            <div class="form-group">
+                                <input name="existence" id="existence" type="checkbox">
+                                <label for="existence" class="col-form-label">Existence</label>
+                            </div>
+        
+                            <div class="form-group">
+                                <input name="executive" id="executive" type="checkbox">
+                                <label for="executive" class="col-form-label">Executive</label>
+                            </div>
+        
+                            <div class="form-group">
+                                <input name="property" id="property" type="checkbox">
+                                <label for="property" class="col-form-label">Property</label>
+                            </div>
+        
+                            <!--<input type="submit" class="btn btn-primary" value="Set Manual Label"/>-->
+                            <button type="button" class="btn btn-primary" id="classify_issue_btn">Set Manual Label</button>
+                        <!--</form>-->
+                    </div>
+                </div>
+                <div class="col-sm-6 card">
+                    <div class="card-body">
+                        <!--<form id="mark_modal_form" method="POST" action="">-->
+                            <h4>Mark Issue for Review or Training</h4>
+                            <p id="mark_issue_clarification"></p>
+                            <!--<input type="submit" class="btn btn-primary" value="" id="mark_issue_input"/>-->
+                            <button type="button" class="btn btn-primary" id="mark_issue_btn">TEMP</button>
+                        <!--</form>-->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <table id="data" class="table table-striped">
     <thead>
         <tr>
             <th>Key</th>
             <th>Action</th>
             <th>Manual Label</th>
+            <th>Summary/Description</th>
             {% for m_id in headers %}
                 {% for h in headers[m_id] %}
+                <th>{{id_to_name[m_id]}}: {{h.title()}}</th>
                 <th>{{id_to_name[m_id]}}: {{h.title()}}</th>
                 {% endfor %}
             {% endfor %}
@@ -27,12 +81,21 @@
         {% for id in issue_data %}
         <tr>
             <td><a href="{{issue_data[id]['link']}}" target="_blank">{{issue_data[id]['key']}}</a></td>
-            <td>CLASSIFY TODO</td>
-            <td>{{ manual[id] if id in manual else "" }}</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classify_modal" onclick="classifyModal('{{id}}')">Classify</button>
+
+            </td>
+            <td id="{{id}}_manual_label">{{ manual[id] if id in manual else "" }}</td>
+            <td>
+                <button class="btn btn-secondary" data-bs-toggle="popover" title="{{issue_data[id]['summary']}}" data-bs-content="{{issue_data[id]['description'] if issue_data[id]['description'] else 'Empty'}}">
+                    Read Issue
+                </button>
+            </td>
 
             {% for m_id in headers %}
                 {% for h in headers[m_id] %}
-                    <td>{{predictions[id][m_id][h]['probability']}} ({{predictions[id][m_id][h]['prediction']}})</td>
+                    <td>{{predictions[id][m_id][h]['probability']}}</td>
+                    <td>{{predictions[id][m_id][h]['prediction']}}</td>
                 {% endfor %}
             {% endfor %}
         </tr>
@@ -42,7 +105,7 @@
 {% endblock%}
 
 {% block scripts %}
-{{ super() }}
+{{super()}}
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
@@ -51,6 +114,142 @@
 $(document).ready(function() {
     $.fn.dataTable.numString(/\d+/);
     $('#data').DataTable()
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl)
+    })
 })
+
+function classifyModal(id) {
+    // todo adapt to formless
+    header = document.getElementById('classify_label')
+    key = {{issue_data|tojson|safe}}[id]['key']
+    header.innerHTML = `Classify Issue ${key}`
+
+    classify_btn = document.getElementById('classify_issue_btn')
+    classify_btn.setAttribute('onclick', `classifyIssue("${id}")`)
+
+    formmarkbutton = document.getElementById('mark_issue_btn')
+    formmarktext = document.getElementById('mark_issue_clarification')
+
+    curr_label = document.getElementById(`${id}_manual_label`).innerHTML
+
+    inreviewstr = ' (In Review)'
+
+    if (curr_label === "") {
+        // not in current dataset
+        // should not allow to mark for review/whatever else
+        formmarkbutton.setAttribute('onclick', ``)
+        formmarkbutton.disabled = true
+        formmarkbutton.innerHTML = "Disabled"
+        formmarktext.innerHTML = "Cannot mark for review/training an issue which has not been labeled."
+    } else if (curr_label.endsWith(inreviewstr)) {
+        // in review
+        formmarkbutton.setAttribute('onclick', `markTraining("${id}")`)
+        formmarkbutton.disabled = false
+        formmarkbutton.innerHTML = 'Mark for training'
+        formmarktext.innerHTML = `This issue is currently in review, marked as ${curr_label.slice(0, curr_label.length - inreviewstr.length)}. You can mark it for training to add it to the training dataset.`
+    } else {
+        // in training
+        formmarkbutton.setAttribute('onclick', `markReview("${id}")`)
+        formmarkbutton.disabled = false
+        formmarkbutton.innerHTML = 'Mark for review'
+        formmarktext.innerHTML = `This issue is currently in the training dataset, marked as ${curr_label}. Marking it for review will remove it from the training dataset.`
+    }
+}
+
+function classifyIssue(issue) {
+    // get data
+    existence = document.getElementById('existence').checked
+    executive = document.getElementById('executive').checked
+    property = document.getElementById('property').checked
+
+    // submit data
+    fetch(`/manual/classify/${issue}`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
+        existence: existence,
+        executive: executive,
+        property: property
+    })})
+
+    // update labels in the table
+    inreviewstr = ' (In Review)'
+    curr_label = document.getElementById(`${issue}_manual_label`)
+    newlabel = "Non-Arch."
+    if (existence || executive || property) {
+        newlabel = []
+        if (existence) newlabel.push("Existence")
+        if (executive) newlabel.push("Executive")
+        if (property) newlabel.push("Property")
+        newlabel = newlabel.join(", ")
+    }
+    
+    if (curr_label.innerHTML === "") {
+        // just got classified to training
+        curr_label.innerHTML = newlabel
+    } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
+        // in review - keep inreviewstr
+        curr_label.innerHTML = newlabel + inreviewstr
+    } else {
+        // in training, no inreviewstr
+        curr_label.innerHTML = newlabel
+    }
+
+    // update modal
+    classifyModal(issue)
+}
+
+function markReview(issue) {
+    // don't need data
+    // submit request
+    fetch(`/manual/review/${issue}`, {method: "POST"})
+
+    // update label in the table
+    curr_label = document.getElementById(`${issue}_manual_label`)
+    
+    inreviewstr = ' (In Review)'
+    if (curr_label.innerHTML === "") {
+        // was not in any dataset yet, no data either
+        // (shouldn't happen)
+        console.log("Logic Error")
+        curr_label.innerHTML = "Non-Arch." + inreviewstr
+    } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
+        // is in review
+        // do nothing
+        // (shouldn't happen)
+        console.log("Logic Error")
+    } else {
+        // was in training, no modifications
+        curr_label.innerHTML += inreviewstr
+    }
+
+    // update modal
+    classifyModal(issue)
+}
+
+function markTraining(issue) {
+    // don't need data
+    // submit request
+    fetch(`/manual/training/${issue}`, {method: "POST"})
+
+    // update label in the table
+    curr_label = document.getElementById(`${issue}_manual_label`)
+    
+    inreviewstr = ' (In Review)'
+    if (curr_label.innerHTML === "") {
+        // was not in any dataset, mark this as nonarch
+        curr_label.innerHTML = "Non-Arch."
+        // (shouldn't happen)
+        console.log("Logic Error")
+    } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
+        // was in review
+        curr_label.innerHTML = curr_label.innerHTML.slice(0,  curr_label.innerHTML.length - inreviewstr.length) // remove in review label
+    } else {
+        // is in training, no modifications
+    }
+
+    // update modal
+    classifyModal(issue)
+}
 </script>
 {% endblock %}

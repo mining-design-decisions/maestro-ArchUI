@@ -30,3 +30,7 @@ def viewform():
 def create():
     # todo
     return 'under construction'
+
+@bp.route('/label/<issue>')
+def manual_label(issue):
+    return "under construction"
