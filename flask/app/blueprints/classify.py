@@ -1,5 +1,8 @@
 from flask import render_template
 from flask import Blueprint
+from flask import request
+from flask import redirect
+from flask import url_for
 
 from app.services import dbapi
 
@@ -22,14 +25,17 @@ def view(query):
 @bp.route('/create', methods=["GET"])
 def viewform():
     # todo
-    models = ["testmodel", "model1", "model2"]
-    projects = ["testproj", "test", "proj"]
-    return render_template("classify/form.html", models=models, projects=projects)
+    models = dbapi.get_model_ids_names()
+    # projects = ["testproj", "test", "proj"]
+    return render_template("classify/form.html", models=models)
 
 @bp.route('/create', methods=["POST"])
 def create():
-    # todo
-    return 'under construction'
+    models = [request.form.get(x) for x in request.form if x.startswith('model_')]
+    projects = [request.form.get(x) for x in request.form if x.startswith('target_project_')]
+    q_name = request.form.get('query_name')
+    dbapi.create_query(models, projects, q_name)
+    return redirect(url_for('classify.viewall'))
 
 @bp.route('/label/<issue>')
 def manual_label(issue):

@@ -2,7 +2,7 @@ import requests
 from flask import session
 
 IP = "192.168.178.248"
-DB_WRAPPER_URL = f"https://{IP}:8000"
+DB_WRAPPER_URL = f"https://issues-db.nl:8000"
 CLI_WRAPPER_URL = f"https://{IP}:9011"
 
 # todo what's with the verify=false that's required?
@@ -57,8 +57,11 @@ def create_model_config(config, name):
     return x.json()['id']
 
 def get_model_ids_names():
-    model_ids = requests.get(f"{DB_WRAPPER_URL}/models", verify=False)
-    return model_ids.json()['models']
+    try:
+        model_ids = requests.get(f"{DB_WRAPPER_URL}/models", verify=False)
+        return model_ids.json()['models']
+    except:
+        return {}
 
 def get_model_data(id):
     data = requests.get(f"{DB_WRAPPER_URL}/models/{id}", verify=False)
