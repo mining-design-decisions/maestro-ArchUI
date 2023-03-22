@@ -93,8 +93,8 @@
 
             {% for m_id in headers %}
                 {% for h in headers[m_id] %}
-                    <td>{{predictions[id][m_id][h]['probability']}}</td>
-                    <td>{{predictions[id][m_id][h]['prediction']}}</td>
+                    <td>{{predictions[id][m_id][h]['probability'] if m_id in predictions[id] else ''}}</td>
+                    <td>{{predictions[id][m_id][h]['prediction'] if m_id in predictions[id] else ''}}</td>
                 {% endfor %}
             {% endfor %}
         </tr>

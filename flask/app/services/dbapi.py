@@ -265,14 +265,22 @@ def get_query_data(query_name):
         pred = requests.get(f"{get_db()}/models/{model}/versions/{version}/predictions", json={"ids": issue_ids}, verify=False).json()
         if "predictions" in pred:
             # add headers
-            first_issue = list(pred["predictions"].keys())[0]
-            first_issue = pred["predictions"][first_issue]
+            # first_issue = list(pred["predictions"].keys())[0]
+            # print(pred["predictions"])
+            # first_issue = pred["predictions"][first_issue]
+            first_issue = None
+            for prediction in pred["predictions"]:
+                if pred["predictions"][prediction]:
+                    first_issue = pred["predictions"][prediction]
+            if first_issue is None:
+                continue
             headers[model] = list(first_issue.keys())
             # add issue predictions
             for key in pred["predictions"]:
                 if not key in predictions:
                     predictions[key] = {}
-                predictions[key][model] = pred["predictions"][key]
+                if pred["predictions"][key]:
+                    predictions[key][model] = pred["predictions"][key]
         # don't really care otherwise
     
     
