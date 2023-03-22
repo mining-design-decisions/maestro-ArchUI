@@ -7,7 +7,6 @@ def raw_to_config(formdata):
     # tab: general
     config['output_mode'] = formdata.get('gen_output_mode', None)
     model_mode = formdata.get('gen_model_mode', 'Single')
-    # config['combination_strategy'] = formdata.get('gen_combination_strategy', None)
 
     strat = formdata.get('gen_combination_strategy', None)
     config['ensemble_strategy'] = "none" # default?
@@ -168,17 +167,19 @@ def config_to_display(config):
             'classifier': config['classifier'][0],
             'hyper-params': {}
         }
-        for hp in config['hyper_params']:
-            split = hp.split('=')
-            classifier['hyper-params'][split[0]] = split[1]
+        if config['hyper_params']:
+            for hp in config['hyper_params']:
+                split = hp.split('=')
+                classifier['hyper-params'][split[0]] = split[1]
         
         input_mode = {
             'input-mode': config['input_mode'][0],
             "params": {}
         }
-        for p in config['params']:
-            split = p.split('=')
-            input_mode['params'][split[0]] = split[1]
+        if config['params']:
+            for p in config['params']:
+                split = p.split('=')
+                input_mode['params'][split[0]] = split[1]
 
         result['classifier'] = classifier
         result['pre-processing'] = input_mode
@@ -205,14 +206,16 @@ def config_to_display(config):
 
             hp_pref = f"{this_classifier}[{class_count[this_classifier]}]."
             
-            for hp in [x[len(hp_pref):] for x in config['hyper_params'] if x.startswith(hp_pref)]:
-                split = hp.split('=')
-                this_obj['hyper-params'][split[0]] = split[1]
+            if config['hyper_params']:
+                for hp in [x[len(hp_pref):] for x in config['hyper_params'] if x.startswith(hp_pref)]:
+                    split = hp.split('=')
+                    this_obj['hyper-params'][split[0]] = split[1]
             
-            p_pref = f"{this_inmode}[{inmode_count[this_inmode]}]."
-            for p in [x[len(p_pref):] for x in config['params'] if x.startswith(p_pref)]:
-                split = p.split('=')
-                this_obj['params'][split[0]] = split[1]
+            if config['params']:
+                p_pref = f"{this_inmode}[{inmode_count[this_inmode]}]."
+                for p in [x[len(p_pref):] for x in config['params'] if x.startswith(p_pref)]:
+                    split = p.split('=')
+                    this_obj['params'][split[0]] = split[1]
 
             class_count[this_classifier] += 1
             inmode_count[this_inmode] += 1

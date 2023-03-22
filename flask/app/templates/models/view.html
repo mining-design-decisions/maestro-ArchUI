@@ -17,9 +17,11 @@
                     <div>Input Mode: {{e_model['input-mode']}}</div>
                     <div>Input Mode Parameters:</div>
                     <ul>
+                        {% if e_model['params'] %}
                         {% for param in e_model['params'] %}
                         <li>{{param}}: {{e_model['params'][param]}}</li>
                         {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
                 <div class="col-sm-6">
@@ -27,9 +29,11 @@
                     <div>Classifier: {{e_model['classifier']}}</div>
                     <div>Classifier Hyper-Parameters:</div>
                     <ul>
+                        {% if e_model['hyper-params'] %}
                         {% for hparam in e_model['hyper-params'] %}
                         <li>{{hparam}}: {{e_model['hyper-params'][hparam]}}</li>
                         {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -44,9 +48,11 @@
             <div>Classifier: {{model[key]['classifier']}}</div>
             <div>Hyper-Parameters:</div>
             <ul>
+                {% if model[key]['hyper-params'] %}
                 {% for hparam in model[key]['hyper-params'] %}
                 <li>{{hparam}}: {{model[key]['hyper-params'][hparam]}}</li>
                 {% endfor %}
+                {% endif %}
             </ul>
         </div>
     </div>
@@ -57,9 +63,11 @@
             <div>Input Mode: {{model[key]['input-mode']}}</div>
             <div>Input Mode Parameters:</div>
             <ul>
+                {% if model[key]['params'] %}
                 {% for param in model[key]['params'] %}
                 <li>{{param}}: {{model[key]['params'][param]}}</li>
                 {% endfor %}
+                {% endif %}
             </ul>
         </div>
     </div>
