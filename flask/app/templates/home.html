@@ -5,42 +5,51 @@
 {% block margin_content %}
 <div>
     <h3>Home page</h3>
-    <p>ArchUI is a tool to facilitate using Deep Learning Models to identify and classify software design decisions in the Apache Jira issue tracking system.</p>
-    <p>Use the tabs in the navbar to view currently available models, create new ones, or run them on a project. More detailed information is available under the divider, or in the readme.</p>
-    <p>The tabs under Help in the navbar provide detailed information also available in the model config editor, but in one place outside of tooltips.</p>
+    <p>ArchUI aims to combine various approaches to detecting architectural knowledge in Jira and Github repositories.</p>
+    <p>Use the tabs in the navbar to view currently available models, create new ones, or run them on a project. More detailed information on each tab is available under the divider and in the project readme.</p>
 
     <hr />
+
     <div class="container">
         <div class="row my-3">
             <div class="col-sm">
                 <div class="mx-2">
                     <h4>Managing Models</h4>
-                    <p>In this application, the term 'model' can refer to two things: either the model configuration, which is used to generate the CLI command, or the trained model data files.</p>
-                    <p>The page 'Create a new model' allows you to create a new model configuration. Hover over the input fields/dropdowns/checkboxes to see a tooltip. Once you are done, click the button at the bottom to save the configuration.</p>
-                    <p>Clicking this button will create the config and redirect you to the view page for your new config. There, you can see all available model configs, and select one for more detailed action.</p>
-                    <p>Available actions on model configurations are currently to train and to edit the configuration. Training a model uses the CLI's <code>run</code> command, saving the trained model to be used for prediction later on. While editing the configuration, you can change any of the previously entered options, except for the model config's name.</p>
-                    <p>In the default version of this project, all models from the 'mining-design-decisions' report table 17 are available pre-made and pre-trained.</p>
-                    <p><em><b>Note that your choice of classifier will impact which input modes are available to use! First choose a classifier, then an input mode.</b></em></p>
+                    <p>In this application, the term 'model' can refer to two things: either the model configuration, which is used by the ML pipeline, or the trained model data files. In the "ML Models" page, accessible from the navbar at the top of the site, you can access and manage the currently available ML model configurations.</p>
+
+                    <p>From this page, the button "Create New Model" allows you to create a new model configuration. Hover over the input fields/dropdowns/checkboxes to see a tooltip. <em>Note that your choice of classifier will impact which input modes are available to use! First choose a classifier, then an input mode.</em> Once you are done, click the "Save Configuration" button at the bottom to save the configuration. This will create the config and redirect you to the view page for your new config. There, you can see all available model configs, and select one for more detailed action.</p>
+
+                    <p>Available actions on model configurations are currently to <b>train the model</b> and to <b>edit the configuration</b>. Training a model uses the CLI's `run` command, saving the trained model files in the database to be used for prediction later on. While editing the configuration, you can change any of the previously entered options, except for the model config's name.</p>
+                    
+                    <h4>Statistics</h4>
+                    <p>The contents of this page will be the subject of the author's bachelor project.</p>
                 </div>
             </div>
             <div class="col-sm">
                 <div class="mx-2">
-                    <h4>Predicting with Models</h4>
-                    <p>In the 'Predict With Models' tab, you will see options to select any number of models, and select the project they will be run on. Running these models means that they will be used to predict the design decision content of all issues in the target project. This action will create a file called a 'run'. Upon completion of the prediction, you will be redirected to the table view of the freshly-completed run. Additionally, in the 'View Runs' tab, you can also see all previously saved runs.</p>
-                    <p>In the table view, every issue has its own row. In this row, you will find first a link to the issue which automatically opens in a new tab, the current classification of this issue in the training data, and the predictions of all selected models regarding this issue.</p>
-                    <p>Classifying an issue in this view will put relevant information into the training labels file. In order to formalize these changes into the actual training data, you must go to the Training Data tab.</p>
+                    <h4>Classify Issues</h4>
+                    <p>In the "Classify Issues" page accessible from the site's navbar, you will find a list of available queries, as described above, and the option to create a new one. Clicking on any available query will lead you to the data table view of all issues and predictions as described by the query.</p>
+
+                    <p>The issue key in the first column doubles as a link to the issue online, automatically opening in a new window. Clicking the "Classify" button in the second column opens a model, allowing you to change the manual classification of an issue or mark it for review. Also in this modal, you can view and place comments on this issue's manual classification. The current manual label of the issue is displayed in the third column (empty for no manual label currently existing). The fourth column allows you to view the summary and description of the issue in a popover, without having to leave the UI. All other columns are machine predictions.</p>
+
+                    <p>If an issue is classified and not in review, it will be used in the training dataset for machine learning models. Changing an issue's classification or commenting on the manual label will add you as author to the manual label, so you can find back which issues you have already looked at. Clicking the "Mark for review" in the UI will flag the issue as needing review in the table view and take it out of the ML training set.</p>
+
+                    <p>You can sort the table view by (shift-)clicking the arrows next to the column headers. Also note the search bar and pagination at the bottom.</p>
                 </div>
             </div>
         </div>
         <div class="row my-3">
             <div class="col-sm">
                 <div class="mx-2">
-                    <h4>Managing Training Data</h4>
-                    <p>Currently, in the Training Data tab, you can only generate a new training data file from the training labels file. More functions, including insights about the training data, are planned.</p>
+                    <h4>Predicting with Models</h4>
+                    <p>In the "Predict With ML Models" tab, you will see options to select any number of models, and select the project(s) they will be run on. Running these models means that they will be used to predict the design decision content of all issues in the target project(s). In this prediction form, you also have the option to create a <b>"query"</b> for this prediction. A query allows you to select and group issues and machine predictions into a view, so that not all data is displayed at once, and you can focus on what you're interested in.</p>
                 </div>
             </div>
             <div class="col-sm">
-
+                <div class="mx-2">
+                    <h4>Login</h4>
+                    <p>In the Login view, you can log in with your username and password, which is required to have to change any data (you can read data without being logged in with a valid account). You can also set the database and pipeline URLs, that the UI will send its data requests to. It is worth noting that you are essentially logging in to the database, so if you change the database URL, you will need to log in again.</p>
+                </div>
             </div>
         </div>
     </div>
