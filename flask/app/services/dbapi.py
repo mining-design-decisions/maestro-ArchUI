@@ -34,7 +34,6 @@ def logout():
     session.pop('token', None)
 
 def is_logged_in():
-    print(session)
     return ('un' in session) and (session['un'] is not None)
 
 def get_username():
@@ -45,7 +44,6 @@ def get_username():
 # returns false if failed to create (due to no auth)
 # returns new model ID if succeeded
 def create_model_config(config, name):
-    # todo
     if not is_logged_in():
         return False
     postbody = {
@@ -53,12 +51,7 @@ def create_model_config(config, name):
         "name": name
     }
 
-    #import json
-    #with open("temp.json", 'w') as f:
-    #    json.dump(postbody, f)
-
     x = requests.post(f"{get_db()}/models", json=postbody, headers=_auth_header(), verify=False)
-    print(x.json())
 
     return x.json()['id']
 
@@ -219,7 +212,6 @@ def get_query_data(query_name):
         }
     }
     manual_issue_ids = requests.get(f"{get_db()}/issue-ids", json=reviewbody, verify=False).json()["ids"]
-    print(manual_issue_ids)
     manual_labels_raw = requests.get(f"{get_db()}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
 
     if "labels" in manual_labels_raw:
@@ -300,3 +292,12 @@ def mark_training(id):
 
 def set_manual_label(issue, classifications):
     requests.post(f"{get_db()}/manual-labels/{issue}", json=classifications, verify=False, headers=_auth_header())
+
+def get_comments_for(issue):
+    x = requests.get(f"{get_db()}/manual-labels/{issue}/comments", verify=False).json()
+    if "comments" in x:
+        return x["comments"]
+    return []
+
+def add_comment_for(issue, comment):
+    requests.post(f"{get_db()}/manual-labels/{issue}/comments", verify=False, headers=_auth_header(), json={"comment": comment})

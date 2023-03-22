@@ -23,3 +23,12 @@ def classify(issue):
     json = request.json
     dbapi.set_manual_label(issue, json)
     return "ok"
+
+@bp.route('/comments/<issue>', methods=["GET"])
+def get_comments(issue):
+    return dbapi.get_comments_for(issue)
+
+@bp.route('/comments/<issue>', methods=["POST"])
+def post_comment(issue):
+    dbapi.add_comment_for(issue, request.json['comment'])
+    return "ok"

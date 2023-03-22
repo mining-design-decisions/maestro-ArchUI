@@ -1,4 +1,3 @@
-import psycopg2 # todo
 import os
 import json
 import datetime

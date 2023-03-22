@@ -18,39 +18,38 @@
                 <h5 class="modal-title" id="classify_label">Classify Issue</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body row">
-                <div class="col-sm-6 card">
+            <div class="modal-body">
+                <div class="card">
                     <div class="card-body">
-                        <!--<form id="classify_modal_form" method="POST" action="">-->
-                            <h4>Set Issue Manual Label</h4>
-                            <div class="form-group">
-                                <input name="existence" id="existence" type="checkbox">
-                                <label for="existence" class="col-form-label">Existence</label>
-                            </div>
-        
-                            <div class="form-group">
-                                <input name="executive" id="executive" type="checkbox">
-                                <label for="executive" class="col-form-label">Executive</label>
-                            </div>
-        
-                            <div class="form-group">
-                                <input name="property" id="property" type="checkbox">
-                                <label for="property" class="col-form-label">Property</label>
-                            </div>
-        
-                            <!--<input type="submit" class="btn btn-primary" value="Set Manual Label"/>-->
-                            <button type="button" class="btn btn-primary" id="classify_issue_btn">Set Manual Label</button>
-                        <!--</form>-->
+                        <h4>Set Issue Manual Label</h4>
+                        <div class="form-group">
+                            <input name="existence" id="existence" type="checkbox">
+                            <label for="existence" class="col-form-label">Existence</label>
+                        </div>
+    
+                        <div class="form-group">
+                            <input name="executive" id="executive" type="checkbox">
+                            <label for="executive" class="col-form-label">Executive</label>
+                        </div>
+    
+                        <div class="form-group">
+                            <input name="property" id="property" type="checkbox">
+                            <label for="property" class="col-form-label">Property</label>
+                        </div>
+    
+                        <button type="button" class="btn btn-primary" id="classify_issue_btn">Set Manual Label</button>
+    
+                        <hr />
+                        
+                        <button type="button" class="btn btn-primary" id="mark_issue_btn">TEMP</button>
                     </div>
                 </div>
-                <div class="col-sm-6 card">
+                <div class="card">
                     <div class="card-body">
-                        <!--<form id="mark_modal_form" method="POST" action="">-->
-                            <h4>Mark Issue for Review or Training</h4>
-                            <p id="mark_issue_clarification"></p>
-                            <!--<input type="submit" class="btn btn-primary" value="" id="mark_issue_input"/>-->
-                            <button type="button" class="btn btn-primary" id="mark_issue_btn">TEMP</button>
-                        <!--</form>-->
+                        <h4>Comments</h4>
+                        <div id="classify_comments"></div>
+                        <input type="textarea" id="classify_newcomment"/>
+                        <button type="button" class="btn btn-primary" id="classify_addcomment">Add New Comment</button>
                     </div>
                 </div>
             </div>
@@ -121,6 +120,28 @@ $(document).ready(function() {
     })
 })
 
+function setCommentsFor(issue) {
+    comments_div = document.getElementById('classify_comments')
+    result = ""
+    fetch(`/manual/comments/${issue}`)
+        .then(response => {
+            response.json().then(data =>{
+                data.forEach(comment => {
+                    author = Object.keys(comment)
+                    text = comment[author]
+                    
+                    new_html = `<b>${author}</b>: ${text}`
+                    new_html = `<div>${new_html}</div><hr />`
+
+                    result += new_html
+                });
+
+                
+                comments_div.innerHTML = result
+            })
+        })
+}
+
 function classifyModal(id) {
     header = document.getElementById('classify_label')
     key = {{issue_data|tojson|safe}}[id]['key']
@@ -130,7 +151,11 @@ function classifyModal(id) {
     classify_btn.setAttribute('onclick', `classifyIssue("${id}")`)
 
     formmarkbutton = document.getElementById('mark_issue_btn')
-    formmarktext = document.getElementById('mark_issue_clarification')
+
+    newcomment_btn = document.getElementById('classify_addcomment')
+    newcomment_btn.setAttribute('onclick', `addComment("${id}")`)
+    
+    setCommentsFor(id)
 
     curr_label = document.getElementById(`${id}_manual_label`).innerHTML
 
@@ -142,19 +167,16 @@ function classifyModal(id) {
         formmarkbutton.setAttribute('onclick', ``)
         formmarkbutton.disabled = true
         formmarkbutton.innerHTML = "Disabled"
-        formmarktext.innerHTML = "Cannot mark for review/training an issue which has not been labeled."
     } else if (curr_label.endsWith(inreviewstr)) {
         // in review
         formmarkbutton.setAttribute('onclick', `markTraining("${id}")`)
         formmarkbutton.disabled = false
         formmarkbutton.innerHTML = 'Mark for training'
-        formmarktext.innerHTML = `This issue is currently in review, marked as ${curr_label.slice(0, curr_label.length - inreviewstr.length)}. You can mark it for training to add it to the training dataset.`
     } else {
         // in training
         formmarkbutton.setAttribute('onclick', `markReview("${id}")`)
         formmarkbutton.disabled = false
         formmarkbutton.innerHTML = 'Mark for review'
-        formmarktext.innerHTML = `This issue is currently in the training dataset, marked as ${curr_label}. Marking it for review will remove it from the training dataset.`
     }
 }
 
@@ -249,6 +271,18 @@ function markTraining(issue) {
 
     // update modal
     classifyModal(issue)
+}
+
+function addComment(issue) {
+    input = document.getElementById("classify_newcomment")
+    comment_text = input.value
+    fetch(`/manual/comments/${issue}`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
+        comment: comment_text
+    })})
+        .then(e => {
+            input.value=""
+            setCommentsFor(issue)
+        })
 }
 </script>
 {% endblock %}
