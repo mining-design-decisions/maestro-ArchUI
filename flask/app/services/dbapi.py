@@ -1,5 +1,6 @@
 import requests
 from flask import session
+import json
 
 def get_db():
     return session.get("db_url", 'https://localhost:8000')
@@ -95,7 +96,7 @@ def get_model_performance(id):
 
     return (len(performances), latest_version, latest_performance)
 
-def _get_proj_query(projects):
+def get_proj_query(projects):
     projects = [f"{{\"tags\": {{\"$eq\": \"{project}\"}} }}" for project in projects]
     return f"{{ \"$or\": [ {','.join(projects)} ] }}"
 
@@ -107,7 +108,7 @@ def predict_models_projects(models, projects):
         config['subcommand_name_0'] = 'predict'
         config['model'] = model
         config['version'] = 'most-recent'
-        config['data-query'] = _get_proj_query(projects)
+        config['data-query'] = get_proj_query(projects)
         config['database-url'] = get_db()
         config['num-threads'] = 1
 
@@ -124,7 +125,7 @@ def _query_dir():
     import os
     os.makedirs("app/data/queries", exist_ok=True)
 
-def create_query(models, projects, name):
+def create_query(models, data_query, name):
     # todo put these in the db eventually?
     modelversions = {}
     for model in models:
@@ -132,10 +133,9 @@ def create_query(models, projects, name):
     
     _query_dir()
     with open(f'app/data/queries/{name}.json', 'w') as f:
-        import json
         json.dump({
             "models": modelversions,
-            "projects": projects
+            "query": data_query
         }, f)
 
 def get_query_names():
@@ -154,15 +154,15 @@ def get_query_data(query_name):
     # and automatic predictions. per model if possible.
     _query_dir()
     with open(f'app/data/queries/{query_name}.json', 'r') as f:
-        import json
         qdata = json.load(f)
         models = qdata['models']
-        projects = qdata['projects']
+        query = qdata['query']
 
     # first: regular issue data!
-    postbody = {"filter": {
-        "$or": [{"tags": {"$eq": project}} for project in projects]
-    }}
+    # postbody = {"filter": {
+    #     "$or": [{"tags": {"$eq": project}} for project in projects]
+    # }}
+    postbody = {"filter":json.loads(query)}
     x = requests.get(f"{get_db()}/issue-ids", json=postbody, verify=False).json()
     issue_ids = x["ids"]
 
@@ -277,7 +277,6 @@ def get_query_data(query_name):
     
     
     with open("temp.json", "w") as f:
-        import json
         json.dump(predictions, f)
 
     return (issue_data, manual_labels, predictions, headers)

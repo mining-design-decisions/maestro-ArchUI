@@ -13,8 +13,26 @@
 <form method="POST" id="create_query" action="{{ url_for('classify.create') }}">
     {{ card_start() }}
     <h4>Select Target Projects</h4>
-    <div id="target_projects_div"></div>
-    <button onclick="add_project()" type="button" class="btn btn-primary">Add Project Option</button>
+    <div class="form-group">
+        <input name="query_type" id="query_type" type="checkbox" onchange="queryTypeChanged()" checked="checked">
+        <label for="query_type" class="col-form-label">
+            Simplified query?
+        </label>
+    </div>
+    <div id="query_type_simple">
+        <div id="target_projects_div"></div>
+        <button onclick="add_project()" type="button" class="btn btn-primary">Add Project Option</button>
+    </div>
+    <div id="query_type_complex" class="d-none">
+        <p>Note: the UI already escapes quotes. Example query: <code>{ "$or": [ {"tags": {"$eq": "mohamed"} } ] }</code></p>
+        <div class="form-group">
+            <label for="target_tag_query" class="col-form-label">
+                Mongo Syntax Tag Query: 
+            </label>
+            <input name="target_tag_query" id="target_tag_query" type="text">
+        </div>
+    </div>
+    
     {{ card_end() }}
     
     {{ card_start() }}
@@ -136,6 +154,19 @@ add_model(); // initial option
 
 function remove_model(id) {
     document.getElementById(id).remove();
+}
+
+function queryTypeChanged() {
+    simplified = document.getElementById("query_type").checked
+    simple = document.getElementById("query_type_simple")
+    complex = document.getElementById("query_type_complex")
+    if (simplified) {
+        simple.setAttribute("class", "")
+        complex.setAttribute("class", "d-none")
+    } else {
+        simple.setAttribute("class", "d-none")
+        complex.setAttribute("class", "")
+    }
 }
 </script>
 {% endblock %}

@@ -32,9 +32,17 @@ def viewform():
 @bp.route('/create', methods=["POST"])
 def create():
     models = [request.form.get(x) for x in request.form if x.startswith('model_')]
-    projects = [request.form.get(x) for x in request.form if x.startswith('target_project_')]
+    data_q = ""
+    if request.form.get('query_type', False):
+        # complex
+        projects = [request.form.get(x) for x in request.form if x.startswith('target_project_')]
+        data_q = dbapi.get_proj_query(projects)
+    else:
+        # simple
+        data_q = request.form.get("target_tag_query")
+        
     q_name = request.form.get('query_name')
-    dbapi.create_query(models, projects, q_name)
+    dbapi.create_query(models, data_q, q_name)
     return redirect(url_for('classify.viewall'))
 
 @bp.route('/label/<issue>')
