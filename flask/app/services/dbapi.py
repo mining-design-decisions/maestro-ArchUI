@@ -1,9 +1,15 @@
 import requests
 from flask import session
 
-IP = "192.168.178.248"
-DB_WRAPPER_URL = f"https://issues-db.nl:8000"
-CLI_WRAPPER_URL = f"https://{IP}:9011"
+def get_db():
+    return session.get("db_url", 'https://localhost:8000')
+def set_db(new_url):
+    session["db_url"] = new_url
+
+def get_cli():
+    return session.get("cli_url", 'https://localhost:9011')
+def set_cli(new_url):
+    session["cli_url"] = new_url
 
 # todo what's with the verify=false that's required?
 def _auth_header():
@@ -11,7 +17,7 @@ def _auth_header():
 
 # auth
 def login(un: str, pw: str):
-    x = requests.post(f"{DB_WRAPPER_URL}/token", files={
+    x = requests.post(f"{get_db()}/token", files={
         "username": (None, un), 
         "password": (None, pw)
     }, verify=False)
@@ -51,31 +57,31 @@ def create_model_config(config, name):
     #with open("temp.json", 'w') as f:
     #    json.dump(postbody, f)
 
-    x = requests.post(f"{DB_WRAPPER_URL}/models", json=postbody, headers=_auth_header(), verify=False)
+    x = requests.post(f"{get_db()}/models", json=postbody, headers=_auth_header(), verify=False)
     print(x.json())
 
     return x.json()['id']
 
 def get_model_ids_names():
     try:
-        model_ids = requests.get(f"{DB_WRAPPER_URL}/models", verify=False)
+        model_ids = requests.get(f"{get_db()}/models", verify=False)
         return model_ids.json()['models']
     except:
         return {}
 
 def get_model_data(id):
-    data = requests.get(f"{DB_WRAPPER_URL}/models/{id}", verify=False)
+    data = requests.get(f"{get_db()}/models/{id}", verify=False)
     return data.json()
 
 def edit_model(id, name, config):
-    x = requests.post(f"{DB_WRAPPER_URL}/models/{id}", headers=_auth_header(), verify=False, json={"name": name, "config": config})
+    x = requests.post(f"{get_db()}/models/{id}", headers=_auth_header(), verify=False, json={"name": name, "config": config})
 
 def train_model(id):
-    data = requests.get(f"{DB_WRAPPER_URL}/models/{id}", verify=False)
+    data = requests.get(f"{get_db()}/models/{id}", verify=False)
     config = data.json()['config']
     config['subcommand_name_0'] = 'run'
     config['model-id'] = id
-    config['database-url'] = DB_WRAPPER_URL
+    config['database-url'] = get_db()
     config['num-threads'] = 1
     config['training_data_query'] = "{\"tags\":{\"$eq\":\"has-label\"}}"
     config['test_with_training_data'] = True
@@ -84,15 +90,15 @@ def train_model(id):
         "config": config
     }
 
-    requests.post(f"{CLI_WRAPPER_URL}/invoke", json=postbody, verify=False)
+    requests.post(f"{get_cli()}/invoke", json=postbody, verify=False)
 
 def get_model_performance(id):
-    performances = requests.get(f"{DB_WRAPPER_URL}/models/{id}/performances", verify=False).json()["performances"]
+    performances = requests.get(f"{get_db()}/models/{id}/performances", verify=False).json()["performances"]
     latest_version = "Never"
     latest_performance = None
     if len(performances)>0:
         latest_version = max(performances)
-        latest_performance = requests.get(f"{DB_WRAPPER_URL}/models/{id}/performances/{latest_version}", verify=False).json()[f"{latest_version}"][0]["f-score"][0]
+        latest_performance = requests.get(f"{get_db()}/models/{id}/performances/{latest_version}", verify=False).json()[f"{latest_version}"][0]["f-score"][0]
 
     return (len(performances), latest_version, latest_performance)
 
@@ -109,7 +115,7 @@ def predict_models_projects(models, projects):
         config['model'] = model
         config['version'] = 'most-recent'
         config['data-query'] = _get_proj_query(projects)
-        config['database-url'] = DB_WRAPPER_URL
+        config['database-url'] = get_db()
         config['num-threads'] = 1
 
         postbody = {
@@ -117,7 +123,7 @@ def predict_models_projects(models, projects):
             "config": config
         }
 
-        requests.post(f"{CLI_WRAPPER_URL}/invoke", json=postbody, verify=False)
+        requests.post(f"{get_cli()}/invoke", json=postbody, verify=False)
 
 # queries
 # temp
@@ -129,7 +135,7 @@ def create_query(models, projects, name):
     # todo put these in the db eventually?
     modelversions = {}
     for model in models:
-        modelversions[model] = requests.get(f"{DB_WRAPPER_URL}/models/{model}/versions", verify=False).json()["versions"][0]["id"]
+        modelversions[model] = requests.get(f"{get_db()}/models/{model}/versions", verify=False).json()["versions"][0]["id"]
     
     _query_dir()
     with open(f'app/data/queries/{name}.json', 'w') as f:
@@ -164,10 +170,10 @@ def get_query_data(query_name):
     postbody = {"filter": {
         "$or": [{"tags": {"$eq": project}} for project in projects]
     }}
-    x = requests.get(f"{DB_WRAPPER_URL}/issue-ids", json=postbody, verify=False).json()
+    x = requests.get(f"{get_db()}/issue-ids", json=postbody, verify=False).json()
     issue_ids = x["ids"]
 
-    issue_data = requests.get(f"{DB_WRAPPER_URL}/issue-data", json={"ids": issue_ids, "attributes": ["key", "summary", "description", "link"]}, verify=False).json()
+    issue_data = requests.get(f"{get_db()}/issue-data", json={"ids": issue_ids, "attributes": ["key", "summary", "description", "link"]}, verify=False).json()
     if "data" in issue_data:
         issue_data = issue_data["data"]
     else:
@@ -186,8 +192,8 @@ def get_query_data(query_name):
             ]
         }
     }
-    manual_issue_ids = requests.get(f"{DB_WRAPPER_URL}/issue-ids", json=labelbody, verify=False).json()["ids"]
-    manual_labels_raw = requests.get(f"{DB_WRAPPER_URL}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
+    manual_issue_ids = requests.get(f"{get_db()}/issue-ids", json=labelbody, verify=False).json()["ids"]
+    manual_labels_raw = requests.get(f"{get_db()}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
     manual_labels = {}
 
 
@@ -212,9 +218,9 @@ def get_query_data(query_name):
             ]
         }
     }
-    manual_issue_ids = requests.get(f"{DB_WRAPPER_URL}/issue-ids", json=reviewbody, verify=False).json()["ids"]
+    manual_issue_ids = requests.get(f"{get_db()}/issue-ids", json=reviewbody, verify=False).json()["ids"]
     print(manual_issue_ids)
-    manual_labels_raw = requests.get(f"{DB_WRAPPER_URL}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
+    manual_labels_raw = requests.get(f"{get_db()}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
 
     if "labels" in manual_labels_raw:
         for key in manual_labels_raw['labels']:
@@ -264,7 +270,7 @@ def get_query_data(query_name):
     """
     for model in models:
         version = models[model]
-        pred = requests.get(f"{DB_WRAPPER_URL}/models/{model}/versions/{version}/predictions", json={"ids": issue_ids}, verify=False).json()
+        pred = requests.get(f"{get_db()}/models/{model}/versions/{version}/predictions", json={"ids": issue_ids}, verify=False).json()
         if "predictions" in pred:
             # add headers
             first_issue = list(pred["predictions"].keys())[0]
@@ -287,10 +293,10 @@ def get_query_data(query_name):
 # labels
 
 def mark_review(id):
-    requests.post(f"{DB_WRAPPER_URL}/issues/{id}/mark-review", verify=False, headers=_auth_header())
+    requests.post(f"{get_db()}/issues/{id}/mark-review", verify=False, headers=_auth_header())
 
 def mark_training(id):
-    requests.post(f"{DB_WRAPPER_URL}/issues/{id}/finish-review", verify=False, headers=_auth_header())
+    requests.post(f"{get_db()}/issues/{id}/finish-review", verify=False, headers=_auth_header())
 
 def set_manual_label(issue, classifications):
-    requests.post(f"{DB_WRAPPER_URL}/manual-labels/{issue}", json=classifications, verify=False, headers=_auth_header())
+    requests.post(f"{get_db()}/manual-labels/{issue}", json=classifications, verify=False, headers=_auth_header())

@@ -122,7 +122,6 @@ $(document).ready(function() {
 })
 
 function classifyModal(id) {
-    // todo adapt to formless
     header = document.getElementById('classify_label')
     key = {{issue_data|tojson|safe}}[id]['key']
     header.innerHTML = `Classify Issue ${key}`

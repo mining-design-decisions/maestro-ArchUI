@@ -1,12 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'login/base.html' %}
 
 {% block subtitle %}Login{% endblock %}
 
-{% block margin_content %}
-<p>Note that logging in is necessary to make changes to data, such as predicting with models or classifying issues.</p>
-
-<hr />
-
+{% block loginspecific %}
 <form method="POST" id="user_login" action="{{ url_for('login.login') }}">
     <div class="form-group my-2">
         <label for="username" class="col-form-label">Username: </label>

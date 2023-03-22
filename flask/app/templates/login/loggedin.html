@@ -1,12 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'login/base.html' %}
 
 {% block subtitle %}Login{% endblock %}
 
-{% block margin_content %}
-<p>Note that logging in is necessary to make changes to data, such as predicting with models or classifying issues.</p>
-
-<hr />
-
+{% block loginspecific %}
 <p>You are logged in as {{un}}.</p>
 <form action="{{ url_for('login.logout') }}" method="POST">
     <input type="submit" value="Log out?" class="btn btn-secondary my-2" />

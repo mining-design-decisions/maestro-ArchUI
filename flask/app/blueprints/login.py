@@ -10,7 +10,9 @@ bp = Blueprint('login', __name__, url_prefix="/login")
 def viewform():
     if dbapi.is_logged_in():
         un = dbapi.get_username()
-        return render_template("login/loggedin.html", un=un)
+        db = dbapi.get_db()
+        cli = dbapi.get_cli()
+        return render_template("login/loggedin.html", un=un, db=db, cli=cli)
     else:
         return render_template("login/form.html")
 
@@ -27,3 +29,11 @@ def login():
 def logout():
     dbapi.logout()
     return render_template('login/form.html')
+
+@bp.route('/setdb', methods=["POST"])
+def setdb():
+    dbapi.set_db(request.json['new_url'])
+
+@bp.route('/setcli', methods=["POST"])
+def setcli():
+    dbapi.set_cli(request.json['new_url'])
