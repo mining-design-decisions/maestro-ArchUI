@@ -301,10 +301,14 @@ def set_manual_label(issue, classifications):
     requests.post(f"{get_db()}/manual-labels/{issue}", json=classifications, verify=False, headers=_auth_header())
 
 def get_comments_for(issue):
-    x = requests.get(f"{get_db()}/manual-labels/{issue}/comments", verify=False).json()
-    if "comments" in x:
-        return x["comments"]
-    return []
+    try:
+        x = requests.get(f"{get_db()}/manual-labels/{issue}/comments", verify=False)
+        if "comments" in x:
+            return x["comments"]
+        return []
+    except Exception:
+        print("Error fetching comments")
+        return []
 
 def add_comment_for(issue, comment):
     requests.post(f"{get_db()}/manual-labels/{issue}/comments", verify=False, headers=_auth_header(), json={"comment": comment})

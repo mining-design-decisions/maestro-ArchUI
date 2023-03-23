@@ -86,9 +86,9 @@
             </td>
             <td id="{{id}}_manual_label">{{ manual[id] if id in manual else "" }}</td>
             <td>
-                <button class="btn btn-secondary" data-bs-toggle="popover" title="{{issue_data[id]['summary']}}" data-bs-content="{{issue_data[id]['description'] if issue_data[id]['description'] else 'Empty'}}">
+                <a tabindex="0" class="btn btn-secondary" role="button" data-bs-toggle="popover" title="Summary: {{issue_data[id]['summary']}}" data-bs-content="Description: {{issue_data[id]['description'] if issue_data[id]['description'] else 'Empty'}}" data-bs-trigger="focus">
                     Read Issue
-                </button>
+                </a>
             </td>
 
             {% for m_id in headers %}
@@ -116,7 +116,7 @@ $(document).ready(function() {
 
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-    return new bootstrap.Popover(popoverTriggerEl)
+        return new bootstrap.Popover(popoverTriggerEl)
     })
 })
 
@@ -136,8 +136,9 @@ function setCommentsFor(issue) {
                     result += new_html
                 });
 
-                
                 comments_div.innerHTML = result
+            }).catch(e => {
+                console.log(e)
             })
         })
 }
