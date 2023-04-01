@@ -302,9 +302,10 @@ def set_manual_label(issue, classifications):
 
 def get_comments_for(issue):
     try:
-        x = requests.get(f"{get_db()}/manual-labels/{issue}/comments", verify=False)
+        x = requests.get(f"{get_db()}/manual-labels/{issue}/comments", verify=False).json()
         if "comments" in x:
             return x["comments"]
+        print("Comments not in response")
         return []
     except Exception:
         print("Error fetching comments")

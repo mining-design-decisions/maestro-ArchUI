@@ -127,7 +127,7 @@ function setCommentsFor(issue) {
         .then(response => {
             response.json().then(data =>{
                 data.forEach(comment => {
-                    author = Object.keys(comment)
+                    author = Object.keys(comment)[0]
                     text = comment[author]
                     
                     new_html = `<b>${author}</b>: ${text}`
