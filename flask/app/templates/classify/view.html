@@ -149,7 +149,6 @@ function setCommentsFor(issue) {
 }
 
 function classificationChanged() {
-    // todo
     nonarch_checked = document.getElementById('nonarch').checked
 
     existence = document.getElementById('existence')
@@ -192,6 +191,7 @@ function classifyModal(id) {
 
     inreviewstr = ' (In Review)'
 
+    // set button availability
     if (curr_label === "") {
         // not in current dataset
         // should not allow to mark for review/whatever else
@@ -209,6 +209,27 @@ function classifyModal(id) {
         formmarkbutton.disabled = false
         formmarkbutton.innerHTML = 'Mark for review'
     }
+
+    // set checkbox defaults
+    label_str = curr_label
+    if (label_str.endsWith(inreviewstr)) {
+        label_str.slice(0, label_str.length - inreviewstr.length)
+    }
+    labels = label_str.split(', ')
+    nonarch = document.getElementById('nonarch')
+    nonarch.checked = (labels.length == 0 || labels[0] == 'Non-Arch.')
+    classificationChanged()
+    
+    existence = document.getElementById('existence')
+    property = document.getElementById('property')
+    executive = document.getElementById('executive')
+    existence.checked = false
+    property.checked = false
+    executive.checked = false
+    labels.forEach(label => {
+        if (label !== "Non-Arch.")
+            document.getElementById(label.toLowerCase()).checked = true
+    })
 }
 
 function classifyIssue(issue) {
