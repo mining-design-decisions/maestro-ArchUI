@@ -217,11 +217,6 @@ function classifyIssue(issue) {
     executive = document.getElementById('executive').checked
     property = document.getElementById('property').checked
 
-    console.log(existence)
-    console.log(executive)
-    console.log(property)
-    return
-
     // submit data
     fetch(`/manual/classify/${issue}`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
         existence: existence,
