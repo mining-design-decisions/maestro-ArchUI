@@ -23,17 +23,22 @@
                     <div class="card-body">
                         <h4>Set Issue Manual Label</h4>
                         <div class="form-group">
-                            <input name="existence" id="existence" type="checkbox">
+                            <input name="nonarch" id="nonarch" type="checkbox" checked="checked" onchange="classificationChanged()">
+                            <label for="nonarch" class="col-form-label">Non-Architectural</label>
+                        </div>
+
+                        <div class="form-group">
+                            <input name="existence" id="existence" type="checkbox" disabled="disabled" onchange="classificationChanged()">
                             <label for="existence" class="col-form-label">Existence</label>
                         </div>
     
                         <div class="form-group">
-                            <input name="executive" id="executive" type="checkbox">
+                            <input name="executive" id="executive" type="checkbox" disabled="disabled" onchange="classificationChanged()">
                             <label for="executive" class="col-form-label">Executive</label>
                         </div>
     
                         <div class="form-group">
-                            <input name="property" id="property" type="checkbox">
+                            <input name="property" id="property" type="checkbox" disabled="disabled" onchange="classificationChanged()">
                             <label for="property" class="col-form-label">Property</label>
                         </div>
     
@@ -143,6 +148,31 @@ function setCommentsFor(issue) {
         })
 }
 
+function classificationChanged() {
+    // todo
+    nonarch_checked = document.getElementById('nonarch').checked
+
+    existence = document.getElementById('existence')
+    property = document.getElementById('property')
+    executive = document.getElementById('executive')
+    if (nonarch_checked) {
+        // disable the others
+        existence.setAttribute('disabled','disabled')
+        executive.setAttribute('disabled','disabled')
+        property.setAttribute('disabled','disabled')
+
+        existence.checked = false
+        executive.checked = false
+        property.checked = false
+    }
+    else {
+        // enable the others
+        existence.removeAttribute('disabled')
+        executive.removeAttribute('disabled')
+        property.removeAttribute('disabled')
+    }
+}
+
 function classifyModal(id) {
     header = document.getElementById('classify_label')
     key = {{issue_data|tojson|safe}}[id]['key']
@@ -186,6 +216,11 @@ function classifyIssue(issue) {
     existence = document.getElementById('existence').checked
     executive = document.getElementById('executive').checked
     property = document.getElementById('property').checked
+
+    console.log(existence)
+    console.log(executive)
+    console.log(property)
+    return
 
     // submit data
     fetch(`/manual/classify/${issue}`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
