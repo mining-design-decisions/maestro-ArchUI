@@ -92,7 +92,7 @@
             </td>
             <td id="{{id}}_manual_label">{{ manual[id] if id in manual else "" }}</td>
             <td>
-                <a tabindex="0" class="btn btn-secondary" role="button" data-bs-toggle="popover" title="Summary: {{issue_data[id]['summary']}}" data-bs-content="Description: {{issue_data[id]['description'] if issue_data[id]['description'] else 'Empty'}}" data-bs-trigger="focus">
+                <a tabindex="0" class="btn btn-secondary" role="button" data-bs-toggle="popover" title="{{issue_data[id]['summary']}}" data-bs-content="{{issue_data[id]['description'] if issue_data[id]['description'] else 'Empty'}}" data-bs-trigger="focus">
                     Read Issue
                 </a>
             </td>
