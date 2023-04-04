@@ -16,6 +16,25 @@ def set_cli(new_url):
 def _auth_header():
     return {"Authorization": f"bearer {session['token']}"}
 
+# decorator for authentication-required requests
+def auth_req(func):
+    def inner(*args, **kwargs):
+        if not is_logged_in():
+            return {'msg': "Not logged in in UI"}, 401
+        
+        x = func(*args, **kwargs)
+
+        if x.status_code == 200:
+            return {"msg": "ok"}, x.status_code
+
+        try:
+            data = x.json()
+        except:
+            data = {'msg': "Error retrieving response data"}
+        return data, x.status_code
+
+    return inner
+
 # auth
 def login(un: str, pw: str):
     x = requests.post(f"{get_db()}/token", files={
@@ -120,7 +139,6 @@ def predict_models_projects(models, projects):
         requests.post(f"{get_cli()}/invoke", json=postbody, verify=False)
 
 # queries
-# temp
 def _query_dir():
     import os
     os.makedirs("app/data/queries", exist_ok=True)
@@ -290,15 +308,18 @@ def get_query_data(query_name):
     return (issue_data, manual_labels, predictions, headers)
 
 # labels
-
+@auth_req
 def mark_review(id):
-    requests.post(f"{get_db()}/issues/{id}/mark-review", verify=False, headers=_auth_header())
+    return requests.post(f"{get_db()}/issues/{id}/mark-review", verify=False, headers=_auth_header())
 
+@auth_req
 def mark_training(id):
-    requests.post(f"{get_db()}/issues/{id}/finish-review", verify=False, headers=_auth_header())
+    return requests.post(f"{get_db()}/issues/{id}/finish-review", verify=False, headers=_auth_header())
 
+@auth_req
 def set_manual_label(issue, classifications):
-    requests.post(f"{get_db()}/manual-labels/{issue}", json=classifications, verify=False, headers=_auth_header())
+    return requests.post(f"{get_db()}/manual-labels/{issue}", json=classifications, verify=False, headers=_auth_header())
+
 
 def get_comments_for(issue):
     try:
@@ -311,5 +332,6 @@ def get_comments_for(issue):
         print("Error fetching comments")
         return []
 
+@auth_req
 def add_comment_for(issue, comment):
-    requests.post(f"{get_db()}/manual-labels/{issue}/comments", verify=False, headers=_auth_header(), json={"comment": comment})
+    return requests.post(f"{get_db()}/manual-labels/{issue}/comments", verify=False, headers=_auth_header(), json={"comment": comment})

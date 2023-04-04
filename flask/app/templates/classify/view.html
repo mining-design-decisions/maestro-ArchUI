@@ -228,8 +228,9 @@ function classifyModal(id) {
     property.checked = false
     executive.checked = false
     labels.forEach(label => {
-        if (label !== "Non-Arch.")
+        if (label && label !== "Non-Arch.") {
             document.getElementById(label.toLowerCase()).checked = true
+        }
     })
 
     // clear previous comment
@@ -249,85 +250,104 @@ function classifyIssue(issue) {
         executive: executive,
         property: property
     })})
+    .then(e => {
+        console.log(e.status)
+        if (e.status == 200) {
+            // update labels in the table
+            inreviewstr = ' (In Review)'
+            curr_label = document.getElementById(`${issue}_manual_label`)
+            newlabel = "Non-Arch."
+            if (existence || executive || property) {
+                newlabel = []
+                if (existence) newlabel.push("Existence")
+                if (executive) newlabel.push("Executive")
+                if (property) newlabel.push("Property")
+                newlabel = newlabel.join(", ")
+            }
+            
+            if (curr_label.innerHTML === "") {
+                // just got classified to training
+                curr_label.innerHTML = newlabel
+            } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
+                // in review - keep inreviewstr
+                curr_label.innerHTML = newlabel + inreviewstr
+            } else {
+                // in training, no inreviewstr
+                curr_label.innerHTML = newlabel
+            }
 
-    // update labels in the table
-    inreviewstr = ' (In Review)'
-    curr_label = document.getElementById(`${issue}_manual_label`)
-    newlabel = "Non-Arch."
-    if (existence || executive || property) {
-        newlabel = []
-        if (existence) newlabel.push("Existence")
-        if (executive) newlabel.push("Executive")
-        if (property) newlabel.push("Property")
-        newlabel = newlabel.join(", ")
-    }
-    
-    if (curr_label.innerHTML === "") {
-        // just got classified to training
-        curr_label.innerHTML = newlabel
-    } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
-        // in review - keep inreviewstr
-        curr_label.innerHTML = newlabel + inreviewstr
-    } else {
-        // in training, no inreviewstr
-        curr_label.innerHTML = newlabel
-    }
-
-    // update modal
-    classifyModal(issue)
+            // update modal
+            classifyModal(issue)
+        }
+        else {
+            alertDbError(e)
+        }
+    })
 }
 
 function markReview(issue) {
     // don't need data
     // submit request
     fetch(`/manual/review/${issue}`, {method: "POST"})
+        .then(e => {
+            if (e.status != 200) {
+                alertDbError(e)
+            }
+            else {
+                // update label in the table
+                curr_label = document.getElementById(`${issue}_manual_label`)
+                
+                inreviewstr = ' (In Review)'
+                if (curr_label.innerHTML === "") {
+                    // was not in any dataset yet, no data either
+                    // (shouldn't happen)
+                    console.log("Logic Error")
+                    curr_label.innerHTML = "Non-Arch." + inreviewstr
+                } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
+                    // is in review
+                    // do nothing
+                    // (shouldn't happen)
+                    console.log("Logic Error")
+                } else {
+                    // was in training, no modifications
+                    curr_label.innerHTML += inreviewstr
+                }
 
-    // update label in the table
-    curr_label = document.getElementById(`${issue}_manual_label`)
-    
-    inreviewstr = ' (In Review)'
-    if (curr_label.innerHTML === "") {
-        // was not in any dataset yet, no data either
-        // (shouldn't happen)
-        console.log("Logic Error")
-        curr_label.innerHTML = "Non-Arch." + inreviewstr
-    } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
-        // is in review
-        // do nothing
-        // (shouldn't happen)
-        console.log("Logic Error")
-    } else {
-        // was in training, no modifications
-        curr_label.innerHTML += inreviewstr
-    }
-
-    // update modal
-    classifyModal(issue)
+                // update modal
+                classifyModal(issue)
+            }
+        })
 }
 
 function markTraining(issue) {
     // don't need data
     // submit request
     fetch(`/manual/training/${issue}`, {method: "POST"})
+        .then(e => {
+            if (e.status != 200) {
+                alertDbError(e)
+            } 
+            else {
+                // update label in the table
+                curr_label = document.getElementById(`${issue}_manual_label`)
+                
+                inreviewstr = ' (In Review)'
+                if (curr_label.innerHTML === "") {
+                    // was not in any dataset, mark this as nonarch
+                    curr_label.innerHTML = "Non-Arch."
+                    // (shouldn't happen)
+                    console.log("Logic Error")
+                } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
+                    // was in review
+                    curr_label.innerHTML = curr_label.innerHTML.slice(0,  curr_label.innerHTML.length - inreviewstr.length) // remove in review label
+                } else {
+                    // is in training, no modifications
+                }
 
-    // update label in the table
-    curr_label = document.getElementById(`${issue}_manual_label`)
-    
-    inreviewstr = ' (In Review)'
-    if (curr_label.innerHTML === "") {
-        // was not in any dataset, mark this as nonarch
-        curr_label.innerHTML = "Non-Arch."
-        // (shouldn't happen)
-        console.log("Logic Error")
-    } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
-        // was in review
-        curr_label.innerHTML = curr_label.innerHTML.slice(0,  curr_label.innerHTML.length - inreviewstr.length) // remove in review label
-    } else {
-        // is in training, no modifications
-    }
-
-    // update modal
-    classifyModal(issue)
+                // update modal
+                classifyModal(issue)
+            }
+        })
 }
 
 function resizeCommentbox() {
@@ -343,9 +363,28 @@ function addComment(issue) {
         comment: comment_text
     })})
         .then(e => {
-            input.value=""
-            setCommentsFor(issue)
+            if (e.status == 200) {
+                input.value=""
+                setCommentsFor(issue)
+            }
+            else {
+                alertDbError(e)
+            }
         })
+}
+
+function alertDbError(response) {
+    str = `Something went wrong while processing your request: DB API returned code ${response.status}.`
+    if (response.status == 401)
+        str += " Double-check if you're logged in correctly!"
+    response.json().then(data => {
+        str += "\n\nResponse body:\n"
+        str += JSON.stringify(data)
+        alert(str)
+    })
+    .catch(e => {
+        alert(str)
+    })
 }
 </script>
 {% endblock %}
