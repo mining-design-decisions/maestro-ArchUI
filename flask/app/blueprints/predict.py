@@ -10,9 +10,8 @@ bp = Blueprint('predict', __name__, url_prefix="/predict")
 
 @bp.route('/', methods=["GET"])
 def viewform():
-    # todo
+    # todo add in projects as dropdown
     models = dbapi.get_model_ids_names()
-    # projects = ["testproj", "test", "proj"]
     return render_template("predict/form.html", models=models)
 
 @bp.route('/', methods=["POST"])

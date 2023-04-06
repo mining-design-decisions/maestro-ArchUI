@@ -37,9 +37,9 @@ def logout():
 @bp.route('/setdb', methods=["POST"])
 def setdb():
     dbapi.set_db(request.json['new_url'])
-    return "ok"
+    return "ok", 200
 
 @bp.route('/setcli', methods=["POST"])
 def setcli():
     dbapi.set_cli(request.json['new_url'])
-    return "ok"
+    return "ok", 200

@@ -24,9 +24,8 @@ def view(query):
 
 @bp.route('/create', methods=["GET"])
 def viewform():
-    # todo
+    # todo add in list of tags as dropdown?
     models = dbapi.get_model_ids_names()
-    # projects = ["testproj", "test", "proj"]
     return render_template("classify/form.html", models=models)
 
 @bp.route('/create', methods=["POST"])
@@ -47,4 +46,6 @@ def create():
 
 @bp.route('/label/<issue>')
 def manual_label(issue):
+    # manual label, multiple label, comment discussion
+    # todo
     return "under construction"

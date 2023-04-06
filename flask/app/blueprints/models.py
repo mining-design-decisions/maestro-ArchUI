@@ -10,6 +10,13 @@ from app.services import dbapi
 
 bp = Blueprint('models', __name__, url_prefix="/models")
 
+inmode_per_classifier = {
+    "FullyConnectedModel": ["Doc2Vec","BOWFrequency","BOWNormalized","TfidfGenerator","Metadata","OntologyFeatures"],
+    "LinearConv1Model": ["Word2Vec1D"],
+    "LinearRNNModel": ["Word2Vec1D"],
+    "Bert": ["Bert"]
+}
+
 @bp.route('/', methods=["GET"])
 def viewall():
     models = dbapi.get_model_ids_names()
@@ -17,12 +24,6 @@ def viewall():
 
 @bp.route('/create', methods=["GET"])
 def viewform():
-    inmode_per_classifier = {
-        "FullyConnectedModel": ["Doc2Vec","BOWFrequency","BOWNormalized","TfidfGenerator","Metadata","OntologyFeatures"],
-        "LinearConv1Model": ["Word2Vec1D"],
-        "LinearRNNModel": ["Word2Vec1D"],
-        "Bert": ["Bert"]
-    }
     field_configs = data.get_field_configs()
 
     return render_template('models/form_create.html',
@@ -58,18 +59,11 @@ def view(model):
 
 @bp.route('/train/<model>', methods=["POST"])
 def train(model):
-    # todo
     dbapi.train_model(model)
     return redirect(url_for('models.view', model=model))
 
 @bp.route('/edit/<model>', methods=["GET"])
 def editform(model):
-    inmode_per_classifier = {
-        "FullyConnectedModel": ["Doc2Vec","BOWFrequency","BOWNormalized","TfidfGenerator","Metadata","OntologyFeatures"],
-        "LinearConv1Model": ["Word2Vec1D"],
-        "LinearRNNModel": ["Word2Vec1D"],
-        "Bert": ["Bert"]
-    }
     field_configs = data.get_field_configs()
 
     model_data = dbapi.get_model_data(model)

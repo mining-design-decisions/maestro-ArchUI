@@ -1,4 +1,3 @@
-from flask import render_template
 from flask import Blueprint
 from flask import request
 
@@ -25,5 +24,4 @@ def get_comments(issue):
 
 @bp.route('/comments/<issue>', methods=["POST"])
 def post_comment(issue):
-    data, code = dbapi.add_comment_for(issue, request.json['comment'])
-    return data, code
+    return dbapi.add_comment_for(issue, request.json['comment'])

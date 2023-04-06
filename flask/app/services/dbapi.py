@@ -16,7 +16,7 @@ def set_cli(new_url):
 def _auth_header():
     return {"Authorization": f"bearer {session['token']}"}
 
-# decorator for authentication-required requests
+# decorator for simple authentication-required requests
 def auth_req(func):
     def inner(*args, **kwargs):
         if not is_logged_in():
@@ -64,8 +64,10 @@ def get_username():
 # returns false if failed to create (due to no auth)
 # returns new model ID if succeeded
 def create_model_config(config, name):
+    # todo auth error reporting
     if not is_logged_in():
         return False
+    
     postbody = {
         "config": config,
         "name": name
@@ -76,6 +78,7 @@ def create_model_config(config, name):
     return x.json()['id']
 
 def get_model_ids_names():
+    # todo adequate error reporting in case of no models
     try:
         model_ids = requests.get(f"{get_db()}/models", verify=False)
         return model_ids.json()['models']
@@ -83,13 +86,16 @@ def get_model_ids_names():
         return {}
 
 def get_model_data(id):
+    # todo error handling
     data = requests.get(f"{get_db()}/models/{id}", verify=False)
     return data.json()
 
 def edit_model(id, name, config):
-    x = requests.post(f"{get_db()}/models/{id}", headers=_auth_header(), verify=False, json={"name": name, "config": config})
+    # todo auth error reporting & handling
+    requests.post(f"{get_db()}/models/{id}", headers=_auth_header(), verify=False, json={"name": name, "config": config})
 
 def train_model(id):
+    # todo auth error handling & reporting
     data = requests.get(f"{get_db()}/models/{id}", verify=False)
     config = data.json()['config']
     config['subcommand_name_0'] = 'run'
@@ -106,6 +112,7 @@ def train_model(id):
     requests.post(f"{get_cli()}/invoke", json=postbody, verify=False)
 
 def get_model_performance(id):
+    # todo error handling & reporting
     performances = requests.get(f"{get_db()}/models/{id}/performances", verify=False).json()["performances"]
     latest_version = "Never"
     latest_performance = None
@@ -120,9 +127,9 @@ def get_proj_query(projects):
     return f"{{ \"$or\": [ {','.join(projects)} ] }}"
 
 def predict_models_projects(models, projects):
+    # todo error handling/reporting
+    # continuously open socket status reports?
     for model in models:
-        # data = requests.get(f"{DB_WRAPPER_URL}/models/{model}", verify=False)
-        # config = data.json()['config']
         config = {}
         config['subcommand_name_0'] = 'predict'
         config['model'] = model
@@ -139,14 +146,15 @@ def predict_models_projects(models, projects):
         requests.post(f"{get_cli()}/invoke", json=postbody, verify=False)
 
 # queries
+# todo save the query data in the db eventually?
 def _query_dir():
     import os
     os.makedirs("app/data/queries", exist_ok=True)
 
 def create_query(models, data_query, name):
-    # todo put these in the db eventually?
     modelversions = {}
     for model in models:
+        # todo verify that this is latest, unsure of how array gets ordered
         modelversions[model] = requests.get(f"{get_db()}/models/{model}/versions", verify=False).json()["versions"][0]["id"]
     
     _query_dir()
@@ -166,10 +174,13 @@ def get_query_names():
     return results
 
 def get_query_data(query_name):
+    # todo: error handling & reporting. do not let the db fail silently
+
     # things needed for each issue
     # key/link. summary. description.
     # manual labels.
-    # and automatic predictions. per model if possible.
+    # and automatic predictions per model
+    # plus various auxiliary data structures that will make displaying easier
     _query_dir()
     with open(f'app/data/queries/{query_name}.json', 'r') as f:
         qdata = json.load(f)
@@ -177,9 +188,6 @@ def get_query_data(query_name):
         query = qdata['query']
 
     # first: regular issue data!
-    # postbody = {"filter": {
-    #     "$or": [{"tags": {"$eq": project}} for project in projects]
-    # }}
     postbody = {"filter":json.loads(query)}
     x = requests.get(f"{get_db()}/issue-ids", json=postbody, verify=False).json()
     issue_ids = x["ids"]
@@ -253,7 +261,7 @@ def get_query_data(query_name):
     "Apache-12639558": {
         "architectural": {
             "prediction": false,
-            "probability": 0.0
+            "confidence": 0.0
         }
     }
     """
@@ -262,19 +270,19 @@ def get_query_data(query_name):
     "Apache-12639558": {
         "executive": {
             "prediction": false,
-            "probability": 0.024279268458485603
+            "confidence": 0.024279268458485603
         },
         "existence": {
             "prediction": false,
-            "probability": 0.07352140545845032
+            "confidence": 0.07352140545845032
         },
         "non-architectural": {
             "prediction": false,
-            "probability": 0.8794219493865967
+            "confidence": 0.8794219493865967
         },
         "property": {
             "prediction": false,
-            "probability": 0.022777432575821877
+            "confidence": 0.022777432575821877
         }
     }
     """
@@ -283,9 +291,6 @@ def get_query_data(query_name):
         pred = requests.get(f"{get_db()}/models/{model}/versions/{version}/predictions", json={"ids": issue_ids}, verify=False).json()
         if "predictions" in pred:
             # add headers
-            # first_issue = list(pred["predictions"].keys())[0]
-            # print(pred["predictions"])
-            # first_issue = pred["predictions"][first_issue]
             first_issue = None
             for prediction in pred["predictions"]:
                 if pred["predictions"][prediction]:
@@ -301,10 +306,6 @@ def get_query_data(query_name):
                     predictions[key][model] = pred["predictions"][key]
         # don't really care otherwise
     
-    
-    with open("temp.json", "w") as f:
-        json.dump(predictions, f)
-
     return (issue_data, manual_labels, predictions, headers)
 
 # labels
@@ -322,6 +323,7 @@ def set_manual_label(issue, classifications):
 
 
 def get_comments_for(issue):
+    # todo proper error handling/reporting, see auth_reqs
     try:
         x = requests.get(f"{get_db()}/manual-labels/{issue}/comments", verify=False).json()
         if "comments" in x:
