@@ -43,3 +43,7 @@ def setdb():
 def setcli():
     dbapi.set_cli(request.json['new_url'])
     return "ok", 200
+
+@bp.route('/isloggedin', methods=["GET"])
+def isLoggedIn():
+    return {'is logged in': dbapi.is_logged_in()}, 200

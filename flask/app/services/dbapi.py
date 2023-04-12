@@ -6,6 +6,7 @@ def get_db():
     return session.get("db_url", 'https://localhost:8000')
 def set_db(new_url):
     session["db_url"] = new_url
+    logout()
 
 def get_cli():
     return session.get("cli_url", 'https://localhost:9011')
@@ -69,16 +70,16 @@ def create_model_config(config, name):
         return False
     
     postbody = {
-        "config": config,
-        "name": name
+        "model_config": config,
+        "model_name": name
     }
 
     x = requests.post(f"{get_db()}/models", json=postbody, headers=_auth_header(), verify=False)
 
-    return x.json()['id']
+    return x.json()['model_id']
 
 def get_model_ids_names():
-    # todo adequate error reporting in case of no models
+    # todo adequate error reporting in case of no models?
     try:
         model_ids = requests.get(f"{get_db()}/models", verify=False)
         return model_ids.json()['models']
@@ -92,12 +93,12 @@ def get_model_data(id):
 
 def edit_model(id, name, config):
     # todo auth error reporting & handling
-    requests.post(f"{get_db()}/models/{id}", headers=_auth_header(), verify=False, json={"name": name, "config": config})
+    requests.post(f"{get_db()}/models/{id}", headers=_auth_header(), verify=False, json={"model_name": name, "model_config": config})
 
 def train_model(id):
     # todo auth error handling & reporting
-    data = requests.get(f"{get_db()}/models/{id}", verify=False)
-    config = data.json()['config']
+    data = get_model_data(id)
+    config = data.json()['model_config']
     config['subcommand_name_0'] = 'run'
     config['model-id'] = id
     config['database-url'] = get_db()
@@ -111,12 +112,13 @@ def train_model(id):
 
     requests.post(f"{get_cli()}/invoke", json=postbody, verify=False)
 
+# todo metrics 2.0
 def get_model_performance(id):
     # todo error handling & reporting
     performances = requests.get(f"{get_db()}/models/{id}/performances", verify=False).json()["performances"]
     latest_version = "Never"
     latest_performance = None
-    if len(performances)>0:
+    if len(performances) > 0:
         latest_version = max(performances)
         latest_performance = requests.get(f"{get_db()}/models/{id}/performances/{latest_version}", verify=False).json()[f"{latest_version}"][0]["f-score"][0]
 
@@ -154,8 +156,12 @@ def _query_dir():
 def create_query(models, data_query, name):
     modelversions = {}
     for model in models:
-        # todo verify that this is latest, unsure of how array gets ordered
-        modelversions[model] = requests.get(f"{get_db()}/models/{model}/versions", verify=False).json()["versions"][0]["id"]
+        modelVersions = requests.get(f"{get_db()}/models/{model}/versions", verify=False).json()["versions"]
+        latest = modelVersions[0]
+        for i in range(1, len(modelVersions)):
+            if modelVersions[i]['time'] > latest['time']:
+                latest = modelVersions[i]
+        modelversions[model] = latest["version_id"]
     
     _query_dir()
     with open(f'app/data/queries/{name}.json', 'w') as f:
@@ -173,6 +179,7 @@ def get_query_names():
             results.append(file[:-5])
     return results
 
+# todo pagination rework
 def get_query_data(query_name):
     # todo: error handling & reporting. do not let the db fail silently
 
@@ -190,9 +197,10 @@ def get_query_data(query_name):
     # first: regular issue data!
     postbody = {"filter":json.loads(query)}
     x = requests.get(f"{get_db()}/issue-ids", json=postbody, verify=False).json()
-    issue_ids = x["ids"]
+    issue_ids = x["issue_ids"]
 
-    issue_data = requests.get(f"{get_db()}/issue-data", json={"ids": issue_ids, "attributes": ["key", "summary", "description", "link"]}, verify=False).json()
+    issue_data = requests.get(f"{get_db()}/issue-data", json={"issue_ids": issue_ids, "attributes": ["key", "summary", "description", "link"]}, verify=False)
+    issue_data = issue_data.json()
     if "data" in issue_data:
         issue_data = issue_data["data"]
     else:
@@ -211,22 +219,22 @@ def get_query_data(query_name):
             ]
         }
     }
-    manual_issue_ids = requests.get(f"{get_db()}/issue-ids", json=labelbody, verify=False).json()["ids"]
-    manual_labels_raw = requests.get(f"{get_db()}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
+    manual_issue_ids = requests.get(f"{get_db()}/issue-ids", json=labelbody, verify=False).json()["issue_ids"]
+    manual_labels_raw = requests.get(f"{get_db()}/manual-labels", json={"issue_ids": manual_issue_ids}, verify=False).json()
     manual_labels = {}
 
 
     labels = ["existence", "property", "executive"]
-    if "labels" in manual_labels_raw:
-        for key in manual_labels_raw['labels']:
+    if "manual_labels" in manual_labels_raw:
+        for issue_id in manual_labels_raw['manual_labels']:
             classifications = []
             for label in labels:
-                if manual_labels_raw["labels"][key][label]:
+                if manual_labels_raw["manual_labels"][issue_id][label]:
                     classifications.append(label.title())
             if len(classifications) == 0:
                 classifications.append("Non-Arch.")
             
-            manual_labels[key] = ", ".join(classifications)
+            manual_labels[issue_id] = ", ".join(classifications)
 
     # then the in-review ones
     reviewbody = {
@@ -237,20 +245,20 @@ def get_query_data(query_name):
             ]
         }
     }
-    manual_issue_ids = requests.get(f"{get_db()}/issue-ids", json=reviewbody, verify=False).json()["ids"]
-    manual_labels_raw = requests.get(f"{get_db()}/manual-labels", json={"ids": manual_issue_ids}, verify=False).json()
+    manual_issue_ids = requests.get(f"{get_db()}/issue-ids", json=reviewbody, verify=False).json()["issue_ids"]
+    manual_labels_raw = requests.get(f"{get_db()}/manual-labels", json={"issue_ids": manual_issue_ids}, verify=False).json()
 
-    if "labels" in manual_labels_raw:
-        for key in manual_labels_raw['labels']:
+    if "manual_labels" in manual_labels_raw:
+        for issue_id in manual_labels_raw['manual_labels']:
             classifications = []
             for label in labels:
-                if manual_labels_raw["labels"][key][label]:
+                if manual_labels_raw["manual_labels"][issue_id][label]:
                     classifications.append(label.title())
             if len(classifications) == 0:
                 classifications.append("Non-Arch.")
             
             # will override
-            manual_labels[key] = ", ".join(classifications) + " (In Review)"
+            manual_labels[issue_id] = ", ".join(classifications) + " (In Review)"
     
     
     # finally: predictions!
@@ -288,22 +296,24 @@ def get_query_data(query_name):
     """
     for model in models:
         version = models[model]
-        pred = requests.get(f"{get_db()}/models/{model}/versions/{version}/predictions", json={"ids": issue_ids}, verify=False).json()
+        pred = requests.get(f"{get_db()}/models/{model}/versions/{version}/predictions", json={"issue_ids": issue_ids}, verify=False).json()
         if "predictions" in pred:
             # add headers
             first_issue = None
-            for prediction in pred["predictions"]:
-                if pred["predictions"][prediction]:
-                    first_issue = pred["predictions"][prediction]
+            for issue_id in pred["predictions"]:
+                if pred["predictions"][issue_id]:
+                    first_issue = pred["predictions"][issue_id]
+                    break
             if first_issue is None:
                 continue
             headers[model] = list(first_issue.keys())
             # add issue predictions
-            for key in pred["predictions"]:
-                if not key in predictions:
-                    predictions[key] = {}
-                if pred["predictions"][key]:
-                    predictions[key][model] = pred["predictions"][key]
+            for issue_id in pred["predictions"]:
+                if not issue_id in predictions:
+                    predictions[issue_id] = {}
+                if pred["predictions"][issue_id]:
+                    predictions[issue_id][model] = pred["predictions"][issue_id]
+                
         # don't really care otherwise
     
     return (issue_data, manual_labels, predictions, headers)

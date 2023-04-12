@@ -19,7 +19,7 @@ def view(query):
     model_id_names = dbapi.get_model_ids_names()
     id_to_name = {}
     for model in model_id_names:
-        id_to_name[model['id']] = model['name']
+        id_to_name[model['model_id']] = model['model_name']
     return render_template("classify/view.html", issue_data=issue_data, manual=manual, predictions=predictions, id_to_name=id_to_name, headers=headers)
 
 @bp.route('/create', methods=["GET"])

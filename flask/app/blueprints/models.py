@@ -44,8 +44,8 @@ def create():
 @bp.route('/view/<model>', methods=["GET"])
 def view(model):
     data = dbapi.get_model_data(model)
-    name = data['name']
-    config = modelconfig.config_to_display(data['config'])
+    name = data['model_name']
+    config = modelconfig.config_to_display(data['model_config'])
     version_count, latest_version, performance = dbapi.get_model_performance(model) 
 
     return render_template(
@@ -59,16 +59,17 @@ def view(model):
 
 @bp.route('/train/<model>', methods=["POST"])
 def train(model):
+    print('a')
     dbapi.train_model(model)
-    return redirect(url_for('models.view', model=model))
+    return 'ok', 200 # todo error handling
 
 @bp.route('/edit/<model>', methods=["GET"])
 def editform(model):
     field_configs = data.get_field_configs()
 
     model_data = dbapi.get_model_data(model)
-    name = model_data["name"]
-    model_defaults = modelconfig.config_to_form(model_data['config'])
+    name = model_data["model_name"]
+    model_defaults = modelconfig.config_to_form(model_data['model_config'])
     model_defaults["gen_model_name"] = name
     print(model_defaults)
 

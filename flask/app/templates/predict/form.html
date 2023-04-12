@@ -41,6 +41,20 @@
 {% block scripts %}
 {{ super() }}
 <script>
+function onReady() {
+    fetch('/login/isloggedin')
+    .then(e => {
+        e.json()
+        .then(data => {
+            if (!data['is logged in']) {
+                alert('You are not logged in! Without logging in, you cannot predict with ML models. Please log in.')
+            }
+        })
+    })
+}
+onReady()
+</script>
+<script>
 function add_project() {
     target_div = document.getElementById('target_projects_div')
 
@@ -109,7 +123,7 @@ function add_model() {
     new_html += `<select id="${new_id}" name="${new_id}" class="mx-3">`
     models = {{models|tojson|safe}}
     models.forEach(model => {
-        new_html += `<option value="${model['id']}">${model['name']}</option>`
+        new_html += `<option value="${model['model_id']}">${model['model_name']}</option>`
     })
     new_html += `</select>`
     new_html += `<button onclick="remove_model('${new_id}_div')" type="button" class="btn btn-secondary">Remove this ML Model Option</button>`

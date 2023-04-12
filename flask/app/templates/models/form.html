@@ -66,6 +66,16 @@ function onDocReady() {
     tabs.forEach(tab => {
         document.getElementById(tab).innerHTML = generate_tab(tab, data, defaults)
     })
+
+    fetch('/login/isloggedin')
+    .then(e => {
+        e.json()
+        .then(data => {
+            if (!data['is logged in']) {
+                alert('You are not logged in! Without logging in, you cannot save edited model configuraton data. Please log in before submitting the model form.')
+            }
+        })
+    })
 }
 onDocReady()
 

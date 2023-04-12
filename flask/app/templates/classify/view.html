@@ -117,8 +117,6 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.13.1/sorting/numString.js"></script>
 <script>
 $(document).ready(function() {
-    // $.fn.dataTable.numString(/\d+/);
-
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl)
@@ -132,12 +130,22 @@ function setCommentsFor(issue) {
     fetch(`/manual/comments/${issue}`)
         .then(response => {
             response.json().then(data =>{
-                data.forEach(comment => {
+                Object.keys(data).forEach(comment_id => {
+                    /*
                     author = Object.keys(comment)[0]
                     text = comment[author]
                     
                     new_html = `<b>${author}</b>: ${text}`
                     new_html = `<div>${new_html}</div><hr />`
+
+                    result += new_html
+                    */
+                    comment_obj = data[comment_id]
+                    author = comment_obj.author
+                    text = comment_obj.comment
+
+                    new_html = `<b>${author}</b>: ${text}`
+                    new_html = `<div id='comment_${comment_id}'>${new_html}</div><hr />`
 
                     result += new_html
                 });

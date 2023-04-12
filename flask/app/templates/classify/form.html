@@ -125,7 +125,7 @@ function add_model() {
     models = {{models|tojson|safe}}
     if (models.length > 0) {
         models.forEach(model => {
-            new_html += `<option value="${model['id']}">${model['name']}</option>`
+            new_html += `<option value="${model['model_id']}">${model['model_name']}</option>`
         })
     }
     
