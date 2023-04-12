@@ -131,20 +131,11 @@ function setCommentsFor(issue) {
         .then(response => {
             response.json().then(data =>{
                 Object.keys(data).forEach(comment_id => {
-                    /*
-                    author = Object.keys(comment)[0]
-                    text = comment[author]
-                    
-                    new_html = `<b>${author}</b>: ${text}`
-                    new_html = `<div>${new_html}</div><hr />`
-
-                    result += new_html
-                    */
                     comment_obj = data[comment_id]
                     author = comment_obj.author
-                    text = comment_obj.comment
+                    text = comment_obj.comment.replaceAll('\n', '<br />')
 
-                    new_html = `<b>${author}</b>: ${text}`
+                    new_html = `<b>${author}</b>: <br />${text}`
                     new_html = `<div id='comment_${comment_id}'>${new_html}</div><hr />`
 
                     result += new_html
@@ -181,7 +172,10 @@ function classificationChanged() {
     }
 }
 
+current_modal_issue_id = null
+
 function classifyModal(id) {
+    current_modal_issue_id = id
     header = document.getElementById('classify_label')
     key = {{issue_data|tojson|safe}}[id]['key']
     header.innerHTML = `Classify Issue ${key}`
@@ -357,6 +351,13 @@ function markTraining(issue) {
             }
         })
 }
+
+$("#classify_newcomment").on('keyup', function(e) {
+    if ((e.key === 'Enter' || e.keyCode === 13) && !e.shiftKey) {
+        console.log(current_modal_issue_id)
+        addComment(current_modal_issue_id)
+    }
+})
 
 function resizeCommentbox() {
     textarea = document.getElementById("classify_newcomment")
