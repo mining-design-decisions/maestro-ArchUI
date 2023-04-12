@@ -351,3 +351,7 @@ def add_comment_for(issue, comment):
 @auth_req
 def delete_comment(issue, comment_id):
     return requests.delete(f"{get_db()}/manual-labels/{issue}/comments/{comment_id}", verify=False, headers=_auth_header())
+
+@auth_req
+def edit_comment(issue, comment_id, json):
+    return requests.patch(f"{get_db()}/manual-labels/{issue}/comments/{comment_id}", verify=False, headers=_auth_header(), json=json)

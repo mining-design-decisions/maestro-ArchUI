@@ -53,7 +53,7 @@
                     <div class="card-body">
                         <h4>Comments</h4>
                         <div id="classify_comments"></div>
-                        <textarea id="classify_newcomment" oninput="resizeCommentbox()" style="min-width: 100%;min-height:50px;overflow-y:hidden"></textarea>
+                        <textarea id="classify_newcomment" oninput="resizeCommentbox($(this))" style="min-width: 100%;min-height:50px;overflow-y:hidden"></textarea>
                         <div class="w-100 d-none d-md-block my-2"></div>
                         <button type="button" class="btn btn-primary" id="classify_addcomment">Add New Comment</button>
                     </div>
@@ -136,9 +136,8 @@ function setCommentsFor(issue) {
                     author = comment_obj.author
                     text = comment_obj.comment.replaceAll('\n', '<br />')
 
-                    new_html = `<b>${author}</b>: <br />${text}`
+                    new_html = `<p><b>${author}</b>:</p><p id="comment_${comment_id}_text">${text}</p>`
                     if (thisuser === author) {
-                        new_html += "<br />"
                         new_html += "<div class='row my-2'>"
                         new_html += `<button type="button" class="btn btn-danger col-sm mx-2" onclick="deleteComment('${comment_id}')">Delete</button>`
                         new_html += `<button type="button" class="btn btn-secondary col-sm mx-2" onclick="editComment('${comment_id}')">Edit</button>`
@@ -169,10 +168,36 @@ function deleteComment(comment_id) {
         }
     })
 }
-
 function editComment(comment_id) {
     // start editing
-    console.log("editing comment ", comment_id)
+    comment_text = document.getElementById(`comment_${comment_id}_text`).innerHTML
+    div_element = document.getElementById(`comment_${comment_id}`)
+    new_html = ""
+    // ...
+    new_html += `<textarea id="edit_comment_${comment_id}" oninput="resizeCommentbox($(this))" style="min-width: 100%;min-height:50px;overflow-y:hidden">${comment_text}</textarea>`
+    new_html += `<div class="row my-2">`
+    new_html += `<button class="btn btn-primary col-sm mx-2" onclick="saveCommentEdit('${comment_id}')">Save</button>`
+    new_html += `<button class="btn btn-secondary col-sm mx-2" onclick="cancelCommentEdit()">Cancel</button>`
+    new_html += `</div>`
+    div_element.innerHTML = new_html
+}
+function saveCommentEdit(comment_id) {
+    new_text = document.getElementById(`edit_comment_${comment_id}`).value.trim()
+
+    fetch(`/manual/comments/${current_modal_issue_id}/${comment_id}`, {method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
+        comment: new_text
+    })})
+        .then(e => {
+            if (e.status == 200) {
+                setCommentsFor(current_modal_issue_id)
+            }
+            else {
+                alertDbError(e)
+            }
+        })
+}
+function cancelCommentEdit() {
+    setCommentsFor(current_modal_issue_id)
 }
 
 function classificationChanged() {
@@ -263,8 +288,9 @@ function classifyModal(id) {
     })
 
     // clear previous comment
-    document.getElementById("classify_newcomment").value = ""
-    resizeCommentbox()
+    commentBox = document.getElementById("classify_newcomment")
+    commentBox.value = ""
+    resizeCommentbox([commentBox])
 }
 
 function classifyIssue(issue) {
@@ -280,7 +306,6 @@ function classifyIssue(issue) {
         property: property
     })})
     .then(e => {
-        console.log(e.status)
         if (e.status == 200) {
             // update labels in the table
             inreviewstr = ' (In Review)'
@@ -381,13 +406,12 @@ function markTraining(issue) {
 
 $("#classify_newcomment").on('keyup', function(e) {
     if ((e.key === 'Enter' || e.keyCode === 13) && !e.shiftKey) {
-        console.log(current_modal_issue_id)
         addComment(current_modal_issue_id)
     }
 })
 
-function resizeCommentbox() {
-    textarea = document.getElementById("classify_newcomment")
+function resizeCommentbox(textarea_element) {
+    textarea = textarea_element[0]
     textarea.style.height = 0
     textarea.style.height = textarea.scrollHeight + "px"
 }

@@ -29,3 +29,8 @@ def post_comment(issue):
 @bp.route('/comments/<issue>/<comment_id>', methods=["DELETE"])
 def delete_comment(issue, comment_id):
     return dbapi.delete_comment(issue, comment_id)
+
+@bp.route('/comments/<issue>/<comment_id>', methods=["PATCH"])
+def edit_comment(issue, comment_id):
+    json = request.json
+    return dbapi.edit_comment(issue, comment_id, json)
