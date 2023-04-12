@@ -20,7 +20,8 @@ def view(query):
     id_to_name = {}
     for model in model_id_names:
         id_to_name[model['model_id']] = model['model_name']
-    return render_template("classify/view.html", issue_data=issue_data, manual=manual, predictions=predictions, id_to_name=id_to_name, headers=headers)
+    thisuser = dbapi.get_username()
+    return render_template("classify/view.html", issue_data=issue_data, manual=manual, predictions=predictions, id_to_name=id_to_name, headers=headers, thisuser=thisuser)
 
 @bp.route('/create', methods=["GET"])
 def viewform():

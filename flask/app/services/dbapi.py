@@ -58,7 +58,7 @@ def is_logged_in():
     return ('un' in session) and (session['un'] is not None)
 
 def get_username():
-    return session['un']
+    return session['un'] if 'un' in session else ''
 
 # models
 
@@ -347,3 +347,7 @@ def get_comments_for(issue):
 @auth_req
 def add_comment_for(issue, comment):
     return requests.post(f"{get_db()}/manual-labels/{issue}/comments", verify=False, headers=_auth_header(), json={"comment": comment})
+
+@auth_req
+def delete_comment(issue, comment_id):
+    return requests.delete(f"{get_db()}/manual-labels/{issue}/comments/{comment_id}", verify=False, headers=_auth_header())

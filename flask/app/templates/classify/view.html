@@ -127,6 +127,7 @@ $(document).ready(function() {
 function setCommentsFor(issue) {
     comments_div = document.getElementById('classify_comments')
     result = ""
+    thisuser = `{{thisuser}}`
     fetch(`/manual/comments/${issue}`)
         .then(response => {
             response.json().then(data =>{
@@ -136,6 +137,13 @@ function setCommentsFor(issue) {
                     text = comment_obj.comment.replaceAll('\n', '<br />')
 
                     new_html = `<b>${author}</b>: <br />${text}`
+                    if (thisuser === author) {
+                        new_html += "<br />"
+                        new_html += "<div class='row my-2'>"
+                        new_html += `<button type="button" class="btn btn-danger col-sm mx-2" onclick="deleteComment('${comment_id}')">Delete</button>`
+                        new_html += `<button type="button" class="btn btn-secondary col-sm mx-2" onclick="editComment('${comment_id}')">Edit</button>`
+                        new_html += "</div>"
+                    }
                     new_html = `<div id='comment_${comment_id}'>${new_html}</div><hr />`
 
                     result += new_html
@@ -146,6 +154,25 @@ function setCommentsFor(issue) {
                 console.log(e)
             })
         })
+}
+
+function deleteComment(comment_id) {
+    fetch(`/manual/comments/${current_modal_issue_id}/${comment_id}`, {
+        method: "DELETE"
+    })
+    .then(e => {
+        if (e.status != 200) {
+            alertDbError(e)
+        } 
+        else {
+            setCommentsFor(current_modal_issue_id)
+        }
+    })
+}
+
+function editComment(comment_id) {
+    // start editing
+    console.log("editing comment ", comment_id)
 }
 
 function classificationChanged() {
@@ -367,7 +394,7 @@ function resizeCommentbox() {
 
 function addComment(issue) {
     input = document.getElementById("classify_newcomment")
-    comment_text = input.value
+    comment_text = input.value.trim()
     fetch(`/manual/comments/${issue}`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
         comment: comment_text
     })})
