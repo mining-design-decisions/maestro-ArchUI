@@ -212,10 +212,10 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc):
                 if issue['manual_label'][label]:
                     labels.append(label.title())
 
-            if len(label) > 0:
+            if len(labels) > 0:
                 manual_labels[issue['issue_id']] = ', '.join(labels)
             else:
-                manual_labels[issue['issue_id']] = 'Non-Arch.'
+                manual_labels[issue['issue_id']] = 'Non-Arch.' 
 
             if 'needs-review' in issue['tags']:
                 manual_labels[issue['issue_id']] += ' (In Review)'
