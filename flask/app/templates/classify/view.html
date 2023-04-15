@@ -62,6 +62,14 @@
     </div>
 </div>
 
+<div>
+    <nav aria-label="Pagination Navigation">
+        <ul class="pagination" id="pagination_ul">
+
+        </ul>
+    </nav>
+</div>
+
 <table id="data" class="table table-striped">
     <thead>
         <th>Key</th>
@@ -97,11 +105,70 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/1.13.1/sorting/numString.js"></script>
 <script>
+function getPageLink(i, pageLimit, title, disabled=false) {
+    if (i != null) {
+        link = `/classify/view/{{query}}/${i}?page_limit=${pageLimit}`
+        sort = '{{sort if sort else null}}'
+        sort_asc = '{{sort_asc if sort_asc else null}}'
+        if (sort !== '') link += `&sort=${sort}`
+        if (sort_asc !== '') link += `&sort_asc=${sort}`
+
+        return `<li class="page-item ${(i == {{thisPage}})? 'active' : (disabled? 'disabled' : '')}"><a class="page-link" href="${link}">${title}</a></li>`
+    }
+    else {
+        return `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`
+    }
+}
+function max(a, b) {
+    return a > b ? a : b
+}
+function min(a, b) {
+    return a > b ? b : a
+}
 $(document).ready(function() {
+    // popovers
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl)
     })
+
+    // pagination
+    pag_el = document.getElementById('pagination_ul')
+    total = {{totalPages}};
+    thisPage = {{thisPage}};
+    pageLimit = {{pageLimit}};
+    new_html = ""
+    if (total <= 10) {
+        // just display all
+        new_html += getPageLink(thisPage-1, pageLimit, 'Previous', thisPage == 1)
+        for (i = 0; i < total; i++) {
+            new_html += getPageLink(i+1, pageLimit, i+1)
+        }
+        new_html += getPageLink(thisPage+1, pageLimit, 'Next', thisPage == total)
+    }
+    else {
+        // max: 5 or so
+        min_i = max(1, thisPage-2)
+        new_html += getPageLink(1, pageLimit, 'First', min_i <= 1)
+
+        
+        new_html += getPageLink(thisPage-1, pageLimit, 'Previous', thisPage == 1)
+        
+        max_i = min(thisPage+2, total)
+        
+        if (min_i <= 2) max_i = min_i + 4
+        if (max_i >= (total - 1)) min_i = max_i - 4
+
+        for (i = min_i; i <= max_i; i++) {
+            new_html += getPageLink(i, pageLimit, i)
+        }
+        
+        new_html += getPageLink(thisPage+1, pageLimit, 'Next', thisPage == total)
+
+        new_html += getPageLink(total, pageLimit, 'Last', max >= (total-1))
+    }
+    
+    pag_el.innerHTML = new_html
 })
     
 function setCommentsFor(issue) {
