@@ -17,13 +17,17 @@ def viewall():
 def view(query, page):
     pageLimit = request.args.get('page_limit', default=10, type=int)
     sort = request.args.get('sort', default=None)
-    sort_asc = request.args.get('sort_asc', default=True, type=bool)
-    issue_data, manual, headers, totalPages = dbapi.get_paginated_data(query, page, pageLimit, sort, sort_asc)
+    sort_asc = request.args.get('sort_asc', default='true')
+    sort_asc = sort_asc == 'true'
+    issue_data, manual, headers, totalPages, models = dbapi.get_paginated_data(query, page, pageLimit, sort, sort_asc)
 
     model_id_names = dbapi.get_model_ids_names()
+    model_name_dic = {}
+    for m in model_id_names:
+        model_name_dic[m['model_id']] = m['model_name']
     id_to_name = {}
-    for model in model_id_names:
-        id_to_name[model['model_id']] = model['model_name']
+    for m_id in models:
+        id_to_name[f"{m_id}-{models[m_id]}"] = model_name_dic[m_id]
 
     thisuser = dbapi.get_username()
 

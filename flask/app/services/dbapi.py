@@ -181,7 +181,7 @@ def get_query_names():
 
 # todo pagination rework
 def get_paginated_data(query_name, page, pageLimit, sort, sort_asc):  
-    # data to return in order: issue_data, manual_labels, headers, total_pages
+    # data to return in order: issue_data, manual_labels, headers, total_pages, model_versions
     with open(f'app/data/queries/{query_name}.json', 'r') as f:
         qdata = json.load(f)
         models = qdata['models']
@@ -200,8 +200,11 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc):
 
     # get issue data from UI endpoint
     x = requests.get(f'{get_db()}/ui', verify=False, json=uibody)
-    issue_data = x.json()['data']
-    total_pages = x.json()['total_pages']
+    try:
+        issue_data = x.json()['data']
+        total_pages = x.json()['total_pages']
+    except:
+        print(x.json())
 
     # parse manual labels (issue id -> str)
     manual_labels = {}
@@ -221,7 +224,7 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc):
                 manual_labels[issue['issue_id']] += ' (In Review)'
 
     # get headers from model configs
-    headers = {} # model_id-version_id -> [headers]
+    headers = {} # model_id-version_id -> [headers] 
     output_mode_to_headers = {
         'Classification3': ['existence', 'executive', 'property']
     }
@@ -229,10 +232,10 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc):
         output_mode = requests.get(f'{get_db()}/models/{m_id}').json()['model_config']['output_mode']
         if output_mode not in output_mode_to_headers:
             print('\nERROR: Unknown Output Mode: ' + output_mode + ". Please complete output_mode_to_headers.\n\n")
-        headers[m_id] = output_mode_to_headers[output_mode]
+        headers[f"{m_id}-{models[m_id]}"] = output_mode_to_headers[output_mode]
 
     # return results
-    return (issue_data, manual_labels, headers, total_pages)
+    return (issue_data, manual_labels, headers, total_pages, models)
 
 def get_query_data(query_name):
     # todo: error handling & reporting. do not let the db fail silently

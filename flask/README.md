@@ -111,6 +111,7 @@ Additionally, if you are building a script-heavy page, you can separate out the 
 
 - Flask: https://flask.palletsprojects.com/en/2.2.x/
 - Bootstrap 5 (note the version - there are newer versions, but this project uses 5.0): https://getbootstrap.com/docs/5.0/getting-started/introduction/
+- Bootstrap Icons: https://github.com/twbs/icons/releases/tag/v1.10.4 (in templates/classify/view.html)
 
 ## Notes on Python Version and Compatible Packages
 
