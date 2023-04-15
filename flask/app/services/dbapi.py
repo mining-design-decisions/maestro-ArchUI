@@ -180,6 +180,60 @@ def get_query_names():
     return results
 
 # todo pagination rework
+def get_paginated_data(query_name, page, pageLimit, sort, sort_asc):  
+    # data to return in order: issue_data, manual_labels, headers, total_pages
+    with open(f'app/data/queries/{query_name}.json', 'r') as f:
+        qdata = json.load(f)
+        models = qdata['models']
+        query = qdata['query']
+    
+    model_ids = [f'{m_id}-{models[m_id]}' for m_id in models]
+
+    uibody = {
+        "filter": json.loads(query),
+        "sort": sort,
+        "sort_ascending": sort_asc,
+        "models": model_ids,
+        "page": int(page),
+        "limit": pageLimit
+    }
+
+    # get issue data from UI endpoint
+    x = requests.get(f'{get_db()}/ui', verify=False, json=uibody)
+    issue_data = x.json()['data']
+    total_pages = x.json()['total_pages']
+
+    # parse manual labels (issue id -> str)
+    manual_labels = {}
+    for issue in issue_data:
+        if issue['manual_label']['existence'] is not None:
+            labels = []
+            for label in issue['manual_label']:
+                if issue['manual_label'][label]:
+                    labels.append(label.title())
+
+            if len(label) > 0:
+                manual_labels[issue['issue_id']] = ', '.join(labels)
+            else:
+                manual_labels[issue['issue_id']] = 'Non-Arch.'
+
+            if 'needs-review' in issue['tags']:
+                manual_labels[issue['issue_id']] += ' (In Review)'
+
+    # get headers from model configs
+    headers = {} # model_id-version_id -> [headers]
+    output_mode_to_headers = {
+        'Classification3': ['existence', 'executive', 'property']
+    }
+    for m_id in models:
+        output_mode = requests.get(f'{get_db()}/models/{m_id}').json()['model_config']['output_mode']
+        if output_mode not in output_mode_to_headers:
+            print('\nERROR: Unknown Output Mode: ' + output_mode + ". Please complete output_mode_to_headers.\n\n")
+        headers[m_id] = output_mode_to_headers[output_mode]
+
+    # return results
+    return (issue_data, manual_labels, headers, total_pages)
+
 def get_query_data(query_name):
     # todo: error handling & reporting. do not let the db fail silently
 

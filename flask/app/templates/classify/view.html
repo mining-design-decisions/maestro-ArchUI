@@ -7,10 +7,6 @@
 {% endblock %}
 
 {% block margin_content %}
-<p class="my-2">
-    Use shift-click to order by multiple columns at the same time.
-</p>
-
 <div class="modal fade" id="classify_modal" tabindex="-1" aria-labelledby="classify_label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -66,51 +62,36 @@
     </div>
 </div>
 
-
 <table id="data" class="table table-striped">
     <thead>
-        <tr>
-            <th>Key</th>
-            <th>Action</th>
-            <th>Manual Label</th>
-            <th>Summary/Description</th>
-            {% for m_id in headers %}
-                {% for h in headers[m_id] %}
-                <th>{{id_to_name[m_id]}}: {{h.title()}}</th>
-                <th>{{id_to_name[m_id]}}: {{h.title()}}</th>
-                {% endfor %}
-            {% endfor %}
-        </tr>
+        <th>Key</th>
+        <th>Classify</th>
+        <th>Manual Label</th>
+        <th>Summary/Desc</th>
+        {% for m_id in headers %}{% for h in headers[m_id] %}
+        <th>{{id_to_name[m_id]}}: {{h.title()}}</th>
+        <th>{{id_to_name[m_id]}}: {{h.title()}}</th>
+        {% endfor %}{% endfor %}
     </thead>
     <tbody>
-        {% for id in issue_data %}
-        <tr>
-            <td><a href="{{issue_data[id]['link']}}" target="_blank">{{issue_data[id]['key']}}</a></td>
-            <td>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classify_modal" onclick="classifyModal('{{id}}')">Classify</button>
-
-            </td>
-            <td id="{{id}}_manual_label">{{ manual[id] if id in manual else "" }}</td>
-            <td>
-                <a tabindex="0" class="btn btn-secondary" role="button" data-bs-toggle="popover" title="{{issue_data[id]['summary']}}" data-bs-content="{{issue_data[id]['description'] if issue_data[id]['description'] else 'Empty'}}" data-bs-trigger="focus">
-                    Read Issue
-                </a>
-            </td>
-
-            {% for m_id in headers %}
-                {% for h in headers[m_id] %}
-                    <td>{{predictions[id][m_id][h]['confidence'] if m_id in predictions[id] else ''}}</td>
-                    <td>{{predictions[id][m_id][h]['prediction'] if m_id in predictions[id] else ''}}</td>
-                {% endfor %}
-            {% endfor %}
-        </tr>
-        {% endfor %}
+    {% for issue in issue_data %}
+    <tr>
+        <td><a href="{{issue['issue_link']}}" id="{{issue['issue_id']}}_key">{{issue['issue_key']}}</a></td>
+        <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classify_modal" onclick="classifyModal(`{{issue['issue_id']}}`)">Classify</button></td>
+        <td id="{{issue['issue_id']}}_manual_label">{{manual[issue['issue_id']] if issue['issue_id'] in manual else ''}}</td>
+        <td><a tabindex="0" class="btn btn-secondary" role="button" data-bs-toggle="popover" title="{{issue['summary']}}" data-bs-content="{{issue['description']}}" data-bs-trigger="focus">Read Issue</a></td>
+        {% for m_id in headers %}{% for h in headers[m_id] %}
+        <td>{{issue['predictions'][m_id][h]['confidence'] if m_id in issue['predictions'] else ''}}</td>
+        <td>{{issue['predictions'][m_id][h]['prediction'] if m_id in issue['predictions'] else ''}}</td>
+        {% endfor %}{% endfor %}
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
-{% endblock%}
+{% endblock %}
 
 {% block scripts %}
-{{super()}}
+{{ super() }}
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
@@ -121,9 +102,8 @@ $(document).ready(function() {
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl)
     })
-    $('#data').DataTable()
 })
-
+    
 function setCommentsFor(issue) {
     comments_div = document.getElementById('classify_comments')
     result = ""
@@ -229,7 +209,7 @@ current_modal_issue_id = null
 function classifyModal(id) {
     current_modal_issue_id = id
     header = document.getElementById('classify_label')
-    key = {{issue_data|tojson|safe}}[id]['key']
+    key = document.getElementById(`${id}_key`).innerHTML
     header.innerHTML = `Classify Issue ${key}`
 
     classify_btn = document.getElementById('classify_issue_btn')
