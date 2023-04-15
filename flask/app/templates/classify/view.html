@@ -64,6 +64,14 @@
 </div>
 
 <div>
+    <div>
+        Amount of items on a page:
+        <input type="number" id="page_size_input" min="1" value="{{pageLimit}}"/>
+        <button type="button" class="btn btn-secondary" onclick="changePageSize()">Go</button>
+    </div>
+
+    <br />
+
     <nav aria-label="Pagination Navigation">
         <ul class="pagination" id="pagination_ul"></ul>
     </nav>
@@ -188,6 +196,16 @@ function sortModel(model_version_id) {
     }
     
     location.replace(`/classify/view/{{query}}/{{thisPage}}?page_limit={{pageLimit}}&sort=${model_version_id}&sort_asc=${sort_asc}`)
+}
+
+function changePageSize() {
+    sort = '{{sort if sort else null}}'
+    sort_asc = '{{sort_asc}}'
+    new_size = document.getElementById('page_size_input').value
+    url = `/classify/view/{{query}}/1?page_limit=${new_size}`
+    if (sort !== '') url += `&sort=${sort}`
+    url += '&sort_asc=' + sort_asc.toLowerCase()
+    location.replace(url)
 }
     
 function setCommentsFor(issue) {
