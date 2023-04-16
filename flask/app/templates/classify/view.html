@@ -91,6 +91,7 @@
 
 <table id="data" class="table table-striped">
     <thead>
+        <th>Row</th>
         <th>Key</th>
         <th>Classify</th>
         <th>Manual Label</th>
@@ -104,6 +105,7 @@
     <tbody>
     {% for issue in issue_data %}
     <tr>
+        <td>{{issue_text[issue['issue_id']]['row']}}</td>
         <td><a href="{{issue['issue_link']}}" target="_blank" id="{{issue['issue_id']}}_key">{{issue['issue_key']}}</a></td>
         <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classify_modal" onclick="classifyModal(`{{issue['issue_id']}}`)">Classify</button></td>
         <td id="{{issue['issue_id']}}_manual_label">{{manual[issue['issue_id']] if issue['issue_id'] in manual else ''}}</td>
@@ -126,6 +128,7 @@
         <td>{{issue['predictions'][m_id][h]['prediction'] if m_id in issue['predictions'] else ''}}</td>
         {% endfor %}{% endfor %}
     </tr>
+    
     {% endfor %}
     </tbody>
 </table>
