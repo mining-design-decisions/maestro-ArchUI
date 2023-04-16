@@ -107,7 +107,7 @@
         <td><a href="{{issue['issue_link']}}" target="_blank" id="{{issue['issue_id']}}_key">{{issue['issue_key']}}</a></td>
         <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classify_modal" onclick="classifyModal(`{{issue['issue_id']}}`)">Classify</button></td>
         <td id="{{issue['issue_id']}}_manual_label">{{manual[issue['issue_id']] if issue['issue_id'] in manual else ''}}</td>
-        <td><a tabindex="0" class="btn btn-secondary" role="button" data-bs-toggle="popover" title="{{issue['summary']}}" data-bs-content="{{issue['description']}}" data-bs-trigger="focus">Read Issue</a></td>
+        <td><a tabindex="0" class="btn btn-secondary" role="button" data-bs-toggle="popover" title="{{issue_text[issue['issue_id']]['summary']}}" data-bs-html="true" data-bs-content="{{issue_text[issue['issue_id']]['description']}}" data-bs-trigger="focus">Read Issue</a></td>
         <td>
             <table class="table table-light" id="{{issue['issue_id']}}_tags">
                 <tbody>
@@ -162,7 +162,12 @@ $(document).ready(function() {
     // popovers
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
+        try {
+            return new bootstrap.Popover(popoverTriggerEl)
+        }
+        catch {
+            console.log('error popover')
+        }
     })
 
     // pagination
