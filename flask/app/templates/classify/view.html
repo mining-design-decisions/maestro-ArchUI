@@ -89,6 +89,7 @@
         <th>Classify</th>
         <th>Manual Label</th>
         <th>Summary/Desc</th>
+        <th>Tags</th>
         {% for m_id in headers %}{% for h in headers[m_id] %}
         <th><button class="btn bi {{'bi-diamond' if (sort != 'predictions.'+m_id+'.'+h+'.confidence') else ('bi-caret-up-fill' if sort_asc else 'bi-caret-down-fill')}}" onclick="sortModel('predictions.{{m_id}}.{{h}}.confidence')"></button>{{id_to_name[m_id]}}: {{h.title()}}</th>
         <th>{{id_to_name[m_id]}}: {{h.title()}}</th>
@@ -101,6 +102,20 @@
         <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classify_modal" onclick="classifyModal(`{{issue['issue_id']}}`)">Classify</button></td>
         <td id="{{issue['issue_id']}}_manual_label">{{manual[issue['issue_id']] if issue['issue_id'] in manual else ''}}</td>
         <td><a tabindex="0" class="btn btn-secondary" role="button" data-bs-toggle="popover" title="{{issue['summary']}}" data-bs-content="{{issue['description']}}" data-bs-trigger="focus">Read Issue</a></td>
+        <td>
+            <table class="table-primary">
+                <tbody>
+                    
+            {% for tag in issue['tags'] %}{% if tag in man_tags %}
+            <tr>
+                <td><button type="button" class="btn text-start m-0 p-0" data-bs-toggle="tooltip" title="{{man_tags[tag]}}">{{tag}}</button></td>
+                <td><button class="btn btn-danger">Remove</button></td>
+            </tr>
+            {% endif %}{% endfor %}
+            <tr><td><button class="btn btn-primary">Add New...</button></td><td></td></tr>
+                </tbody>
+            </table>
+        </td>
         {% for m_id in headers %}{% for h in headers[m_id] %}
         <td>{{issue['predictions'][m_id][h]['confidence'] if m_id in issue['predictions'] else ''}}</td>
         <td>{{issue['predictions'][m_id][h]['prediction'] if m_id in issue['predictions'] else ''}}</td>
@@ -144,6 +159,13 @@ $(document).ready(function() {
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl)
     })
+
+    // tag tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
 
     // pagination
     pag_el = document.getElementById('pagination_ul')

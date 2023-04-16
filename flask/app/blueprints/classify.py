@@ -20,6 +20,7 @@ def view(query, page):
     sort_asc = request.args.get('sort_asc', default='true')
     sort_asc = sort_asc == 'true'
     issue_data, manual, headers, totalPages, models = dbapi.get_paginated_data(query, page, pageLimit, sort, sort_asc)
+    man_tags = dbapi.get_manual_tags()
 
     model_id_names = dbapi.get_model_ids_names()
     model_name_dic = {}
@@ -31,7 +32,7 @@ def view(query, page):
 
     thisuser = dbapi.get_username()
 
-    return render_template('classify/view.html', issue_data=issue_data, manual=manual, headers=headers, id_to_name=id_to_name, thisuser=thisuser, totalPages=totalPages, pageLimit=pageLimit, thisPage=int(page), query=query, sort=sort, sort_asc=sort_asc)
+    return render_template('classify/view.html', issue_data=issue_data, manual=manual, headers=headers, id_to_name=id_to_name, thisuser=thisuser, totalPages=totalPages, pageLimit=pageLimit, thisPage=int(page), query=query, sort=sort, sort_asc=sort_asc, man_tags=man_tags)
     
 
 @bp.route('/create', methods=["GET"])

@@ -412,3 +412,11 @@ def delete_comment(issue, comment_id):
 @auth_req
 def edit_comment(issue, comment_id, json):
     return requests.patch(f"{get_db()}/manual-labels/{issue}/comments/{comment_id}", verify=False, headers=_auth_header(), json=json)
+
+def get_manual_tags():
+    tags = requests.get(f"{get_db()}/tags").json()['tags']
+    result = {}
+    for tag in tags:
+        if tag['type'] != 'project' and tag['name'] != 'has-label':
+            result[tag['name']] = tag['description']
+    return result
