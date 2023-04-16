@@ -32,7 +32,11 @@ def view(query, page):
 
     thisuser = dbapi.get_username()
 
-    return render_template('classify/view.html', issue_data=issue_data, manual=manual, headers=headers, id_to_name=id_to_name, thisuser=thisuser, totalPages=totalPages, pageLimit=pageLimit, thisPage=int(page), query=query, sort=sort, sort_asc=sort_asc, man_tags=man_tags)
+    issue_text = {}
+    for issue in issue_data:
+        issue_text[issue['issue_id']] = {'summary': issue['summary'], 'description': issue['description']}
+
+    return render_template('classify/view.html', issue_data=issue_data, manual=manual, headers=headers, id_to_name=id_to_name, thisuser=thisuser, totalPages=totalPages, pageLimit=pageLimit, thisPage=int(page), query=query, sort=sort, sort_asc=sort_asc, man_tags=man_tags, issue_text=issue_text)
     
 
 @bp.route('/create', methods=["GET"])

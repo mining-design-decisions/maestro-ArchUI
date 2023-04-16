@@ -18,6 +18,12 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-body">
+                        <p><b id="classify_modal_summary"></b></p>
+                <p id="classify_modal_description"></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <h4>Set Issue Manual Label</h4>
                         <div class="form-group">
                             <input name="nonarch" id="nonarch" type="checkbox" checked="checked" onchange="classificationChanged()">
@@ -337,6 +343,12 @@ function classifyModal(id) {
 
     newcomment_btn = document.getElementById('classify_addcomment')
     newcomment_btn.setAttribute('onclick', `addComment("${id}")`)
+
+    summary = document.getElementById('classify_modal_summary')
+    issue_data = {{issue_text|tojson|safe}}
+    summary.innerHTML = issue_data[id]['summary']
+    description = document.getElementById('classify_modal_description')
+    description.innerHTML = issue_data[id]['description']
     
     setCommentsFor(id)
 
