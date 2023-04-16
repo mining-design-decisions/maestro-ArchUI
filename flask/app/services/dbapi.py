@@ -447,4 +447,4 @@ def get_tags_for(issue):
 
 @auth_req
 def add_tag_to(issue, tag):
-    return requests.get(f"{get_db()}/issues/{issue}/tags", verify=False, headers=_auth_header(), json={"tag": tag})
+    return requests.post(f"{get_db()}/issues/{issue}/tags", verify=False, headers=_auth_header(), json={"tag": tag})
