@@ -413,6 +413,8 @@ def delete_comment(issue, comment_id):
 def edit_comment(issue, comment_id, json):
     return requests.patch(f"{get_db()}/manual-labels/{issue}/comments/{comment_id}", verify=False, headers=_auth_header(), json=json)
 
+# tags
+
 def get_manual_tags():
     tags = requests.get(f"{get_db()}/tags").json()['tags']
     result = {}
@@ -420,3 +422,18 @@ def get_manual_tags():
         if tag['type'] != 'project' and tag['name'] != 'has-label':
             result[tag['name']] = tag['description']
     return result
+
+def create_tag(name, desc):
+    x = requests.post(f"{get_db()}/tags", verify=False, headers=_auth_header(), json={
+        "tag": name,
+        "description": desc
+    })
+
+    if x.status_code != 200:
+        print(f"ERROR occurred in creating new tag. code: {x.status_code}")
+        print(x.json())
+        print('\n')
+
+@auth_req
+def delete_tag(tag):
+    return requests.delete(f"{get_db()}/tags/{tag}", verify=False, headers=_auth_header())

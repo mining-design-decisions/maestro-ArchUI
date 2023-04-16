@@ -32,7 +32,7 @@ def create_app(test_config=None):
 
     app.debug = True
 
-    from .blueprints import models, predict, classify, statistics, login, manual, help
+    from .blueprints import models, predict, classify, statistics, login, manual, help, tags
 
     app.register_blueprint(models.bp)
     app.register_blueprint(predict.bp)
@@ -41,6 +41,7 @@ def create_app(test_config=None):
     app.register_blueprint(login.bp)
     app.register_blueprint(manual.bp)
     app.register_blueprint(help.bp)
+    app.register_blueprint(tags.bp)
 
     @app.route("/hello")
     def hello():
