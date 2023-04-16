@@ -34,3 +34,15 @@ def delete_comment(issue, comment_id):
 def edit_comment(issue, comment_id):
     json = request.json
     return dbapi.edit_comment(issue, comment_id, json)
+
+@bp.route('/tags/<issue>/<tag>', methods=["DELETE"])
+def remove_tag(issue, tag):
+    return dbapi.remove_tag(issue, tag)
+
+@bp.route('/tags/<issue>/<tag>', methods=["POST"])
+def add_tag(issue, tag):
+    return dbapi.add_tag_to(issue, tag)
+
+@bp.route('/tags/<issue>', methods=["GET"])
+def get_tags_for(issue):
+    return dbapi.get_tags_for(issue)
