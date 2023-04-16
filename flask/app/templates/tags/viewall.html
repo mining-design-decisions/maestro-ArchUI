@@ -35,7 +35,7 @@
 {{ super() }}
 <script>
 function deleteTag(tag) {
-    fetch(`tags/delete/${tag}`, {method: "DELETE"})
+    fetch(`/tags/delete/${tag}`, {method: "DELETE"})
     .then(e => {
         if (e.status != 200) {
             alertDbError(e)
