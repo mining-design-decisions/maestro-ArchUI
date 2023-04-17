@@ -20,12 +20,21 @@
                     <p>From this page, the button "Create New Model" allows you to create a new model configuration. Hover over the input fields/dropdowns/checkboxes to see a tooltip. <em>Note that your choice of classifier will impact which input modes are available to use! First choose a classifier, then an input mode.</em> Once you are done, click the "Save Configuration" button at the bottom to save the configuration. This will create the config and redirect you to the view page for your new config. There, you can see all available model configs, and select one for more detailed action.</p>
 
                     <p>Available actions on model configurations are currently to <b>train the model</b> and to <b>edit the configuration</b>. Training a model uses the CLI's `run` command, saving the trained model files in the database to be used for prediction later on. While editing the configuration, you can change any of the previously entered options, except for the model config's name.</p>
-                    
-                    <h4>Statistics</h4>
-                    <p>The contents of this page will be the subject of the author's bachelor project.</p>
+                </div>
+                <div class="mx-2">
+                    <h4>Login</h4>
+                    <p>In the Login view, you can log in with your username and password, which is required to have to change any data (you can read data without being logged in with a valid account). You can also set the database and pipeline URLs, that the UI will send its data requests to. It is worth noting that you are essentially logging in to the database, so if you change the database URL, you will need to log in again.</p>
+                </div>
+                <div class="mx-2">
+                    <h4>Tags</h4>
+                    <p>Tags are applied to issues and are used in queries to group issues which all have a certain (set of) tags together, for easier classification. In the tags overview, you can add and delete tags. Edit functionality is coming soon. In the query view, per issue, you can add tags to or remove tags from individual issues. Tags have a title and a description. In the query view, hover over the tag name to see the description in a tooltip.</p>
                 </div>
             </div>
             <div class="col-sm">
+                <div class="mx-2">
+                    <h4>Predicting with Models</h4>
+                    <p>In the "Predict With ML Models" tab, you will see options to select any number of models, and select the project(s) they will be run on. Running these models means that they will be used to predict the design decision content of all issues in the target project(s). In this prediction form, you also have the option to create a <b>"query"</b> for this prediction. A query allows you to select and group issues and machine predictions into a view, so that not all data is displayed at once, and you can focus on what you're interested in.</p>
+                </div>
                 <div class="mx-2">
                     <h4>Classify Issues</h4>
                     <p>In the "Classify Issues" page accessible from the site's navbar, you will find a list of available queries, as described above, and the option to create a new one. Clicking on any available query will lead you to the data table view of all issues and predictions as described by the query.</p>
@@ -36,19 +45,9 @@
 
                     <p>You can sort the table view by (shift-)clicking the arrows next to the column headers. Also note the search bar and pagination at the bottom.</p>
                 </div>
-            </div>
-        </div>
-        <div class="row my-3">
-            <div class="col-sm">
                 <div class="mx-2">
-                    <h4>Predicting with Models</h4>
-                    <p>In the "Predict With ML Models" tab, you will see options to select any number of models, and select the project(s) they will be run on. Running these models means that they will be used to predict the design decision content of all issues in the target project(s). In this prediction form, you also have the option to create a <b>"query"</b> for this prediction. A query allows you to select and group issues and machine predictions into a view, so that not all data is displayed at once, and you can focus on what you're interested in.</p>
-                </div>
-            </div>
-            <div class="col-sm">
-                <div class="mx-2">
-                    <h4>Login</h4>
-                    <p>In the Login view, you can log in with your username and password, which is required to have to change any data (you can read data without being logged in with a valid account). You can also set the database and pipeline URLs, that the UI will send its data requests to. It is worth noting that you are essentially logging in to the database, so if you change the database URL, you will need to log in again.</p>
+                    <h4>Statistics</h4>
+                    <p>The contents of this page will be the subject of the author's bachelor project.</p>
                 </div>
             </div>
         </div>
