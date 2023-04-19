@@ -419,7 +419,7 @@ def get_manual_tags():
     tags = requests.get(f"{get_db()}/tags").json()['tags']
     result = {}
     for tag in tags:
-        if tag['type'] != 'project' and tag['name'] != 'has-label':
+        if tag['type'] != 'project' and tag['name'] not in ['has-label', 'needs-review']:
             result[tag['name']] = tag['description']
     return result
 
