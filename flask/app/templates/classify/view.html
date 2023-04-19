@@ -89,7 +89,7 @@
     </div>
 </div>
 
-<table id="data" class="table table-striped">
+<table id="data" class="table table-striped table-hover">
     <thead>
         <th>Row</th>
         <th>Key</th>
@@ -210,6 +210,14 @@ $(document).ready(function() {
     }
     
     pag_el.innerHTML = new_html
+
+    
+})
+
+// table
+$('#data').on('click', 'tbody tr', function(event) {
+    console.log('a')
+    $(this).addClass('table-active').siblings().removeClass('table-active');
 })
 
 function sortModel(model_version_id) {
