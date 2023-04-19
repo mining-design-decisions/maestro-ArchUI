@@ -145,9 +145,9 @@ function getPageLink(i, pageLimit, title, disabled=false) {
     if (i != null) {
         link = `/classify/view/{{query}}/${i}?page_limit=${pageLimit}`
         sort = '{{sort if sort else null}}'
-        sort_asc = '{{sort_asc if sort_asc else null}}'
+        sort_asc = '{{sort_asc if sort_asc else "false" }}'
         if (sort !== '') link += `&sort=${sort}`
-        if (sort_asc !== '') link += `&sort_asc=${sort}`
+        if (sort_asc !== '') link += `&sort_asc=${sort_asc.toLowerCase()}`
 
         return `<li class="page-item ${(i == {{thisPage}})? 'active' : (disabled? 'disabled' : '')}"><a class="page-link" href="${link}">${title}</a></li>`
     }
