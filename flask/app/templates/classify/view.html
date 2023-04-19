@@ -31,17 +31,17 @@
                         </div>
 
                         <div class="form-group">
-                            <input name="existence" id="existence" type="checkbox" disabled="disabled" onchange="classificationChanged()">
+                            <input name="existence" id="existence" type="checkbox" onchange="classificationChanged()">
                             <label for="existence" class="col-form-label">Existence</label>
                         </div>
     
                         <div class="form-group">
-                            <input name="executive" id="executive" type="checkbox" disabled="disabled" onchange="classificationChanged()">
+                            <input name="executive" id="executive" type="checkbox" onchange="classificationChanged()">
                             <label for="executive" class="col-form-label">Executive</label>
                         </div>
     
                         <div class="form-group">
-                            <input name="property" id="property" type="checkbox" disabled="disabled" onchange="classificationChanged()">
+                            <input name="property" id="property" type="checkbox" onchange="classificationChanged()">
                             <label for="property" class="col-form-label">Property</label>
                         </div>
     
@@ -321,26 +321,13 @@ function cancelCommentEdit() {
 }
 
 function classificationChanged() {
-    nonarch_checked = document.getElementById('nonarch').checked
-
+    nonarch = document.getElementById('nonarch')
     existence = document.getElementById('existence')
     property = document.getElementById('property')
     executive = document.getElementById('executive')
-    if (nonarch_checked) {
-        // disable the others
-        existence.setAttribute('disabled','disabled')
-        executive.setAttribute('disabled','disabled')
-        property.setAttribute('disabled','disabled')
 
-        existence.checked = false
-        executive.checked = false
-        property.checked = false
-    }
-    else {
-        // enable the others
-        existence.removeAttribute('disabled')
-        executive.removeAttribute('disabled')
-        property.removeAttribute('disabled')
+    if (existence.checked || property.checked || executive.checked) {
+        nonarch.checked = false
     }
 }
 
@@ -401,12 +388,9 @@ function classifyModal(id) {
     nonarch.checked = (labels.length == 0 || labels[0] == 'Non-Arch.')
     classificationChanged()
     
-    existence = document.getElementById('existence')
-    property = document.getElementById('property')
-    executive = document.getElementById('executive')
-    existence.checked = false
-    property.checked = false
-    executive.checked = false
+    document.getElementById('existence').checked = false
+    document.getElementById('property').checked = false
+    document.getElementById('executive').checked = false
     labels.forEach(label => {
         if (label && label !== "Non-Arch.") {
             document.getElementById(label.toLowerCase()).checked = true
