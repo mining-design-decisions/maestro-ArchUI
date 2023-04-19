@@ -1,3 +1,7 @@
+{% macro columnhider(title, index) %}
+<button onclick="hideColumn({{index}})" type="button" class="btn btn-outline-primary">{{title}}</button>
+{% endmacro %}
+
 {% extends 'base.html' %}
 
 {% block subtitle %}View Query{% endblock %}
@@ -88,6 +92,29 @@
 
     <div>
         <a href="/classify/view/{{query}}/{{thisPage}}?page_limit={{pageLimit}}" class="btn btn-primary">Clear Sort</a>
+    </div>
+
+    <br />
+
+    <div>
+        <h5>Hide Columns</h5>
+        <div class="btn-group">
+            {{ columnhider('Row', 1) }}
+            {{ columnhider('Key', 2) }}
+            {{ columnhider('Classify', 3) }}
+            {{ columnhider('Manual Label', 4) }}
+            {{ columnhider('Summary/Desc', 5) }}
+            {{ columnhider('Tags', 6) }}
+
+            {% set count = namespace(value=6) %}
+
+            {% for m_id in headers %}{% for h in headers[m_id] %}
+            {% set count.value = count.value + 1 %}
+            {{ columnhider(id_to_name[m_id] + ": " + h.title() + "-confidence", count.value) }}
+            {% set count.value = count.value + 1 %}
+            {{ columnhider(id_to_name[m_id] + ": " + h.title() + "-prediction", count.value) }}
+            {% endfor %}{% endfor %}
+        </div>
     </div>
 </div>
 
@@ -621,6 +648,18 @@ function alertDbError(response) {
     })
     .catch(e => {
         alert(str)
+    })
+}
+
+function hideColumn(index) {
+    str =`thead th:nth-child(${index})`
+
+    $(str).each(function(index) {
+        $(this).toggleClass('d-none')
+    })
+    str = `tr td:nth-child(${index})`
+    $(str).each(function(index) {
+        $(this).toggleClass('d-none')
     })
 }
 </script>
