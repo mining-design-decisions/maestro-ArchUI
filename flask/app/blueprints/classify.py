@@ -13,6 +13,9 @@ def viewall():
     query_names = dbapi.get_query_names()
     return render_template("classify/viewall.html", queries=query_names)
 
+def fixtext_html(str):
+    return str.strip().replace('<', '&lt;').replace('>', '&gt;').replace('\n', '<br />')
+
 @bp.route('/view/<query>/<page>', methods=["GET"])
 def view(query, page):
     pageLimit = request.args.get('page_limit', default=10, type=int)
@@ -36,8 +39,8 @@ def view(query, page):
     row = 1
     for issue in issue_data:
         issue_text[issue['issue_id']] = {
-            'summary': issue['summary'].strip().replace('\n', '<br />') if 'summary' in issue and issue['summary'] else 'None', 
-            'description': issue['description'].strip().replace('\n', '<br />') if 'description' in issue and issue['description'] else 'None',
+            'summary': fixtext_html(issue['summary']) if 'summary' in issue and issue['summary'] else 'None', 
+            'description': fixtext_html(issue['description']) if 'description' in issue and issue['description'] else 'None',
             'row': (int(page) - 1) * pageLimit + row
             }
         row+=1

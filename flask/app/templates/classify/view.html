@@ -9,7 +9,7 @@
 
 {% block margin_content %}
 <div class="modal fade" id="classify_modal" tabindex="-1" aria-labelledby="classify_label" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="classify_label">Classify Issue</h5>
@@ -17,9 +17,11 @@
             </div>
             <div class="modal-body">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body flex">
                         <p><b id="classify_modal_summary"></b></p>
-                <p id="classify_modal_description"></p>
+                        <div class="overflow-auto" style="max-height:400px;">
+                            <p id="classify_modal_description"></p>
+                        </div>
                     </div>
                 </div>
                 <div class="card">
@@ -216,7 +218,6 @@ $(document).ready(function() {
 
 // table
 $('#data').on('click', 'tbody tr', function(event) {
-    console.log('a')
     $(this).addClass('table-active').siblings().removeClass('table-active');
 })
 
@@ -550,7 +551,6 @@ function addComment(issue) {
 }
 
 function removeTag(tag, issue_id) {
-    console.log(`Removing tag ${tag} from issue ${issue_id}`)
     fetch(`/manual/tags/${issue_id}/${tag}`, {method:"DELETE"})
     .then(e => {
         if (e.status == 200) {
