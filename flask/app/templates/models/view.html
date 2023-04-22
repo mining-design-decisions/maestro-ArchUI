@@ -90,6 +90,14 @@
     {% if last_trained != 'Never' %}
     <p class="my-2">Performance (version {{version_count}}): {{performance}}</p>
     {% endif %}
+    {% if class_prec %}
+        <p class="my-2">Class Precision:</p>
+        <ul>
+        {% for label in class_prec %}
+            <li>{{label}}: {{class_prec[label][0]}}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 </div>
 <div>
     <h3>Actions</h3>
