@@ -10,8 +10,11 @@ bp = Blueprint('classify', __name__, url_prefix="/classify")
 
 @bp.route('/', methods=["GET"])
 def viewall():
+    failed_models = dbapi.get_cache('failed_models', [])
+    dbapi.set_cache('failed_models', [])
+    print(failed_models)
     query_names = dbapi.get_query_names()
-    return render_template("classify/viewall.html", queries=query_names)
+    return render_template("classify/viewall.html", queries=query_names, failed_models=failed_models)
 
 def fixtext_html(str):
     return str.strip().replace('<', '&lt;').replace('>', '&gt;').replace('\n', '<br />')
@@ -67,7 +70,9 @@ def create():
         data_q = request.form.get("target_tag_query")
         
     q_name = request.form.get('query_name')
-    dbapi.create_query(models, data_q, q_name)
+    failed_models = dbapi.create_query(models, data_q, q_name)
+    print(failed_models)
+    dbapi.set_cache('failed_models', failed_models)
     return redirect(url_for('classify.viewall'))
 
 @bp.route('/label/<issue>')

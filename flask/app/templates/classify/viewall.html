@@ -21,6 +21,10 @@
 {% block scripts %}
 {{super()}}
 <script>
-
+{% if failed_models %}
+    {% for model in failed_models %}
+    alert(`Error: failed to create query with model {{model}} because no model versions were found. Model has been left out of query.`)
+    {% endfor %}
+{% endif %}
 </script>
 {% endblock%}

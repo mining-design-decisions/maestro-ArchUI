@@ -14,6 +14,11 @@ def get_cli():
 def set_cli(new_url):
     session["cli_url"] = new_url
 
+def set_cache(name, value):
+    session[name] = value
+def get_cache(name, default):
+    return session.get(name, default)
+
 # todo what's with the verify=false that's required?
 def _auth_header():
     return {"Authorization": f"bearer {session['token']}"}
@@ -166,20 +171,24 @@ def _query_dir():
 
 def create_query(models, data_query, name):
     modelversions = {}
+    failed_models = []
     for model in models:
-        modelVersions = requests.get(f"{get_db()}/models/{model}/versions", verify=False).json()["versions"]
-        latest = modelVersions[0]
-        for i in range(1, len(modelVersions)):
-            if modelVersions[i]['time'] > latest['time']:
-                latest = modelVersions[i]
-        modelversions[model] = latest["version_id"]
-    
+        modelVersions_raw = requests.get(f"{get_db()}/models/{model}/versions", verify=False).json()["versions"]
+        if len(modelVersions_raw) > 0:
+            latest = modelVersions_raw[0]
+            for i in range(1, len(modelVersions_raw)):
+                if modelVersions_raw[i]['time'] > latest['time']:
+                    latest = modelVersions_raw[i]
+            modelversions[model] = latest["version_id"]
+        else:
+            failed_models.append(model)
     _query_dir()
     with open(f'app/data/queries/{name}.json', 'w') as f:
         json.dump({
             "models": modelversions,
             "query": data_query
         }, f)
+    return failed_models
 
 def get_query_names():
     from os import walk
@@ -289,7 +298,7 @@ def edit_comment(issue, comment_id, json):
 # tags
 
 def get_manual_tags():
-    tags = requests.get(f"{get_db()}/tags").json()['tags']
+    tags = requests.get(f"{get_db()}/tags", verify=False).json()['tags']
     result = {}
     for tag in tags:
         if tag['type'] != 'project' and tag['name'] not in ['has-label', 'needs-review']:

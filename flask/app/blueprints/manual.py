@@ -46,3 +46,8 @@ def add_tag(issue, tag):
 @bp.route('/tags/<issue>', methods=["GET"])
 def get_tags_for(issue):
     return dbapi.get_tags_for(issue)
+
+@bp.route('/url/live_updates', methods=['GET'])
+def get_live_updates():
+    url = dbapi.get_db()
+    return f"wss{url[url.find('://'):]}/ws"
