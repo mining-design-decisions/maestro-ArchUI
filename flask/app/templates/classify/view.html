@@ -174,6 +174,10 @@
 thisPage = {{thisPage}};
 total = {{totalPages}};
 pageLimit = {{pageLimit}};
+query = '{{query}}'
+tooltips = {{man_tags|tojson|safe}};
+g_sort = '{{sort if sort else null}}'
+g_sort_asc = '{{sort_asc if sort_asc else "false" }}'
 
 $(document).ready(function() {
     // popovers
@@ -189,7 +193,46 @@ $(document).ready(function() {
 
     // pagination
     pag_el = document.getElementById('pagination_ul')
-    pag_el.innerHTML = getPaginationHtml(thisPage, pageLimit, total)
+    pag_el.innerHTML = getPaginationHtml(thisPage, pageLimit, total, query, g_sort, g_sort_asc)
+
+    // websocket for live updates
+    websocket = new WebSocket("{{websocket}}")
+    this_issue_ids = Object.keys({{issue_text|tojson|safe}})
+    websocket.onmessage = function(event) {
+        data = JSON.parse(event.data)
+
+        if (this_issue_ids.includes(data.issue_id)) {
+            if (data.hasOwnProperty('manual_label')) {
+                // update label
+                labels = data.manual_label
+                curr_label = document.getElementById(`${data.issue_id}_manual_label`)
+                curr_label.innerHTML = getNewManualLabel(labels.existence, labels.executive, labels.property, curr_label.innerHTML)
+            }
+            else if (data.hasOwnProperty('tags')) {
+                // tags list
+                updateTagsFor(data.issue_id)
+
+                // manual label text for in review
+                inreviewstr = " (In Review)"
+                curr_label = document.getElementById(`${data.issue_id}_manual_label`)
+                if (data.tags.includes('needs-review') && !curr_label.innerHTML.endsWith(inreviewstr)) {
+                    curr_label.innerHTML += inreviewstr
+                }
+                else if (!data.tags.includes('needs-review') && curr_label.innerHTML.endsWith(inreviewstr)) {
+                    curr_label.innerHTML = curr_label.innerHTML.slice(0, curr_label.innerHTML.length - inreviewstr.length)
+                }
+
+                // colour
+                document.getElementById(`${data.issue_id}_row`).setAttribute('class',  data.tags.includes('needs-review')? 'table-warning' : '')
+            }
+            else if (data.hasOwnProperty('comments')) {
+                // only need to worry about this if this is the active one
+                if (current_modal_issue_id === data.issue_id) {
+                    setCommentsFor(data.issue_id)
+                }
+            }
+        }
+    }
 })
 
 // table
@@ -377,27 +420,8 @@ function classifyIssue(issue) {
     .then(e => {
         if (e.status == 200) {
             // update labels in the table
-            inreviewstr = ' (In Review)'
             curr_label = document.getElementById(`${issue}_manual_label`)
-            newlabel = "Non-Arch."
-            if (existence || executive || property) {
-                newlabel = []
-                if (existence) newlabel.push("Existence")
-                if (executive) newlabel.push("Executive")
-                if (property) newlabel.push("Property")
-                newlabel = newlabel.join(", ")
-            }
-            
-            if (curr_label.innerHTML === "") {
-                // just got classified to training
-                curr_label.innerHTML = newlabel
-            } else if (curr_label.innerHTML.endsWith(inreviewstr)) {
-                // in review - keep inreviewstr
-                curr_label.innerHTML = newlabel + inreviewstr
-            } else {
-                // in training, no inreviewstr
-                curr_label.innerHTML = newlabel
-            }
+            curr_label.innerHTML = getNewManualLabel(existence, executive, property, curr_label.innerHTML)
 
             // update modal
             classifyModal(issue)
@@ -534,7 +558,6 @@ function updateTagsFor(issue_id) {
     .then(e=>{
         e.json().then(issueTags=>{
             tagTable = document.getElementById(`${issue_id}_tags`)
-            tooltips = {{man_tags|tojson|safe}};
 
             new_html = ``
             options = Object.keys(tooltips)

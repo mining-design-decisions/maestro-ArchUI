@@ -1,8 +1,6 @@
-function getPageLink(i, pageLimit, title, thisPage, disabled=false) {
+function getPageLink(i, pageLimit, title, thisPage, query, sort, sort_asc, disabled=false) {
     if (i != null) {
-        link = `/classify/view/{{query}}/${i}?page_limit=${pageLimit}`
-        sort = '{{sort if sort else null}}'
-        sort_asc = '{{sort_asc if sort_asc else "false" }}'
+        link = `/classify/view/${query}/${i}?page_limit=${pageLimit}`
         if (sort !== '') link += `&sort=${sort}`
         if (sort_asc !== '') link += `&sort_asc=${sort_asc.toLowerCase()}`
 
@@ -19,22 +17,22 @@ function min(a, b) {
     return a > b ? b : a
 }
 
-function getPaginationHtml(thisPage, pageLimit, total) {
+function getPaginationHtml(thisPage, pageLimit, total, query, sort, sort_asc) {
     new_html = ""
     if (total <= 10) {
         // just display all
-        new_html += getPageLink(thisPage-1, pageLimit, 'Previous', thisPage, thisPage == 1)
+        new_html += getPageLink(thisPage-1, pageLimit, 'Previous', thisPage, query, sort, sort_asc, thisPage == 1)
         for (i = 0; i < total; i++) {
-            new_html += getPageLink(i+1, pageLimit, i+1, thisPage)
+            new_html += getPageLink(i+1, pageLimit, i+1, thisPage, query, sort, sort_asc)
         }
-        new_html += getPageLink(thisPage+1, pageLimit, 'Next', thisPage, thisPage == total)
+        new_html += getPageLink(thisPage+1, pageLimit, 'Next', thisPage, query, sort, sort_asc, thisPage == total)
     }
     else {
         // max: 5 or so
         min_i = max(1, thisPage-2)
-        new_html += getPageLink(1, pageLimit, 'First', thisPage, min_i <= 1)
+        new_html += getPageLink(1, pageLimit, 'First', thisPage, query, sort, sort_asc, min_i <= 1)
 
-        new_html += getPageLink(thisPage-1, pageLimit, 'Previous', thisPage, thisPage == 1)
+        new_html += getPageLink(thisPage-1, pageLimit, 'Previous', thisPage, query, sort, sort_asc, thisPage == 1)
         
         max_i = min(thisPage+2, total)
         
@@ -42,12 +40,12 @@ function getPaginationHtml(thisPage, pageLimit, total) {
         if (max_i >= (total - 1)) min_i = max_i - 4
 
         for (i = min_i; i <= max_i; i++) {
-            new_html += getPageLink(i, pageLimit, i, thisPage)
+            new_html += getPageLink(i, pageLimit, i, thisPage, query, sort, sort_asc)
         }
         
-        new_html += getPageLink(thisPage+1, pageLimit, 'Next', thisPage, thisPage == total)
+        new_html += getPageLink(thisPage+1, pageLimit, 'Next', thisPage, query, sort, sort_asc, thisPage == total)
 
-        new_html += getPageLink(total, pageLimit, 'Last', thisPage, max >= (total-1))
+        new_html += getPageLink(total, pageLimit, 'Last', thisPage, query, sort, sort_asc, max >= (total-1))
     }
     return new_html
 }
@@ -91,4 +89,31 @@ function alertDbError(response) {
     .catch(e => {
         alert(str)
     })
+}
+
+function getNewManualLabel(existence, executive, property, current) {
+    inreviewstr = ' (In Review)'
+    newlabel = "Non-Arch."
+
+    if (existence || executive || property) {
+        newlabel = []
+        if (existence) newlabel.push("Existence")
+        if (executive) newlabel.push("Executive")
+        if (property) newlabel.push("Property")
+        newlabel = newlabel.join(", ")
+    }
+
+    result = ""
+    if (current === "") {
+        // just got classified to training
+        result = newlabel
+    } else if (current.endsWith(inreviewstr)) {
+        // in review - keep inreviewstr
+        result = newlabel + inreviewstr
+    } else {
+        // in training, no inreviewstr
+        result = newlabel
+    }
+
+    return result
 }

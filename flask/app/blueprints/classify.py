@@ -48,7 +48,10 @@ def view(query, page):
             }
         row+=1
 
-    return render_template('classify/view.html', issue_data=issue_data, manual=manual, headers=headers, id_to_name=id_to_name, thisuser=thisuser, totalPages=totalPages, pageLimit=pageLimit, thisPage=int(page), query=query, sort=sort, sort_asc=sort_asc, man_tags=man_tags, issue_text=issue_text)
+    url = dbapi.get_db()
+    websocket = f"wss{url[url.find('://'):]}/ws"
+
+    return render_template('classify/view.html', issue_data=issue_data, manual=manual, headers=headers, id_to_name=id_to_name, thisuser=thisuser, totalPages=totalPages, pageLimit=pageLimit, thisPage=int(page), query=query, sort=sort, sort_asc=sort_asc, man_tags=man_tags, issue_text=issue_text, websocket=websocket)
     
 
 @bp.route('/create', methods=["GET"])
