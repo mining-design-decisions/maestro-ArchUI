@@ -33,33 +33,7 @@ The above command will run the app. The `--app` parameter is not required, becau
 By default, the webserver is available at http://localhost:5000.
 
 ## Web Server Usage
-The homepage of the web application will display the same information as is available in this subsection.
-
-### ML Models
-In this application, the term 'model' can refer to two things: either the model configuration, which is used by the ML pipeline, or the trained model data files. In the "ML Models" page, accessible from the navbar at the top of the site, you can access and manage the currently available ML model configurations.
-
-From this page, the button "Create New Model" allows you to create a new model configuration. Hover over the input fields/dropdowns/checkboxes to see a tooltip. **Note that your choice of classifier will impact which input modes are available to use! First choose a classifier, then an input mode.** Once you are done, click the "Save Configuration" button at the bottom to save the configuration. This will create the config and redirect you to the view page for your new config. There, you can see all available model configs, and select one for more detailed action.
-
-Available actions on model configurations are currently to **train the model** and to **edit the configuration**. Training a model uses the CLI's `run` command, saving the trained model files in the database to be used for prediction later on. While editing the configuration, you can change any of the previously entered options, except for the model config's name.
-
-### Predicting with Models
-In the "Predict With ML Models" tab, you will see options to select any number of models, and select the project(s) they will be run on. Running these models means that they will be used to predict the design decision content of all issues in the target project(s). In this prediction form, you also have the option to create a **"query"** for this prediction. A query allows you to select and group issues and machine predictions into a view, so that not all data is displayed at once, and you can focus on what you're interested in.
-
-### Classify Issues
-
-In the "Classify Issues" page accessible from the site's navbar, you will find a list of available queries, as described above, and the option to create a new one. Clicking on any available query will lead you to the data table view of all issues and predictions as described by the query.
-
-The issue key in the first column doubles as a link to the issue online, automatically opening in a new window. Clicking the "Classify" button in the second column opens a model, allowing you to change the manual classification of an issue or mark it for review. Also in this modal, you can view and place comments on this issue's manual classification. The current manual label of the issue is displayed in the third column (empty for no manual label currently existing). The fourth column allows you to view the summary and description of the issue in a popover, without having to leave the UI. All other columns are machine predictions.
-
-If an issue is classified and not in review, it will be used in the training dataset for machine learning models. Changing an issue's classification or commenting on the manual label will add you as author to the manual label, so you can find back which issues you have already looked at. Clicking the "Mark for review" in the UI will flag the issue as needing review in the table view and take it out of the ML training set.
-
-You can sort the table view by (shift-)clicking the arrows next to the column headers. Also note the search bar and pagination at the bottom.
-
-### Statistics
-The contents of this page will be the subject of the author's bachelor project.
-
-### Login
-In the Login view, you can log in with your username and password, which is required to have to change any data (you can read data without being logged in with a valid account). You can also set the database and pipeline URLs, that the UI will send its data requests to. It is worth noting that you are essentially logging in to the database, so if you change the database URL, you will need to log in again.
+The homepage of the web application will display all necessary information to use the frontend. Please inform the developer or add information yourself if this is not sufficient.
 
 # Adapting or Extending this project
 The project will be designed to be easy to extend for developers new to the project. This section describes details about the project and various ways to improve and grow it. When making changes to how the project is interacted with by users and developers, please keep this readme up to date as well.
