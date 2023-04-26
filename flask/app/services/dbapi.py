@@ -122,9 +122,10 @@ def train_model(id):
 def get_model_performance(model_id):
     # todo error handling & reporting
     performances = requests.get(f"{get_db()}/models/{model_id}/performances", verify=False).json()["performances"]
-    latest_version = "Never"
+    latest_version = None
     latest_performance = None
     class_prec = None
+    fscore = None
     if len(performances) > 0:
         ids = [x['performance_id'] for x in performances]
         latest_version = ids[0]
@@ -138,7 +139,7 @@ def get_model_performance(model_id):
         if 'class-precision' in latest_performance:
             class_prec = latest_performance['class-precision']
 
-    return (len(performances), ObjectId(latest_version).generation_time, fscore, class_prec)
+    return (len(performances), ObjectId(latest_version).generation_time if latest_version else "Never", fscore, class_prec)
 
 def get_proj_query(projects):
     projects = [f"{{\"tags\": {{\"$eq\": \"{project}\"}} }}" for project in projects]

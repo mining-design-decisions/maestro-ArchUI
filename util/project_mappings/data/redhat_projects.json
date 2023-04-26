@@ -1,0 +1,1862 @@
+[
+    {
+        "name": "3scale",
+        "repo": "https://github.com/3scale",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "abrt",
+        "repo": "https://github.com/abrt",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Aeolus Project",
+        "repo": "https://github.com/aeolusproject",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "AeroGear",
+        "repo": "https://github.com/aerogear",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "aeshell",
+        "repo": "https://github.com/aeshell",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "anaconda",
+        "repo": "https://github.com/rhinstaller/anaconda",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Ansible",
+        "repo": "https://github.com/ansible",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache ActiveMQ",
+        "repo": "https://github.com/apache/activemq",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache ActiveMQ Artemis",
+        "repo": "https://github.com/apache/activemq-artemis",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache Camel",
+        "repo": "https://github.com/apache/camel",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Apache CXF",
+        "repo": "https://github.com/apache/cxf",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache DeltaSpike",
+        "repo": "https://github.com/apache/deltaspike",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Apache HTTP Server Project",
+        "repo": "https://github.com/apache/httpd",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache jUDDI",
+        "repo": "https://github.com/apache/juddi",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache Karaf",
+        "repo": "https://github.com/apache/karaf",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache ODE",
+        "repo": "https://github.com/apache/ode",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache Qpid",
+        "repo": "https://github.com/apache/qpid",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Apache ServiceMix",
+        "repo": "https://github.com/apache/servicemix",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Apache Spark",
+        "repo": "https://github.com/apache/spark",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Apache Tomcat",
+        "repo": "https://github.com/apache/tomcat",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "apiman",
+        "repo": "https://github.com/apiman",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Arquillian",
+        "repo": "https://github.com/arquillian",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Artificial Intelligence Center of Excellence",
+        "repo": "https://github.com/AICoE",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "asciibinder",
+        "repo": "https://github.com/redhataccess/ascii_binder",
+        "website": null,
+        "category": "Documentation"
+    },
+    {
+        "name": "Augeas",
+        "repo": "https://github.com/hercules-team/augeas",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Avahi",
+        "repo": "https://github.com/lathiat/avahi",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Avocado",
+        "repo": "https://github.com/avocado-framework",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "awestruct",
+        "repo": "https://github.com/awestruct",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Beaker",
+        "repo": "https://github.com/beaker-project",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "boom",
+        "repo": "https://github.com/bmr-cymru/boom",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Booth",
+        "repo": "https://github.com/ClusterLabs/booth",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "buildah",
+        "repo": "https://github.com/projectatomic/buildah/",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Byteman",
+        "repo": "https://github.com/bytemanproject",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Candlepin",
+        "repo": "https://github.com/candlepin",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "casync",
+        "repo": "https://github.com/systemd/casync/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "CEKit",
+        "repo": "https://github.com/cekit/cekit/",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "CentOS CI",
+        "repo": "https://github.com/CentOS-PaaS-SIG",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "CentOS Project",
+        "repo": "https://github.com/CentOS",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Ceph",
+        "repo": "https://github.com/ceph",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "Ceylon",
+        "repo": "https://github.com/ceylon",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Charlotte",
+        "repo": "https://github.com/redhat-infosec/charlotte",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Checkpoint/Restore In Userspace",
+        "repo": "https://github.com/checkpoint-restore/criu",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "chronicler",
+        "repo": "https://github.com/alechenninger/chronicler",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Cinch",
+        "repo": "https://github.com/RedHatQE/cinch",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Citellus",
+        "repo": "https://github.com/citellusorg/citellus",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "clufter",
+        "repo": "https://github.com/jnpkrn/clufter",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "CO.LAB",
+        "repo": "https://github.com/RedHatOfficial/CO.LAB",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "cobbler",
+        "repo": "https://github.com/cobbler/cobbler",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "cockpit-project",
+        "repo": "https://github.com/cockpit-project",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "colord",
+        "repo": "https://github.com/hughsie/colord",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "containers/image",
+        "repo": "https://github.com/containers/image",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "containers/storage",
+        "repo": "https://github.com/containers/storage",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "CoreOS",
+        "repo": "https://github.com/coreos/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Corosync",
+        "repo": "https://github.com/corosync/corosync",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "crash",
+        "repo": "https://github.com/crash-utility",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "CRaSH",
+        "repo": "https://github.com/crashub",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "CRI-O",
+        "repo": "https://github.com/kubernetes-incubator/cri-o/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Cygwin",
+        "repo": "https://github.com/cygwin",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "darcy framework",
+        "repo": "https://github.com/darcy-framework",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Dashbuilder",
+        "repo": "https://github.com/dashbuilder",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Data Grids for the Java Platform",
+        "repo": "https://github.com/datagrids",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "DBuildService",
+        "repo": "https://github.com/DBuildService",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "dbus-broker",
+        "repo": "https://github.com/bus1/dbus-broker",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "dbxtool",
+        "repo": "https://github.com/rhboot/dbxtool",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "DCI",
+        "repo": "https://github.com/redhat-cip/dci-control-server/",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Debezium",
+        "repo": "https://github.com/debezium/",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "dm-vdo",
+        "repo": "https://github.com/dm-vdo",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "dmioscope",
+        "repo": "https://github.com/bmr-cymru/dmioscope",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "dmpy",
+        "repo": "https://github.com/bmr-cymru/dmpy",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "dogtagpki",
+        "repo": "https://github.com/dogtagpki",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Drools",
+        "repo": "https://github.com/kiegroup/drools",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "dumpet",
+        "repo": "https://github.com/rhboot/dumpet",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Dynflow",
+        "repo": "https://github.com/Dynflow",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Dynist Project",
+        "repo": "https://github.com/dyninst",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Eclipse Che",
+        "repo": "https://github.com/eclipse/che",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Eclipse Hono",
+        "repo": "https://github.com/eclipse/hono",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Eclipse JKube",
+        "repo": "https://github.com/eclipse/jkube",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Eclipse Theia",
+        "repo": "https://github.com/eclipse-theia/theia",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Eclipse Vert.x",
+        "repo": "https://github.com/vert-x3",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Eclipse Web Tools Project",
+        "repo": "https://github.com/eclipse?q=webtools",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "efibootmgr",
+        "repo": "https://github.com/rhboot/efibootmgr",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "efivar",
+        "repo": "https://github.com/rhboot/efivar",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "EnMasse",
+        "repo": "https://github.com/EnMasseProject",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Errai Framework",
+        "repo": "https://github.com/errai",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "esbtools",
+        "repo": "https://github.com/esbtools",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "fabric8",
+        "repo": "https://github.com/fabric8io",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Fedora Cloud SIG",
+        "repo": "https://github.com/fedora-cloud",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Fedora Developer Portal",
+        "repo": "https://github.com/developer-portal",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Fedora Infrastructure",
+        "repo": "https://github.com/fedora-infra",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Fedora LiveCD Tools",
+        "repo": "https://github.com/livecd-tools",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "fedora-selinux",
+        "repo": "https://github.com/fedora-selinux",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "fedora-static-analysis",
+        "repo": "https://github.com/fedora-static-analysis",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "fedora-sysv",
+        "repo": "https://github.com/fedora-sysv",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "fence-agents",
+        "repo": "https://github.com/ClusterLabs/fence-agents",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "fence-virt",
+        "repo": "https://github.com/ClusterLabs/fence-virt",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "firewalld",
+        "repo": "https://github.com/firewalld",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Foreman Project",
+        "repo": "https://github.com/theforeman",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "freeipa",
+        "repo": "https://github.com/freeipa/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "fs-drift",
+        "repo": "https://github.com/parallel-fs-utils/fs-drift/commits/master",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "fusor",
+        "repo": "https://github.com/fusor",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "fwupd",
+        "repo": "https://github.com/hughsie/fwupd",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "fwupdate",
+        "repo": "https://github.com/rhboot/fwupdate",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Gluetool",
+        "repo": "https://github.com/gluetool/gluetool",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Gluster.org",
+        "repo": "https://github.com/gluster",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "hawtio",
+        "repo": "https://github.com/hawtio",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Heketi",
+        "repo": "https://github.com/heketi",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Hibernate",
+        "repo": "https://github.com/hibernate",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "hwdata",
+        "repo": "https://github.com/vcrhonek/hwdata",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "IBus",
+        "repo": "https://github.com/ibus/ibus",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "ImageFactory",
+        "repo": "https://github.com/redhat-imaging",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Immutant",
+        "repo": "https://github.com/immutant",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Infinispan",
+        "repo": "https://github.com/infinispan",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "IronJacamar",
+        "repo": "https://github.com/oloake/IronJacamar",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Jaeger",
+        "repo": "https://github.com/jaegertracing",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "JBeret",
+        "repo": "https://github.com/jberet",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "JBoss CapeDwarf",
+        "repo": "https://github.com/capedwarf",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JBoss Community",
+        "repo": "https://github.com/jbossorg",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JBoss Demo Central",
+        "repo": "https://github.com/jbossdemocentral",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "JBoss Developer",
+        "repo": "https://github.com/jboss-developer",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JBoss Developer Studio",
+        "repo": "https://github.com/jbdevstudio",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JBoss Forge",
+        "repo": "https://github.com/forge",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JBoss Logging",
+        "repo": "https://github.com/jboss-logging",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JBoss LogManager",
+        "repo": "https://github.com/jboss-logging",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JBoss Remoting",
+        "repo": "https://github.com/jboss-remoting",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JBoss Tools",
+        "repo": "https://github.com/jbosstools",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "JBoss Web Services",
+        "repo": "https://github.com/jbossws",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "jboss-logging",
+        "repo": "https://github.com/jboss-logging",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "jBPM",
+        "repo": "https://github.com/kiegroup/jbpm",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Jcliff",
+        "repo": "https://github.com/bserdar/jcliff",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JGroups",
+        "repo": "https://github.com/belaban/JGroups",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "JReadline",
+        "repo": "https://github.com/qmx/jreadline",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "JRuby",
+        "repo": "https://github.com/jruby",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "JSFUnit",
+        "repo": "https://github.com/jsfunit",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Juicer",
+        "repo": "https://github.com/juicer",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Katello Project",
+        "repo": "https://github.com/Katello",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "KDE",
+        "repo": "https://github.com/KDE",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "keycloak",
+        "repo": "https://github.com/keycloak",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Keylime",
+        "repo": "https://github.com/keylime",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Kiali",
+        "repo": "https://github.com/kiali",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "kimchi-project",
+        "repo": "https://github.com/kimchi-project",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Knative",
+        "repo": "https://github.com/knative",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "kpatch",
+        "repo": "https://github.com/dynup/kpatch",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "krb5",
+        "repo": "https://github.com/krb5/krb5",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Kronosnet",
+        "repo": "https://github.com/kronosnet/kronosnet",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Kubernetes",
+        "repo": "https://github.com/kubernetes",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "KubeVirt",
+        "repo": "https://github.com/kubevirt",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Lago",
+        "repo": "https://github.com/lago-project",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "latchset",
+        "repo": "https://github.com/latchset",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "LEAPP",
+        "repo": "https://github.com/leapp-to/",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "libguestfs",
+        "repo": "https://github.com/libguestfs",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "libpod",
+        "repo": "https://github.com/projectatomic/libpod/",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "libqb",
+        "repo": "https://github.com/ClusterLabs/libqb",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Libre Server",
+        "repo": "https://github.com/libre-server",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "LibreOffice",
+        "repo": "https://github.com/libreoffice",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "LibStorageMgmt",
+        "repo": "https://github.com/libstorage/libstoragemgmt/",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "libvirt",
+        "repo": "https://github.com/libvirt",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Lightblue Platform",
+        "repo": "https://github.com/lightblue-platform",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Linchpin",
+        "repo": "https://github.com/CentOS-PaaS-SiG/linchpin",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Linux",
+        "repo": "https://github.com/torvalds/linux",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Linux Audit Project",
+        "repo": "https://github.com/linux-audit",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "linux-system-roles",
+        "repo": "https://github.com/linux-system-roles",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Maistra",
+        "repo": "https://github.com/maistra",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "ManageIQ",
+        "repo": "https://github.com/ManageIQ/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "ManageIQ-Exchange",
+        "repo": "https://github.com/ManageIQ-Exchange/",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Minishift",
+        "repo": "https://github.com/minishift/minishift",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Moby Project",
+        "repo": "https://github.com/moby",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Mock",
+        "repo": "https://github.com/rpm-software-management/mock",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "ModeShape",
+        "repo": "https://github.com/ModeShape",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "mod_auth_gssapi",
+        "repo": "https://github.com/modauthgssapi/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "mod_cluster",
+        "repo": "https://github.com/modcluster",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "monarch",
+        "repo": "https://github.com/alechenninger/monarch",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Narayana",
+        "repo": "https://github.com/jbosstm",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "navmazing",
+        "repo": "https://github.com/RedHatQE/navmazing/",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "NET Core",
+        "repo": "https://github.com/dotnet",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Netty",
+        "repo": "https://github.com/netty",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Nexus",
+        "repo": "https://github.com/valleedelisle/nexus",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "nfs-ganesha",
+        "repo": "https://github.com/nfs-ganesha",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Obsidian Toaster",
+        "repo": "https://github.com/obsidian-toaster",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "OCF-spec",
+        "repo": "https://github.com/ClusterLabs/OCF-spec",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "OKD",
+        "repo": "https://github.com/openshift/origin",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "The Open Organization Project",
+        "repo": "https://github.com/open-organization",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Open Practice\n            Library",
+        "repo": "https://github.com/openpracticelibrary/openpracticelibrary",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Open Source and Standards",
+        "repo": "https://github.com/OSAS",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "The Open Source Way",
+        "repo": "https://github.com/theopensourceway",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Open vSwitch",
+        "repo": "https://github.com/openvswitch",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "OpenDaylight",
+        "repo": "https://github.com/opendaylight/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "OpenSCAP",
+        "repo": "https://github.com/OpenSCAP",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "OpenShift.io",
+        "repo": "https://github.com/openshiftio",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "OpenTracing",
+        "repo": "https://github.com/opentracing",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "ophicleide",
+        "repo": "https://github.com/ophicleide",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "OptaPlanner",
+        "repo": "https://github.com/kiegroup/optaplanner",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "OSTree Project",
+        "repo": "https://github.com/ostreedev",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "oVirt",
+        "repo": "https://github.com/ovirt",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Oz",
+        "repo": "https://github.com/clalancette/oz",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Pacemaker",
+        "repo": "https://github.com/ClusterLabs/pacemaker",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "PackageKit",
+        "repo": "https://github.com/hughsie/PackageKit",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "patchutils",
+        "repo": "https://github.com/twaugh/patchutils",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Patternfly",
+        "repo": "https://github.com/patternfly",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Pbench",
+        "repo": "https://github.com/distributed-system-analysis/pbench",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "pcs",
+        "repo": "https://github.com/ClusterLabs/pcs",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Performance Co-Pilot",
+        "repo": "https://github.com/performancecopilot",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "pesign",
+        "repo": "https://github.com/rhboot/pesign",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "PicketBox",
+        "repo": "https://github.com/picketbox",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "PicketLink",
+        "repo": "https://github.com/picketlink",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Podman",
+        "repo": "https://github.com/containers/podman",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "PressGang",
+        "repo": "https://github.com/pressgang",
+        "website": null,
+        "category": "Documentation"
+    },
+    {
+        "name": "preupgrade-assistant",
+        "repo": "https://github.com/upgrades-migrations/preupgrade-assistant/",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Project Atomic",
+        "repo": "https://github.com/projectatomic/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Project QUAY",
+        "repo": "https://github.com/quay",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Project Springfield",
+        "repo": "https://github.com/springfield-project/",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "Prometheus",
+        "repo": "https://github.com/prometheus",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "pulp",
+        "repo": "https://github.com/pulp",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Pulp QE",
+        "repo": "https://github.com/pulpqe",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Python",
+        "repo": "https://github.com/python/cpython",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Python GSSAPI",
+        "repo": "https://github.com/pythongssapi",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "python-hwdata",
+        "repo": "https://github.com/xsuchy/python-hwdata",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "pyudev",
+        "repo": "https://github.com/pyudev",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "QEMU",
+        "repo": "https://github.com/qemu/qemu",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Quarkus",
+        "repo": "https://github.com/quarkusio/quarkus",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "radanalyticsio",
+        "repo": "https://github.com/radanalyticsio",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "RadarGun",
+        "repo": "https://github.com/radargun",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "rdo-infra",
+        "repo": "https://github.com/rdo-infra",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "rebase-helper",
+        "repo": "https://github.com/rebase-helper",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Red Hat CodeReady Studio",
+        "repo": "https://github.com/jbdevstudio",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Red Hat Consulting",
+        "repo": "https://github.com/rhtconsulting",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Red Hat Demo Central",
+        "repo": "https://github.com/redhatdemocentral",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Red Hat Documentation",
+        "repo": "https://github.com/redhat-documentation",
+        "website": null,
+        "category": "Documentation"
+    },
+    {
+        "name": "Red Hat Fuse Tooling",
+        "repo": "https://github.com/jbosstools/jbosstools-fuse",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Red Hat Inception",
+        "repo": "https://github.com/RHInception",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Red Hat Insights",
+        "repo": "https://github.com/RedHatInsights",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Red Hat IoT",
+        "repo": "https://github.com/redhat-iot",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Red Hat Middleware Node.js",
+        "repo": "https://github.com/nodeshift",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Red Hat Open Innovation Labs",
+        "repo": "https://github.com/rht-labs",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Red Hat Product Security",
+        "repo": "https://github.com/RedHatProductSecurity",
+        "website": null,
+        "category": "Organizations"
+    },
+    {
+        "name": "Red Hat QE Security",
+        "repo": "http://github.com/redhat-qe-security/",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Red Hat Update Agent",
+        "repo": "https://github.com/up2date",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "redhat-openstack",
+        "repo": "https://github.com/redhat-openstack",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "redhat-upgrade-tool",
+        "repo": "https://github.com/upgrades-migrations/redhat-upgrade-tool/",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "redhatanalytics",
+        "repo": "https://github.com/redhatanalytics",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "resource-agents",
+        "repo": "https://github.com/ClusterLabs/resource-agents",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "RESTEasy",
+        "repo": "https://github.com/resteasy",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "rh-messaging",
+        "repo": "https://github.com/rh-messaging",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "RHElements",
+        "repo": "https://github.com/RHElements",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Rhiot",
+        "repo": "https://github.com/rhiot",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "RHQ",
+        "repo": "https://github.com/rhq-project",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "RichFaces",
+        "repo": "https://github.com/richfaces/",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "riftsaw",
+        "repo": "https://github.com/riftsaw",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Rook",
+        "repo": "https://github.com/rook",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "RPM Package Manager",
+        "repo": "https://github.com/rpm-software-management",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "RPM Packaging Guide",
+        "repo": "https://github.com/redhat-developer/rpm-packaging-guide/",
+        "website": null,
+        "category": "Documentation"
+    },
+    {
+        "name": "Rsyslog",
+        "repo": "https://github.com/rsyslog",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "sarstats",
+        "repo": "https://github.com/mbaldessari/sarstats",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "SAVARA",
+        "repo": "https://github.com/savara",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "SBD",
+        "repo": "https://github.com/ClusterLabs/sbd",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Scribble",
+        "repo": "https://github.com/scribble",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Seam",
+        "repo": "https://github.com/seam",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "SELinux Project",
+        "repo": "https://github.com/SELinuxProject",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Sentaku",
+        "repo": "https://github.com/RedHatQE/Sentaku/",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "shim",
+        "repo": "https://github.com/rhboot/shim",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "ShrinkWrap",
+        "repo": "https://github.com/shrinkwrap",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Simple Signed Certificate Generator",
+        "repo": "https://github.com/sgallagher/sscg",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Skopeo",
+        "repo": "https://github.com/projectatomic/skopeo",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "skyrings",
+        "repo": "https://github.com/skyrings",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "slapi-nis",
+        "repo": "https://github.com/gooselinux/slapi-nis",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Smallfile",
+        "repo": "https://github.com/bengland2/smallfile",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "Snowdrop",
+        "repo": "https://github.com/snowdrop",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Software Collections",
+        "repo": "https://github.com/sclorg",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Solenopsis",
+        "repo": "https://github.com/solenopsis/Solenopsis",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "sosreport",
+        "repo": "https://github.com/sosreport",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Spacewalk",
+        "repo": "https://github.com/spacewalkproject",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Spice",
+        "repo": "https://github.com/SPICE",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "splice",
+        "repo": "https://github.com/splice",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "SSM",
+        "repo": "https://github.com/system-storage-manager/",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "Stilts",
+        "repo": "https://github.com/projectodd/stilts",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Storaged Project",
+        "repo": "https://github.com/storaged-project",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "Strimzi",
+        "repo": "https://github.com/strimzi/strimzi",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "SWI-Prolog",
+        "repo": "https://github.com/SWI-Prolog",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "SwitchYard",
+        "repo": "https://github.com/jboss-switchyard",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Syndesis",
+        "repo": "https://github.com/syndesisio",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "syslog-ng",
+        "repo": "https://github.com/balabit/syslog-ng",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "System Security Services Daemon",
+        "repo": "https://github.com/SSSD",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "systemd",
+        "repo": "https://github.com/systemd",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "Tattletale",
+        "repo": "https://github.com/jesperpedersen/tattletale",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Teiid",
+        "repo": "https://github.com/teiid",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Tendrl",
+        "repo": "https://github.com/Tendrl",
+        "website": null,
+        "category": "Storage"
+    },
+    {
+        "name": "TianoCore",
+        "repo": "https://github.com/tianocore",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "ticketutil",
+        "repo": "https://github.com/dmranck/ticketutil",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "tito",
+        "repo": "https://github.com/dgoodwin/tito",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "tlsfuzzer",
+        "repo": "https://github.com/tomato42/tlsfuzzer",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "TorqueBox Project",
+        "repo": "https://github.com/torquebox",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Transtats",
+        "repo": "https://github.com/transtats",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Tuned",
+        "repo": "https://github.com/redhat-performance/tuned",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "udisks",
+        "repo": "https://github.com/storaged-project/udisks",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "util-linux",
+        "repo": "https://github.com/karelzak/util-linux",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "varlink",
+        "repo": "https://github.com/varlink/",
+        "website": null,
+        "category": "Platform"
+    },
+    {
+        "name": "virt-manager",
+        "repo": "https://github.com/virt-manager",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "VMaaS",
+        "repo": "https://github.com/RedHatInsights/vmaas/",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "wait_for",
+        "repo": "https://github.com/RedHatQE/wait_for/",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "Weld",
+        "repo": "https://github.com/weld",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "widgetastic",
+        "repo": "https://github.com/RedHatQE/widgetastic.core",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "widgetastic.patternfly",
+        "repo": "https://github.com/RedHatQE/widgetastic.patternfly",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "WildFly",
+        "repo": "https://github.com/wildfly",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "WildFly Elytron",
+        "repo": "https://github.com/wildfly-security",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "WildFly Swarm",
+        "repo": "https://github.com/wildfly-swarm",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Windup",
+        "repo": "https://github.com/windup",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "Wise",
+        "repo": "https://github.com/jboss-wise",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "wrapanapi",
+        "repo": "https://github.com/ManageIQ/wrapanapi",
+        "website": null,
+        "category": "Development"
+    },
+    {
+        "name": "XNIO",
+        "repo": "https://github.com/xnio",
+        "website": null,
+        "category": "Middleware"
+    },
+    {
+        "name": "xsos",
+        "repo": "https://github.com/ryran/xsos",
+        "website": null,
+        "category": "Operations"
+    },
+    {
+        "name": "Zanata",
+        "repo": "https://github.com/zanata",
+        "website": null,
+        "category": "Documentation"
+    }
+]

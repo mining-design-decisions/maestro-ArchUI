@@ -1,0 +1,2858 @@
+[
+    {
+        "key": "MPLUGINTESTING",
+        "project": "Maven Plugin Testing",
+        "language": "java",
+        "domain": "build-management",
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugin-testing/"
+    },
+    {
+        "key": "BETWIXT",
+        "project": "Commons Betwixt",
+        "language": "java",
+        "domain": "build-management",
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/betwixt/"
+    },
+    {
+        "key": "RUNTIME",
+        "project": "Avalon Merlin Runtime",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://avalon.apache.org/"
+    },
+    {
+        "key": "MAILBOX",
+        "project": "James Mailbox",
+        "language": "java",
+        "domain": "mail",
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/mailbox"
+    },
+    {
+        "key": "SMXCOMP",
+        "project": "ServiceMix Components",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://servicemix.apache.org/components/"
+    },
+    {
+        "key": "ARCHETYPE",
+        "project": "Maven Archetype",
+        "language": "java",
+        "domain": "build-management",
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/archetype/"
+    },
+    {
+        "key": "SCM",
+        "project": "Maven SCM",
+        "language": "java",
+        "domain": "build-management",
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/scm/"
+    },
+    {
+        "key": "AURORA",
+        "project": "Aurora",
+        "language": "java",
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://aurora.apache.org/"
+    },
+    {
+        "key": "HUPA",
+        "project": "James Hupa",
+        "language": "java",
+        "domain": "mail",
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/hupa/index.html"
+    },
+    {
+        "key": "MSOURCES",
+        "project": "Maven Source Plugin",
+        "language": "java",
+        "domain": "build-management",
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-source-plugin/"
+    },
+    {
+        "key": "KITTY",
+        "project": "Kitty",
+        "language": "java",
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/kitty/"
+    },
+    {
+        "key": "IMAP",
+        "project": "James Imap",
+        "language": "java",
+        "domain": "mail",
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/imap/"
+    },
+    {
+        "key": "POSTAGE",
+        "project": "James Postage",
+        "language": "java",
+        "domain": "mail",
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/postage/"
+    },
+    {
+        "key": "IBATISNET",
+        "project": "iBatis for .NET",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ibatis.apache.org/"
+    },
+    {
+        "key": "CS",
+        "project": "Central Services",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://www.apache.org/"
+    },
+    {
+        "key": "KYLIN",
+        "project": "Kylin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://kylin.apache.org"
+    },
+    {
+        "key": "HERMES",
+        "project": "Pubscribe",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/ws-fx/pubscribe/"
+    },
+    {
+        "key": "SMX4",
+        "project": "ServiceMix 4",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://servicemix.apache.org/SMX4/"
+    },
+    {
+        "key": "SAND",
+        "project": "Sandesha",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/sandesha/"
+    },
+    {
+        "key": "AGEOLD",
+        "project": "Apache AGE (old)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://age.incubator.apache.org"
+    },
+    {
+        "key": "SCOUT",
+        "project": "Scout (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/juddi.html"
+    },
+    {
+        "key": "JDKIM",
+        "project": "James jDKIM",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/jdkim"
+    },
+    {
+        "key": "EXTCDI",
+        "project": "MyFaces CODI",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://svn.apache.org/repos/asf/myfaces/extensions/cdi/"
+    },
+    {
+        "key": "BLUEMARLIN",
+        "project": "Apache BlueMarlin (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/bluemarlin.html"
+    },
+    {
+        "key": "DI",
+        "project": "Diversity and Inclusion",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://diversity.apache.org/"
+    },
+    {
+        "key": "MECLIPSE",
+        "project": "Maven Eclipse Plugin (RETIRED)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-eclipse-plugin/"
+    },
+    {
+        "key": "WAYANG",
+        "project": "Apache Wayang",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://wayang.apache.org"
+    },
+    {
+        "key": "TRANSACTION",
+        "project": "Commons Transaction",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/transaction/"
+    },
+    {
+        "key": "JCRSITE",
+        "project": "Jackrabbit Site",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://jackrabbit.apache.org/"
+    },
+    {
+        "key": "MPLUGIN",
+        "project": "Maven Plugin Tools",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugin-tools/"
+    },
+    {
+        "key": "MJARSIGNER",
+        "project": "Maven Jar Signer Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-jarsigner-plugin/"
+    },
+    {
+        "key": "STREAMPIPES",
+        "project": "StreamPipes",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://streampipes.apache.org"
+    },
+    {
+        "key": "SINGA",
+        "project": "Singa",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://singa.apache.org"
+    },
+    {
+        "key": "TILESSHOW",
+        "project": "Tiles Showcase",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/"
+    },
+    {
+        "key": "AMQCPP",
+        "project": "ActiveMQ C++ Client",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://activemq.apache.org/cms/"
+    },
+    {
+        "key": "SHALE",
+        "project": "Shale",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://shale.apache.org/"
+    },
+    {
+        "key": "TUWENI",
+        "project": "Tuweni",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://tuweni.incubator.apache.org"
+    },
+    {
+        "key": "KAND",
+        "project": "Kandula",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/kandula/"
+    },
+    {
+        "key": "RESOURCES",
+        "project": "Commons Resources",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/resources/"
+    },
+    {
+        "key": "MYRIAD",
+        "project": "Myriad",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://myriad.apache.org/"
+    },
+    {
+        "key": "JOHNZON",
+        "project": "Johnzon",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://johnzon.incubator.apache.org"
+    },
+    {
+        "key": "GRFT",
+        "project": "Graffito",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/graffito/"
+    },
+    {
+        "key": "COTTON",
+        "project": "COTTON",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://cotton.incubator.apache.org"
+    },
+    {
+        "key": "TRANSPORTS",
+        "project": "Axis2 Transports",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://axis.apache.org/axis2/java/transports/"
+    },
+    {
+        "key": "SAVAN",
+        "project": "Savan",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/savan/"
+    },
+    {
+        "key": "SMX4KNL",
+        "project": "ServiceMix Kernel",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://servicemix.apache.org/kernel/"
+    },
+    {
+        "key": "HDT",
+        "project": "Hadoop Development Tools",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://hdt.incubator.apache.org/"
+    },
+    {
+        "key": "MJAR",
+        "project": "Maven JAR Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-jar-plugin/"
+    },
+    {
+        "key": "DATALAB",
+        "project": "Apache DataLab",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://datalab.incubator.apache.org"
+    },
+    {
+        "key": "YUNIKORN",
+        "project": "Apache YuniKorn",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://yunikorn.apache.org"
+    },
+    {
+        "key": "MANT",
+        "project": "Maven Ant Plugin (RETIRED)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-ant-plugin/"
+    },
+    {
+        "key": "ONAMI",
+        "project": "Apache Onami",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://onami.apache.org/"
+    },
+    {
+        "key": "TILESSB",
+        "project": "Tiles Sandbox",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org"
+    },
+    {
+        "key": "SPOT",
+        "project": "Spot (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/incubator.html"
+    },
+    {
+        "key": "TAVERNA",
+        "project": "Apache Taverna",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://taverna.incubator.apache.org/"
+    },
+    {
+        "key": "MUSE",
+        "project": "Muse",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/muse/"
+    },
+    {
+        "key": "CENTRAL",
+        "project": "Avalon Metro Central",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://avalon.apache.org/"
+    },
+    {
+        "key": "WADI",
+        "project": "WADI",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/wadi"
+    },
+    {
+        "key": "APISIX",
+        "project": "APISIX",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://apisix.apache.org"
+    },
+    {
+        "key": "MSKINS",
+        "project": "Maven Skins",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/skins/"
+    },
+    {
+        "key": "JCRTCK",
+        "project": "Jackrabbit JCR Tests",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://jackrabbit.apache.org/"
+    },
+    {
+        "key": "MANTRUN",
+        "project": "Maven Antrun Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-antrun-plugin/"
+    },
+    {
+        "key": "SENTRY",
+        "project": "Sentry (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/sentry.html"
+    },
+    {
+        "key": "RAMPART",
+        "project": "Rampart",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://axis.apache.org/axis2/java/rampart/"
+    },
+    {
+        "key": "TEVAL",
+        "project": "Tiles Eval",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org"
+    },
+    {
+        "key": "EVENTMESH",
+        "project": "Apache EventMesh",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://eventmesh.apache.org"
+    },
+    {
+        "key": "SYSTEMDS",
+        "project": "SystemDS",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://systemds.apache.org/"
+    },
+    {
+        "key": "SOAP",
+        "project": "SOAP",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/soap/"
+    },
+    {
+        "key": "TATPI",
+        "project": "TomEE Arquillian Test Porting Initiative",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://tomee.apache.org"
+    },
+    {
+        "key": "TC",
+        "project": "Traffic Control",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://trafficcontrol.incubator.apache.org/"
+    },
+    {
+        "key": "MPATCH",
+        "project": "Maven Patch Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-patch-plugin"
+    },
+    {
+        "key": "XW",
+        "project": "XWork",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://wiki.opensymphony.com/space/XWork"
+    },
+    {
+        "key": "MSHARED",
+        "project": "Maven Shared Components",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/shared"
+    },
+    {
+        "key": "INFRATEST3",
+        "project": "Infra Test 3",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://infra.apache.org"
+    },
+    {
+        "key": "MDOCCK",
+        "project": "Maven Documentation Checker Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-docck-plugin/"
+    },
+    {
+        "key": "LIMINAL",
+        "project": "Apache Liminal",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://liminal.incubator.apache.org"
+    },
+    {
+        "key": "TEST6",
+        "project": "Infrastructure Test 6 (Retired) (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/TEST6.html"
+    },
+    {
+        "key": "SIRONA",
+        "project": "Sirona",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://sirona.incubator.apache.org/"
+    },
+    {
+        "key": "MRRESOURCES",
+        "project": "Maven Remote Resources Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-remote-resources-plugin/"
+    },
+    {
+        "key": "APLO",
+        "project": "ActiveMQ Apollo (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/activemq.html"
+    },
+    {
+        "key": "TRINIDAD",
+        "project": "MyFaces Trinidad",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://myfaces.apache.org/trinidad"
+    },
+    {
+        "key": "BATCHEE",
+        "project": "BatchEE",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://batchee.incubator.apache.org/"
+    },
+    {
+        "key": "MAILET",
+        "project": "James Mailet",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/mailet/"
+    },
+    {
+        "key": "PROXY",
+        "project": "Commons Proxy",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/proxy/"
+    },
+    {
+        "key": "NEMO",
+        "project": "Apache Nemo",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://nemo.apache.org"
+    },
+    {
+        "key": "CLKE",
+        "project": "Click Eclipse",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://click.apache.org/docs/click-ide.html"
+    },
+    {
+        "key": "NIFILIBS",
+        "project": "NiFi Standard Libraries",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://nifi.apache.org/"
+    },
+    {
+        "key": "MDEP",
+        "project": "Maven Dependency Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-dependency-plugin/"
+    },
+    {
+        "key": "DOSGI",
+        "project": "CXF Distributed OSGi (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/cxf.html"
+    },
+    {
+        "key": "RIPPLE",
+        "project": "Apache Ripple",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ripple.incubator.apache.org"
+    },
+    {
+        "key": "PEGASUS",
+        "project": "Apache Pegasus",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://pegasus.incubator.apache.org"
+    },
+    {
+        "key": "MBUILDCACHE",
+        "project": "Maven Build Cache Extension",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://maven.apache.org/extensions/maven-build-cache-extension"
+    },
+    {
+        "key": "HDDS",
+        "project": "Apache Ozone",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://ozone.apache.org"
+    },
+    {
+        "key": "TOMAHAWK",
+        "project": "MyFaces Tomahawk",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://myfaces.apache.org/tomahawk"
+    },
+    {
+        "key": "DIRTSEC",
+        "project": "Triplesec",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://directory.apache.org/triplesec"
+    },
+    {
+        "key": "MPDF",
+        "project": "Maven PDF Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-pdf-plugin"
+    },
+    {
+        "key": "NUTTX",
+        "project": "Apache NuttX",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://nuttx.apach.org"
+    },
+    {
+        "key": "S4",
+        "project": "Apache S4",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/s4/"
+    },
+    {
+        "key": "HAWQ",
+        "project": "Apache HAWQ",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://hawq.apache.org"
+    },
+    {
+        "key": "MPIR",
+        "project": "Maven Project Info Reports Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-project-info-reports-plugin/"
+    },
+    {
+        "key": "FINERACT",
+        "project": "Apache Fineract",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://fineract.apache.org"
+    },
+    {
+        "key": "TESTING",
+        "project": "Apache Commons Testing",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://commons.apache.org/testing"
+    },
+    {
+        "key": "MRELEASE",
+        "project": "Maven Release Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-release-plugin/"
+    },
+    {
+        "key": "MJMOD",
+        "project": "Maven JMod Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://maven.apache.org"
+    },
+    {
+        "key": "DUBBO",
+        "project": "Apache Dubbo",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://dubbo.apache.org"
+    },
+    {
+        "key": "MRQL",
+        "project": "MRQL",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://mrql.incubator.apache.org/"
+    },
+    {
+        "key": "HTRACE",
+        "project": "HTrace",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://htrace.incubator.apache.org"
+    },
+    {
+        "key": "TRIPLES",
+        "project": "TripleSoup",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/triplesoup/"
+    },
+    {
+        "key": "JSPF",
+        "project": "James jSPF",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/jspf"
+    },
+    {
+        "key": "DVSL",
+        "project": "Dvsl",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://velocity.apache.org/dvsl/devel"
+    },
+    {
+        "key": "ARIA",
+        "project": "AriaTosca",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ariatosca.incubator.apache.org/"
+    },
+    {
+        "key": "HTTPASYNC",
+        "project": "HttpComponents HttpAsyncClient",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://hc.apache.org/"
+    },
+    {
+        "key": "QPIDJMS",
+        "project": "Qpid JMS",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://qpid.apache.org"
+    },
+    {
+        "key": "KALUMET",
+        "project": "Kalumet (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/kalumet"
+    },
+    {
+        "key": "DIRSHARED",
+        "project": "Directory Shared (Please use DIRAPI instead)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://directory.apache.org/api"
+    },
+    {
+        "key": "CRAIL",
+        "project": "Apache Crail",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://crail.apache.org"
+    },
+    {
+        "key": "TOOLS",
+        "project": "Avalon Metro Tools",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://avalon.apache.org/"
+    },
+    {
+        "key": "GSHELL",
+        "project": "GShell",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://geronimo.apache.org/gshell"
+    },
+    {
+        "key": "MEAR",
+        "project": "Maven EAR Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-ear-plugin/"
+    },
+    {
+        "key": "MCHANGELOG",
+        "project": "Maven Changelog Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-changelog-plugin/"
+    },
+    {
+        "key": "DIRGROOVY",
+        "project": "Directory Groovy LDAP",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://directory.apache.org/api/groovy-ldap.html"
+    },
+    {
+        "key": "QPIDIT",
+        "project": "Apache QPID Interoperability Test Suite",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://qpid.apache.org"
+    },
+    {
+        "key": "ODFTOOLKIT",
+        "project": "ODF Toolkit",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org"
+    },
+    {
+        "key": "MNEMONIC",
+        "project": "Mnemonic",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://mnemonic.apache.org"
+    },
+    {
+        "key": "KATO",
+        "project": "Kato",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://attic.apache.org/"
+    },
+    {
+        "key": "MCHECKSTYLE",
+        "project": "Maven Checkstyle Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-checkstyle-plugin/"
+    },
+    {
+        "key": "CXFXJC",
+        "project": "CXF XJC Utils",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://cxf.apache.org"
+    },
+    {
+        "key": "WSIF",
+        "project": "Axis-WSIF",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/wsif/"
+    },
+    {
+        "key": "AXIS2C",
+        "project": "Axis2-C",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://axis.apache.org/axis2/c/core/"
+    },
+    {
+        "key": "AWF",
+        "project": "Apache AWF",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/awf"
+    },
+    {
+        "key": "MODELER",
+        "project": "Commons Modeler",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/modeler/"
+    },
+    {
+        "key": "ORCHESTRA",
+        "project": "MyFaces Orchestra",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://myfaces.apache.org/orchestra/"
+    },
+    {
+        "key": "MARCHETYPES",
+        "project": "Maven Archetype Bundles",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://maven.apache.org/archetypes/"
+    },
+    {
+        "key": "PHOTARK",
+        "project": "PhotArk",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/photark/"
+    },
+    {
+        "key": "UNOMI",
+        "project": "Apache Unomi",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://unomi.apache.org"
+    },
+    {
+        "key": "MCOMPILER",
+        "project": "Maven Compiler Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-compiler-plugin/"
+    },
+    {
+        "key": "MINVOKER",
+        "project": "Maven Invoker Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-invoker-plugin/"
+    },
+    {
+        "key": "LIVY",
+        "project": "Livy",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://livy.incubator.apache.org/"
+    },
+    {
+        "key": "MARTIFACT",
+        "project": "Maven Artifact Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://maven.apache.org/plugins/maven-artifact-plugin/"
+    },
+    {
+        "key": "CONCERTED",
+        "project": "Apache Concerted",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org"
+    },
+    {
+        "key": "WSRP4J",
+        "project": "WSRP4J",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://portals.apache.org/wsrp4j/"
+    },
+    {
+        "key": "DIRAPI",
+        "project": "Directory Client API",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://directory.apache.org/api"
+    },
+    {
+        "key": "MDEPLOY",
+        "project": "Maven Deploy Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-deploy-plugin/"
+    },
+    {
+        "key": "TEPHRA",
+        "project": "Phoenix Tephra",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://phoenix.apache.org"
+    },
+    {
+        "key": "MJLINK",
+        "project": "Maven JLink Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://maven.apache.org"
+    },
+    {
+        "key": "LOKAHI",
+        "project": "Lokahi",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/lokahi/"
+    },
+    {
+        "key": "OLIO",
+        "project": "Olio",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/olio"
+    },
+    {
+        "key": "MTOOLCHAINS",
+        "project": "Maven Toolchains Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-toolchains-plugin"
+    },
+    {
+        "key": "OPENAZ",
+        "project": "Apache OpenAZ",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://openaz.incubator.apache.org"
+    },
+    {
+        "key": "HDFS",
+        "project": "Hadoop HDFS",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://hadoop.apache.org/"
+    },
+    {
+        "key": "S2GRAPH",
+        "project": "S2Graph",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://s2graph.incubator.apache.org"
+    },
+    {
+        "key": "JAXME",
+        "project": "JaxMe",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://attic.apache.org"
+    },
+    {
+        "key": "MFHTML5",
+        "project": "MyFaces HTML5 Component Library",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://myfaces.apache.org/"
+    },
+    {
+        "key": "FUNCTOR",
+        "project": "Commons Functor",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/functor/"
+    },
+    {
+        "key": "MSTAGE",
+        "project": "Maven Stage Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-stage-plugin"
+    },
+    {
+        "key": "GOSSIP",
+        "project": "Gossip",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://incubator.apache.org"
+    },
+    {
+        "key": "MINSTALL",
+        "project": "Maven Install Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-install-plugin/"
+    },
+    {
+        "key": "LABS",
+        "project": "Labs (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/labs.html"
+    },
+    {
+        "key": "EL",
+        "project": "Commons EL",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/el/"
+    },
+    {
+        "key": "SANDBOX",
+        "project": "Commons Sandbox",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/sandbox/"
+    },
+    {
+        "key": "COMMONSRDF",
+        "project": "Apache Commons RDF",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://commons.apache.org/proper/commons-rdf/"
+    },
+    {
+        "key": "OMID",
+        "project": "Phoenix Omid",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://phoenix.apache.org/"
+    },
+    {
+        "key": "MAVIBOT",
+        "project": "Mavibot",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://directory.apache.org/mavibot"
+    },
+    {
+        "key": "MGPG",
+        "project": "Maven GPG Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-gpg-plugin/"
+    },
+    {
+        "key": "CELEBORN",
+        "project": "Apache Celeborn",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://celeborn.apache.org/"
+    },
+    {
+        "key": "MVERIFIER",
+        "project": "Maven Verifier Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-verifier-plugin/"
+    },
+    {
+        "key": "TREQ",
+        "project": "Tiles Request",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org"
+    },
+    {
+        "key": "DORIS",
+        "project": "Apache Doris",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://doris.apache.org/"
+    },
+    {
+        "key": "EWS",
+        "project": "ews",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/ews/"
+    },
+    {
+        "key": "RBATIS",
+        "project": "iBATIS for Ruby",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ibatis.apache.org/docs/ruby/"
+    },
+    {
+        "key": "ASYNCWEB",
+        "project": "Asyncweb",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://mina.apache.org/asyncweb"
+    },
+    {
+        "key": "OJB",
+        "project": "OJB",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://db.apache.org/ojb/"
+    },
+    {
+        "key": "AMATERASU",
+        "project": "AMATERASU",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://incubator.apache.org/project/amaterasu.html"
+    },
+    {
+        "key": "AXISCPP",
+        "project": "Axis-C++",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/axis/cpp/index.html"
+    },
+    {
+        "key": "NEETHI",
+        "project": "Neethi",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org"
+    },
+    {
+        "key": "MYNEWT",
+        "project": "Mynewt",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://mynewt.apache.org"
+    },
+    {
+        "key": "ECS",
+        "project": "ECS",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://jakarta.apache.org/ecs"
+    },
+    {
+        "key": "EASYANT",
+        "project": "EasyAnt",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ant.apache.org/projects/easyant.html"
+    },
+    {
+        "key": "MEJB",
+        "project": "Maven EJB Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-ejb-plugin/"
+    },
+    {
+        "key": "TENTACLES",
+        "project": "Apache Tentacles",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://creadur.apache.org/tentacles/"
+    },
+    {
+        "key": "PROTOCOLS",
+        "project": "James Protocols",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/protocols"
+    },
+    {
+        "key": "DBF",
+        "project": "DocBook Framework",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://velocity.apache.org/docbook/"
+    },
+    {
+        "key": "RAMPARTC",
+        "project": "Rampart/C",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://axis.apache.org/axis2/c/rampart/"
+    },
+    {
+        "key": "LAUNCHER",
+        "project": "Commons Launcher",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/dormant/commons-launcher/"
+    },
+    {
+        "key": "GEARPUMP",
+        "project": "Apache Gearpump",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://gearpump.incubator.apache.org"
+    },
+    {
+        "key": "HIVEMALL",
+        "project": "Hivemall",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://hivemall.incubator.apache.org/"
+    },
+    {
+        "key": "SMX4NMR",
+        "project": "ServiceMix NMR",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://servicemix.apache.org/nmr/"
+    },
+    {
+        "key": "ACL",
+        "project": "ActiveCluster",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://activecluster.codehaus.org/"
+    },
+    {
+        "key": "EXTSCRIPT",
+        "project": "MyFaces Extensions Scripting",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://myfaces.apache.org/extensions/scripting/"
+    },
+    {
+        "key": "METRON",
+        "project": "Metron (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/metron.html"
+    },
+    {
+        "key": "SAMOA",
+        "project": "SAMOA",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://samoa.incubator.apache.org"
+    },
+    {
+        "key": "LOG4J2",
+        "project": "Log4j 2",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://logging.apache.org/log4j/2.x/"
+    },
+    {
+        "key": "MCLEAN",
+        "project": "Maven Clean Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-clean-plugin/"
+    },
+    {
+        "key": "STR",
+        "project": "Struts 1",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://struts.apache.org/1.x"
+    },
+    {
+        "key": "YARN",
+        "project": "Hadoop YARN",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://hadoop.apache.org"
+    },
+    {
+        "key": "DDLUTILS",
+        "project": "DdlUtils",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://db.apache.org/ddlutils"
+    },
+    {
+        "key": "DIRNAMING",
+        "project": "Directory Naming",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://directory.apache.org/subprojects/naming/"
+    },
+    {
+        "key": "JDO",
+        "project": "JDO",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://db.apache.org/jdo"
+    },
+    {
+        "key": "SEDONA",
+        "project": "Apache Sedona",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://sedona.apache.org"
+    },
+    {
+        "key": "HORN",
+        "project": "Apache Horn",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://incubator.apache.org/projects/horn.html"
+    },
+    {
+        "key": "MIME4J",
+        "project": "James Mime4j",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/mime4j/"
+    },
+    {
+        "key": "IMPERIUS",
+        "project": "Imperius",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/imperius/"
+    },
+    {
+        "key": "EDGENT",
+        "project": "Edgent",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://edgent.incubator.apache.org"
+    },
+    {
+        "key": "MINDEXER",
+        "project": "Maven Indexer",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/maven-indexer/"
+    },
+    {
+        "key": "DATASKETCHES",
+        "project": "Apache Datasketches",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://datasketches.apache.org"
+    },
+    {
+        "key": "NUVEM",
+        "project": "Nuvem",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/projects/nuvem.html"
+    },
+    {
+        "key": "SCB",
+        "project": "Apache ServiceComb",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://incubator.apache.org/projects/servicecomb.html"
+    },
+    {
+        "key": "SLIDER",
+        "project": "Slider",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://slider.incubator.apache.org"
+    },
+    {
+        "key": "MSHADE",
+        "project": "Maven Shade Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-shade-plugin/"
+    },
+    {
+        "key": "MINIFI",
+        "project": "Apache NiFi MiNiFi - MOVED TO NIFI PROJECT",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://nifi.apache.org/minifi"
+    },
+    {
+        "key": "MRESOURCES",
+        "project": "Maven Resources Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-resources-plugin/"
+    },
+    {
+        "key": "WSS",
+        "project": "WSS4J",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/wss4j/"
+    },
+    {
+        "key": "RAVE",
+        "project": "Rave",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://rave.apache.org/"
+    },
+    {
+        "key": "MYFACESTEST",
+        "project": "MyFaces Test",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://myfaces.apache.org/test"
+    },
+    {
+        "key": "MSCMPUB",
+        "project": "Maven SCM Publish Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-scm-publish-plugin/"
+    },
+    {
+        "key": "AUTOTAG",
+        "project": "Tiles Autotag",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org"
+    },
+    {
+        "key": "RATIS",
+        "project": "Ratis",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ratis.apache.org/"
+    },
+    {
+        "key": "SLING",
+        "project": "Sling",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://sling.apache.org/"
+    },
+    {
+        "key": "XMLRPC",
+        "project": "XML-RPC",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/xmlrpc/"
+    },
+    {
+        "key": "EXLBR",
+        "project": "Excalibur Components",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://excalibur.apache.org/"
+    },
+    {
+        "key": "MJAVADOC",
+        "project": "Maven Javadoc Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-javadoc-plugin/"
+    },
+    {
+        "key": "PNIX",
+        "project": "Avalon Phoenix",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://avalon.apache.org/"
+    },
+    {
+        "key": "LCN4C",
+        "project": "Lucene4c",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/lucene4c/"
+    },
+    {
+        "key": "COCOON3",
+        "project": "Cocoon 3",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://cocoon.apache.org/3.0/"
+    },
+    {
+        "key": "SCIMPLE",
+        "project": "Apache SCIMple",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://directory.apache.org/scimple"
+    },
+    {
+        "key": "COMMONSSITE",
+        "project": "Apache Commons All",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/"
+    },
+    {
+        "key": "JXR",
+        "project": "Maven JXR",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/jxr/"
+    },
+    {
+        "key": "EXTVAL",
+        "project": "MyFaces Extensions Validator",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://myfaces.apache.org/extensions/validator/"
+    },
+    {
+        "key": "WEEX",
+        "project": "Weex (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://incubator.apache.org/projects/weex.html"
+    },
+    {
+        "key": "PROVISIONR",
+        "project": "Provisionr",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://provisionr.incubator.apache.org/"
+    },
+    {
+        "key": "SB",
+        "project": "Struts Sandbox",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://struts.apache.org/struts-sandbox/"
+    },
+    {
+        "key": "MANTTASKS",
+        "project": "Maven Ant Tasks (RETIRED)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/ant-tasks.html"
+    },
+    {
+        "key": "DL",
+        "project": "DistributedLog",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://distributedlog.io"
+    },
+    {
+        "key": "JUDDI",
+        "project": "jUDDI (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/juddi.html"
+    },
+    {
+        "key": "CORAL",
+        "project": "Apache Coral",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://coral.apache.org"
+    },
+    {
+        "key": "BLUESKY",
+        "project": "Bluesky",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/projects/bluesky"
+    },
+    {
+        "key": "TM",
+        "project": "BRAND",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://www.apache.org/foundation/marks/"
+    },
+    {
+        "key": "NLPCRAFT",
+        "project": "NLPCraft",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://nlpcraft.apache.org"
+    },
+    {
+        "key": "ASFSITE",
+        "project": "www.apache.org website",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://www.apache.org"
+    },
+    {
+        "key": "FEDIZ",
+        "project": "CXF-Fediz",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://cxf.apache.org/fediz.html"
+    },
+    {
+        "key": "OAK",
+        "project": "Jackrabbit Oak",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://jackrabbit.apache.org/oak"
+    },
+    {
+        "key": "MADLIB",
+        "project": "Apache MADlib",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://madlib.apache.org/"
+    },
+    {
+        "key": "MODPYTHON",
+        "project": "mod_python",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://modpython.org"
+    },
+    {
+        "key": "ATTIC",
+        "project": "Attic",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://attic.apache.org"
+    },
+    {
+        "key": "MPOM",
+        "project": "Maven POMs",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/pom/"
+    },
+    {
+        "key": "TWILL",
+        "project": "Apache Twill (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/twill.html"
+    },
+    {
+        "key": "PLANET",
+        "project": "Avalon Metro Planet",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://avalon.apache.org/"
+    },
+    {
+        "key": "ALOIS",
+        "project": "ALOIS",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/alois"
+    },
+    {
+        "key": "ROCKETMQ",
+        "project": "Apache RocketMQ",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/projects/rocketmq.html"
+    },
+    {
+        "key": "ORP",
+        "project": "Open Relevance Project ",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://lucene.apache.org/openrelevance/"
+    },
+    {
+        "key": "IMPALA",
+        "project": "IMPALA",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://impala.apache.org/"
+    },
+    {
+        "key": "TINKERPOP",
+        "project": "TinkerPop",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://tinkerpop.apache.org/"
+    },
+    {
+        "key": "OPENEJB",
+        "project": "OpenEJB",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://openejb.apache.org"
+    },
+    {
+        "key": "MWRAPPER",
+        "project": "Maven Wrapper",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://maven.apache.org/wrapper/"
+    },
+    {
+        "key": "ADDR",
+        "project": "Addressing",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://axis.apache.org/"
+    },
+    {
+        "key": "JUNEAU",
+        "project": "Juneau",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://juneau.apache.org"
+    },
+    {
+        "key": "MRESOLVER",
+        "project": "Maven Resolver",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://maven.apache.org/resolver/"
+    },
+    {
+        "key": "MSITE",
+        "project": "Maven Site Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-site-plugin/"
+    },
+    {
+        "key": "JACOB",
+        "project": "ODE JaCOb",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ode.apache.org/"
+    },
+    {
+        "key": "HISE",
+        "project": "HISE",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/hise"
+    },
+    {
+        "key": "ECHARTS",
+        "project": "Apache ECharts",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://echarts.incubator.apache.org/"
+    },
+    {
+        "key": "HCATALOG",
+        "project": "HCatalog",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://hive.apache.org"
+    },
+    {
+        "key": "XBEAN",
+        "project": "XBean",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://geronimo.apache.org/xbean/"
+    },
+    {
+        "key": "MCHANGES",
+        "project": "Maven Changes Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-changes-plugin/"
+    },
+    {
+        "key": "MTOMCAT",
+        "project": "Apache Tomcat Maven Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://tomcat.apache.org/maven-plugin.html"
+    },
+    {
+        "key": "GBUILD",
+        "project": "GBuild",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://geronimo.apache.org/"
+    },
+    {
+        "key": "FLAGON",
+        "project": "Flagon",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://flagon.incubator.apache.org"
+    },
+    {
+        "key": "INLONG",
+        "project": "Apache InLong",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://inlong.apache.org"
+    },
+    {
+        "key": "JOSHUA",
+        "project": "Joshua (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/joshua.html"
+    },
+    {
+        "key": "ASTERIXDB",
+        "project": "Apache AsterixDB",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://asterixdb.apache.org"
+    },
+    {
+        "key": "DISCOVERY",
+        "project": "Commons Discovery",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/dormant/commons-discovery/"
+    },
+    {
+        "key": "HADOOP",
+        "project": "Hadoop Common",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://hadoop.apache.org/"
+    },
+    {
+        "key": "WSCOMMONS",
+        "project": "WS-Commons",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/commons/"
+    },
+    {
+        "key": "MXNET",
+        "project": "Apache MXNet",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://mxnet.apache.org/"
+    },
+    {
+        "key": "TILESSHARED",
+        "project": "Tiles Shared Resources",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/"
+    },
+    {
+        "key": "MSCRIPTING",
+        "project": "Maven Scripting",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://maven.apache.org/plugins/maven-scripting-plugin"
+    },
+    {
+        "key": "STUDIO",
+        "project": "Avalon Merlin Studio",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://avalon.apache.org/"
+    },
+    {
+        "key": "ATLAS",
+        "project": "Atlas",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://atlas.apache.org"
+    },
+    {
+        "key": "MASSEMBLY",
+        "project": "Maven Assembly Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-assembly-plugin/"
+    },
+    {
+        "key": "APOLLO",
+        "project": "WSRF",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/ws-fx/wsrf/"
+    },
+    {
+        "key": "MPT",
+        "project": "James MPT",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/mpt"
+    },
+    {
+        "key": "PRIMITIVES",
+        "project": "Commons Primitives",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/dormant/commons-primitives/"
+    },
+    {
+        "key": "RANGER",
+        "project": "Ranger",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ranger.apache.org"
+    },
+    {
+        "key": "JSIEVE",
+        "project": "James jSieve",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://james.apache.org/jsieve/"
+    },
+    {
+        "key": "XAP",
+        "project": "XAP",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/xap/"
+    },
+    {
+        "key": "SUREFIRE",
+        "project": "Maven Surefire",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/surefire/"
+    },
+    {
+        "key": "ATTRIBUTES",
+        "project": "Commons Attributes",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/attributes/"
+    },
+    {
+        "key": "BLAZE",
+        "project": "ActiveRealTime (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/activemq.html"
+    },
+    {
+        "key": "MREPOSITORY",
+        "project": "Maven Repository Plugin (RETIRED)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-repository-plugin/"
+    },
+    {
+        "key": "HTTPDRAFT",
+        "project": "Labs WebArch draft-fielding-http (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/labs.html"
+    },
+    {
+        "key": "CHAINSAW",
+        "project": "Apache Chainsaw",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://logging.apache.org/chainsaw/2.x/"
+    },
+    {
+        "key": "SUBMARINE",
+        "project": "Apache Submarine",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://submarine.apache.org"
+    },
+    {
+        "key": "MENFORCER",
+        "project": "Maven Enforcer Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-enforcer-plugin/"
+    },
+    {
+        "key": "MACR",
+        "project": "Maven ACR Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-acr-plugin/"
+    },
+    {
+        "key": "MRAR",
+        "project": "Maven RAR Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-rar-plugin/"
+    },
+    {
+        "key": "STDCXX",
+        "project": "C++ Standard Library",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://stdcxx.apache.org/"
+    },
+    {
+        "key": "ARTEMIS",
+        "project": "ActiveMQ Artemis",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://activemq.apache.org/artemis"
+    },
+    {
+        "key": "HERALDRY",
+        "project": "Heraldry",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/projects/heraldry.html"
+    },
+    {
+        "key": "ARROW",
+        "project": "Apache Arrow",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://arrow.apache.org"
+    },
+    {
+        "key": "GERONIMODEVTOOLS",
+        "project": "Geronimo-Devtools",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://geronimo.apache.org/development-tools.html"
+    },
+    {
+        "key": "SITE",
+        "project": "Struts Shared Resources",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://struts.apache.org/"
+    },
+    {
+        "key": "MNGSITE",
+        "project": "Maven Project Web Site",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/"
+    },
+    {
+        "key": "NIFI",
+        "project": "Apache NiFi",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://nifi.apache.org"
+    },
+    {
+        "key": "TAMAYA",
+        "project": "Tamaya",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://tamaya.incubator.apache.org"
+    },
+    {
+        "key": "YOKO",
+        "project": "Yoko - CORBA Server",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://geronimo.apache.org/yoko/"
+    },
+    {
+        "key": "MPH",
+        "project": "Maven Help Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-help-plugin/"
+    },
+    {
+        "key": "OPENOFFICE",
+        "project": "OpenOffice",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://openoffice.apache.org"
+    },
+    {
+        "key": "PODLINGNAMESEARCH",
+        "project": "Podling Suitable Names Search",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/guides/names.html"
+    },
+    {
+        "key": "ZIPKIN",
+        "project": "Apache Zipkin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://zipkin.incubator.apache.org"
+    },
+    {
+        "key": "PRC",
+        "project": "Public Relations",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://www.apache.org/press/"
+    },
+    {
+        "key": "CMDA",
+        "project": "Apache Climate Model Diagnostic Analyzer",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://incubator.apache.org/"
+    },
+    {
+        "key": "AVALON",
+        "project": "Avalon",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://excalibur.apache.org/"
+    },
+    {
+        "key": "ARMI",
+        "project": "AltRMI",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/projects/altrmi"
+    },
+    {
+        "key": "DISPATCH",
+        "project": "Qpid Dispatch",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://qpid.apache.org"
+    },
+    {
+        "key": "NETBEANSINFRA",
+        "project": "Apache NetBeans Infra",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://netbeans.apache.org"
+    },
+    {
+        "key": "DORMANT",
+        "project": "Commons Dormant",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/dormant/index.html"
+    },
+    {
+        "key": "TS",
+        "project": "Traffic Server",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://trafficserver.apache.org"
+    },
+    {
+        "key": "KI",
+        "project": "Ki",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/jsecurity"
+    },
+    {
+        "key": "MPMD",
+        "project": "Maven PMD Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-pmd-plugin/"
+    },
+    {
+        "key": "AXIS",
+        "project": "Axis",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/axis/"
+    },
+    {
+        "key": "JCRVLT",
+        "project": "Jackrabbit FileVault",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://wiki.apache.org/jackrabbit/JackrabbitFileVault"
+    },
+    {
+        "key": "WAGON",
+        "project": "Maven Wagon",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/wagon"
+    },
+    {
+        "key": "CASSANDRASC",
+        "project": "Sidecar for Apache Cassandra",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://cassandra.apache.org"
+    },
+    {
+        "key": "NPANDAY",
+        "project": "NPanday",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/npanday/"
+    },
+    {
+        "key": "MLINKCHECK",
+        "project": "Maven Linkcheck Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-linkcheck-plugin/"
+    },
+    {
+        "key": "ZETACOMP",
+        "project": "Zeta Components",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/projects/zetacomponents.html"
+    },
+    {
+        "key": "INCUBATOR",
+        "project": "Incubator",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://incubator.apache.org"
+    },
+    {
+        "key": "FINCN",
+        "project": "Fineract Cloud Native",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://fineract.apache.org"
+    },
+    {
+        "key": "MFCOMMONS",
+        "project": "MyFaces Commons",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://myfaces.apache.org/commons/"
+    },
+    {
+        "key": "IOTA",
+        "project": "Iota",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://iota.incubator.apache.org"
+    },
+    {
+        "key": "AVNSHARP",
+        "project": "Avalon Castle",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://avalon.apache.org/"
+    },
+    {
+        "key": "STOMP",
+        "project": "Stomp Specification",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://activemq.apache.org/stomp/"
+    },
+    {
+        "key": "OEP",
+        "project": "OpenEJB Eclipse Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://openejb.apache.org"
+    },
+    {
+        "key": "TRAINING",
+        "project": "Apache Training",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://training.apache.org"
+    },
+    {
+        "key": "FEEDPARSER",
+        "project": "Commons FeedParser",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://commons.apache.org/dormant/feedparser/"
+    },
+    {
+        "key": "MDOAP",
+        "project": "Maven DOAP Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-doap-plugin/"
+    },
+    {
+        "key": "LEGAL",
+        "project": "Legal Discuss",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://www.apache.org/legal/"
+    },
+    {
+        "key": "MASFRES",
+        "project": "Apache Maven Resource Bundles",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/apache-resource-bundles/"
+    },
+    {
+        "key": "MARVIN",
+        "project": "Apache Marvin (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/incubator.html"
+    },
+    {
+        "key": "TAPESTRY",
+        "project": "Tapestry",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://tapestry.apache.org"
+    },
+    {
+        "key": "EAGLE",
+        "project": "Eagle (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/eagle.html"
+    },
+    {
+        "key": "MAPREDUCE",
+        "project": "Hadoop Map/Reduce",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://hadoop.apache.org"
+    },
+    {
+        "key": "USERGRID",
+        "project": "Usergrid (Retired)",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://attic.apache.org/projects/usergrid.html"
+    },
+    {
+        "key": "AMQNET",
+        "project": "ActiveMQ .Net",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://activemq.apache.org/nms/"
+    },
+    {
+        "key": "MIRAE",
+        "project": "Mirae",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ws.apache.org/mirae/"
+    },
+    {
+        "key": "MWAR",
+        "project": "Maven WAR Plugin",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://maven.apache.org/plugins/maven-war-plugin/"
+    },
+    {
+        "key": "TSIK",
+        "project": "TSIK",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/projects/tsik.html"
+    },
+    {
+        "key": "JCRRMI",
+        "project": "Jackrabbit JCR-RMI",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://jackrabbit.apache.org/"
+    },
+    {
+        "key": "JSPWIKI",
+        "project": "JSPWiki",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://jspwiki.apache.org"
+    },
+    {
+        "key": "STONEHENGE",
+        "project": "Stonehenge",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/stonehenge"
+    },
+    {
+        "key": "PIRK",
+        "project": "PIRK",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://pirk.incubator.apache.org"
+    },
+    {
+        "key": "DEPOT",
+        "project": "Depot",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/projects/depot.html"
+    },
+    {
+        "key": "DROIDS",
+        "project": "Droids",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://incubator.apache.org/droids/"
+    },
+    {
+        "key": "CB",
+        "project": "Apache Cordova",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://cordova.apache.org/"
+    },
+    {
+        "key": "PINOT",
+        "project": "Apache Pinot",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://pinot.apache.org"
+    },
+    {
+        "key": "IBATIS",
+        "project": "iBatis for Java [READ ONLY]",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "http://ibatis.apache.org"
+    },
+    {
+        "key": "PORTLETBRIDGE",
+        "project": "MyFaces Portlet Bridge",
+        "language": null,
+        "domain": null,
+        "ecosystem": "Apache",
+        "url": "https://issues.apache.org/jira/browse/PortletBridge"
+    }
+]
