@@ -1,17 +1,17 @@
 [
     {
         "id": "AUTH",
-        "name": null,
-        "repo": null,
+        "name": "OpenShift Authentication",
+        "repo": "https://github.com/openshift/cluster-authentication-operator",
         "website": null,
-        "domain": null,
-        "language": null,
+        "domain": "",
+        "language": "go",
         "ecosystem": "RedHat",
         "project_tag": "RedHat-AUTH"
     },
     {
         "id": "ACM",
-        "name": null,
+        "name": "Red Hat Advanced Cluster Management",
         "repo": null,
         "website": null,
         "domain": null,
