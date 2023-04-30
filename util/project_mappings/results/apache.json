@@ -326,10 +326,7 @@
     {
         "key": "FOR",
         "project": "Apache Forrest",
-        "language": [
-            "java",
-            "xml"
-        ],
+        "language": "java",
         "domain": [
             "retired",
             "build-management",
@@ -452,8 +449,7 @@
         "project": "Apache Guacamole",
         "language": [
             "c",
-            "java",
-            "javascript"
+            "java"
         ],
         "domain": [
             "network-client",
@@ -931,10 +927,7 @@
     {
         "key": "UIMA",
         "project": "Apache UIMA",
-        "language": [
-            "java",
-            "c++"
-        ],
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 6479
