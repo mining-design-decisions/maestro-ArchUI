@@ -21,7 +21,8 @@ def fixtext_html(str):
 
 @bp.route('/view/<query>/<page>', methods=["GET"])
 def view(query, page):
-    pageLimit = request.args.get('page_limit', default=10, type=int)
+    pageLimit = request.args.get('page_limit', default=dbapi.get_cache('page_limit', 10), type=int)
+    dbapi.set_cache('page_limit', pageLimit)
     sort = request.args.get('sort', default=None)
     sort_asc = request.args.get('sort_asc', default='true')
     sort_asc = sort_asc == 'true'
