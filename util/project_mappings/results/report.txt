@@ -5,3 +5,12 @@ Apache
 	-Apache Qpid: Lots of different repositories, main language does not seem to be Java. Not sure what it is, though.
 	-Apache Guacamole: has a server in C and a client in Java.
 -There are 52 projects with undocumented domains. Not sure how to assign them to these projects without guesswork.
+
+RedHat
+-Amount of #issues>=1000 projects: 97
+-Need to go through everything for OpenShift projects at some point. All the same stuff likely.
+-Name == null: 2
+-Repo == null: 42
+-Website == null: 40
+-Domain == null: 57
+-Language == null: 46
