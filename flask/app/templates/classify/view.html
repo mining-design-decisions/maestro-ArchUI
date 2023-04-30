@@ -32,22 +32,22 @@
                     <div class="card-body">
                         <h4>Set Issue Manual Label</h4>
                         <div class="form-group">
-                            <input name="nonarch" id="nonarch" type="checkbox" checked="checked" onchange="classificationChanged()">
+                            <input name="nonarch" id="nonarch" type="checkbox" checked="checked" onchange="classificationChanged(false)">
                             <label for="nonarch" class="col-form-label">Non-Architectural</label>
                         </div>
 
                         <div class="form-group">
-                            <input name="existence" id="existence" type="checkbox" onchange="classificationChanged()">
+                            <input name="existence" id="existence" type="checkbox" onchange="classificationChanged(true)">
                             <label for="existence" class="col-form-label">Existence</label>
                         </div>
     
                         <div class="form-group">
-                            <input name="executive" id="executive" type="checkbox" onchange="classificationChanged()">
+                            <input name="executive" id="executive" type="checkbox" onchange="classificationChanged(true)">
                             <label for="executive" class="col-form-label">Executive</label>
                         </div>
     
                         <div class="form-group">
-                            <input name="property" id="property" type="checkbox" onchange="classificationChanged()">
+                            <input name="property" id="property" type="checkbox" onchange="classificationChanged(true)">
                             <label for="property" class="col-form-label">Property</label>
                         </div>
     
@@ -324,15 +324,25 @@ function cancelCommentEdit() {
     setCommentsFor(current_modal_issue_id)
 }
 
-function classificationChanged() {
+function classificationChanged(architectural) {
     nonarch = document.getElementById('nonarch')
     existence = document.getElementById('existence')
     property = document.getElementById('property')
     executive = document.getElementById('executive')
 
-    if (existence.checked || property.checked || executive.checked) {
-        nonarch.checked = false
+    if (architectural) {
+        if (existence.checked || property.checked || executive.checked) {
+            nonarch.checked = false
+        }
     }
+    else {
+        if (nonarch.checked) {
+            existence.checked = false;
+            property.checked = false;
+            executive.checked = false;
+        }
+    }
+    
 }
 
 current_modal_issue_id = null
