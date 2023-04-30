@@ -1,0 +1,1046 @@
+[
+    {
+        "key": "DAOS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "IntelDAOS",
+        "issue_count": 11490,
+        "link": "https://daosio.atlassian.net/browse/DAOS/summary"
+    },
+    {
+        "key": "MDEV",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MariaDB",
+        "issue_count": 22436,
+        "link": "https://jira.mariadb.org/browse/MDEV/summary"
+    },
+    {
+        "key": "MXS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MariaDB",
+        "issue_count": 3333,
+        "link": "https://jira.mariadb.org/browse/MXS/summary"
+    },
+    {
+        "key": "MCOL",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MariaDB",
+        "issue_count": 3325,
+        "link": "https://jira.mariadb.org/browse/MCOL/summary"
+    },
+    {
+        "key": "TCAP",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JFrog",
+        "issue_count": 1070,
+        "link": "https://jfrog.com/jira/browse/TCAP/summary"
+    },
+    {
+        "key": "RTFACT",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JFrog",
+        "issue_count": 16298,
+        "link": "https://jfrog.com/jira/browse/RTFACT/summary"
+    },
+    {
+        "key": "HAP",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JFrog",
+        "issue_count": 1294,
+        "link": "https://jfrog.com/jira/browse/HAP/summary"
+    },
+    {
+        "key": "SRCTREEWIN",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 9861,
+        "link": "https://jira.atlassian.com/browse/SRCTREEWIN/summary"
+    },
+    {
+        "key": "SRCTREE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 5491,
+        "link": "https://jira.atlassian.com/browse/SRCTREE/summary"
+    },
+    {
+        "key": "JSWSERVER",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 13641,
+        "link": "https://jira.atlassian.com/browse/JSWSERVER/summary"
+    },
+    {
+        "key": "JSWCLOUD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 14188,
+        "link": "https://jira.atlassian.com/browse/JSWCLOUD/summary"
+    },
+    {
+        "key": "JSDSERVER",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 8226,
+        "link": "https://jira.atlassian.com/browse/JSDSERVER/summary"
+    },
+    {
+        "key": "JSDCLOUD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 8186,
+        "link": "https://jira.atlassian.com/browse/JSDCLOUD/summary"
+    },
+    {
+        "key": "JRASERVER",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 48731,
+        "link": "https://jira.atlassian.com/browse/JRASERVER/summary"
+    },
+    {
+        "key": "JRACLOUD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 29658,
+        "link": "https://jira.atlassian.com/browse/JRACLOUD/summary"
+    },
+    {
+        "key": "JPOSERVER",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 2374,
+        "link": "https://jira.atlassian.com/browse/JPOSERVER/summary"
+    },
+    {
+        "key": "ID",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 1506,
+        "link": "https://jira.atlassian.com/browse/ID/summary"
+    },
+    {
+        "key": "I18N",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 1057,
+        "link": "https://jira.atlassian.com/browse/I18N/summary"
+    },
+    {
+        "key": "FE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 5590,
+        "link": "https://jira.atlassian.com/browse/FE/summary"
+    },
+    {
+        "key": "CWD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 4535,
+        "link": "https://jira.atlassian.com/browse/CWD/summary"
+    },
+    {
+        "key": "CRUC",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 6784,
+        "link": "https://jira.atlassian.com/browse/CRUC/summary"
+    },
+    {
+        "key": "CONFSERVER",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 45081,
+        "link": "https://jira.atlassian.com/browse/CONFSERVER/summary"
+    },
+    {
+        "key": "CONFCLOUD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 26847,
+        "link": "https://jira.atlassian.com/browse/CONFCLOUD/summary"
+    },
+    {
+        "key": "CLOV",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 1501,
+        "link": "https://jira.atlassian.com/browse/CLOV/summary"
+    },
+    {
+        "key": "CLOUD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 7831,
+        "link": "https://jira.atlassian.com/browse/CLOUD/summary"
+    },
+    {
+        "key": "BSERV",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 8430,
+        "link": "https://jira.atlassian.com/browse/BSERV/summary"
+    },
+    {
+        "key": "BCLOUD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 21282,
+        "link": "https://jira.atlassian.com/browse/BCLOUD/summary"
+    },
+    {
+        "key": "BAM",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 15104,
+        "link": "https://jira.atlassian.com/browse/BAM/summary"
+    },
+    {
+        "key": "JIRAALIGN",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 2280,
+        "link": "https://jira.atlassian.com/browse/JIRAALIGN/summary"
+    },
+    {
+        "key": "OPSGENIE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Jira",
+        "issue_count": 1284,
+        "link": "https://jira.atlassian.com/browse/OPSGENIE/summary"
+    },
+    {
+        "key": "ICS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mindville",
+        "issue_count": 1847,
+        "link": "https://jira.mindville.com/browse/ICS/summary"
+    },
+    {
+        "key": "QTVSADDINBUG",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 1080,
+        "link": "https://bugreports.qt.io/browse/QTVSADDINBUG/summary"
+    },
+    {
+        "key": "QTQAINFRA",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 4749,
+        "link": "https://bugreports.qt.io/browse/QTQAINFRA/summary"
+    },
+    {
+        "key": "QTMOBILITY",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 1926,
+        "link": "https://bugreports.qt.io/browse/QTMOBILITY/summary"
+    },
+    {
+        "key": "QTIFW",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 2671,
+        "link": "https://bugreports.qt.io/browse/QTIFW/summary"
+    },
+    {
+        "key": "QTCREATORBUG",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 27018,
+        "link": "https://bugreports.qt.io/browse/QTCREATORBUG/summary"
+    },
+    {
+        "key": "QTBUG",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 108810,
+        "link": "https://bugreports.qt.io/browse/QTBUG/summary"
+    },
+    {
+        "key": "QT3DS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 4097,
+        "link": "https://bugreports.qt.io/browse/QT3DS/summary"
+    },
+    {
+        "key": "QSR",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 1297,
+        "link": "https://bugreports.qt.io/browse/QSR/summary"
+    },
+    {
+        "key": "QDS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 7807,
+        "link": "https://bugreports.qt.io/browse/QDS/summary"
+    },
+    {
+        "key": "QBS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 1669,
+        "link": "https://bugreports.qt.io/browse/QBS/summary"
+    },
+    {
+        "key": "PYSIDE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 2025,
+        "link": "https://bugreports.qt.io/browse/PYSIDE/summary"
+    },
+    {
+        "key": "AUTOSUITE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Qt",
+        "issue_count": 1531,
+        "link": "https://bugreports.qt.io/browse/AUTOSUITE/summary"
+    },
+    {
+        "key": "WT",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 10403,
+        "link": "https://jira.mongodb.org/browse/WT/summary"
+    },
+    {
+        "key": "TOOLS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 2676,
+        "link": "https://jira.mongodb.org/browse/TOOLS/summary"
+    },
+    {
+        "key": "SWIFT",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 1590,
+        "link": "https://jira.mongodb.org/browse/SWIFT/summary"
+    },
+    {
+        "key": "SERVER",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 71031,
+        "link": "https://jira.mongodb.org/browse/SERVER/summary"
+    },
+    {
+        "key": "RUST",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 1481,
+        "link": "https://jira.mongodb.org/browse/RUST/summary"
+    },
+    {
+        "key": "RUBY",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 3017,
+        "link": "https://jira.mongodb.org/browse/RUBY/summary"
+    },
+    {
+        "key": "PYTHON",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 3315,
+        "link": "https://jira.mongodb.org/browse/PYTHON/summary"
+    },
+    {
+        "key": "PHPC",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 1739,
+        "link": "https://jira.mongodb.org/browse/PHPC/summary"
+    },
+    {
+        "key": "NODE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 4795,
+        "link": "https://jira.mongodb.org/browse/NODE/summary"
+    },
+    {
+        "key": "MOTOR",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 1017,
+        "link": "https://jira.mongodb.org/browse/MOTOR/summary"
+    },
+    {
+        "key": "MONGOSH",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 1047,
+        "link": "https://jira.mongodb.org/browse/MONGOSH/summary"
+    },
+    {
+        "key": "MONGOID",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 5446,
+        "link": "https://jira.mongodb.org/browse/MONGOID/summary"
+    },
+    {
+        "key": "JAVA",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 4481,
+        "link": "https://jira.mongodb.org/browse/JAVA/summary"
+    },
+    {
+        "key": "GODRIVER",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 2615,
+        "link": "https://jira.mongodb.org/browse/GODRIVER/summary"
+    },
+    {
+        "key": "EVG",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 15463,
+        "link": "https://jira.mongodb.org/browse/EVG/summary"
+    },
+    {
+        "key": "DRIVERS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 1235,
+        "link": "https://jira.mongodb.org/browse/DRIVERS/summary"
+    },
+    {
+        "key": "DOCS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 14697,
+        "link": "https://jira.mongodb.org/browse/DOCS/summary"
+    },
+    {
+        "key": "CXX",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 2504,
+        "link": "https://jira.mongodb.org/browse/CXX/summary"
+    },
+    {
+        "key": "CSHARP",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 4283,
+        "link": "https://jira.mongodb.org/browse/CSHARP/summary"
+    },
+    {
+        "key": "COMPASS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 3607,
+        "link": "https://jira.mongodb.org/browse/COMPASS/summary"
+    },
+    {
+        "key": "CDRIVER",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "MongoDB",
+        "issue_count": 3695,
+        "link": "https://jira.mongodb.org/browse/CDRIVER/summary"
+    },
+    {
+        "key": "STORM",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "SecondLife",
+        "issue_count": 1547,
+        "link": "https://jira.secondlife.com/browse/STORM/summary"
+    },
+    {
+        "key": "SAK",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Sakai",
+        "issue_count": 45122,
+        "link": "https://jira.sakaiproject.org/browse/SAK/summary"
+    },
+    {
+        "key": "GRBK",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Sakai",
+        "issue_count": 1433,
+        "link": "https://jira.sakaiproject.org/browse/GRBK/summary"
+    },
+    {
+        "key": "EVALSYS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Sakai",
+        "issue_count": 1581,
+        "link": "https://jira.sakaiproject.org/browse/EVALSYS/summary"
+    },
+    {
+        "key": "XD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 3707,
+        "link": "https://jira.spring.io/browse/XD/summary"
+    },
+    {
+        "key": "SWS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1041,
+        "link": "https://jira.spring.io/browse/SWS/summary"
+    },
+    {
+        "key": "SWF",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1668,
+        "link": "https://jira.spring.io/browse/SWF/summary"
+    },
+    {
+        "key": "STS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 4407,
+        "link": "https://jira.spring.io/browse/STS/summary"
+    },
+    {
+        "key": "SPRNET",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1537,
+        "link": "https://jira.spring.io/browse/SPRNET/summary"
+    },
+    {
+        "key": "SPR",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 17413,
+        "link": "https://jira.spring.io/browse/SPR/summary"
+    },
+    {
+        "key": "SEC",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 3150,
+        "link": "https://jira.spring.io/browse/SEC/summary"
+    },
+    {
+        "key": "ROO",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 3987,
+        "link": "https://jira.spring.io/browse/ROO/summary"
+    },
+    {
+        "key": "INT",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 4494,
+        "link": "https://jira.spring.io/browse/INT/summary"
+    },
+    {
+        "key": "IDE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1386,
+        "link": "https://jira.spring.io/browse/IDE/summary"
+    },
+    {
+        "key": "DATAREST",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1565,
+        "link": "https://jira.spring.io/browse/DATAREST/summary"
+    },
+    {
+        "key": "DATAREDIS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1257,
+        "link": "https://jira.spring.io/browse/DATAREDIS/summary"
+    },
+    {
+        "key": "DATAMONGO",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 2590,
+        "link": "https://jira.spring.io/browse/DATAMONGO/summary"
+    },
+    {
+        "key": "DATAJPA",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1687,
+        "link": "https://jira.spring.io/browse/DATAJPA/summary"
+    },
+    {
+        "key": "DATAGRAPH",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1465,
+        "link": "https://jira.spring.io/browse/DATAGRAPH/summary"
+    },
+    {
+        "key": "DATAES",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1003,
+        "link": "https://jira.spring.io/browse/DATAES/summary"
+    },
+    {
+        "key": "DATACMNS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 1781,
+        "link": "https://jira.spring.io/browse/DATACMNS/summary"
+    },
+    {
+        "key": "BATCH",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Spring",
+        "issue_count": 2598,
+        "link": "https://jira.spring.io/browse/BATCH/summary"
+    },
+    {
+        "key": "OSSRH",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Sonatype",
+        "issue_count": 87533,
+        "link": "https://issues.sonatype.org/browse/OSSRH/summary"
+    },
+    {
+        "key": "NEXUS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Sonatype",
+        "issue_count": 11187,
+        "link": "https://issues.sonatype.org/browse/NEXUS/summary"
+    },
+    {
+        "key": "MVNCENTRAL",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Sonatype",
+        "issue_count": 1668,
+        "link": "https://issues.sonatype.org/browse/MVNCENTRAL/summary"
+    },
+    {
+        "key": "WEB",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mojang",
+        "issue_count": 4031,
+        "link": "https://bugs.mojang.com/browse/WEB/summary"
+    },
+    {
+        "key": "REALMS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mojang",
+        "issue_count": 10203,
+        "link": "https://bugs.mojang.com/browse/REALMS/summary"
+    },
+    {
+        "key": "MCPE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mojang",
+        "issue_count": 160776,
+        "link": "https://bugs.mojang.com/browse/MCPE/summary"
+    },
+    {
+        "key": "MCL",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mojang",
+        "issue_count": 19387,
+        "link": "https://bugs.mojang.com/browse/MCL/summary"
+    },
+    {
+        "key": "MCD",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mojang",
+        "issue_count": 7063,
+        "link": "https://bugs.mojang.com/browse/MCD/summary"
+    },
+    {
+        "key": "MCCE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mojang",
+        "issue_count": 11774,
+        "link": "https://bugs.mojang.com/browse/MCCE/summary"
+    },
+    {
+        "key": "MC",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mojang",
+        "issue_count": 225049,
+        "link": "https://bugs.mojang.com/browse/MC/summary"
+    },
+    {
+        "key": "BDS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Mojang",
+        "issue_count": 14711,
+        "link": "https://bugs.mojang.com/browse/BDS/summary"
+    },
+    {
+        "key": "STL",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Hyperledger",
+        "issue_count": 1664,
+        "link": "https://jira.hyperledger.org/browse/STL/summary"
+    },
+    {
+        "key": "IS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Hyperledger",
+        "issue_count": 1536,
+        "link": "https://jira.hyperledger.org/browse/IS/summary"
+    },
+    {
+        "key": "IR",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Hyperledger",
+        "issue_count": 1172,
+        "link": "https://jira.hyperledger.org/browse/IR/summary"
+    },
+    {
+        "key": "INDY",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Hyperledger",
+        "issue_count": 2323,
+        "link": "https://jira.hyperledger.org/browse/INDY/summary"
+    },
+    {
+        "key": "FABN",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Hyperledger",
+        "issue_count": 1611,
+        "link": "https://jira.hyperledger.org/browse/FABN/summary"
+    },
+    {
+        "key": "FAB",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "Hyperledger",
+        "issue_count": 13926,
+        "link": "https://jira.hyperledger.org/browse/FAB/summary"
+    },
+    {
+        "key": "UPM",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 3767,
+        "link": "https://ecosystem.atlassian.net/browse/UPM/summary"
+    },
+    {
+        "key": "STRM",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 2295,
+        "link": "https://ecosystem.atlassian.net/browse/STRM/summary"
+    },
+    {
+        "key": "PLUG",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 1165,
+        "link": "https://ecosystem.atlassian.net/browse/PLUG/summary"
+    },
+    {
+        "key": "PLE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 1499,
+        "link": "https://ecosystem.atlassian.net/browse/PLE/summary"
+    },
+    {
+        "key": "PL",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 2889,
+        "link": "https://ecosystem.atlassian.net/browse/PL/summary"
+    },
+    {
+        "key": "FRGE",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 1155,
+        "link": "https://ecosystem.atlassian.net/browse/FRGE/summary"
+    },
+    {
+        "key": "AUI",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 4225,
+        "link": "https://ecosystem.atlassian.net/browse/AUI/summary"
+    },
+    {
+        "key": "APL",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 1270,
+        "link": "https://ecosystem.atlassian.net/browse/APL/summary"
+    },
+    {
+        "key": "AMPS",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 1514,
+        "link": "https://ecosystem.atlassian.net/browse/AMPS/summary"
+    },
+    {
+        "key": "AMKT",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 4604,
+        "link": "https://ecosystem.atlassian.net/browse/AMKT/summary"
+    },
+    {
+        "key": "AG",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 1486,
+        "link": "https://ecosystem.atlassian.net/browse/AG/summary"
+    },
+    {
+        "key": "ACJIRA",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 2116,
+        "link": "https://ecosystem.atlassian.net/browse/ACJIRA/summary"
+    },
+    {
+        "key": "AC",
+        "project": null,
+        "language": null,
+        "domain": null,
+        "ecosystem": "JiraEcosystem",
+        "issue_count": 1555,
+        "link": "https://ecosystem.atlassian.net/browse/AC/summary"
+    }
+]
