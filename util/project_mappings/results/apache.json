@@ -1296,472 +1296,483 @@
     },
     {
         "key": "YUNIKORN",
-        "project": null,
-        "language": null,
+        "project": "Apache YuniKorn",
+        "language": "go",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1620
     },
     {
         "key": "YARN",
-        "project": null,
-        "language": null,
+        "project": "Hadoop YARN",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 11162
     },
     {
         "key": "XW",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "XWork",
+        "language": "java",
+        "domain": "web-framework",
         "ecosystem": "Apache",
         "issue_count": 1128
     },
     {
         "key": "USERGRID",
-        "project": null,
-        "language": null,
+        "project": "Usergrid",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1341
     },
     {
         "key": "TS",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "Traffic Server",
+        "language": "C++",
+        "domain": "http",
         "ecosystem": "Apache",
         "issue_count": 5103
     },
     {
         "key": "TRINIDAD",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "MyFaces Trinidad",
+        "language": "Java",
+        "domain": [
+            "web-framework",
+            "javaee"
+        ],
         "ecosystem": "Apache",
         "issue_count": 2561
     },
     {
         "key": "TOMAHAWK",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "MyFaces Tomahawk",
+        "language": "Java",
+        "domain": [
+            "web-framework",
+            "javaee"
+        ],
         "ecosystem": "Apache",
         "issue_count": 1683
     },
     {
         "key": "TINKERPOP",
-        "project": null,
-        "language": null,
+        "project": "TinkerPop",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2893
     },
     {
         "key": "TAVERNA",
-        "project": null,
-        "language": null,
+        "project": "Apache Taverna",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1063
     },
     {
         "key": "TAPESTRY",
-        "project": null,
-        "language": null,
+        "project": "Tapestry",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2499
     },
     {
         "key": "SYSTEMDS",
-        "project": null,
-        "language": null,
+        "project": "SystemDS",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 3356
     },
     {
         "key": "SUREFIRE",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "Maven Surefire",
+        "language": "java",
+        "domain": "build-management",
         "ecosystem": "Apache",
         "issue_count": 2138
     },
     {
         "key": "SUBMARINE",
-        "project": null,
-        "language": null,
+        "project": "Apache Submarine",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1369
     },
     {
         "key": "STR",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "Struts 1",
+        "language": "java",
+        "domain": "web-framework",
         "ecosystem": "Apache",
         "issue_count": 3009
     },
     {
         "key": "STDCXX",
-        "project": null,
-        "language": null,
+        "project": "C++ Standard Library",
+        "language": "c++",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1062
     },
     {
         "key": "SMX4",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "ServiceMix 4",
+        "language": "java",
+        "domain": [
+            "network-client",
+            "network-server",
+            "xml",
+            "osgi"
+        ],
         "ecosystem": "Apache",
         "issue_count": 1905
     },
     {
         "key": "SLING",
-        "project": null,
-        "language": null,
+        "project": "Sling",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 11766
     },
     {
         "key": "SLIDER",
-        "project": null,
-        "language": null,
+        "project": "Slider",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1265
     },
     {
         "key": "SENTRY",
-        "project": null,
-        "language": null,
+        "project": "Sentry (Retired)",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2564
     },
     {
         "key": "SCB",
-        "project": null,
-        "language": null,
+        "project": "Apache ServiceComb",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2747
     },
     {
         "key": "RAVE",
-        "project": null,
-        "language": null,
+        "project": "Rave",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1286
     },
     {
         "key": "RATIS",
-        "project": null,
-        "language": null,
+        "project": "Ratis",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1795
     },
     {
         "key": "RANGER",
-        "project": null,
-        "language": null,
+        "project": "Ranger",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 4117
     },
     {
         "key": "OPENEJB",
-        "project": null,
-        "language": null,
+        "project": "OpenEJB",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2047
     },
     {
         "key": "OAK",
-        "project": null,
-        "language": null,
+        "project": "Jackrabbit Oak",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 10090
     },
     {
         "key": "NIFI",
-        "project": null,
-        "language": null,
+        "project": "Apache NiFi",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 11215
     },
     {
         "key": "MXNET",
-        "project": null,
-        "language": null,
+        "project": "Apache MXNet",
+        "language": "c++",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1407
     },
     {
         "key": "MSHARED",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "Maven Shared Components",
+        "language": "java",
+        "domain": "build-management",
         "ecosystem": "Apache",
         "issue_count": 1168
     },
     {
         "key": "MRELEASE",
-        "project": null,
-        "language": null,
-        "domain": null,
+        "project": "Maven Release Plugin",
+        "language": "java",
+        "domain": "build-management",
         "ecosystem": "Apache",
         "issue_count": 1083
     },
     {
         "key": "MINIFICPP",
-        "project": null,
-        "language": null,
+        "project": "Apache NiFi MiNiFi C++",
+        "language": "c++",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2064
     },
     {
         "key": "METRON",
-        "project": null,
-        "language": null,
+        "project": "Metron (Retired)",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2349
     },
     {
         "key": "MAPREDUCE",
-        "project": null,
-        "language": null,
+        "project": "Hadoop Map/Reduce",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 7109
     },
     {
         "key": "MADLIB",
-        "project": null,
-        "language": null,
+        "project": "Apache MADlib",
+        "language": "c++",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1499
     },
     {
         "key": "LOG4J2",
-        "project": null,
-        "language": null,
+        "project": "Log4j 2",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 3632
     },
     {
         "key": "KYLIN",
-        "project": null,
-        "language": null,
+        "project": "Kylin",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 5316
     },
     {
         "key": "JUDDI",
-        "project": null,
-        "language": null,
+        "project": "jUDDI (Retired)",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1018
     },
     {
         "key": "JSPWIKI",
-        "project": null,
-        "language": null,
+        "project": "JSPWiki",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1057
     },
     {
         "key": "ISIS",
-        "project": null,
-        "language": null,
+        "project": "Causeway",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2609
     },
     {
         "key": "IMPALA",
-        "project": null,
-        "language": null,
+        "project": "IMPALA",
+        "language": "c++",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 11941
     },
     {
         "key": "HDFS",
-        "project": null,
-        "language": null,
+        "project": "Hadoop Distributed File System",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 16105
     },
     {
         "key": "HDDS",
-        "project": null,
-        "language": null,
+        "project": "Apache Ozone",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 8059
     },
     {
         "key": "HAWQ",
-        "project": null,
-        "language": null,
+        "project": "Apache HAWQ",
+        "language": "c",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1837
     },
     {
         "key": "HADOOP",
-        "project": null,
-        "language": null,
+        "project": "Hadoop Common",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 16366
     },
     {
         "key": "GOBBLIN",
-        "project": null,
-        "language": null,
+        "project": "Apache Gobblin",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1792
     },
     {
         "key": "FINERACT",
-        "project": null,
-        "language": null,
+        "project": "Apache Fineract",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1900
     },
     {
         "key": "EAGLE",
-        "project": null,
-        "language": null,
+        "project": "Eagle (Retired)",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1097
     },
     {
         "key": "DISPATCH",
-        "project": null,
-        "language": null,
+        "project": "Qpid Dispatch",
+        "language": "python",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2353
     },
     {
         "key": "DATALAB",
-        "project": null,
-        "language": null,
+        "project": "Apache DataLab",
+        "language": "python",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2622
     },
     {
         "key": "CB",
-        "project": null,
-        "language": null,
+        "project": "Apache Cordova",
+        "language": "javascript",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 14005
     },
     {
         "key": "AXISCPP",
-        "project": null,
-        "language": null,
+        "project": "Axis-C++",
+        "language": "c++",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1087
     },
     {
         "key": "AXIS2C",
-        "project": null,
-        "language": null,
+        "project": "Axis2-C",
+        "language": "c",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1693
     },
     {
         "key": "AXIS",
-        "project": null,
-        "language": null,
+        "project": "Axis",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 2922
     },
     {
         "key": "AURORA",
-        "project": null,
-        "language": null,
+        "project": "Aurora",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 1970
     },
     {
         "key": "ATLAS",
-        "project": null,
-        "language": null,
+        "project": "Atlas",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 4677
     },
     {
         "key": "ASTERIXDB",
-        "project": null,
-        "language": null,
+        "project": "Apache AsterixDB",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 3119
     },
     {
         "key": "ARTEMIS",
-        "project": null,
-        "language": null,
+        "project": "ActiveMQ Artemis",
+        "language": "java",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 4094
     },
     {
         "key": "ARROW",
-        "project": null,
-        "language": null,
+        "project": "Apache Arrow",
+        "language": "c++",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 18293
     },
     {
         "key": "AIRFLOW",
-        "project": null,
-        "language": null,
+        "project": "Apache Airflow",
+        "language": "python",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 7038
     },
     {
         "key": "AAR",
-        "project": null,
-        "language": null,
+        "project": "aardvark",
+        "language": "python",
         "domain": null,
         "ecosystem": "Apache",
         "issue_count": 9126
