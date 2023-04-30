@@ -207,6 +207,7 @@ $(document).ready(function() {
                 labels = data.manual_label
                 curr_label = document.getElementById(`${data.issue_id}_manual_label`)
                 curr_label.innerHTML = getNewManualLabel(labels.existence, labels.executive, labels.property, curr_label.innerHTML)
+                classifyModal(current_modal_issue_id)
             }
             else if (data.hasOwnProperty('tags')) {
                 // tags list
@@ -224,6 +225,7 @@ $(document).ready(function() {
 
                 // colour
                 document.getElementById(`${data.issue_id}_row`).setAttribute('class',  data.tags.includes('needs-review')? 'table-warning' : '')
+                classifyModal(current_modal_issue_id)
             }
             else if (data.hasOwnProperty('comments')) {
                 // only need to worry about this if this is the active one
