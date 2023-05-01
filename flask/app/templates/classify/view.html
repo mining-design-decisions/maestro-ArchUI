@@ -419,21 +419,21 @@ function classifyModal(id) {
 
 function classifyIssue(issue) {
     // get data
-    existence = document.getElementById('existence').checked
-    executive = document.getElementById('executive').checked
-    property = document.getElementById('property').checked
+    existence_checked = document.getElementById('existence').checked
+    executive_checked = document.getElementById('executive').checked
+    property_checked = document.getElementById('property').checked
 
     // submit data
     fetch(`/manual/classify/${issue}`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
-        existence: existence,
-        executive: executive,
-        property: property
+        existence: existence_checked,
+        executive: executive_checked,
+        property: property_checked
     })})
     .then(e => {
         if (e.status == 200) {
             // update labels in the table
             curr_label = document.getElementById(`${issue}_manual_label`)
-            curr_label.innerHTML = getNewManualLabel(existence, executive, property, curr_label.innerHTML)
+            curr_label.innerHTML = getNewManualLabel(existence_checked, executive_checked, property_checked, curr_label.innerHTML)
 
             // update modal
             classifyModal(issue)
