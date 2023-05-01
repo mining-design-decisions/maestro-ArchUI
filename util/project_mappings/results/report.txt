@@ -1,4 +1,4 @@
-Plan: Do 1 quick pass to gain familiarity with projects and get an idea of what Apache and RedHat assign as domains/categories. Then, 
+Plan: Do 1 quick pass to gain familiarity with projects and get an idea of what Apache and RedHat assign as domains/categories. Base actual options for domain off of those + supervisor input and go back over everything, classifying them into useful categories for ML.
 
 Apache
 -Amount of #issues>=1000 projects: 187
