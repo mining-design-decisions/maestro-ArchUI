@@ -1,3 +1,5 @@
+Plan: Do 1 quick pass to gain familiarity with projects and get an idea of what Apache and RedHat assign as domains/categories. Then, 
+
 Apache
 -Amount of #issues>=1000 projects: 187
 -Problems with language:
@@ -14,3 +16,7 @@ RedHat
 -Website == null: 40
 -Domain == null: 57
 -Language == null: 46
+
+Other
+-The Atlassian (ecosystem: Jira) projects are very hard to find the correct repos for. Not sure if they're on github at all.
+-Currently at: JPOSERVER

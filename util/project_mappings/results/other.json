@@ -1,124 +1,142 @@
 [
     {
         "key": "DAOS",
-        "project": null,
-        "language": null,
+        "project": "DAOS",
+        "language": "c",
         "domain": null,
         "ecosystem": "IntelDAOS",
         "issue_count": 11490,
-        "link": "https://daosio.atlassian.net/browse/DAOS/summary"
+        "link": "https://daosio.atlassian.net/browse/DAOS/summary",
+        "repo": "https://github.com/daos-stack/daos"
     },
     {
         "key": "MDEV",
-        "project": null,
-        "language": null,
+        "project": "MariaDB Server",
+        "language": "C++",
         "domain": null,
         "ecosystem": "MariaDB",
         "issue_count": 22436,
-        "link": "https://jira.mariadb.org/browse/MDEV/summary"
+        "link": "https://jira.mariadb.org/browse/MDEV/summary",
+        "repo": "https://github.com/MariaDB/"
     },
     {
         "key": "MXS",
-        "project": null,
-        "language": null,
+        "project": "MariaDB MaxScale",
+        "language": "C",
         "domain": null,
         "ecosystem": "MariaDB",
         "issue_count": 3333,
-        "link": "https://jira.mariadb.org/browse/MXS/summary"
+        "link": "https://jira.mariadb.org/browse/MXS/summary",
+        "repo": "https://github.com/mariadb-corporation/MaxScale",
+        "comment": "Had to find this on Google."
     },
     {
         "key": "MCOL",
-        "project": null,
-        "language": null,
+        "project": "MariaDB ColumnStore",
+        "language": "C++",
         "domain": null,
         "ecosystem": "MariaDB",
         "issue_count": 3325,
-        "link": "https://jira.mariadb.org/browse/MCOL/summary"
+        "link": "https://jira.mariadb.org/browse/MCOL/summary",
+        "repo": "https://github.com/mariadb-corporation/mariadb-columnstore-engine"
     },
     {
         "key": "TCAP",
-        "project": null,
-        "language": null,
+        "project": "TeamCity Artifactory Plug-in",
+        "language": "Java",
         "domain": null,
         "ecosystem": "JFrog",
         "issue_count": 1070,
-        "link": "https://jfrog.com/jira/browse/TCAP/summary"
+        "link": "https://jfrog.com/jira/browse/TCAP/summary",
+        "repo": "https://github.com/jfrog/teamcity-artifactory-plugin",
+        "comment": "Got repo from google"
     },
     {
         "key": "RTFACT",
-        "project": null,
-        "language": null,
+        "project": "Artifactory Binary Repository",
+        "language": "Java",
         "domain": null,
         "ecosystem": "JFrog",
         "issue_count": 16298,
-        "link": "https://jfrog.com/jira/browse/RTFACT/summary"
+        "link": "https://jfrog.com/jira/browse/RTFACT/summary",
+        "repo": "https://github.com/jfrog?q=artifactory+&type=all&language=&sort=",
+        "comment": "Repo link is a search link because there are several artifactory repositories and I'm not sure which one is main. Similarly guessing at the language."
     },
     {
         "key": "HAP",
-        "project": null,
-        "language": null,
+        "project": "Jenkins Artifactory Plug-in",
+        "language": "Java",
         "domain": null,
         "ecosystem": "JFrog",
         "issue_count": 1294,
-        "link": "https://jfrog.com/jira/browse/HAP/summary"
+        "link": "https://jfrog.com/jira/browse/HAP/summary",
+        "repo": "https://github.com/jfrog/jenkins-artifactory-plugin"
     },
     {
         "key": "SRCTREEWIN",
-        "project": null,
+        "project": "Sourcetree for Windows",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
         "issue_count": 9861,
-        "link": "https://jira.atlassian.com/browse/SRCTREEWIN/summary"
+        "link": "https://jira.atlassian.com/browse/SRCTREEWIN/summary",
+        "website": "https://www.sourcetreeapp.com/",
+        "comment": "Can't easily find repo. They might host it on their own thing, bitbucket?"
     },
     {
         "key": "SRCTREE",
-        "project": null,
+        "project": "Sourcetree For Mac",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
         "issue_count": 5491,
-        "link": "https://jira.atlassian.com/browse/SRCTREE/summary"
+        "link": "https://jira.atlassian.com/browse/SRCTREE/summary",
+        "comment": "same as above"
     },
     {
         "key": "JSWSERVER",
-        "project": null,
-        "language": null,
+        "project": "Jira Software Server and Data Center",
+        "language": "TypeScript",
         "domain": null,
         "ecosystem": "Jira",
         "issue_count": 13641,
-        "link": "https://jira.atlassian.com/browse/JSWSERVER/summary"
+        "link": "https://jira.atlassian.com/browse/JSWSERVER/summary",
+        "repo": "https://github.com/atlassian/github-for-jira",
+        "comment": "Found repo through google"
     },
     {
         "key": "JSWCLOUD",
-        "project": null,
-        "language": null,
+        "project": "Jira Software Cloud",
+        "language": "TypeScript",
         "domain": null,
         "ecosystem": "Jira",
         "issue_count": 14188,
-        "link": "https://jira.atlassian.com/browse/JSWCLOUD/summary"
+        "link": "https://jira.atlassian.com/browse/JSWCLOUD/summary",
+        "comment": "Not sure what the difference is, guessing at the language, not sure what the repo is."
     },
     {
         "key": "JSDSERVER",
-        "project": null,
+        "project": "Jira Service Management Server and Data Center",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
         "issue_count": 8226,
-        "link": "https://jira.atlassian.com/browse/JSDSERVER/summary"
+        "link": "https://jira.atlassian.com/browse/JSDSERVER/summary",
+        "comment": "Not sure what the repo could be, can't find"
     },
     {
         "key": "JSDCLOUD",
-        "project": null,
+        "project": "Jira Service Management Cloud",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
         "issue_count": 8186,
-        "link": "https://jira.atlassian.com/browse/JSDCLOUD/summary"
+        "link": "https://jira.atlassian.com/browse/JSDCLOUD/summary",
+        "comment": "Not sure what the repo could be, can't find"
     },
     {
         "key": "JRASERVER",
-        "project": null,
+        "project": "Jira Server and Data Center",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -127,7 +145,7 @@
     },
     {
         "key": "JRACLOUD",
-        "project": null,
+        "project": "Jira Cloud",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
