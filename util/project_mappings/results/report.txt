@@ -18,5 +18,14 @@ RedHat
 -Language == null: 46
 
 Other
--The Atlassian (ecosystem: Jira) projects are very hard to find the correct repos for. Not sure if they're on github at all.
--Currently at: JPOSERVER
+-Amount of #issues>=1000 projects: 116
+-The Atlassian (ecosystem: Jira) projects are very hard to find the correct repos for. Not sure if they're on github at all. Wondering if the researchers who originally composed this DB got just open Jiras or Open Source.
+-The Qt projects are seemingly used as bug reports, not development? Potentially very low amount of architecture here. Putting C++ on all projects by default.
+-MongoDB: A lot of projects have their repos linked in jira.
+-Spring has migrated everything to GitHub.
+-Mojang: Not open source, are bug trackers.
+-JiraEcosystem: Same problem as Atlassian
+-Name == null: 3
+-Repo == null: 78
+-Domain == null: 116
+-Language == null: 54

@@ -154,7 +154,7 @@
     },
     {
         "key": "JPOSERVER",
-        "project": null,
+        "project": "Advanced Roadmaps",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -163,7 +163,7 @@
     },
     {
         "key": "ID",
-        "project": null,
+        "project": "Identity",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -172,7 +172,7 @@
     },
     {
         "key": "I18N",
-        "project": null,
+        "project": "Atlassian Internationalization",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -181,7 +181,7 @@
     },
     {
         "key": "FE",
-        "project": null,
+        "project": "FishEye",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -190,7 +190,7 @@
     },
     {
         "key": "CWD",
-        "project": null,
+        "project": "Crowd",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -199,7 +199,7 @@
     },
     {
         "key": "CRUC",
-        "project": null,
+        "project": "Crucible",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -208,7 +208,7 @@
     },
     {
         "key": "CONFSERVER",
-        "project": null,
+        "project": "Confluence Server and Data Center",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -217,7 +217,7 @@
     },
     {
         "key": "CONFCLOUD",
-        "project": null,
+        "project": "Confluence Cloud",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -226,7 +226,7 @@
     },
     {
         "key": "CLOV",
-        "project": null,
+        "project": "Clover",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -235,7 +235,7 @@
     },
     {
         "key": "CLOUD",
-        "project": null,
+        "project": "Atlassian Cloud",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -244,7 +244,7 @@
     },
     {
         "key": "BSERV",
-        "project": null,
+        "project": "Bitbucket Server",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -253,7 +253,7 @@
     },
     {
         "key": "BCLOUD",
-        "project": null,
+        "project": "Bitbucket Cloud",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -262,7 +262,7 @@
     },
     {
         "key": "BAM",
-        "project": null,
+        "project": "Bamboo",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -271,7 +271,7 @@
     },
     {
         "key": "JIRAALIGN",
-        "project": null,
+        "project": "Jira Align",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -280,7 +280,7 @@
     },
     {
         "key": "OPSGENIE",
-        "project": null,
+        "project": "Opsgenie",
         "language": null,
         "domain": null,
         "ecosystem": "Jira",
@@ -294,12 +294,13 @@
         "domain": null,
         "ecosystem": "Mindville",
         "issue_count": 1847,
-        "link": "https://jira.mindville.com/browse/ICS/summary"
+        "link": "https://jira.mindville.com/browse/ICS/summary",
+        "comment": "Mindville moved to Atlassian and ICS is a deleted project there"
     },
     {
         "key": "QTVSADDINBUG",
-        "project": null,
-        "language": null,
+        "project": "Qt Visual Studio Tools",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 1080,
@@ -307,8 +308,8 @@
     },
     {
         "key": "QTQAINFRA",
-        "project": null,
-        "language": null,
+        "project": "Qt Quality Assurance Infrastructure",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 4749,
@@ -316,8 +317,8 @@
     },
     {
         "key": "QTMOBILITY",
-        "project": null,
-        "language": null,
+        "project": "Qt Mobility",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 1926,
@@ -325,8 +326,8 @@
     },
     {
         "key": "QTIFW",
-        "project": null,
-        "language": null,
+        "project": "Qt Installer Framework",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 2671,
@@ -334,8 +335,8 @@
     },
     {
         "key": "QTCREATORBUG",
-        "project": null,
-        "language": null,
+        "project": "Qt Creator",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 27018,
@@ -343,8 +344,8 @@
     },
     {
         "key": "QTBUG",
-        "project": null,
-        "language": null,
+        "project": "Qt",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 108810,
@@ -352,8 +353,8 @@
     },
     {
         "key": "QT3DS",
-        "project": null,
-        "language": null,
+        "project": "Qt 3D Studio",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 4097,
@@ -361,8 +362,8 @@
     },
     {
         "key": "QSR",
-        "project": null,
-        "language": null,
+        "project": "Qt Safe Renderer",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 1297,
@@ -370,8 +371,8 @@
     },
     {
         "key": "QDS",
-        "project": null,
-        "language": null,
+        "project": "Qt Design Studio",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 7807,
@@ -379,8 +380,8 @@
     },
     {
         "key": "QBS",
-        "project": null,
-        "language": null,
+        "project": "Qbs (\"Cubes\")",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 1669,
@@ -388,8 +389,8 @@
     },
     {
         "key": "PYSIDE",
-        "project": null,
-        "language": null,
+        "project": "Qt for Python",
+        "language": "Python",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 2025,
@@ -397,8 +398,8 @@
     },
     {
         "key": "AUTOSUITE",
-        "project": null,
-        "language": null,
+        "project": "Qt Automotive Suite",
+        "language": "C++",
         "domain": null,
         "ecosystem": "Qt",
         "issue_count": 1531,
@@ -406,62 +407,69 @@
     },
     {
         "key": "WT",
-        "project": null,
-        "language": null,
+        "project": "WiredTiger",
+        "language": "c",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 10403,
-        "link": "https://jira.mongodb.org/browse/WT/summary"
+        "link": "https://jira.mongodb.org/browse/WT/summary",
+        "repo": "https://github.com/wiredtiger",
+        "comment": "Desc sounds like bug reports only. Repo from google."
     },
     {
         "key": "TOOLS",
-        "project": null,
-        "language": null,
+        "project": "MongoDB Database Tools",
+        "language": "Go",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 2676,
-        "link": "https://jira.mongodb.org/browse/TOOLS/summary"
+        "link": "https://jira.mongodb.org/browse/TOOLS/summary",
+        "repo": "https://github.com/mongodb/mongo-tools"
     },
     {
         "key": "SWIFT",
-        "project": null,
-        "language": null,
+        "project": "Swift Driver",
+        "language": "Swift",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 1590,
-        "link": "https://jira.mongodb.org/browse/SWIFT/summary"
+        "link": "https://jira.mongodb.org/browse/SWIFT/summary",
+        "repo": "https://github.com/mongodb/mongo-swift-driver"
     },
     {
         "key": "SERVER",
-        "project": null,
-        "language": null,
+        "project": "Core Server",
+        "language": "C++",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 71031,
-        "link": "https://jira.mongodb.org/browse/SERVER/summary"
+        "link": "https://jira.mongodb.org/browse/SERVER/summary",
+        "repo": "https://github.com/mongodb/mongo"
     },
     {
         "key": "RUST",
-        "project": null,
-        "language": null,
+        "project": "Rust Driver",
+        "language": "Rust",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 1481,
-        "link": "https://jira.mongodb.org/browse/RUST/summary"
+        "link": "https://jira.mongodb.org/browse/RUST/summary",
+        "repo": "https://github.com/mongodb/mongo-rust-driver"
     },
     {
         "key": "RUBY",
-        "project": null,
-        "language": null,
+        "project": "Ruby Driver",
+        "language": "Ruby",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 3017,
-        "link": "https://jira.mongodb.org/browse/RUBY/summary"
+        "link": "https://jira.mongodb.org/browse/RUBY/summary",
+        "repo": "https://github.com/mongodb/mongo-ruby-driver"
     },
     {
         "key": "PYTHON",
-        "project": null,
-        "language": null,
+        "project": "Python Driver",
+        "language": "Python",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 3315,
@@ -469,8 +477,8 @@
     },
     {
         "key": "PHPC",
-        "project": null,
-        "language": null,
+        "project": "PHP Driver: Extension",
+        "language": "PHP",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 1739,
@@ -478,8 +486,8 @@
     },
     {
         "key": "NODE",
-        "project": null,
-        "language": null,
+        "project": "Node.js Driver",
+        "language": "TypeScript",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 4795,
@@ -487,26 +495,28 @@
     },
     {
         "key": "MOTOR",
-        "project": null,
-        "language": null,
+        "project": "Motor",
+        "language": "Python",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 1017,
-        "link": "https://jira.mongodb.org/browse/MOTOR/summary"
+        "link": "https://jira.mongodb.org/browse/MOTOR/summary",
+        "repo": "https://github.com/mongodb/motor"
     },
     {
         "key": "MONGOSH",
-        "project": null,
+        "project": "MongoDB Shell",
         "language": null,
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 1047,
-        "link": "https://jira.mongodb.org/browse/MONGOSH/summary"
+        "link": "https://jira.mongodb.org/browse/MONGOSH/summary",
+        "comment": "mongodb github user only has documentation for the shell?"
     },
     {
         "key": "MONGOID",
-        "project": null,
-        "language": null,
+        "project": "Mongoid",
+        "language": "Ruby",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 5446,
@@ -514,8 +524,8 @@
     },
     {
         "key": "JAVA",
-        "project": null,
-        "language": null,
+        "project": "Java Driver",
+        "language": "Java",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 4481,
@@ -523,8 +533,8 @@
     },
     {
         "key": "GODRIVER",
-        "project": null,
-        "language": null,
+        "project": "Go Driver",
+        "language": "Go",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 2615,
@@ -532,35 +542,38 @@
     },
     {
         "key": "EVG",
-        "project": null,
+        "project": "Evergreen",
         "language": null,
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 15463,
-        "link": "https://jira.mongodb.org/browse/EVG/summary"
+        "link": "https://jira.mongodb.org/browse/EVG/summary",
+        "comment": "Surprisingly no link to repo found immediately"
     },
     {
         "key": "DRIVERS",
-        "project": null,
+        "project": "Drivers",
         "language": null,
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 1235,
-        "link": "https://jira.mongodb.org/browse/DRIVERS/summary"
+        "link": "https://jira.mongodb.org/browse/DRIVERS/summary",
+        "comment": "Not a code project?"
     },
     {
         "key": "DOCS",
-        "project": null,
+        "project": "Documentation",
         "language": null,
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 14697,
-        "link": "https://jira.mongodb.org/browse/DOCS/summary"
+        "link": "https://jira.mongodb.org/browse/DOCS/summary",
+        "comment": "Also not a code project?"
     },
     {
         "key": "CXX",
-        "project": null,
-        "language": null,
+        "project": "C++ Driver",
+        "language": "C++",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 2504,
@@ -568,8 +581,8 @@
     },
     {
         "key": "CSHARP",
-        "project": null,
-        "language": null,
+        "project": "C# Driver",
+        "language": "C#",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 4283,
@@ -577,17 +590,18 @@
     },
     {
         "key": "COMPASS",
-        "project": null,
-        "language": null,
+        "project": "Compass",
+        "language": "Python",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 3607,
-        "link": "https://jira.mongodb.org/browse/COMPASS/summary"
+        "link": "https://jira.mongodb.org/browse/COMPASS/summary",
+        "comment": "MongoDB github user only has a repo for docs for compass. It's in python so I'm guessing the thing itself is too"
     },
     {
         "key": "CDRIVER",
-        "project": null,
-        "language": null,
+        "project": "C Driver",
+        "language": "C",
         "domain": null,
         "ecosystem": "MongoDB",
         "issue_count": 3695,
@@ -595,25 +609,27 @@
     },
     {
         "key": "STORM",
-        "project": null,
+        "project": "Snowstorm",
         "language": null,
         "domain": null,
         "ecosystem": "SecondLife",
         "issue_count": 1547,
-        "link": "https://jira.secondlife.com/browse/STORM/summary"
+        "link": "https://jira.secondlife.com/browse/STORM/summary",
+        "comment": "This one lives in a Bitbucket, see various done issues with pull requests. Can't find a repo on the bitbucket that's specifically for snowstorm."
     },
     {
         "key": "SAK",
-        "project": null,
-        "language": null,
+        "project": "Sakai",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Sakai",
         "issue_count": 45122,
-        "link": "https://jira.sakaiproject.org/browse/SAK/summary"
+        "link": "https://jira.sakaiproject.org/browse/SAK/summary",
+        "comment": "Assuming this is https://github.com/sakaiproject"
     },
     {
         "key": "GRBK",
-        "project": null,
+        "project": "Contrib: Gradebook2",
         "language": null,
         "domain": null,
         "ecosystem": "Sakai",
@@ -622,7 +638,7 @@
     },
     {
         "key": "EVALSYS",
-        "project": null,
+        "project": "Contrib: Evaluation System",
         "language": null,
         "domain": null,
         "ecosystem": "Sakai",
@@ -631,237 +647,264 @@
     },
     {
         "key": "XD",
-        "project": null,
-        "language": null,
+        "project": "Spring XD",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 3707,
-        "link": "https://jira.spring.io/browse/XD/summary"
+        "link": "https://jira.spring.io/browse/XD/summary",
+        "repo": "https://github.com/spring-attic/spring-xd"
     },
     {
         "key": "SWS",
-        "project": null,
-        "language": null,
+        "project": "Spring Web Services",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1041,
-        "link": "https://jira.spring.io/browse/SWS/summary"
+        "link": "https://jira.spring.io/browse/SWS/summary",
+        "repo": "https://github.com/spring-projects/spring-ws"
     },
     {
         "key": "SWF",
-        "project": null,
-        "language": null,
+        "project": "Spring Web Flow",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1668,
-        "link": "https://jira.spring.io/browse/SWF/summary"
+        "link": "https://jira.spring.io/browse/SWF/summary",
+        "repo": "https://github.com/spring-projects/spring-webflow"
     },
     {
         "key": "STS",
-        "project": null,
+        "project": "Spring Tool Suite",
         "language": null,
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 4407,
-        "link": "https://jira.spring.io/browse/STS/summary"
+        "link": "https://jira.spring.io/browse/STS/summary",
+        "comment": "Project name is a guess from some googling. Can't find a repo."
     },
     {
         "key": "SPRNET",
-        "project": null,
-        "language": null,
+        "project": "Spring.NET Framework",
+        "language": "C#",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1537,
-        "link": "https://jira.spring.io/browse/SPRNET/summary"
+        "link": "https://jira.spring.io/browse/SPRNET/summary",
+        "repo": "https://github.com/spring-projects/spring-net"
     },
     {
         "key": "SPR",
-        "project": null,
-        "language": null,
+        "project": "Spring Framework",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 17413,
-        "link": "https://jira.spring.io/browse/SPR/summary"
+        "link": "https://jira.spring.io/browse/SPR/summary",
+        "repo": "https://github.com/spring-projects/spring-framework"
     },
     {
         "key": "SEC",
-        "project": null,
-        "language": null,
+        "project": "Spring Security",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 3150,
-        "link": "https://jira.spring.io/browse/SEC/summary"
+        "link": "https://jira.spring.io/browse/SEC/summary",
+        "repo": "https://github.com/spring-projects/spring-security"
     },
     {
         "key": "ROO",
-        "project": null,
-        "language": null,
+        "project": "Spring Roo",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 3987,
-        "link": "https://jira.spring.io/browse/ROO/summary"
+        "link": "https://jira.spring.io/browse/ROO/summary",
+        "repo": "https://github.com/spring-attic/spring-roo"
     },
     {
         "key": "INT",
-        "project": null,
-        "language": null,
+        "project": "Spring Integration",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 4494,
-        "link": "https://jira.spring.io/browse/INT/summary"
+        "link": "https://jira.spring.io/browse/INT/summary",
+        "repo": "https://github.com/spring-projects/spring-integration"
     },
     {
         "key": "IDE",
-        "project": null,
-        "language": null,
+        "project": "Spring IDE",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1386,
-        "link": "https://jira.spring.io/browse/IDE/summary"
+        "link": "https://jira.spring.io/browse/IDE/summary",
+        "repo": "https://github.com/spring-attic/spring-ide",
+        "comment": "Not 100% sure about repo. Issues look like they contain info about Spring STS?"
     },
     {
         "key": "DATAREST",
-        "project": null,
-        "language": null,
+        "project": "Spring Data REST",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1565,
-        "link": "https://jira.spring.io/browse/DATAREST/summary"
+        "link": "https://jira.spring.io/browse/DATAREST/summary",
+        "repo": "https://github.com/spring-projects/spring-data-rest"
     },
     {
         "key": "DATAREDIS",
-        "project": null,
-        "language": null,
+        "project": "Spring Data Redis",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1257,
-        "link": "https://jira.spring.io/browse/DATAREDIS/summary"
+        "link": "https://jira.spring.io/browse/DATAREDIS/summary",
+        "repo": "https://github.com/spring-projects/spring-data-redis"
     },
     {
         "key": "DATAMONGO",
-        "project": null,
-        "language": null,
+        "project": "Spring Data MongoDB",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 2590,
-        "link": "https://jira.spring.io/browse/DATAMONGO/summary"
+        "link": "https://jira.spring.io/browse/DATAMONGO/summary",
+        "repo": "https://github.com/spring-projects/spring-data-mongodb"
     },
     {
         "key": "DATAJPA",
-        "project": null,
-        "language": null,
+        "project": "Spring Data JPA",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1687,
-        "link": "https://jira.spring.io/browse/DATAJPA/summary"
+        "link": "https://jira.spring.io/browse/DATAJPA/summary",
+        "repo": "https://github.com/spring-projects/spring-data-jpa"
     },
     {
         "key": "DATAGRAPH",
-        "project": null,
-        "language": null,
+        "project": "Spring Data Neo4j",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1465,
-        "link": "https://jira.spring.io/browse/DATAGRAPH/summary"
+        "link": "https://jira.spring.io/browse/DATAGRAPH/summary",
+        "repo": "https://github.com/spring-projects/spring-data-neo4j"
     },
     {
         "key": "DATAES",
-        "project": null,
-        "language": null,
+        "project": "Spring Data for Elasticsearch",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1003,
-        "link": "https://jira.spring.io/browse/DATAES/summary"
+        "link": "https://jira.spring.io/browse/DATAES/summary",
+        "repo": "https://github.com/spring-projects/spring-data-elasticsearch"
     },
     {
         "key": "DATACMNS",
-        "project": null,
-        "language": null,
+        "project": "Spring Data Commons",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 1781,
-        "link": "https://jira.spring.io/browse/DATACMNS/summary"
+        "link": "https://jira.spring.io/browse/DATACMNS/summary",
+        "repo": "https://github.com/spring-projects/spring-data-commons"
     },
     {
         "key": "BATCH",
-        "project": null,
-        "language": null,
+        "project": "Spring Batch",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Spring",
         "issue_count": 2598,
-        "link": "https://jira.spring.io/browse/BATCH/summary"
+        "link": "https://jira.spring.io/browse/BATCH/summary",
+        "repo": "https://github.com/spring-projects/spring-batch"
     },
     {
         "key": "OSSRH",
-        "project": null,
+        "project": "Community Support - Open Source Project Repository Hosting",
         "language": null,
         "domain": null,
         "ecosystem": "Sonatype",
         "issue_count": 87533,
-        "link": "https://issues.sonatype.org/browse/OSSRH/summary"
+        "link": "https://issues.sonatype.org/browse/OSSRH/summary",
+        "comment": "Not sure where to find repo. Not a code project?"
     },
     {
         "key": "NEXUS",
-        "project": null,
-        "language": null,
+        "project": "Sonatype Nexus Repository",
+        "language": "Java",
         "domain": null,
         "ecosystem": "Sonatype",
         "issue_count": 11187,
-        "link": "https://issues.sonatype.org/browse/NEXUS/summary"
+        "link": "https://issues.sonatype.org/browse/NEXUS/summary",
+        "repo": "https://github.com/sonatype/nexus-public"
     },
     {
         "key": "MVNCENTRAL",
-        "project": null,
+        "project": "Community Support - Maven Central",
         "language": null,
         "domain": null,
         "ecosystem": "Sonatype",
         "issue_count": 1668,
-        "link": "https://issues.sonatype.org/browse/MVNCENTRAL/summary"
+        "link": "https://issues.sonatype.org/browse/MVNCENTRAL/summary",
+        "comment": "Not sure where to find repo. Not a code project?"
     },
     {
         "key": "WEB",
-        "project": null,
+        "project": "Mojang Web Services",
         "language": null,
         "domain": null,
         "ecosystem": "Mojang",
         "issue_count": 4031,
-        "link": "https://bugs.mojang.com/browse/WEB/summary"
+        "link": "https://bugs.mojang.com/browse/WEB/summary",
+        "comment": "Not a code project, just bugs?"
     },
     {
         "key": "REALMS",
-        "project": null,
+        "project": "Minecraft Realms",
         "language": null,
         "domain": null,
         "ecosystem": "Mojang",
         "issue_count": 10203,
-        "link": "https://bugs.mojang.com/browse/REALMS/summary"
+        "link": "https://bugs.mojang.com/browse/REALMS/summary",
+        "comment": "Bug tracker."
     },
     {
         "key": "MCPE",
-        "project": null,
+        "project": "Minecraft (Bedrock codebase)",
         "language": null,
         "domain": null,
         "ecosystem": "Mojang",
         "issue_count": 160776,
-        "link": "https://bugs.mojang.com/browse/MCPE/summary"
+        "link": "https://bugs.mojang.com/browse/MCPE/summary",
+        "comment": "Bug tracker."
     },
     {
         "key": "MCL",
-        "project": null,
+        "project": "Minecraft Launcher",
         "language": null,
         "domain": null,
         "ecosystem": "Mojang",
         "issue_count": 19387,
-        "link": "https://bugs.mojang.com/browse/MCL/summary"
+        "link": "https://bugs.mojang.com/browse/MCL/summary",
+        "comment": "Bug tracker."
     },
     {
         "key": "MCD",
-        "project": null,
+        "project": "Minecraft Dungeons",
         "language": null,
         "domain": null,
         "ecosystem": "Mojang",
         "issue_count": 7063,
-        "link": "https://bugs.mojang.com/browse/MCD/summary"
+        "link": "https://bugs.mojang.com/browse/MCD/summary",
+        "comment": "Bug tracker."
     },
     {
         "key": "MCCE",
@@ -870,43 +913,49 @@
         "domain": null,
         "ecosystem": "Mojang",
         "issue_count": 11774,
-        "link": "https://bugs.mojang.com/browse/MCCE/summary"
+        "link": "https://bugs.mojang.com/browse/MCCE/summary",
+        "comment": "Can't access, signup is being difficult."
     },
     {
         "key": "MC",
-        "project": null,
+        "project": "Minecraft: Java Edition",
         "language": null,
         "domain": null,
         "ecosystem": "Mojang",
         "issue_count": 225049,
-        "link": "https://bugs.mojang.com/browse/MC/summary"
+        "link": "https://bugs.mojang.com/browse/MC/summary",
+        "comment": "Bug tracker."
     },
     {
         "key": "BDS",
-        "project": null,
+        "project": "Bedrock Dedicated Server",
         "language": null,
         "domain": null,
         "ecosystem": "Mojang",
         "issue_count": 14711,
-        "link": "https://bugs.mojang.com/browse/BDS/summary"
+        "link": "https://bugs.mojang.com/browse/BDS/summary",
+        "comment": "Bug tracker."
     },
     {
         "key": "STL",
-        "project": null,
-        "language": null,
+        "project": "Sawtooth",
+        "language": "Python",
         "domain": null,
         "ecosystem": "Hyperledger",
         "issue_count": 1664,
-        "link": "https://jira.hyperledger.org/browse/STL/summary"
+        "link": "https://jira.hyperledger.org/browse/STL/summary",
+        "repo": "https://github.com/hyperledger/sawtooth-core",
+        "comment": "Repo from google."
     },
     {
         "key": "IS",
-        "project": null,
-        "language": null,
+        "project": "Indy SDK",
+        "language": "Rust",
         "domain": null,
         "ecosystem": "Hyperledger",
         "issue_count": 1536,
-        "link": "https://jira.hyperledger.org/browse/IS/summary"
+        "link": "https://jira.hyperledger.org/browse/IS/summary",
+        "repo": "https://github.com/hyperledger/indy-sdk"
     },
     {
         "key": "IR",
@@ -915,38 +964,42 @@
         "domain": null,
         "ecosystem": "Hyperledger",
         "issue_count": 1172,
-        "link": "https://jira.hyperledger.org/browse/IR/summary"
+        "link": "https://jira.hyperledger.org/browse/IR/summary",
+        "comment": "Project is deleted? Redirected me three times, made an account, and it tells me 'deleted or i dont have permission'."
     },
     {
         "key": "INDY",
-        "project": null,
-        "language": null,
+        "project": "Indy Node",
+        "language": "Python",
         "domain": null,
         "ecosystem": "Hyperledger",
         "issue_count": 2323,
-        "link": "https://jira.hyperledger.org/browse/INDY/summary"
+        "link": "https://jira.hyperledger.org/browse/INDY/summary",
+        "repo": "https://github.com/hyperledger/indy-node"
     },
     {
         "key": "FABN",
-        "project": null,
-        "language": null,
+        "project": "Fabric SDK Node",
+        "language": "JavaScript",
         "domain": null,
         "ecosystem": "Hyperledger",
         "issue_count": 1611,
-        "link": "https://jira.hyperledger.org/browse/FABN/summary"
+        "link": "https://jira.hyperledger.org/browse/FABN/summary",
+        "repo": "https://github.com/hyperledger/fabric-sdk-node"
     },
     {
         "key": "FAB",
-        "project": null,
-        "language": null,
+        "project": "Fabric",
+        "language": "go",
         "domain": null,
         "ecosystem": "Hyperledger",
         "issue_count": 13926,
-        "link": "https://jira.hyperledger.org/browse/FAB/summary"
+        "link": "https://jira.hyperledger.org/browse/FAB/summary",
+        "repo": "https://github.com/hyperledger/fabric"
     },
     {
         "key": "UPM",
-        "project": null,
+        "project": "Universal Plugin Manager",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -955,7 +1008,7 @@
     },
     {
         "key": "STRM",
-        "project": null,
+        "project": "Activity Streams",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -964,7 +1017,7 @@
     },
     {
         "key": "PLUG",
-        "project": null,
+        "project": "Atlassian Plugins",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -973,7 +1026,7 @@
     },
     {
         "key": "PLE",
-        "project": null,
+        "project": "Atlassian Connector for Eclipse (discontinued)",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -982,7 +1035,7 @@
     },
     {
         "key": "PL",
-        "project": null,
+        "project": "Atlassian Connctor for IntelliJ IDE (discontinued)",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -991,7 +1044,7 @@
     },
     {
         "key": "FRGE",
-        "project": null,
+        "project": "Forge",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -1000,7 +1053,7 @@
     },
     {
         "key": "AUI",
-        "project": null,
+        "project": "Atlassian User Interface",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -1009,7 +1062,7 @@
     },
     {
         "key": "APL",
-        "project": null,
+        "project": "Application Links",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -1018,7 +1071,7 @@
     },
     {
         "key": "AMPS",
-        "project": null,
+        "project": "Atlassian Maven Plugin Suite",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -1027,7 +1080,7 @@
     },
     {
         "key": "AMKT",
-        "project": null,
+        "project": "Atlassian Marketplace",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -1036,7 +1089,7 @@
     },
     {
         "key": "AG",
-        "project": null,
+        "project": "Atlassian Gadgets",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -1045,7 +1098,7 @@
     },
     {
         "key": "ACJIRA",
-        "project": null,
+        "project": "Atlassian Connect in Jira Cloud",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
@@ -1054,7 +1107,7 @@
     },
     {
         "key": "AC",
-        "project": null,
+        "project": "Atlassian Connect",
         "language": null,
         "domain": null,
         "ecosystem": "JiraEcosystem",
