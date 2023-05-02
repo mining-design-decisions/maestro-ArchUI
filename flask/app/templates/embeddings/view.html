@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}View Embedding {{e['name']}}{% endblock %}
+
+{% block margin_content %}
+
+<h3>Viewing ML Word Embedding: {{e['name']}}</h3>
+
+<div class="card m-2">
+    <div class="card-body">
+        <h4>Configuration</h4>
+        <ul>
+            {% for c in e['config'] %}
+                {% if c == 'training-data-query' %}
+                <li>Training Data Query: {{e['config'][c]}}</li>
+                {% elif c == 'params' %}
+                <li>Parameters:
+                    <ul>
+                        {% for p in e['config'][c] %}
+                        <li>{{p}}: {{e['config'][c][p]}}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% else %}
+                <li>{{c}}: {{e['config'][c]}}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

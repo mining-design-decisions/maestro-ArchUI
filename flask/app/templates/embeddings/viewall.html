@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}Word Embeddings{% endblock %}
+
+{% block margin_content %}
+<form action="{{url_for('embeddings.viewform')}}" method="GET">
+    <input type="submit" value="Create New Embedding" class="btn btn-primary my-2" />
+</form>
+
+<div class="card my-2">
+    <div class="card-body">
+        <h4>Machine Learning Models: Word Embeddings</h4>
+        <ul>
+            {% for e in embeddings %}
+            <li><a href="{{url_for('embeddings.view', embedding=e['embedding_id'])}}">{{e['name']}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

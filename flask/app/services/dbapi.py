@@ -339,3 +339,16 @@ def get_tags_for(issue):
 @auth_req
 def add_tag_to(issue, tag):
     return requests.post(f"{get_db()}/issues/{issue}/tags", verify=False, headers=_auth_header(), json={"tag": tag})
+
+# embeddings
+def get_embeddings():
+    return requests.get(f"{get_db()}/embeddings", verify=False).json()['embeddings']
+
+def get_embedding(embedding):
+    return requests.get(f"{get_db()}/embeddings/{embedding}", verify=False).json()
+
+def get_args_wordembed():
+    try:
+        return requests.get(f"{get_cli()}/arglists/generate-embedding-internal/embedding-config", verify=False).json()
+    except:
+        return None
