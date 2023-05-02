@@ -77,9 +77,17 @@
 
 <div>
     <div>
-        Amount of items on a page:
-        <input type="number" id="page_size_input" min="1" value="{{pageLimit}}"/>
-        <button type="button" class="btn btn-secondary" onclick="changePageSize()">Go</button>
+        <div>
+            Search by Issue ID:
+            <input type="text" id="search_issue_id" value="{{search_issue_id if search_issue_id else ''}}" />
+            <button type="button" class="btn btn-secondary" onclick="searchIssueID()">Go</button>
+        </div>
+        
+        <div class="my-2">
+            Amount of items on a page:
+            <input type="number" id="page_size_input" min="1" value="{{pageLimit}}"/>
+            <button type="button" class="btn btn-secondary" onclick="changePageSize()">Go</button>
+        </div>
     </div>
 
     <br />
@@ -264,6 +272,12 @@ function changePageSize() {
     if (sort !== '') url += `&sort=${sort}`
     url += '&sort_asc=' + sort_asc.toLowerCase()
     location.replace(url)
+}
+
+function searchIssueID() {
+    id = document.getElementById('search_issue_id').value
+
+    location.replace(`/classify/view/{{query}}/1?page_limit={{pageLimit}}&search=${id}`)
 }
 
 function setCommentsFor(issue) {

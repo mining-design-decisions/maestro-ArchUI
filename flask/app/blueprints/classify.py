@@ -26,7 +26,8 @@ def view(query, page):
     sort = request.args.get('sort', default=None)
     sort_asc = request.args.get('sort_asc', default='true')
     sort_asc = sort_asc == 'true'
-    issue_data, manual, headers, totalPages, models = dbapi.get_paginated_data(query, page, pageLimit, sort, sort_asc)
+    search_issue_id = request.args.get('search', default=None)
+    issue_data, manual, headers, totalPages, models = dbapi.get_paginated_data(query, page, pageLimit, sort, sort_asc, search_issue_id)
     man_tags = dbapi.get_manual_tags()
 
     model_id_names = dbapi.get_model_ids_names()
@@ -52,7 +53,7 @@ def view(query, page):
     url = dbapi.get_db()
     websocket = f"wss{url[url.find('://'):]}/ws"
 
-    return render_template('classify/view.html', issue_data=issue_data, manual=manual, headers=headers, id_to_name=id_to_name, thisuser=thisuser, totalPages=totalPages, pageLimit=pageLimit, thisPage=int(page), query=query, sort=sort, sort_asc=sort_asc, man_tags=man_tags, issue_text=issue_text, websocket=websocket)
+    return render_template('classify/view.html', issue_data=issue_data, manual=manual, headers=headers, id_to_name=id_to_name, thisuser=thisuser, totalPages=totalPages, pageLimit=pageLimit, thisPage=int(page), query=query, sort=sort, sort_asc=sort_asc, man_tags=man_tags, issue_text=issue_text, websocket=websocket, search_issue_id=search_issue_id)
     
 
 @bp.route('/create', methods=["GET"])

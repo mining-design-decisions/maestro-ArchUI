@@ -200,8 +200,7 @@ def get_query_names():
             results.append(file[:-5])
     return results
 
-# todo pagination rework
-def get_paginated_data(query_name, page, pageLimit, sort, sort_asc):  
+def get_paginated_data(query_name, page, pageLimit, sort, sort_asc, issue_id):  
     # data to return in order: issue_data, manual_labels, headers, total_pages, model_versions
     with open(f'app/data/queries/{query_name}.json', 'r') as f:
         qdata = json.load(f)
@@ -210,8 +209,17 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc):
     
     model_ids = [f'{m_id}-{models[m_id]}' for m_id in models]
 
+    query_filter = json.loads(query)
+    if issue_id is not None:
+        query_filter = {
+            "$and": [
+                query_filter,
+                {'_id': {"$eq": issue_id}}
+            ]
+        }
+
     uibody = {
-        "filter": json.loads(query),
+        "filter": query_filter,
         "sort": sort,
         "sort_ascending": sort_asc,
         "models": model_ids,
