@@ -77,7 +77,6 @@ function typeChanged() {
         if (element.hasOwnProperty('options')) {
             config.type = 'select'
             config.options = JSON.parse(JSON.stringify(element.options))
-            if (!element['has-default']) config.options.push('')
         }
         defaults = {}
         if (element['has-default']) {

@@ -11,6 +11,7 @@
 
     <button class="btn btn-primary m-2" onclick="trainEmbedding()">Train Embedding</button>
 </div>
+<p>Has a trained file: {{e['has_file']}}</p>
 
 <div class="card m-2">
     <div class="card-body">
@@ -22,13 +23,13 @@
                 {% elif c == 'params' %}
                 <li>Parameters:
                     <ul>
-                        {% for p in e['config'][c] %}
-                        <li>{{p}}: {{e['config'][c][p]}}</li>
+                        {% for p in e['config'][c][e['config']['generator']+".0"] %}
+                        <li>{{p}}: {{e['config'][c][e['config']['generator']+".0"][p]}}</li>
                         {% endfor %}
                     </ul>
                 </li>
                 {% else %}
-                <li>{{c}}: {{e['config'][c]}}</li>
+                <li>{{c.title()}}: {{e['config'][c]}}</li>
                 {% endif %}
             {% endfor %}
         </ul>
@@ -73,7 +74,9 @@ function trainEmbedding() {
         if (e.status != 200) {
             alertPopup(e)
         }
-        // no need to do anything else? is there last-trained data for embedddings? todo?
+        else {
+            location.reload()
+        }
     })
 }
 </script>

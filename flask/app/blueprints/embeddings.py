@@ -39,34 +39,38 @@ def create():
     params = {}
     
     for setting in this_config:
-        if setting['name'] in request.form:
-            params[setting['name']] = request.form.get(setting['name'])
-        elif not setting['has-default']: # html forms don't give you values that didn't get filled in
+        if setting['name'] in request.form and request.form.get(setting['name']):
             match(setting['type']):
                 case 'bool':
-                    params[setting['name']] = False
+                    params[setting['name']] = True
                 case 'int':
-                    params[setting['name']] = None
-                case 'str':
-                    params[setting['name']] = ''
+                    params[setting['name']] = int(request.form.get(setting['name']))
                 case _:
-                    print(f"WARNING: Unhandled Case in Embedding create: arg was of type {setting['type']}")
-
-        pass
+                    params[setting['name']] = request.form.get(setting['name'])
+        elif setting['type'] == 'bool':
+            params[setting['name']] = False
+        else:
+            # not a bool. not present in the form.
+            match(setting['type']):
+                case 'int':
+                    # grab the min.
+                    params[setting['name']] = setting['minimum']
+                case _:
+                    print(f"WARNING: Unhandled Embedding Param {setting['name']} of type {setting['type']}")
 
     config = {
         "generator": type,
-        "training_data_query": {
+        "training-data-query": {
             "$or": [
-                {"tags": {"$eq": "TAJO"}},
-                {"tags": {"$eq": "HDFS"}},
-                {"tags": {"$eq": "HADOOP"}},
-                {"tags": {"$eq": "YARN"}},
-                {"tags": {"$eq": "MAPREDUCE"}},
-                {"tags": {"$eq": "HADOOP"}}
+                {"tags": {"$eq": "Apache-TAJO"}},
+                {"tags": {"$eq": "Apache-HDFS"}},
+                {"tags": {"$eq": "Apache-HADOOP"}},
+                {"tags": {"$eq": "Apache-YARN"}},
+                {"tags": {"$eq": "Apache-MAPREDUCE"}},
+                {"tags": {"$eq": "Apache-HADOOP"}}
             ]
         },
-        "params": params
+        "params": { f"{type}.0": params}
     }
 
     data, status = dbapi.save_embedding(name, config)
