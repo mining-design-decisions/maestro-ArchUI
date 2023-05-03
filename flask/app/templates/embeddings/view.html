@@ -6,6 +6,12 @@
 
 <h3>Viewing ML Word Embedding: {{e['name']}}</h3>
 
+<div class="d-flex flex-row-reverse">
+    <button class="btn btn-danger m-2" onclick="deleteEmbedding()">Delete Embedding</button>
+
+    <button class="btn btn-primary m-2" onclick="trainEmbedding()">Train Embedding</button>
+</div>
+
 <div class="card m-2">
     <div class="card-body">
         <h4>Configuration</h4>
@@ -29,4 +35,46 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+embedding_id = "{{e['embedding_id']}}"
+
+function alertPopup(e) {
+    str = `Something went wrong while processing your request. Code returned was: ${e.status}.`
+    
+    e.json().then(data => {
+        str += "\n\nResponse body:\n"
+        str += JSON.stringify(data)
+        alert(str)
+    })
+    .catch(err => {
+        alert(str)
+    })
+}
+
+function deleteEmbedding() {
+    fetch(`/embed/delete/${embedding_id}`, {method: "DELETE"})
+    .then(e => {
+        if (e.status != 200) {
+            alertPopup(e)
+        }
+        else {
+            location.replace({{url_for('embeddings.viewall')}})
+        }
+    })
+}
+
+function trainEmbedding() {
+    fetch(`/embed/train/${embedding_id}`, {method: "POST"})
+    .then(e => {
+        if (e.status != 200) {
+            alertPopup(e)
+        }
+        // no need to do anything else? is there last-trained data for embedddings? todo?
+    })
+}
+</script>
 {% endblock %}

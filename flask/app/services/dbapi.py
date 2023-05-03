@@ -352,3 +352,24 @@ def get_args_wordembed():
         return requests.get(f"{get_cli()}/arglists/generate-embedding-internal/embedding-config", verify=False).json()
     except:
         return None
+
+@auth_req
+def save_embedding(name, config):
+    return requests.post(f"{get_db()}/embeddings", verify=False, headers=_auth_header(), json={"name": name, "config": config})
+
+@auth_req
+def delete_embedding(id):
+    return requests.delete(f"{get_db()}/embeddings/{id}", verify=False, headers=_auth_header())
+
+@auth_req
+def train_embedding(embedding):
+    return requests.post(f"{get_cli()}/generate-embedding", verify=False, json={
+        "auth": {
+            "username": get_username(),
+            "password": "asdf" # todo!
+        },
+        "config": {
+            "database-url": get_db(),
+            "embedding-id": embedding
+        }
+    })
