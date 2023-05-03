@@ -32,6 +32,8 @@ def auth_req(func):
         x = func(*args, **kwargs)
         try:
             data = x.json()
+            if data is None:
+                data = {"msg": "empty response"}
         except:
             data = {'msg': "Error retrieving response data"}
 
