@@ -72,7 +72,6 @@ def create():
     data, status = dbapi.save_embedding(name, config)
     if status != 200:
         return render_template('embeddings/error.html')
-    print(data)
     return redirect(url_for('embeddings.view', embedding=data['embedding_id']))
 
 @bp.route('/view/<embedding>', methods=["GET"])

@@ -30,14 +30,11 @@ def auth_req(func):
             return {'msg': "Not logged in in UI"}, 401
         
         x = func(*args, **kwargs)
-
-        if x.status_code == 200:
-            return {"msg": "ok"}, x.status_code
-
         try:
             data = x.json()
         except:
             data = {'msg': "Error retrieving response data"}
+
         return data, x.status_code
 
     return inner
