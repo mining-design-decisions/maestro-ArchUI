@@ -6,13 +6,24 @@
 <div>
     <h3>Home page</h3>
     <p>ArchUI aims to combine various approaches to detecting architectural knowledge in Jira and Github repositories.</p>
-    <p>Use the tabs in the navbar to view currently available models, create new ones, or run them on a project. More detailed information on each tab is available under the divider and in the project readme.</p>
+    <p>Use the tabs in the navbar to view currently available ML models, create new ones, or run them on a project. Use the Classify Issues tab to manually label issues. More detailed information on each tab is available under the divider and in the project readme.</p>
 
     <hr />
 
     <div class="container">
         <div class="row my-3">
             <div class="col-sm">
+                <div class="mx-2">
+                    <h4>Word Embeddings</h4>
+                    <p>Several machine learning model types require a word embedding to accurately generate features. Word embeddings can be managed: created, trained, deleted. Word embeddings fit with specific feature generators:</p>
+                    <ul>
+                        <li><em>Word2VecGenerator</em> embedding fits with <em>Word2Vec</em> feature generator</li>
+                        <li><em>Doc2VecGenerator</em> embedding fits with <em>Doc2Vec</em> feature generator</li>
+                        <li><em>DictionaryGenerator</em> embedding fits with <em>BOWFrequency</em> and <em>BOWNormalized</em> feature generators</li>
+                        <li><em>IDFGenerator</em> embedding fits with <em>TfidfGenerator</em> feature generator</li>
+                    </ul>
+                    <p>Note that not all feature generators require an embedding.</p>
+                </div>
                 <div class="mx-2">
                     <h4>Managing Models</h4>
                     <p>In this application, the term 'model' can refer to two things: either the model configuration, which is used by the ML pipeline, or the trained model data files. In the "ML Models" page, accessible from the navbar at the top of the site, you can access and manage the currently available ML model configurations.</p>
@@ -24,10 +35,6 @@
                 <div class="mx-2">
                     <h4>Login</h4>
                     <p>In the Login view, you can log in with your username and password, which is required to have to change any data (you can read data without being logged in with a valid account). You can also set the database and pipeline URLs, that the UI will send its data requests to. It is worth noting that you are essentially logging in to the database, so if you change the database URL, you will need to log in again.</p>
-                </div>
-                <div class="mx-2">
-                    <h4>Tags</h4>
-                    <p>Tags are applied to issues and are used in queries to group issues which all have a certain (set of) tags together, for easier classification. In the tags overview, you can add and delete tags. Edit functionality is coming soon. In the query view, per issue, you can add tags to or remove tags from individual issues. Tags have a title and a description. In the query view, hover over the tag name to see the description in a tooltip.</p>
                 </div>
             </div>
             <div class="col-sm">
@@ -48,6 +55,10 @@
                 <div class="mx-2">
                     <h4>Statistics</h4>
                     <p>The contents of this page will be the subject of the author's bachelor project.</p>
+                </div>
+                <div class="mx-2">
+                    <h4>Tags</h4>
+                    <p>Tags are applied to issues and are used in queries to group issues which all have a certain (set of) tags together, for easier classification. In the tags overview, you can add and delete tags. Edit functionality is coming soon. In the query view, per issue, you can add tags to or remove tags from individual issues. Tags have a title and a description. In the query view, hover over the tag name to see the description in a tooltip.</p>
                 </div>
             </div>
         </div>
