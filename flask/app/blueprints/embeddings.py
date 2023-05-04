@@ -24,7 +24,12 @@ default_q = {
 @bp.route('/', methods=["GET"])
 def viewall():
     embeddings = dbapi.get_embeddings()
-    return render_template('embeddings/viewall.html', embeddings=embeddings)
+    types = []
+    for e in embeddings:
+        gen = e['config']['generator']
+        if gen not in types:
+            types.append(gen)
+    return render_template('embeddings/viewall.html', embeddings=embeddings, types=types)
 
 @bp.route('/create', methods=["GET"])
 def viewform():
