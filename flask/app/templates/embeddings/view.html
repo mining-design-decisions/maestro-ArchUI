@@ -69,7 +69,14 @@ function deleteEmbedding() {
 }
 
 function trainEmbedding() {
-    fetch(`/embed/train/${embedding_id}`, {method: "POST"})
+    pw = prompt('Enter your password to use DL API: ')
+    fetch(`/embed/train/${embedding_id}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': "application/json"
+        },
+        body: JSON.stringify({pw: pw})
+    })
     .then(e => {
         if (e.status != 200) {
             alertPopup(e)

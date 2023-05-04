@@ -361,11 +361,11 @@ def delete_embedding(id):
     return requests.delete(f"{get_db()}/embeddings/{id}", verify=False, headers=_auth_header())
 
 @auth_req
-def train_embedding(embedding):
+def train_embedding(embedding, pw):
     return requests.post(f"{get_cli()}/generate-embedding", verify=False, json={
         "auth": {
             "username": get_username(),
-            "password": "asdf" # todo!
+            "password": pw
         },
         "config": {
             "database-url": get_db(),
