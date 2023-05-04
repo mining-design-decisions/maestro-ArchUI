@@ -4,9 +4,22 @@ from flask import request
 from flask import redirect
 from flask import url_for
 
+import json
+
 from app.services import dbapi
 
 bp = Blueprint('embeddings', __name__, url_prefix="/embed")
+
+default_q = {
+    "$or": [
+        {"tags": {"$eq": "Apache-TAJO"}},
+        {"tags": {"$eq": "Apache-HDFS"}},
+        {"tags": {"$eq": "Apache-HADOOP"}},
+        {"tags": {"$eq": "Apache-YARN"}},
+        {"tags": {"$eq": "Apache-MAPREDUCE"}},
+        {"tags": {"$eq": "Apache-HADOOP"}}
+    ]
+}
 
 @bp.route('/', methods=["GET"])
 def viewall():
@@ -16,25 +29,21 @@ def viewall():
 @bp.route('/create', methods=["GET"])
 def viewform():
     args = dbapi.get_args_wordembed()
-    default_q = {
-        "$or": [
-            {"tags": {"$eq": "TAJO"}},
-            {"tags": {"$eq": "HDFS"}},
-            {"tags": {"$eq": "HADOOP"}},
-            {"tags": {"$eq": "YARN"}},
-            {"tags": {"$eq": "MAPREDUCE"}},
-            {"tags": {"$eq": "HADOOP"}}
-        ]
-    }
     if args is None:
         return render_template('embeddings/error.html')
-    return render_template('embeddings/form.html', args=args, default_q=str(default_q))
+    return render_template('embeddings/form.html', args=args, default_q=json.dumps(default_q))
 
 @bp.route('/create', methods=["POST"])
 def create():
     name = request.form.get('name')
     type = request.form.get('type')
     this_config = dbapi.get_args_wordembed()[type]
+
+    training_q = request.form.get('training_q', default=json.dumps(default_q))
+    try:
+        training_q_json = json.loads(training_q)
+    except:
+        training_q_json = default_q
 
     params = {}
     
@@ -60,16 +69,7 @@ def create():
 
     config = {
         "generator": type,
-        "training-data-query": {
-            "$or": [
-                {"tags": {"$eq": "Apache-TAJO"}},
-                {"tags": {"$eq": "Apache-HDFS"}},
-                {"tags": {"$eq": "Apache-HADOOP"}},
-                {"tags": {"$eq": "Apache-YARN"}},
-                {"tags": {"$eq": "Apache-MAPREDUCE"}},
-                {"tags": {"$eq": "Apache-HADOOP"}}
-            ]
-        },
+        "training-data-query": training_q_json,
         "params": { f"{type}.0": params}
     }
 
