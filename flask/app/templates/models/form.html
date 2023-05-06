@@ -61,6 +61,15 @@
 <script>
 const data = {{field_configs|tojson|safe}}
 const defaults = {{defaults|tojson|safe}}
+const inmode_to_embedmode = {
+    "Word2Vec": "Word2VecGenerator",
+    "Doc2Vec": "Doc2VecGenerator",
+    "BOWFrequency": "DictionaryGenerator",
+    "BOWNormalized": "DictionaryGenerator",
+    "TfidfGenerator": "IDFGenerator"
+}
+const embeds_dic = {{embeds_dic|tojson|safe}}
+
 function onDocReady() {
     tabs = ["general", "training", "classifier", "pre-processing", "classifiers", "meta-classifier"]
     tabs.forEach(tab => {
@@ -92,7 +101,7 @@ function getSize(prefix) {
 function modelModeChanged() {
     newVal = document.getElementById("gen_model_mode").value
 
-    combi_strat_el = document.getElementById("gen_combination_strategy_div")
+    ens_only_div = document.getElementById("gen_ensemble_div")
 
     single_exclusive_tabs = ['classifier', 'pre-processing']
     ensemble_exclusive_tabs = ['classifiers', 'meta-classifier']
@@ -108,7 +117,7 @@ function modelModeChanged() {
                 document.getElementById(`${tab}-tab-header`).setAttribute('class', 'nav-item')
             })
             // enable combi strat field
-            combi_strat_el.setAttribute('class', '')
+            ens_only_div.setAttribute('class', '')
 
             switch(document.getElementById("gen_combination_strategy").value) {
                 case 'stacking':
@@ -130,22 +139,32 @@ function modelModeChanged() {
             })
 
             // disable combi strat field
-            combi_strat_el.setAttribute('class', 'd-none')
+            ens_only_div.setAttribute('class', 'd-none')
             break;
     }
 }
 modelModeChanged()
 
 function combiStratChanged(combi_strat_el) {
-    switch(combi_strat_el[0].value) {
-        case 'stacking':
-            document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item')
-            break;
-        default:
-            document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item d-none')
+    val = combi_strat_el[0].value
+    
+    if (val == 'stacking') {
+        document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item')
     }
+    else {
+        document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item d-none')
+    }
+
+    if (val == 'voting') {
+        document.getElementById(`gen_voting_mode_div`).setAttribute('class', '')
+    }
+    else {
+        document.getElementById(`gen_voting_mode_div`).setAttribute('class', 'd-none')
+    }
+
+
 }
-combiStratChanged([document.getElementById("gen_combination_strategy_div")])
+combiStratChanged([document.getElementById("gen_combination_strategy")])
 
 function useEarlyStoppingChanged() {
     el = document.getElementById("train_early_stopping_div")
@@ -249,6 +268,22 @@ function inmodeChanged(inmode_element) {
     // if (prefix == "stacker") size = "small";
 
     div_element.innerHTML = get_params_for(inmode_selected, prefix+'_', size, defaults)
+
+    // regenerate options for embed dic
+    el = document.getElementById(`${prefix}_p_embedding_id`)
+
+    target_embed_mode = inmode_to_embedmode[inmode_selected]
+
+    if (embeds_dic.hasOwnProperty(target_embed_mode)) {
+        new_html = ""
+        embeds_dic[target_embed_mode].forEach(embed => {
+            new_html += `<option value="${embed['id']}">${embed['name']}</option>`
+        })
+        el.innerHTML = new_html
+    }
+    else if (el) {
+        el.innerHTML = ''
+    }
 }
 _all_inmodes = $("select[id$='_inmode']")
 for (let i = 0; i < _all_inmodes.length; i++) {
@@ -286,6 +321,16 @@ function classifierChanged(classifier_element) {
         // force changes
         inmodeChanged([div_element])
     }
+
+    // if this classifier is the single one
+    // and if it is a convolutional one
+    // we must set the single_analyze_keywords_div element to be visible
+    if (classifier_element[0].id.startsWith('single_') && class_selected == 'LinearConv1Model') {
+        document.getElementById('single_analyze_keywords_div').setAttribute('class', '')
+    }
+    else {
+        document.getElementById('single_analyze_keywords_div').setAttribute('class', 'd-none')
+    }
 }
 _all_classifiers = $("select[id$='_classifier']")
 for (let i = 0; i < _all_classifiers.length; i++) {
@@ -310,6 +355,12 @@ function ensClassCountChanged(count_element) {
     }
 }
 ensClassCountChanged([document.getElementById("ens_classifier_count")])
-</script>
 
+function nrEarlyStoppingAttribsChanged() {
+    new_amt = document.getElementById('train_early_stopping_num_attribs').value
+    div = document.getElementById('train_early_stopping_attribs_div')
+    div.innerHTML = generate_early_stopping_attribs(new_amt, defaults)
+}
+nrEarlyStoppingAttribsChanged()
+</script>
 {% endblock %}

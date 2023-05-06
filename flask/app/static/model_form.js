@@ -43,16 +43,6 @@ function render_field_number(css_label, css_input, tooltip, name, defaults, labe
     }
     new_html = `<label class="${css_label}" title="${tooltip}" for="${name}">${label} </label>\n`
     new_html += `<div class="${css_input}">`
-    /* todo place in field_configs.json
-    if (name == 'vector-length') {
-        if (default_int.length > 0) {
-            default_int += ' required'
-        }
-        else {
-            default_int = ' required value=400'
-        }
-    }
-    */
     new_html += `<input title="${tooltip}" type="number" size="10" name="${name}" id="${name}" ${extra_attr}>\n`
     new_html += `</div>`
     return new_html
@@ -197,16 +187,17 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += `<div id="${pref}hidden_layers_div">`
             // todo should probably be pulled from somewhere
             result += generate_count_fields(1, 'hparam_hidden_layer_size', pref, size, defaults)
+            result += generate_count_fields(1, 'hparam_layer_activation', pref, size, defaults)
             result += `</div>`
             
             // optimizer, loss, use-trainable-embedding
-            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss","hparam_use_trainable_embedding"]
+            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss", "hparam_learning_rate", "hparam_use_trainable_embedding"]
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
             break;
         case "LinearConv1Model":
-            fields = ["hparam_fully_connected_layer_size", "hparam_filters", "hparam_number_of_convolutions"]
+            fields = ["hparam_fully_connected_layer_size", "hparam_fully_connected_layer_activation", "hparam_filters", "hparam_number_of_convolutions"]
             fields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
@@ -215,7 +206,7 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += `</div>`
 
             // optimizer, loss, use-trainable-embedding
-            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss","hparam_use_trainable_embedding"]
+            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss", "hparam_learning_rate", "hparam_use_trainable_embedding"]
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
@@ -232,14 +223,14 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += `</div>`
 
             // optimizer, loss, use-trainable-embedding
-            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss","hparam_use_trainable_embedding"]
+            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss", "hparam_learning_rate", "hparam_use_trainable_embedding"]
             remfields.forEach(field => {
                 result += render_field(data[field], prefix, size, defaults)
             })
             break;
         case "Bert":
             // optimizer, loss
-            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss"]
+            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss", "hparam_learning_rate"]
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
@@ -251,47 +242,57 @@ function get_hparams_for(classifier, prefix, size, defaults) {
 function get_params_for(inmode, prefix, size, defaults) {
     result = ""
 
+    // commented-out are covered in embeddings
     const params_per_inmode = {
-        "Word2Vec1D": [
-            "param_vector_length",
-            "param_min_count",
+        "Word2Vec": [
+            // "param_vector_length",
+            "param_embedding_id",
             "param_max_len",
             "param_disable_lowercase",
             "param_disable_stopwords",
-            "param_use_stemming",
-            "param_use_lemmatization",
-            "param_use_pos",
-            "param_class_limit"
+            // "param_use_stemming",
+            // "param_use_lemmatization",
+            // "param_use_pos",
+            "param_class_limit",
+            "param_metadata_attributes",
+            // "param_formatting_handling"
         ],
         "Doc2Vec": [
-            "param_vector_length",
+            // "param_vector_length",
+            "param_embedding_id",
             "param_max_len",
             "param_disable_lowercase",
             "param_disable_stopwords",
-            "param_use_stemming",
-            "param_use_lemmatization",
-            "param_use_pos",
-            "param_class_limit"
+            // "param_use_stemming",
+            // "param_use_lemmatization",
+            // "param_use_pos",
+            "param_class_limit",
+            "param_metadata_attributes",
+            // "param_formatting_handling"
         ],
         "BOWFrequency": [
-            "param_min_doc_count",
+            "param_embedding_id", // dictionary-id
             "param_max_len",
             "param_disable_lowercase",
             "param_disable_stopwords",
-            "param_use_stemming",
-            "param_use_lemmatization",
-            "param_use_pos",
-            "param_class_limit"
+            // "param_use_stemming",
+            // "param_use_lemmatization",
+            // "param_use_pos",
+            "param_class_limit",
+            "param_metadata_attributes",
+            // "param_formatting_handling"
         ],
         "BOWNormalized": [
-            "param_min_doc_count",
+            "param_embedding_id", // dictionary-id
             "param_max_len",
             "param_disable_lowercase",
             "param_disable_stopwords",
-            "param_use_stemming",
-            "param_use_lemmatization",
-            "param_use_pos",
-            "param_class_limit"
+            // "param_use_stemming",
+            // "param_use_lemmatization",
+            // "param_use_pos",
+            "param_class_limit",
+            "param_metadata_attributes",
+            // "param_formatting_handling"
         ],
         "Bert": [
             "param_max_len",
@@ -300,16 +301,21 @@ function get_params_for(inmode, prefix, size, defaults) {
             "param_use_stemming",
             "param_use_lemmatization",
             "param_use_pos",
-            "param_class_limit"
+            "param_class_limit",
+            "param_metadata_attributes",
+            "param_formatting_handling"
         ],
         "TfidfGenerator": [
             "param_max_len",
             "param_disable_lowercase",
             "param_disable_stopwords",
-            "param_use_stemming",
-            "param_use_lemmatization",
-            "param_use_pos",
-            "param_class_limit"
+            // "param_use_stemming",
+            // "param_use_lemmatization",
+            // "param_use_pos",
+            "param_class_limit",
+            "param_metadata_attributes",
+            // "param_formatting_handling",
+            "param_embedding_id" // dictionary-id
         ],
         "Metadata": [
             "param_max_len",
@@ -318,7 +324,9 @@ function get_params_for(inmode, prefix, size, defaults) {
             "param_use_stemming",
             "param_use_lemmatization",
             "param_use_pos",
-            "param_class_limit"
+            "param_class_limit",
+            "param_metadata_attributes",
+            "param_formatting_handling"
         ],
         "OntologyFeatures": [
             "param_max_len",
@@ -327,7 +335,9 @@ function get_params_for(inmode, prefix, size, defaults) {
             "param_use_stemming",
             "param_use_lemmatization",
             "param_use_pos",
-            "param_class_limit"
+            "param_class_limit",
+            "param_metadata_attributes",
+            "param_formatting_handling"
         ]
     }
 
@@ -364,57 +374,10 @@ function generate_inmode(prefix="", size="small", defaults={}) {
     return result
 }
 
-// tab generators
-function generate_tab_general(defaults, data) {
-    const fields = [
-        "gen_model_name",
-        "gen_output_mode",
-        "gen_model_mode",
-        "gen_combination_strategy"
-    ]
-
-    result = ""
-    fields.forEach(field => {
-        result += render_field(data[field], "gen_", "small", defaults)
-    })
-    return result
-}
-
-function generate_tab_prepro(defaults, data) {
-    return generate_inmode("single_", "small", defaults)
-}
-
-function generate_tab_classifier(defaults, data) {
-    return generate_classifier("single_", "small", defaults)
-}
-
-function generate_tab_training(defaults, data) {
-    const fields = [
-        "train_epochs",
-        "train_split_size",
-        "train_max_train",
-        "train_apply_ontology_classes",
-        "train_architectural_only",
-        "train_class_balancer",
-        "train_batch_size",
-        "train_use_early_stopping"
-    ]
-    const early_stopping_fields = [
-        "train_early_stopping_patience",
-        "train_early_stopping_min_delta",
-        "train_early_stopping_attribute"
-    ]
-
-    result = ""
-    fields.forEach(field => {
-        result += render_field(data[field], "train_", "small", defaults)
-    })
-    result += "<div id=\"train_early_stopping_div\">"
-    early_stopping_fields.forEach(field => {
-        result += render_field(data[field], "train_", "small", defaults)
-    })
-    result += "</div>"
-
+function generate_early_stopping_attribs(amt, defaults) {
+    left = generate_count_fields(amt, 'train_early_stopping_min_delta', 'train_', 'large', defaults)
+    right = generate_count_fields(amt, 'train_early_stopping_attribute', 'train_', 'large', defaults)
+    result = `<div class="row"><div class="col-sm">${left}</div><div class="col-sm">${right}</div></div>`
     return result
 }
 
@@ -443,6 +406,72 @@ function generate_ens_classifiers(amt, defaults) {
     return result
 }
 
+// tab generators
+function generate_tab_general(defaults, data) {
+    result = ""
+
+    result += render_field(data['gen_model_name'], "gen_", "small", defaults)
+    result += render_field(data['gen_output_mode'], "gen_", "small", defaults)
+    result += render_field(data['gen_model_mode'], "gen_", "small", defaults)
+    
+    result += '<div id="gen_ensemble_div">'
+    result += render_field(data['gen_combination_strategy'], "gen_", "small", defaults)
+    result += render_field(data['gen_test_separately'], "gen_", "small", defaults)
+
+    result += render_field(data['gen_voting_mode'], "gen_", "small", defaults)
+    result += '</div>'
+
+    return result
+}
+
+function generate_tab_prepro(defaults, data) {
+    return generate_inmode("single_", "small", defaults)
+}
+
+function generate_tab_classifier(defaults, data) {
+    prefix = "single_"
+    size = "small"
+    
+    result = ""
+    classifier_config = data['class_classifier']
+    result += render_field(classifier_config, prefix, size, defaults)
+    result += render_field(data['class_analyze_keywords'], 'single_', 'small', defaults)
+    result += `<hr />`
+
+    result += `<div id="${prefix}hparams_div">`
+    result += get_hparams_for(classifier_config["extra"][0]["value"], prefix, size, defaults)
+    result += `</div>`
+
+    return result
+}
+
+function generate_tab_training(defaults, data) {
+    const fields = [
+        "train_epochs",
+        "train_split_size",
+        "train_max_train",
+        "train_apply_ontology_classes",
+        "train_architectural_only",
+        "train_class_balancer",
+        "train_batch_size",
+        "train_use_early_stopping"
+    ]
+
+    result = ""
+    fields.forEach(field => {
+        result += render_field(data[field], "train_", "small", defaults)
+    })
+
+    result += "<div id=\"train_early_stopping_div\">"
+    result += render_field(data['train_early_stopping_patience'], "train_", "small", defaults)
+    result += render_field(data['train_early_stopping_num_attribs'], "train_", "small", defaults)
+    result += "<hr />"
+    result += "<div id=\"train_early_stopping_attribs_div\"></div>"
+    result += "</div>"
+
+    return result
+}
+
 function generate_tab_ensemble(defaults, data) {
     result = ""
 
@@ -458,18 +487,21 @@ function generate_tab_ensemble(defaults, data) {
 
 function generate_tab_stacker(defaults, data) {
     result = ""
+
     classifier_config = deep_copy(data['class_classifier'])
-    classifier_config['options'] = ["FullyConnectedModel"]
+    // classifier_config['options'] = ["FullyConnectedModel"]
     result += render_field(classifier_config, "stacker_", "small", defaults)
+    result += render_field(data['stacker_use_concat'], 'stacker_', 'small', defaults)
+    result += render_field(data['stacker_no_matrix'], 'stacker_', 'small', defaults)
     result += `<hr />`
 
-    
     result += `<div id="stacker_hparams_div">`
     result += get_hparams_for("FullyConnectedModel", "stacker_", "small", defaults)
     result += `</div>`
     return result
 }
 
+// entry point
 function generate_tab(tabName, data, defaults={}) {
     switch(tabName) {
         case "general":

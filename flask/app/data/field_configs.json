@@ -56,10 +56,33 @@
                 "value": "required onchange=\"combiStratChanged($(this))\""
             },
             {
-                "type": "in_div"
-            },
+                "type": "indent"
+            }
+        ]
+    },
+    "gen_test_separately": {
+        "name": "test_separately",
+        "label": "Test Separately",
+        "type": "bool",
+        "tooltip": "Disable combining multiple classifiers. Instead, test them separately on the same data.",
+        "extra": [
             {
                 "type": "indent"
+            }
+        ]
+    },
+    "gen_voting_mode": {
+        "name": "voting_mode",
+        "label": "Voting Mode",
+        "type": "select",
+        "tooltip": "Mode for the voting ensemble. Either hard or sort voting.",
+        "options": ["soft", "hard"],
+        "extra": [
+            {
+                "type": "indent"
+            },
+            {
+                "type": "in_div"
             }
         ]
     },
@@ -72,11 +95,7 @@
         "extra": [
             {
                 "type": "attribute",
-                "value": "required"
-            },
-            {
-                "type": "attribute",
-                "value": "min=1"
+                "value": "required min=1"
             },
             {
                 "type": "default",
@@ -88,11 +107,15 @@
         "name": "split_size",
         "label": "Split Size",
         "type": "number",
-        "tooltip": "Size of testing and validation splits.",
+        "tooltip": "Size of testing and validation splits. Ignored when k-cross > 0",
         "extra": [
             {
                 "type": "attribute",
                 "value": "min=0.01 max=0.5 step=0.01"
+            },
+            {
+                "type": "default",
+                "value": 0.2
             }
         ]
     },
@@ -100,11 +123,15 @@
         "name": "max_train",
         "label": "Max Train",
         "type": "number",
-        "tooltip": "Maximum amount of training items. Do not specify for infinite.",
+        "tooltip": "Maximum amount of training items. -1 for infinite.",
         "extra": [
             {
                 "type": "attribute",
-                "value": "min=1"
+                "value": "min=-1"
+            },
+            {
+                "type": "default",
+                "value": -1
             }
         ]
     },
@@ -136,6 +163,10 @@
             {
                 "type": "attribute",
                 "value": "min=1"
+            },
+            {
+                "type": "default",
+                "value": 32
             }
         ]
     },
@@ -163,6 +194,29 @@
             },
             {
                 "type": "indent"
+            },
+            {
+                "type": "default",
+                "value": 5
+            }
+        ]
+    },
+    "train_early_stopping_num_attribs": {
+        "name": "early_stopping_num_attribs",
+        "label": "Number of Early Stopping Attributes",
+        "type": "number",
+        "tooltip": "Amount of Early Stopping Attributes to Configure",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "indent"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"nrEarlyStoppingAttribsChanged()\" min=0"
             }
         ]
     },
@@ -170,11 +224,11 @@
         "name": "early_stopping_min_delta",
         "label": "Early stopping min delta",
         "type": "number",
-        "tooltip": "Minimum delta used when using early stopping. One entry for every attribute used.",
+        "tooltip": "Minimum delta for attribute.",
         "extra": [
             {
                 "type": "attribute",
-                "value": "step=0.001 min=0.001"
+                "value": "step=0.001 min=0.001 required"
             },
             {
                 "type": "indent"
@@ -184,11 +238,16 @@
     "train_early_stopping_attribute": {
         "name": "early_stopping_attribute",
         "label": "Early stopping attribute",
-        "type": "str",
-        "tooltip": "Attribute(s) to use for early stopping (from the validation set).",
+        "type": "select",
+        "tooltip": "Attribute(s) to configure for early stopping.",
+        "options": ["loss", "accuracy", "precision", "recall", "f_score_tf", "true_positives", "true_negatives", "false_positives", "false_negatives"],
         "extra": [
             {
                 "type": "indent"
+            },
+            {
+                "type": "attribute",
+                "value": "required"
             }
         ]
     },
@@ -211,7 +270,21 @@
             },
             {
                 "type": "attribute",
-                "value": "onchange=\"classifierChanged($(this))\""
+                "value": "onchange=\"classifierChanged($(this))\" required"
+            }
+        ]
+    },
+    "class_analyze_keywords": {
+        "name": "analyze_keywords",
+        "label": "Analyze Keywords",
+        "type": "bool",
+        "tooltip": "Compute a list of important keywords. Convolutional mode only. Saves to a local file.",
+        "extra": [
+            {
+                "type": "in_div"
+            },
+            {
+                "type": "indent"
             }
         ]
     },
@@ -220,7 +293,7 @@
         "name": "number_of_hidden_layers",
         "label": "Number of Hidden Layers",
         "type": "number",
-        "tooltip": "[min, max] = [0, 11] -- default = 1",
+        "tooltip": "Number of Hidden Layers in the model.",
         "extra": [
             {
                 "type": "default",
@@ -228,7 +301,7 @@
             },
             {
                 "type": "attribute",
-                "value": "onchange=\"nrHiddenLayersChanged($(this))\""
+                "value": "onchange=\"nrHiddenLayersChanged($(this))\" min=0 max=11"
             }
         ]
     },
@@ -236,11 +309,43 @@
         "name": "hidden_layer_size",
         "label": "Size of Hidden Layer",
         "type": "number",
-        "tooltip": "[min, max] = [2, 16384] -- default = 32",
+        "tooltip": "Number of units in the i-th hidden layer.",
         "extra": [
             {
                 "type": "default",
                 "value": 32
+            },
+            {
+                "type": "indent"
+            },
+            {
+                "type": "attribute",
+                "value": "min=2 max=16384"
+            }
+        ]
+    },
+    "hparam_layer_activation": {
+        "name": "layer_activation",
+        "label": "Activation to use in Hidden Layer",
+        "type": "select",
+        "tooltip": "Activation to use in the i-th hidden layer",
+        "options": [
+            "linear",
+            "relu",
+            "elu",
+            "leakyrule",
+            "sigmoid",
+            "tanh",
+            "softmax",
+            "softsign",
+            "selu",
+            "exp",
+            "prelu"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "linear"
             },
             {
                 "type": "indent"
@@ -303,11 +408,27 @@
             }
         ]
     },
+    "hparam_learning_rate": {
+        "name": "learning_rate",
+        "label": "Learning Rate",
+        "tooltip": "Learning rate for the learning process.",
+        "type": "number",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0.01
+            },
+            {
+                "type": "attribute",
+                "value": "min=0.0 step=0.01"
+            }
+        ]
+    },
     "hparam_use_trainable_embedding": {
         "name": "use_trainable_embedding",
         "label": "Use Trainable Embedding",
         "type": "bool",
-        "tooltip": "Use trainable embedding for this classifier? Default: false."
+        "tooltip": "Whether to make the word-embedding trainable."
     },
     "hparam_fully_connected_layer_size": {
         "name": "fully_connected_layer_size",
@@ -318,6 +439,10 @@
             {
                 "type": "default",
                 "value": 32
+            },
+            {
+                "type": "attribute",
+                "value": "min=2 max=16384"
             }
         ]
     },
@@ -325,11 +450,15 @@
         "name": "filters",
         "label": "Filters",
         "type": "number",
-        "tooltip": "[min, max] = [1, 64] -- default = 32",
+        "tooltip": "Number of filters per convolution layer.",
         "extra": [
             {
                 "type": "default",
                 "value": 32
+            },
+            {
+                "type": "attribute",
+                "value": "min=1 max=64"
             }
         ]
     },
@@ -337,7 +466,7 @@
         "name": "number_of_convolutions",
         "label": "Number of Convolutions",
         "type": "number",
-        "tooltip": "[min, max] = [1, 11] -- default = 1",
+        "tooltip": "Number of different convolutions to use.",
         "extra": [
             {
                 "type": "default",
@@ -345,7 +474,32 @@
             },
             {
                 "type": "attribute",
-                "value": "onchange=\"nrOfConvChanged($(this))\""
+                "value": "onchange=\"nrOfConvChanged($(this))\" min=1 max=11"
+            }
+        ]
+    },
+    "hparam_fully_connected_layer_activation": {
+        "name": "fnn_layer_activation",
+        "label": "Fully Connected Layer Activation",
+        "tooltip": "Activation to use in the fully connected layer.",
+        "type": "select",
+        "options": [
+            "linear",
+            "relu",
+            "elu",
+            "leakyrule",
+            "sigmoid",
+            "tanh",
+            "softmax",
+            "softsign",
+            "selu",
+            "exp",
+            "prelu"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "linear"
             }
         ]
     },
@@ -353,7 +507,7 @@
         "name": "kernel_size",
         "label": "Size of Kernel",
         "type": "number",
-        "tooltip": "[min, max] = [1, 512] -- default = 4",
+        "tooltip": "Size of the i-th convolution kernel.",
         "extra": [
             {
                 "type": "default",
@@ -361,6 +515,10 @@
             },
             {
                 "type": "indent"
+            },
+            {
+                "type": "attribute",
+                "value": "min=1 max=512"
             }
         ]
     },
@@ -368,11 +526,15 @@
         "name": "bidirectional_layer_size",
         "label": "Size of the Bidirectional Layer",
         "type": "number",
-        "tooltip": "[min, max] = [1, 128] -- default = 64",
+        "tooltip": "Size of the bidirectional layer.",
         "extra": [
             {
                 "type": "default",
                 "value": 64
+            },
+            {
+                "type": "attribute",
+                "value": "min=1 max=128"
             }
         ]
     },
@@ -380,7 +542,7 @@
         "name": "number_of_hidden_layers",
         "label": "Number of Hidden Layers",
         "type": "number",
-        "tooltip": "[min, max] = [0, 5] -- default = 1",
+        "tooltip": "Number of hidden layers in the network.",
         "extra": [
             {
                 "type": "default",
@@ -388,7 +550,7 @@
             },
             {
                 "type": "attribute",
-                "value": "onchange=\"nrHiddenLayersChanged($(this))\""
+                "value": "onchange=\"nrHiddenLayersChanged($(this))\" min=0 max=5"
             }
         ]
     },
@@ -399,14 +561,14 @@
         "type": "select",
         "tooltip": "Feature Generator to use.",
         "options": [
+            "Word2Vec",
+            "Doc2Vec",
             "BOWFrequency",
             "BOWNormalized",
-            "Doc2Vec",
-            "Metadata",
-            "OntologyFeatures",
+            "Bert",
             "TfidfGenerator",
-            "Word2Vec1D",
-            "Bert"
+            "Metadata",
+            "OntologyFeatures"
         ],
         "extra": [
             {
@@ -415,15 +577,22 @@
             },
             {
                 "type": "attribute",
-                "value": "onchange=\"inmodeChanged($(this))\""
+                "value": "onchange=\"inmodeChanged($(this))\" required"
             }
         ]
+    },
+    "param_embedding_id": {
+        "name": "embedding_id",
+        "label": "Word Embedding",
+        "type": "select",
+        "tooltip": "Word Embedding to Use (User-Created)",
+        "options": []
     },
     "param_vector_length": {
         "name": "vector_length",
         "label": "Vector Length",
         "type": "number",
-        "tooltip": "Specify the length of the output vector",
+        "tooltip": "Specify the length of the output vector.",
         "extra": [
             {
                 "type": "default",
@@ -431,23 +600,7 @@
             },
             {
                 "type": "attribute",
-                "value": "required"
-            }
-        ]
-    },
-    "param_min_count": {
-        "name": "min_count",
-        "label": "Minimum Count",
-        "type": "number",
-        "tooltip": "Minimum occurrence for a word to be in the Word2Vec",
-        "extra": [
-            {
-                "type": "default",
-                "value": 0
-            },
-            {
-                "type": "attribute",
-                "value": "required"
+                "value": "required min=1"
             }
         ]
     },
@@ -458,12 +611,8 @@
         "tooltip": "Words limit of the issue text",
         "extra": [
             {
-                "type": "default",
-                "value": 1000
-            },
-            {
                 "type": "attribute",
-                "value": "required"
+                "value": "required min=1"
             }
         ]
     },
@@ -501,13 +650,36 @@
         "name": "class_limit",
         "label": "Class Limit",
         "type": "number",
-        "tooltip": "Limit the amount of items per class"
+        "tooltip": "Limit the amount of items per class. -1 to disable.",
+        "extra": [
+            {
+                "type": "default",
+                "value": -1
+            },
+            {
+                "type": "attribute",
+                "value": "min=-1"
+            }
+        ]
     },
-    "param_min_doc_count": {
-        "name": "min_doc_count",
-        "label": "Minimum Document Count",
-        "type": "number",
-        "tooltip": "Minimum number of document occurrences for a word to be included"
+    "param_metadata_attributes": {
+        "name": "metadata_attributes",
+        "label": "Metadata Attributes",
+        "type": "str",
+        "tooltip": "Comma-separated list of metadata attributes to fetch for use in feature generation"
+    },
+    "param_formatting_handling": {
+        "name": "formatting_handling",
+        "label": "Formatting Handling",
+        "type": "select",
+        "tooltip": "How to handle formatting",
+        "options": ["markers", "remove", "keep"],
+        "extra": [
+            {
+                "type": "default",
+                "value": "markers"
+            }
+        ]
     },
 
     "ens_classifier_count": {
@@ -525,5 +697,18 @@
                 "value": "required onchange=\"ensClassCountChanged($(this))\""
             }
         ]
+    },
+
+    "stacker_use_concat": {
+        "name": "use_concat",
+        "label": "Use Concatenation",
+        "type": "bool",
+        "tooltip": " Use simple concatenation to create the input for the meta classifier"
+    },
+    "stacker_no_matrix": {
+        "name": "no_matrix",
+        "label": "No Matrix",
+        "type": "bool",
+        "tooltip": "Disallow the use of matrices for meta classifier input"
     }
 }

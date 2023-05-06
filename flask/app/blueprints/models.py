@@ -12,8 +12,8 @@ bp = Blueprint('models', __name__, url_prefix="/models")
 
 inmode_per_classifier = {
     "FullyConnectedModel": ["Doc2Vec","BOWFrequency","BOWNormalized","TfidfGenerator","Metadata","OntologyFeatures"],
-    "LinearConv1Model": ["Word2Vec1D"],
-    "LinearRNNModel": ["Word2Vec1D"],
+    "LinearConv1Model": ["Word2Vec"],
+    "LinearRNNModel": ["Word2Vec"],
     "Bert": ["Bert"]
 }
 
@@ -25,11 +25,22 @@ def viewall():
 @bp.route('/create', methods=["GET"])
 def viewform():
     field_configs = data.get_field_configs()
+    embeds_raw = dbapi.get_embeddings()
+    embeds_dic = {}
+    for e in embeds_raw:
+        e_type = e['config']['generator']
+        if e_type not in embeds_dic:
+            embeds_dic[e_type] = []
+        embeds_dic[e_type].append({
+            'name': e['name'],
+            'id': e['embedding_id']
+        })
 
     return render_template('models/form_create.html',
         defaults={},
         inmode_per_classifier=inmode_per_classifier,
-        field_configs=field_configs)
+        field_configs=field_configs,
+        embeds_dic=embeds_dic)
 
 @bp.route('/create', methods=["POST"])
 def create():
