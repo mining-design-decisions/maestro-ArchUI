@@ -41,19 +41,36 @@
             {% endfor %}
         </div>
     </div>
-    {% elif key in ['classifier', 'ensemble meta classifier'] %}
+    {% elif key == 'meta classifier' %}
+    <div class="card m-2">
+        <div class="card-body">
+            <h3>{{key.title()}}</h3>
+            <div>Classifier: {{model[key]['classifier']}}</div>
+            <div>Use Concatenation: {{model[key]['use-concat']}}</div>
+            <div>No Matrix: {{model[key]['no-matrix']}}</div>
+            <div>Hyper-Parameters:</div>
+            {% for hp_class in model[key]['hyper-params'] %}
+            <ul>
+                {% for hparam in model[key]['hyper-params'][hp_class] %}
+                <li>{{hparam}}: {{model[key]['hyper-params'][hp_class][hparam]}}</li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+    {% elif key == 'classifier' %}
     <div class="card m-2">
         <div class="card-body">
             <h3>{{key.title()}}</h3>
             <div>Classifier: {{model[key]['classifier']}}</div>
             <div>Hyper-Parameters:</div>
+            {% for hp_class in model[key]['hyper-params'] %}
             <ul>
-                {% if model[key]['hyper-params'] %}
-                {% for hparam in model[key]['hyper-params'] %}
-                <li>{{hparam}}: {{model[key]['hyper-params'][hparam]}}</li>
+                {% for hparam in model[key]['hyper-params'][hp_class] %}
+                <li>{{hparam}}: {{model[key]['hyper-params'][hp_class][hparam]}}</li>
                 {% endfor %}
-                {% endif %}
             </ul>
+            {% endfor %}
         </div>
     </div>
     {% elif key == 'pre-processing' %}
@@ -62,13 +79,13 @@
             <h3>{{key.title()}}</h3>
             <div>Input Mode: {{model[key]['input-mode']}}</div>
             <div>Input Mode Parameters:</div>
+            {% for p_inmode in model[key]['params'] %}
             <ul>
-                {% if model[key]['params'] %}
-                {% for param in model[key]['params'] %}
-                <li>{{param}}: {{model[key]['params'][param]}}</li>
+                {% for param in model[key]['params'][p_inmode] %}
+                <li>{{param}}: {{model[key]['params'][p_inmode][param]}}</li>
                 {% endfor %}
-                {% endif %}
             </ul>
+            {% endfor %}
         </div>
     </div>
     {% else %}

@@ -613,6 +613,11 @@
             {
                 "type": "attribute",
                 "value": "required min=1"
+            },
+            {
+                "type": "default",
+                "value": 400,
+                "comment": "Not an official default."
             }
         ]
     },
