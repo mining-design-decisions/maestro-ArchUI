@@ -251,6 +251,18 @@
             }
         ]
     },
+    "train_training_data_query": {
+        "name": "training_data_query",
+        "label": "Training Data Query",
+        "type": "str",
+        "tooltip": "Query for Training Data",
+        "extra": [
+            {
+                "type": "default",
+                "value": {"$or": [{"tags": {"$eq": "Apache-TAJO"}}, {"tags": {"$eq": "Apache-HDFS"}}, {"tags": {"$eq": "Apache-HADOOP"}}, {"tags": {"$eq": "Apache-YARN"}}, {"tags": {"$eq": "Apache-MAPREDUCE"}}, {"tags": {"$eq": "Apache-HADOOP"}}]}
+            }
+        ]
+    },
 
     "class_classifier": {
         "name": "classifier",

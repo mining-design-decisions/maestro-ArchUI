@@ -1,71 +1,102 @@
 from app.services import dbapi
 
+def retrieve_info(formdata, name, type, default):
+    value = formdata.get(name, default)
+    match(type):
+        case 'str':
+            pass
+        case 'int':
+            value = int(value)
+        case 'bool':
+            value = value in ['on', 'checked']
+        case 'float':
+            value = float(value)
+        case _:
+            print(f"Unhandled type: {type}")
+    return value
+
 def get_by_prefix(formdata, prefix):
     return [x for x in formdata if x.startswith(prefix)]
 
 def get_params_by_prefix(formdata, prefix, is_prepro):
+    name_to_type = {
+        "class-limit": "int",
+        "max-len": "int",
+        'disable-lowercase': "bool",
+        'disable-stopwords': "bool",
+        "number-of-hidden-layers": "int",
+        "number-of-convolutions": "int",
+        "learning-rate": "float",
+        "use-trainable-embedding": "bool"
+    }
+    for i in range(1, 12):
+        name_to_type[f"hidden-layer-{i}-size"] = 'int'
+        name_to_type[f"kernel-{i}-size"] = 'int'
     params = {}
     for p in get_by_prefix(formdata, prefix):
         if formdata.get(p) and len(formdata.get(p).strip()) > 0:
-            params[f"{p[len(prefix):].replace('_', '-')}"] = formdata.get(p)
+            argName = p[len(prefix):].replace('_', '-')
+            thisType = "str"
+            if argName in name_to_type:
+                thisType = name_to_type[argName]
+            params[argName] = retrieve_info(formdata, p, thisType, None)
+
     if is_prepro and f"{prefix}embedding_id" in formdata:
         e = dbapi.get_embedding(formdata.get(f"{prefix}embedding_id"))
         dicname = list(e['config']['params'].keys())[0]
         for param in e['config']['params'][dicname]:
             if param not in ['min-count', 'min-doc-count']: # these aren't in the param lists for feature generators
-                params[f"{p[len(prefix):].replace('_', '-')}"] = formdata.get(p)
+                params[param] = e['config']['params'][dicname][param]
     return params
 
 def raw_to_config(formdata):
     config = {}
 
     # tab: general
-    config['output_mode'] = formdata.get('gen_output_mode', None)
+    config['output-mode'] = formdata.get('gen_output_mode', None)
     model_mode = formdata.get('gen_model_mode', 'Single')
 
     if model_mode == 'Single':
         # single mode tabs:
         # pre-processing
-        config['input_mode'] = [formdata.get('single_inmode')]
+        config['input-mode'] = [formdata.get('single_inmode')]
         config['params'] = {
-            f"{config['input_mode'][0]}.0": get_params_by_prefix(formdata, "single_p_", True)
+            f"{config['input-mode'][0]}.0": get_params_by_prefix(formdata, "single_p_", True)
         }
 
         # classifier
         config['classifier'] = [formdata.get('single_classifier')]
-        config['hyper_params'] = {
+        config['hyper-params'] = {
             f"{config['classifier'][0]}.0": get_params_by_prefix(formdata, 'single_hp_', False)
         }
         if config['classifier'][0] == 'LinearConv1Model':
-            config['analyze_keywords'] = formdata.get('single_analyze_keywords', False) == "on"
+            config['analyze-keywords'] = formdata.get('single_analyze_keywords', False) == "on"
 
     else:
         test_sep = formdata.get('gen_test_separately', False)
         if test_sep:
-            config['test_separately'] = test_sep
+            config['test-separately'] = test_sep
 
         strat = formdata.get('gen_combination_strategy', None)
-        config['ensemble_strategy'] = "none" # default?
-        config['combination_strategy'] = "concat" # default?
+        # config['ensemble_strategy'] = "none" # default?
+        # config['combination_strategy'] = "concat" # default?
         if strat.lower() in ["stacking", "voting"]:
-            config['ensemble_strategy'] = strat.lower()
+            config['ensemble-strategy'] = strat.lower()
         elif strat:
-            config['combination_strategy'] = strat.lower()
+            config['combination-strategy'] = strat.lower()
 
         if strat.lower() == 'voting':
-            config['voting_mode'] = formdata.get('gen_voting_mode')
+            config['voting-mode'] = formdata.get('gen_voting_mode')
 
         # ensemble mode tabs:
         # ensemble classifiers
         class_count = {}
         inmode_count = {}
-        hparams = []
-        params = []
 
-        config['hyper_params'] = {}
+        config['hyper-params'] = {}
         config['params'] = {}
         config['classifier'] = []
-        config['input_mode'] = []
+        config['input-mode'] = []
 
         amt = int(formdata.get('ens_classifier_count'))
         for i in range(amt):
@@ -75,13 +106,13 @@ def raw_to_config(formdata):
 
             # inmode
             this_inmode = formdata.get(f"ens_{i}_inmode")
-            config['input_mode'].append(this_inmode)
+            config['input-mode'].append(this_inmode)
             
             # hparams
             if this_class not in class_count:
                 class_count[this_class] = 0
 
-            config['hyper_params'][f"{this_class}.{class_count[this_class]}"] = get_params_by_prefix(formdata, f"ens_{i}_hp_", False)
+            config['hyper-params'][f"{this_class}.{class_count[this_class]}"] = get_params_by_prefix(formdata, f"ens_{i}_hp_", False)
 
             class_count[this_class] += 1
 
@@ -94,78 +125,75 @@ def raw_to_config(formdata):
             inmode_count[this_inmode] += 1
 
         # if applicable, the stacker
-        if config['ensemble_strategy'] == "stacking":
-            config['stacking_meta_classifier'] = formdata.get('stacker_classifier', None)
-            config['use_concat'] = formdata.get('stacker_use_concat', False) == 'on'
-            config['no_matrix'] = formdata.get('stacker_no_matrix', False) == 'on'
-            config['stacking_meta_classifier_hyper_parameters'] = get_params_by_prefix(formdata, 'stacker_hp_', False)
+        if config['ensemble-strategy'] == "stacking":
+            config['stacking-meta-classifier'] = formdata.get('stacker_classifier', None)
+            config['use-concat'] = formdata.get('stacker_use_concat', False) == 'on'
+            config['no-matrix'] = formdata.get('stacker_no_matrix', False) == 'on'
+            config['stacking-meta-classifier-hyper-parameters'] = get_params_by_prefix(formdata, 'stacker_hp_', False)
 
     # training
-    config['ontology_classes'] = "./dl_manager/feature_generators/util/ontologies.json"
-    config['apply_ontology_classes'] = formdata.get('train_apply_ontology_classes', False)
-    config['epochs'] = formdata.get('train_epochs', 1000)
-    if formdata.get('train_split_size', None):
-        config['split_size'] = formdata.get('train_split_size')
-    if formdata.get('train_max_train', None):
-        config['max_train'] = formdata.get('train_max_train', -1)
-    config['architectural_only'] = formdata.get('train_architectural_only', False)
-    cb = formdata.get('train_class_balancer', "None")
-    config['class_balancer'] = cb if len(cb) > 0 else "None"
-    if formdata.get('train_batch_size', 32):
-        config['batch_size'] = formdata.get('train_batch_size', 32)
-    config['boosting_rounds'] = 0 # not used
+    config['apply-ontology-classes'] = retrieve_info(formdata, 'train_apply_ontology_classes', 'bool', False)
+    if config['apply-ontology-classes']:
+        config['ontology-classes'] = "./dl_manager/feature_generators/util/ontologies.json"
+    config['epochs'] = retrieve_info(formdata, 'train_epochs', 'int', 1000)
+    config['split-size'] = retrieve_info(formdata, 'train_split_size', 'float', 0.2)
+    config['max-train'] = retrieve_info(formdata, 'train_max_train', 'int', -1)
+    config['architectural-only'] = retrieve_info(formdata, 'train_architectural_only', 'bool', False)
+    config['batch-size'] = retrieve_info(formdata, 'train_batch_size', 'int', 32)
+    config['training-data-query'] = retrieve_info(formdata, 'train_training_data_query', 'str', "{\"$or\": [{\"tags\": {\"$eq\": \"Apache-TAJO\"}}, {\"tags\": {\"$eq\": \"Apache-HDFS\"}}, {\"tags\": {\"$eq\": \"Apache-HADOOP\"}}, {\"tags\": {\"$eq\": \"Apache-YARN\"}}, {\"tags\": {\"$eq\": \"Apache-MAPREDUCE\"}}, {\"tags\": {\"$eq\": \"Apache-HADOOP\"}}]}")
     
     # early stopping
-    config['use_early_stopping'] = formdata.get('train_use_early_stopping', False)
-    if formdata.get('train_early_stopping_patience', 5):
-        config['early_stopping_patience'] = formdata.get('train_early_stopping_patience', 5)
+    config['use-early-stopping'] = retrieve_info(formdata, 'train_use_early_stopping', 'bool', False)
+    config['early-stopping-patience'] = retrieve_info(formdata, 'train_early_stopping_patience', 'int', 5)
     amt_attrib = formdata.get('train_early_stopping_num_attribs', 0)
     if not amt_attrib:
         amt_attrib = 0
     amt_attrib = int(amt_attrib)
     if amt_attrib > 0:
-        config['early_stopping_min_delta'] = []
-        config['early_stopping_attribute'] = []
+        config['early-stopping-min-delta'] = []
+        config['early-stopping-attribute'] = []
     for i in range(0, amt_attrib):
-        config['early_stopping_min_delta'].append(formdata.get(f"train_early_stopping_min_{i+1}_size"))
-        config['early_stopping_attribute'].append(formdata.get(f"train_early_stopping_{i+1}_size"))
+        config['early-stopping-min-delta'].append(retrieve_info(formdata, f"train_early_stopping_min_{i+1}_size", 'float', 0))
+        config['early-stopping-attribute'].append(formdata.get(f"train_early_stopping_{i+1}_size"))
 
     # other assorted parameters
-    config['store_model'] = True
+    config['store-model'] = True
+    config["test-with-training-data"] = True
 
     return config
 
 def config_to_display(config):
     # two common tabs for single & ensemble
     general = {
-        "output mode": config['output_mode'],
+        "output mode": config['output-mode'],
     }
-    if 'combination_strategy' in config:
-        general['combination strategy'] = config['combination_strategy']
-    if 'ensemble_strategy' in config:
-        general['ensemble strategy'] = config['ensemble_strategy']
-    if 'voting_mode' in config:
-        general['voting mode'] = config['voting_mode']
+    if 'combination-strategy' in config:
+        general['combination strategy'] = config['combination-strategy']
+    if 'ensemble-strategy' in config:
+        general['ensemble strategy'] = config['ensemble-strategy']
+    if 'voting-mode' in config:
+        general['voting mode'] = config['voting-mode']
 
     train_fields = [
-        "ontology_classes",
-        "apply_ontology_classes",
+        "ontology-classes",
+        "apply-ontology-classes",
         "epochs",
-        "split_size",
-        "max_train",
-        "architectural_only",
-        "class_balancer",
-        "batch_size",
-        "use_early_stopping",
-        "early_stopping_patience",
-        "early_stopping_min_delta",
-        "early_stopping_attribute"
+        "split-size",
+        "max-train",
+        "architectural-only",
+        "class-balancer",
+        "batch-size",
+        "use-early-stopping",
+        "early-stopping-patience",
+        "early-stopping-min-delta",
+        "early-stopping-attribute",
+        "training-data-query"
     ]
 
     training = {}
     for field in train_fields:
         if field in config:
-            train_key = field.replace('_', ' ')
+            train_key = field.replace('-', ' ')
             training[train_key] = config[field]
 
     result = {
@@ -179,13 +207,13 @@ def config_to_display(config):
             'classifier': config['classifier'][0],
             'hyper-params': {}
         }
-        if config['hyper_params']:
-            classifier['hyper-params'] = config['hyper_params']
+        if config['hyper-params']:
+            classifier['hyper-params'] = config['hyper-params']
         if classifier['classifier'] == 'LinearConv1Model':
-            general['analyze-keywords'] = config['analyze_keywords']
+            general['analyze-keywords'] = config['analyze-keywords']
         
         input_mode = {
-            'input-mode': config['input_mode'][0],
+            'input-mode': config['input-mode'][0],
             "params": {}
         }
         if config['params']:
@@ -202,7 +230,7 @@ def config_to_display(config):
 
         for i in range(len(config['classifier'])):
             this_classifier = config['classifier'][i]
-            this_inmode = config['input_mode'][i]
+            this_inmode = config['input-mode'][i]
             
             if not this_classifier in class_count:
                 class_count[this_classifier] = 0
@@ -213,7 +241,7 @@ def config_to_display(config):
                 'classifier': this_classifier,
                 'input-mode': this_inmode,
                 'params': config['params'][f"{this_inmode}.{inmode_count[this_inmode]}"],
-                'hyper-params': config['hyper_params'][f"{this_classifier}.{class_count[this_classifier]}"]
+                'hyper-params': config['hyper-params'][f"{this_classifier}.{class_count[this_classifier]}"]
             }
 
             class_count[this_classifier] += 1
@@ -222,13 +250,13 @@ def config_to_display(config):
 
 
         # stacker?
-        if config['ensemble_strategy'] == "stacking":
+        if config['ensemble-strategy'] == "stacking":
             result['meta classifier'] = {
-                "classifier": config['stacking_meta_classifier'],
-                "use-concat": config['use_concat'],
-                "no-matrix": config['no_matrix'],
+                "classifier": config['stacking-meta-classifier'],
+                "use-concat": config['use-concat'],
+                "no-matrix": config['no-matrix'],
                 "hyper-params": {
-                    f"{config['stacking_meta_classifier']}.0": config['stacking_meta_classifier_hyper_parameters']
+                    f"{config['stacking-meta-classifier']}.0": config['stacking-meta-classifier-hyper-parameters']
                 }
             }
 

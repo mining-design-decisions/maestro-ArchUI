@@ -194,6 +194,7 @@ function nrHiddenLayersChanged(nr_element) {
 
     // generate
     div_el.innerHTML = generate_count_fields(amt, 'hparam_hidden_layer_size', prefix+'_', getSize(prefix), defaults)
+    div_el.innerHTML += generate_count_fields(amt, 'hparam_layer_activation', prefix+'_', getSize(prefix), defaults, 'activation')
 }
 _all_hidden_layers = $("input[id$='_number_of_hidden_layers']")
 for (let i = 0; i < _all_hidden_layers.length; i++) {

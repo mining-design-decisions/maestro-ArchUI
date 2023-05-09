@@ -26,7 +26,11 @@ function render_field_str(css_label, css_input, tooltip, name, defaults, label, 
         extra_attr += ` value="${defaults[`${name}`]}"`
     }
     else if (field_default) {
-        extra_attr += ` value=${field_default}`
+        field_default_str = field_default
+        if (typeof field_default_str === 'string')
+            extra_attr += ` value=${field_default}`
+        else
+            extra_attr += ` value=${JSON.stringify(field_default)}`
     }
     new_html = `<label class="${css_label}" title="${tooltip}" for="${name}">${label} </label>\n`
     new_html += `<div class="${css_input}">`
@@ -161,7 +165,7 @@ function deep_copy(obj) {
 }
 
 // hparam helpers
-function generate_count_fields(count, field, prefix, size, defaults) {
+function generate_count_fields(count, field, prefix, size, defaults, toAppend = "size") {
     result = ""
     for (let i = 0; i < count; i++) {
         config = deep_copy(data[field])
@@ -169,7 +173,7 @@ function generate_count_fields(count, field, prefix, size, defaults) {
         new_name = config['name'].split('_')
         new_name.pop()
         new_name.push((i+1).toString())
-        new_name.push('size')
+        new_name.push(toAppend)
         new_name = new_name.join('_')
         config['name'] = new_name
         result += render_field(config, prefix, size, defaults)
@@ -187,7 +191,7 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += `<div id="${pref}hidden_layers_div">`
             // todo should probably be pulled from somewhere
             result += generate_count_fields(1, 'hparam_hidden_layer_size', pref, size, defaults)
-            result += generate_count_fields(1, 'hparam_layer_activation', pref, size, defaults)
+            result += generate_count_fields(1, 'hparam_layer_activation', pref, size, defaults, 'activation')
             result += `</div>`
             
             // optimizer, loss, use-trainable-embedding
@@ -452,6 +456,7 @@ function generate_tab_training(defaults, data) {
         "train_max_train",
         "train_apply_ontology_classes",
         "train_architectural_only",
+        "train_training_data_query",
         // "train_class_balancer", // currently bugged
         "train_batch_size",
         "train_use_early_stopping"

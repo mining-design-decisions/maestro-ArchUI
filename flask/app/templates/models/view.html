@@ -3,104 +3,13 @@
 {% block subtitle %}View ML Model {{ name }}{% endblock %}
 
 {% block margin_content %}
-<h3>Viewing Model: {{name}}</h3>
+<h3>Viewing ML Model: {{name}}</h3>
 
-{% for key in model %}
-    {% if key == 'ensemble classifiers' %}
-    <div class="card m-2">
-        <div class="card-body">
-            <h3>{{key.title()}}</h3>
-            {% for e_model in model[key] %}
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>Pre-Processing</h4>
-                    <div>Input Mode: {{e_model['input-mode']}}</div>
-                    <div>Input Mode Parameters:</div>
-                    <ul>
-                        {% if e_model['params'] %}
-                        {% for param in e_model['params'] %}
-                        <li>{{param}}: {{e_model['params'][param]}}</li>
-                        {% endfor %}
-                        {% endif %}
-                    </ul>
-                </div>
-                <div class="col-sm-6">
-                    <h4>Classifier</h4>
-                    <div>Classifier: {{e_model['classifier']}}</div>
-                    <div>Classifier Hyper-Parameters:</div>
-                    <ul>
-                        {% if e_model['hyper-params'] %}
-                        {% for hparam in e_model['hyper-params'] %}
-                        <li>{{hparam}}: {{e_model['hyper-params'][hparam]}}</li>
-                        {% endfor %}
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-            <hr />
-            {% endfor %}
-        </div>
-    </div>
-    {% elif key == 'meta classifier' %}
-    <div class="card m-2">
-        <div class="card-body">
-            <h3>{{key.title()}}</h3>
-            <div>Classifier: {{model[key]['classifier']}}</div>
-            <div>Use Concatenation: {{model[key]['use-concat']}}</div>
-            <div>No Matrix: {{model[key]['no-matrix']}}</div>
-            <div>Hyper-Parameters:</div>
-            {% for hp_class in model[key]['hyper-params'] %}
-            <ul>
-                {% for hparam in model[key]['hyper-params'][hp_class] %}
-                <li>{{hparam}}: {{model[key]['hyper-params'][hp_class][hparam]}}</li>
-                {% endfor %}
-            </ul>
-            {% endfor %}
-        </div>
-    </div>
-    {% elif key == 'classifier' %}
-    <div class="card m-2">
-        <div class="card-body">
-            <h3>{{key.title()}}</h3>
-            <div>Classifier: {{model[key]['classifier']}}</div>
-            <div>Hyper-Parameters:</div>
-            {% for hp_class in model[key]['hyper-params'] %}
-            <ul>
-                {% for hparam in model[key]['hyper-params'][hp_class] %}
-                <li>{{hparam}}: {{model[key]['hyper-params'][hp_class][hparam]}}</li>
-                {% endfor %}
-            </ul>
-            {% endfor %}
-        </div>
-    </div>
-    {% elif key == 'pre-processing' %}
-    <div class="card m-2">
-        <div class="card-body">
-            <h3>{{key.title()}}</h3>
-            <div>Input Mode: {{model[key]['input-mode']}}</div>
-            <div>Input Mode Parameters:</div>
-            {% for p_inmode in model[key]['params'] %}
-            <ul>
-                {% for param in model[key]['params'][p_inmode] %}
-                <li>{{param}}: {{model[key]['params'][p_inmode][param]}}</li>
-                {% endfor %}
-            </ul>
-            {% endfor %}
-        </div>
-    </div>
-    {% else %}
-    <div class="card m-2">
-        <div class="card-body">
-            <h3>{{key.title()}}</h3>
-            <ul>
-                {% for option in model[key] %}
-                <li>{{option}}: {{model[key][option]}}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    {% endif %}
-{% endfor %}
+<div class="d-flex flex-row-reverse">
+    <button class="btn btn-danger m-2" onclick="deleteModel()">Delete Model</button>
+    <button onclick="trainModel()" class="btn btn-primary m-2">(Re)train Model</button>
+    <button class="btn btn-primary m-2" onclick="editModel()">Edit Model Configuration</button>
+</div>
 
 <div>
     <p class="my-2">Last trained: {{ last_trained }}</p>
@@ -116,35 +25,190 @@
         </ul>
     {% endif %}
 </div>
-<div>
-    <h3>Actions</h3>
-    <button type="button" onclick="trainModel()" class="btn btn-primary my-2">
-        (Re)train Model
-    </button>
-    <form method="GET" id="editmodel" action="{{ url_for('models.editform', model=id) }}">
-        <input type="submit" value="Edit Model Configuration" class="btn btn-primary my-2">
-    </form>
+
+<div class="card m-2">
+    <div class="card-body">
+        {% for key in model %}
+        {% if key == 'ensemble classifiers' %}
+        <div class="card m-2">
+            <div class="card-body">
+                <h3>{{key.title()}}</h3>
+                {% for e_model in model[key] %}
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Pre-Processing</h4>
+                        <div>Input Mode: {{e_model['input-mode']}}</div>
+                        <div>Input Mode Parameters:</div>
+                        <ul>
+                            {% if e_model['params'] %}
+                            {% for param in e_model['params'] %}
+                            <li>{{param}}: {{e_model['params'][param]}}</li>
+                            {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>Classifier</h4>
+                        <div>Classifier: {{e_model['classifier']}}</div>
+                        <div>Classifier Hyper-Parameters:</div>
+                        <ul>
+                            {% if e_model['hyper-params'] %}
+                            {% for hparam in e_model['hyper-params'] %}
+                            <li>{{hparam}}: {{e_model['hyper-params'][hparam]}}</li>
+                            {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <hr />
+                {% endfor %}
+            </div>
+        </div>
+        {% elif key == 'meta classifier' %}
+        <div class="card m-2">
+            <div class="card-body">
+                <h3>{{key.title()}}</h3>
+                <div>Classifier: {{model[key]['classifier']}}</div>
+                <div>Use Concatenation: {{model[key]['use-concat']}}</div>
+                <div>No Matrix: {{model[key]['no-matrix']}}</div>
+                <div>Hyper-Parameters:</div>
+                {% for hp_class in model[key]['hyper-params'] %}
+                <ul>
+                    {% for hparam in model[key]['hyper-params'][hp_class] %}
+                    <li>{{hparam}}: {{model[key]['hyper-params'][hp_class][hparam]}}</li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+        {% elif key == 'classifier' %}
+        <div class="card m-2">
+            <div class="card-body">
+                <h3>{{key.title()}}</h3>
+                <div>Classifier: {{model[key]['classifier']}}</div>
+                <div>Hyper-Parameters:</div>
+                {% for hp_class in model[key]['hyper-params'] %}
+                <ul>
+                    {% for hparam in model[key]['hyper-params'][hp_class] %}
+                    <li>{{hparam}}: {{model[key]['hyper-params'][hp_class][hparam]}}</li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+        {% elif key == 'pre-processing' %}
+        <div class="card m-2">
+            <div class="card-body">
+                <h3>{{key.title()}}</h3>
+                <div>Input Mode: {{model[key]['input-mode']}}</div>
+                <div>Input Mode Parameters:</div>
+                {% for p_inmode in model[key]['params'] %}
+                <ul>
+                    {% for param in model[key]['params'][p_inmode] %}
+                    <li>{{param}}: {{model[key]['params'][p_inmode][param]}}</li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="card m-2">
+            <div class="card-body">
+                <h3>{{key.title()}}</h3>
+                <ul>
+                    {% for option in model[key] %}
+                    <li>{{option}}: {{model[key][option]}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 <script>
+function alertPopup(e) {
+    str = `Something went wrong while processing your request. Code returned was: ${e.status}.`
+    
+    e.json().then(data => {
+        str += "\n\nResponse body:\n"
+        str += JSON.stringify(data)
+        alert(str)
+    })
+    .catch(err => {
+        alert(str)
+    })
+}
+
 function trainModel() {
+    console.log('starting train')
     fetch('/login/isloggedin')
     .then(e => {
         e.json()
         .then(data => {
             if (!data['is logged in']) {
-                alert('You are not logged in! Without logging in, you cannot save edited model configuraton data. Please log in before submitting the model form.')
+                alert('You are not logged in! Without logging in, you cannot train a model.')
             }
             else {
-                url = `{{ url_for('models.train', model=id) }}`
-                fetch(url, {method: "POST"})
-                    .then(e => {
-                        console.log('Reloading')
+                pw = prompt('Enter your password to use DL API: ')
+                fetch(`{{ url_for('models.train', model=id) }}`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({pw: pw})
+                })
+                .then(e => {
+                    if (e.status != 200) {
+                        alertPopup(e)
+                    }
+                    else {
                         location.reload()
-                    })
+                    }
+                })
+            }
+        })
+    })
+}
+
+function deleteModel() {
+    fetch('/login/isloggedin')
+    .then(e => {
+        e.json()
+        .then(data => {
+            if (!data['is logged in']) {
+                alert('You are not logged in! Without logging in, you cannot delete model configuraton data.')
+            }
+            else {
+                url = `{{ url_for('models.delete', model=id) }}`
+                fetch(url, {method: "DELETE"})
+                .then(e => {
+                    if (e.status != 200) {
+                        alertPopup(e)
+                    }
+                    else {
+                        location.replace("{{url_for('models.viewall')}}")
+                    }
+                })
+            }
+        })
+    })
+}
+
+function editModel() {
+    fetch('/login/isloggedin')
+    .then(e => {
+        e.json()
+        .then(data => {
+            if (!data['is logged in']) {
+                alert('You are not logged in! Without logging in, you cannot save edited model configuration data.')
+            }
+            else {
+                location.replace("{{url_for('models.editform', model=id)}}")
             }
         })
     })

@@ -71,9 +71,7 @@ def view(model):
 
 @bp.route('/train/<model>', methods=["POST"])
 def train(model):
-    print('a')
-    dbapi.train_model(model)
-    return 'ok', 200 # todo error handling
+    return dbapi.train_model(model, request.json['pw'])
 
 @bp.route('/edit/<model>', methods=["GET"])
 def editform(model):
@@ -98,3 +96,7 @@ def edit(model):
     model_data = modelconfig.raw_to_config(request.form)
     dbapi.edit_model(model, model_name, model_data)
     return redirect(url_for('models.view', model=model))
+
+@bp.route('/delete/<model>', methods=["DELETE"])
+def delete(model):
+    return dbapi.delete_model(model)

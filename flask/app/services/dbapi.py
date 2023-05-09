@@ -23,6 +23,12 @@ def get_cache(name, default):
 def _auth_header():
     return {"Authorization": f"bearer {session['token']}"}
 
+def _auth_body(pw):
+    return {
+        "username": get_username(),
+        "password": pw
+    }
+
 # decorator for simple authentication-required requests
 def auth_req(func):
     def inner(*args, **kwargs):
@@ -100,22 +106,36 @@ def edit_model(id, name, config):
     # todo auth error reporting & handling
     requests.post(f"{get_db()}/models/{id}", headers=_auth_header(), verify=False, json={"model_name": name, "model_config": config})
 
-def train_model(id):
+def train_model(id, pw):
     # todo auth error handling & reporting
-    data = get_model_data(id)
-    config = data.json()['model_config']
-    config['subcommand_name_0'] = 'run'
+    # data = get_model_data(id)
+    # config = data.json()['model_config']
+    config = {}
+    # config['subcommand_name_0'] = 'run'
     config['model-id'] = id
     config['database-url'] = get_db()
-    config['num-threads'] = 1
-    config['training_data_query'] = "{\"tags\":{\"$eq\":\"has-label\"}}"
-    config['test_with_training_data'] = True
+    # config['num-threads'] = 1
+    # config['test_data_query'] = "{\"tags\":{\"$eq\":\"has-label\"}}"
+    # config['test_with_training_data'] = True
     postbody = {
-        "auth":{"token": session['token']},
+        "auth": _auth_body(pw),
         "config": config
     }
 
-    requests.post(f"{get_cli()}/invoke", json=postbody, verify=False)
+    print(postbody)
+
+    x = requests.post(f"{get_cli()}/train", json=postbody, verify=False)
+    try:
+        data = x.json()
+        if data is None:
+            data = {"msg": "empty response"}
+    except:
+        data = {'msg': "Error retrieving response data"}
+    return data, x.status_code
+
+@auth_req
+def delete_model(model):
+    return requests.delete(f"{get_db()}/models/{model}", verify=False, headers=_auth_header())
 
 # todo metrics 2.0
 def get_model_performance(model_id):
@@ -363,12 +383,10 @@ def delete_embedding(id):
 @auth_req
 def train_embedding(embedding, pw):
     return requests.post(f"{get_cli()}/generate-embedding", verify=False, json={
-        "auth": {
-            "username": get_username(),
-            "password": pw
-        },
+        "auth": _auth_body(pw),
         "config": {
             "database-url": get_db(),
             "embedding-id": embedding
         }
     })
+
