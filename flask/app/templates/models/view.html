@@ -14,20 +14,77 @@
 <div>
     <p class="my-2">Last trained: {{ last_trained }}</p>
     {% if last_trained != 'Never' %}
-    <p class="my-2">Performance (version {{version_count}}): {{performance}}</p>
-    {% endif %}
-    {% if class_prec %}
-        <p class="my-2">Class Precision:</p>
-        <ul>
-        {% for label in class_prec %}
-            <li>{{label}}: {{class_prec[label][0]}}</li>
-        {% endfor %}
-        </ul>
+    <p class="my-2">Performance (version {{version_count}}):</p>
+    <h4>Macro:</h4>
+    <table class="table table-light">
+        <thead>
+            <th></th>
+            <th>F1 Score</th>
+            <th>Precision</th>
+            <th>Recall</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Training</td>
+                <td>{{macro['training']['f1']}}</td>
+                <td>{{macro['training']['precision']}}</td>
+                <td>{{macro['training']['recall']}}</td>
+            </tr>
+            <tr>
+                <td>Testing</td>
+                <td>{{macro['testing']['f1']}}</td>
+                <td>{{macro['testing']['precision']}}</td>
+                <td>{{macro['testing']['recall']}}</td>
+            </tr>
+            <tr>
+                <td>Validation</td>
+                <td>{{macro['validation']['f1']}}</td>
+                <td>{{macro['validation']['precision']}}</td>
+                <td>{{macro['validation']['recall']}}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h4>Classes:</h4>
+    {% for cname in classes %}
+    <h5>{{cname.title()}}</h5>
+    <table class="table table-light">
+        <thead>
+            <th></th>
+            <th>F1 Score</th>
+            <th>Precision</th>
+            <th>Recall</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Training</td>
+                <td>{{class_prec[cname]['training']['f1']}}</td>
+                <td>{{class_prec[cname]['training']['precision']}}</td>
+                <td>{{class_prec[cname]['training']['recall']}}</td>
+            </tr>
+            <tr>
+                <td>Testing</td>
+                <td>{{class_prec[cname]['testing']['f1']}}</td>
+                <td>{{class_prec[cname]['testing']['precision']}}</td>
+                <td>{{class_prec[cname]['testing']['recall']}}</td>
+            </tr>
+            <tr>
+                <td>Validation</td>
+                <td>{{class_prec[cname]['validation']['f1']}}</td>
+                <td>{{class_prec[cname]['validation']['precision']}}</td>
+                <td>{{class_prec[cname]['validation']['recall']}}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+
+
     {% endif %}
 </div>
 
 <div class="card m-2">
     <div class="card-body">
+        <h3>Configuration</h3>
         {% for key in model %}
         {% if key == 'ensemble classifiers' %}
         <div class="card m-2">
@@ -154,13 +211,8 @@ function trainModel() {
                 alert('You are not logged in! Without logging in, you cannot train a model.')
             }
             else {
-                pw = prompt('Enter your password to use DL API: ')
                 fetch(`{{ url_for('models.train', model=id) }}`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({pw: pw})
+                    method: "POST"
                 })
                 .then(e => {
                     if (e.status != 200) {

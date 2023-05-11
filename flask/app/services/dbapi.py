@@ -23,10 +23,9 @@ def get_cache(name, default):
 def _auth_header():
     return {"Authorization": f"bearer {session['token']}"}
 
-def _auth_body(pw):
+def _auth_body():
     return {
-        "username": get_username(),
-        "password": pw
+        "token": session['token']
     }
 
 # decorator for simple authentication-required requests
@@ -106,19 +105,13 @@ def edit_model(id, name, config):
     # todo auth error reporting & handling
     requests.post(f"{get_db()}/models/{id}", headers=_auth_header(), verify=False, json={"model_name": name, "model_config": config})
 
-def train_model(id, pw):
+def train_model(id):
     # todo auth error handling & reporting
-    # data = get_model_data(id)
-    # config = data.json()['model_config']
     config = {}
-    # config['subcommand_name_0'] = 'run'
     config['model-id'] = id
     config['database-url'] = get_db()
-    # config['num-threads'] = 1
-    # config['test_data_query'] = "{\"tags\":{\"$eq\":\"has-label\"}}"
-    # config['test_with_training_data'] = True
     postbody = {
-        "auth": _auth_body(pw),
+        "auth": _auth_body(),
         "config": config
     }
 
@@ -137,28 +130,170 @@ def train_model(id, pw):
 def delete_model(model):
     return requests.delete(f"{get_db()}/models/{model}", verify=False, headers=_auth_header())
 
-# todo metrics 2.0
 def get_model_performance(model_id):
     # todo error handling & reporting
     performances = requests.get(f"{get_db()}/models/{model_id}/performances", verify=False).json()["performances"]
-    latest_version = None
     latest_performance = None
-    class_prec = None
-    fscore = None
+    macro = None
+    classes = None
+    classes_names = None
     if len(performances) > 0:
+        # get newest
         ids = [x['performance_id'] for x in performances]
-        latest_version = ids[0]
+        latest_performance = ids[0]
         for i in range(1, len(ids)):
             id = ids[i]
-            if ObjectId(id).generation_time > ObjectId(latest_version).generation_time:
-                latest_version = id
-        x = requests.get(f"{get_db()}/models/{model_id}/performances/{latest_version}", verify=False)
-        latest_performance = x.json()['performance'][0]
-        fscore = latest_performance["f-score"][0]
-        if 'class-precision' in latest_performance:
-            class_prec = latest_performance['class-precision']
+            if ObjectId(id).generation_time > ObjectId(latest_performance).generation_time:
+                latest_performance = id
 
-    return (len(performances), ObjectId(latest_version).generation_time if latest_version else "Never", fscore, class_prec)
+        metrics = requests.post(f"{get_cli()}/metrics", verify=False, json={
+            "auth": _auth_body(),
+            "config": {
+                "model-id": model_id,
+                "database-url": get_db(),
+                "epoch": "last",
+                "version-id": latest_performance,
+                "metrics": [
+                    {
+                        "dataset": "testing",
+                        "metric": "f_1_score",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "validation",
+                        "metric": "f_1_score",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "training",
+                        "metric": "f_1_score",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "testing",
+                        "metric": "precision",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "validation",
+                        "metric": "precision",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "training",
+                        "metric": "precision",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "testing",
+                        "metric": "recall",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "validation",
+                        "metric": "recall",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "training",
+                        "metric": "recall",
+                        "variant": "macro"
+                    },
+                    {
+                        "dataset": "testing",
+                        "metric": "f_1_score",
+                        "variant": "class"
+                    },
+                    {
+                        "dataset": "validation",
+                        "metric": "f_1_score",
+                        "variant": "class"
+                    },
+                    {
+                        "dataset": "training",
+                        "metric": "f_1_score",
+                        "variant": "class"
+                    },
+                    {
+                        "dataset": "testing",
+                        "metric": "precision",
+                        "variant": "class"
+                    },
+                    {
+                        "dataset": "validation",
+                        "metric": "precision",
+                        "variant": "class"
+                    },
+                    {
+                        "dataset": "training",
+                        "metric": "precision",
+                        "variant": "class"
+                    },
+                    {
+                        "dataset": "testing",
+                        "metric": "recall",
+                        "variant": "class"
+                    },
+                    {
+                        "dataset": "validation",
+                        "metric": "recall",
+                        "variant": "class"
+                    },
+                    {
+                        "dataset": "training",
+                        "metric": "recall",
+                        "variant": "class"
+                    }
+                ]
+            }
+        }).json()
+
+        try:
+            metrics = metrics['folds'][0][0]
+        except:
+            print(metrics)
+
+        macro = {
+            "training": {
+                "f1": metrics['training']['f_1_score[macro]'],
+                "precision": metrics['training']['precision[macro]'],
+                "recall": metrics['training']['recall[macro]']
+            },
+            "validation": {
+                "f1": metrics['validation']['f_1_score[macro]'],
+                "precision": metrics['validation']['precision[macro]'],
+                "recall": metrics['validation']['recall[macro]']
+            },
+            "testing": {
+                "f1": metrics['testing']['f_1_score[macro]'],
+                "precision": metrics['testing']['precision[macro]'],
+                "recall": metrics['testing']['recall[macro]']
+            }
+        }
+
+        classes_names = list(metrics['training']['f_1_score[class]'].keys())
+
+        classes = {}
+        for cname in classes_names:
+            classes[cname] = {
+            "training": {
+                "f1": metrics['training']['f_1_score[class]'][cname],
+                "precision": metrics['training']['precision[class]'][cname],
+                "recall": metrics['training']['recall[class]'][cname]
+            },
+            "validation": {
+                "f1": metrics['validation']['f_1_score[class]'][cname],
+                "precision": metrics['validation']['precision[class]'][cname],
+                "recall": metrics['validation']['recall[class]'][cname]
+            },
+            "testing": {
+                "f1": metrics['testing']['f_1_score[class]'][cname],
+                "precision": metrics['testing']['precision[class]'][cname],
+                "recall": metrics['testing']['recall[class]'][cname]
+            }
+        }
+
+    return (len(performances), ObjectId(latest_performance).generation_time if latest_performance else "Never", macro, classes, classes_names)
 
 def get_proj_query(projects):
     projects = [f"{{\"tags\": {{\"$eq\": \"{project}\"}} }}" for project in projects]
@@ -381,9 +516,9 @@ def delete_embedding(id):
     return requests.delete(f"{get_db()}/embeddings/{id}", verify=False, headers=_auth_header())
 
 @auth_req
-def train_embedding(embedding, pw):
+def train_embedding(embedding):
     return requests.post(f"{get_cli()}/generate-embedding", verify=False, json={
-        "auth": _auth_body(pw),
+        "auth": _auth_body(),
         "config": {
             "database-url": get_db(),
             "embedding-id": embedding

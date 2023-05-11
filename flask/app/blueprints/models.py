@@ -57,7 +57,7 @@ def view(model):
     data = dbapi.get_model_data(model)
     name = data['model_name']
     config = modelconfig.config_to_display(data['model_config'])
-    version_count, latest_version, performance, class_prec = dbapi.get_model_performance(model) 
+    version_count, latest_version, macro, class_prec, classes = dbapi.get_model_performance(model) 
 
     return render_template(
         'models/view.html', 
@@ -66,12 +66,13 @@ def view(model):
         id=model, 
         last_trained=latest_version,
         version_count=version_count,
-        performance=performance,
-        class_prec=class_prec)
+        macro=macro,
+        class_prec=class_prec,
+        classes=classes)
 
 @bp.route('/train/<model>', methods=["POST"])
 def train(model):
-    return dbapi.train_model(model, request.json['pw'])
+    return dbapi.train_model(model)
 
 @bp.route('/edit/<model>', methods=["GET"])
 def editform(model):

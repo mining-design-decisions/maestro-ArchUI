@@ -94,4 +94,4 @@ def delete(embedding):
 
 @bp.route('/train/<embedding>', methods=["POST"])
 def train(embedding):
-    return dbapi.train_embedding(embedding, request.json['pw'])
+    return dbapi.train_embedding(embedding)
