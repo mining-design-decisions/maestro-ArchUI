@@ -295,28 +295,24 @@ def get_model_performance(model_id):
 
     return (len(performances), ObjectId(latest_performance).generation_time if latest_performance else "Never", macro, classes, classes_names)
 
-def get_proj_query(projects):
-    projects = [f"{{\"tags\": {{\"$eq\": \"{project}\"}} }}" for project in projects]
-    return f"{{ \"$or\": [ {','.join(projects)} ] }}"
+def get_p_query(projects):
+    return {"$or": [{"tags": {"$eq": p}} for p in projects]}
 
 def predict_models_projects(models, projects):
     # todo error handling/reporting
     # continuously open socket status reports?
     for model in models:
-        config = {}
-        config['subcommand_name_0'] = 'predict'
-        config['model'] = model
-        config['version'] = 'most-recent'
-        config['data-query'] = get_proj_query(projects)
-        config['database-url'] = get_db()
-        config['num-threads'] = 1
-
-        postbody = {
-            "auth":{"token": session['token']},
-            "config": config
+        config = {
+            "auth": _auth_body(),
+            "config": {
+                "data-query": get_p_query(projects),
+                "database-url": get_db(),
+                "model": model
+            }
         }
-
-        requests.post(f"{get_cli()}/invoke", json=postbody, verify=False)
+        x = requests.post(f"{get_cli()}/predict", json=config, verify=False)
+        if x.status_code != 200:
+            print(x.json())
 
 # queries
 # todo save the query data in the db eventually?
@@ -324,7 +320,7 @@ def _query_dir():
     import os
     os.makedirs("app/data/queries", exist_ok=True)
 
-def create_query(models, data_query, name):
+def create_query(models, projects, name):
     modelversions = {}
     failed_models = []
     for model in models:
@@ -341,7 +337,7 @@ def create_query(models, data_query, name):
     with open(f'app/data/queries/{name}.json', 'w') as f:
         json.dump({
             "models": modelversions,
-            "query": data_query
+            "query": json.dumps(get_p_query(projects))
         }, f)
     return failed_models
 
@@ -412,7 +408,7 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc, issue_id):
         'Classification3': ['existence', 'executive', 'property']
     }
     for m_id in models:
-        output_mode = requests.get(f'{get_db()}/models/{m_id}').json()['model_config']['output_mode']
+        output_mode = requests.get(f'{get_db()}/models/{m_id}', verify=False).json()['model_config']['output-mode']
         if output_mode not in output_mode_to_headers:
             print('\nERROR: Unknown Output Mode: ' + output_mode + ". Please complete output_mode_to_headers.\n\n")
         headers[f"{m_id}-{models[m_id]}"] = output_mode_to_headers[output_mode]
