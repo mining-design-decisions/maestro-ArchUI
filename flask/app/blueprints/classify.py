@@ -67,12 +67,18 @@ def create():
     models = [request.form.get(x) for x in request.form if x.startswith('model_')]
     data_q = ""
     if request.form.get('query_type', False):
-        # complex
-        projects = [request.form.get(x) for x in request.form if x.startswith('target_project_')]
-        data_q = dbapi.get_proj_query(projects)
-    else:
         # simple
+        projects = [request.form.get(x) for x in request.form if x.startswith('target_project_')]
+        data_q = dbapi.get_p_query(projects)
+    else:
+        # complex
+        import json
         data_q = request.form.get("target_tag_query")
+        try:
+            data_q = json.loads(data_q)
+        except:
+            print("Failed to parse advanced query: " + data_q)
+            data_q = {}
         
     q_name = request.form.get('query_name')
     failed_models = dbapi.create_query(models, data_q, q_name)

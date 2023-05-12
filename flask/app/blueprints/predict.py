@@ -21,6 +21,6 @@ def predict():
     dbapi.predict_models_projects(models, projects)
     if request.form.get('predict_generate_query', False):
         q_name = request.form.get('query_name')
-        dbapi.create_query(models, projects, q_name)
+        dbapi.create_query(models, dbapi.get_p_query(projects), q_name)
         return redirect(url_for('classify.view', query=q_name, page=1))
     return 'under construction'

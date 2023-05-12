@@ -320,7 +320,7 @@ def _query_dir():
     import os
     os.makedirs("app/data/queries", exist_ok=True)
 
-def create_query(models, projects, name):
+def create_query(models, query, name):
     modelversions = {}
     failed_models = []
     for model in models:
@@ -337,7 +337,7 @@ def create_query(models, projects, name):
     with open(f'app/data/queries/{name}.json', 'w') as f:
         json.dump({
             "models": modelversions,
-            "query": json.dumps(get_p_query(projects))
+            "query": query
         }, f)
     return failed_models
 
@@ -359,7 +359,7 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc, issue_id):
     
     model_ids = [f'{m_id}-{models[m_id]}' for m_id in models]
 
-    query_filter = json.loads(query)
+    query_filter = query
     if issue_id is not None:
         query_filter = {
             "$and": [
