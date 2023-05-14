@@ -218,18 +218,18 @@ function get_hparams_for(classifier, prefix, size, defaults) {
         case "LinearRNNModel":
             fields = ["hparam_bidirectional_layer_size", "hparam_number_of_hidden_layers_rnn"]
             fields.forEach(field => {
-                result += render_field(data[field], prefix, size, defaults)
+                result += render_field(data[field], pref, size, defaults)
             })
-            result += `<div id="${prefix}hidden_layers_div">`
+            result += `<div id="${pref}hidden_layers_div">`
             hidden_layer_size_config = deep_copy(data['hparam_hidden_layer_size'])
             hidden_layer_size_config['label'] += ' 1'
-            result += render_field(hidden_layer_size_config, prefix, size, defaults)
+            result += render_field(hidden_layer_size_config, pref, size, defaults)
             result += `</div>`
 
             // optimizer, loss, use-trainable-embedding
             remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss", "hparam_learning_rate", "hparam_use_trainable_embedding"]
             remfields.forEach(field => {
-                result += render_field(data[field], prefix, size, defaults)
+                result += render_field(data[field], pref, size, defaults)
             })
             break;
         case "Bert":

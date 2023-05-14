@@ -18,16 +18,25 @@ def retrieve_info(formdata, name, type, default):
 def get_by_prefix(formdata, prefix):
     return [x for x in formdata if x.startswith(prefix)]
 
-def get_params_by_prefix(formdata, prefix, is_prepro):
+def get_is_dic(featgen_type):
+    return featgen_type in ['BOWFrequency', 'BOWNormalized', 'TfidfGenerator']
+
+def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
     name_to_type = {
         "class-limit": "int",
         "max-len": "int",
         'disable-lowercase': "bool",
         'disable-stopwords': "bool",
+        "use-lemmatization": "bool",
+        "use-stemming": "bool",
+        "use-pos": "bool",
         "number-of-hidden-layers": "int",
         "number-of-convolutions": "int",
         "learning-rate": "float",
-        "use-trainable-embedding": "bool"
+        "use-trainable-embedding": "bool",
+        "fully-connected-layer-size": "int",
+        "filters": "int",
+        "bidirectional-layer-size": "int"
     }
     for i in range(1, 12):
         name_to_type[f"hidden-layer-{i}-size"] = 'int'
@@ -39,6 +48,8 @@ def get_params_by_prefix(formdata, prefix, is_prepro):
             thisType = "str"
             if argName in name_to_type:
                 thisType = name_to_type[argName]
+            if argName == 'embedding-id' and embed_is_dic:
+                argName = 'dictionary-id'
             params[argName] = retrieve_info(formdata, p, thisType, None)
 
     if is_prepro and f"{prefix}embedding_id" in formdata:
@@ -61,7 +72,7 @@ def raw_to_config(formdata):
         # pre-processing
         config['input-mode'] = [formdata.get('single_inmode')]
         config['params'] = {
-            f"{config['input-mode'][0]}.0": get_params_by_prefix(formdata, "single_p_", True)
+            f"{config['input-mode'][0]}.0": get_params_by_prefix(formdata, "single_p_", True, get_is_dic(config['input-mode'][0]))
         }
 
         # classifier
@@ -120,7 +131,7 @@ def raw_to_config(formdata):
             if this_inmode not in inmode_count:
                 inmode_count[this_inmode] = 0
 
-            config['params'][f"{this_inmode}.{inmode_count[this_inmode]}"] = get_params_by_prefix(formdata, "ens_{i}_p_", True)
+            config['params'][f"{this_inmode}.{inmode_count[this_inmode]}"] = get_params_by_prefix(formdata, "ens_{i}_p_", True, get_is_dic(this_inmode))
 
             inmode_count[this_inmode] += 1
 

@@ -153,6 +153,7 @@ def get_model_performance(model_id):
                 "database-url": get_db(),
                 "epoch": "last",
                 "version-id": latest_performance,
+                "include-non-arch": True,
                 "metrics": [
                     {
                         "dataset": "testing",
