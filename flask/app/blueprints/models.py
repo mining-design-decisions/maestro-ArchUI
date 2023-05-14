@@ -57,7 +57,14 @@ def view(model):
     data = dbapi.get_model_data(model)
     name = data['model_name']
     config = modelconfig.config_to_display(data['model_config'])
-    version_count, latest_version, macro, class_prec, classes = dbapi.get_model_performance(model) 
+    try:
+        version_count, latest_version, macro, class_prec, classes = dbapi.get_model_performance(model) 
+    except:
+        version_count = 0
+        latest_version = "Error connecting to ML API"
+        macro = None
+        class_prec = None
+        classes = None
 
     return render_template(
         'models/view.html', 

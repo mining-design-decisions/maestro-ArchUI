@@ -8,12 +8,12 @@
 <div class="d-flex flex-row-reverse">
     <button class="btn btn-danger m-2" onclick="deleteModel()">Delete Model</button>
     <button onclick="trainModel()" class="btn btn-primary m-2">(Re)train Model</button>
-    <button class="btn btn-primary m-2" onclick="editModel()">Edit Model Configuration</button>
+    <button class="btn btn-primary m-2" onclick="editModel()" disabled>Edit Model Configuration</button>
 </div>
 
 <div>
     <p class="my-2">Last trained: {{ last_trained }}</p>
-    {% if last_trained != 'Never' %}
+    {% if version_count > 0 %}
     <p class="my-2">Performance (version {{version_count}}):</p>
     <h4>Macro:</h4>
     <table class="table table-light">
@@ -98,8 +98,11 @@
                         <div>Input Mode Parameters:</div>
                         <ul>
                             {% if e_model['params'] %}
-                            {% for param in e_model['params'] %}
+                            {% for param in e_model['params'] %} {% if param not in ['embedding-id', 'dictionary-id'] %}
                             <li>{{param}}: {{e_model['params'][param]}}</li>
+                            {% else %}
+                            <li>{{param}}: <a href="{{ url_for('embeddings.view', embedding=e_model['params'][param]) }}">{{e_model['params'][param]}}</a></li>
+                            {% endif %}
                             {% endfor %}
                             {% endif %}
                         </ul>
@@ -161,8 +164,11 @@
                 <div>Input Mode Parameters:</div>
                 {% for p_inmode in model[key]['params'] %}
                 <ul>
-                    {% for param in model[key]['params'][p_inmode] %}
-                    <li>{{param}}: {{model[key]['params'][p_inmode][param]}}</li>
+                    {% for param in model[key]['params'][p_inmode] %} {% if not param in ['embedding-id', 'dictionary-id'] %}
+                    <li>{{param}}: </li>
+                    {% else %}
+                    <li>{{param}}: <a href="{{ url_for('embeddings.view', embedding=model[key]['params'][p_inmode][param]) }}">{{model[key]['params'][p_inmode][param]}}</a></li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
                 {% endfor %}
