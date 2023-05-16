@@ -1,0 +1,9 @@
+{
+    "Apache": {
+        "HADOOP": "data"
+    },
+    "RedHat": {
+        "JBWS": "SOA",
+        "TEIIDDES": "data"
+    }
+}
