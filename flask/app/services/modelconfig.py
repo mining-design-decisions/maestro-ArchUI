@@ -38,6 +38,12 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
         "filters": "int",
         "bidirectional-layer-size": "int"
     }
+    do_not_propagate = [
+        "use-ontologies",
+        "ontology-id",
+        'min-count',
+        'min-doc-count'
+    ]
     for i in range(1, 12):
         name_to_type[f"hidden-layer-{i}-size"] = 'int'
         name_to_type[f"kernel-{i}-size"] = 'int'
@@ -45,6 +51,8 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
     for p in get_by_prefix(formdata, prefix):
         if formdata.get(p) and len(formdata.get(p).strip()) > 0:
             argName = p[len(prefix):].replace('_', '-')
+            if argName in do_not_propagate:
+                continue
             thisType = "str"
             if argName in name_to_type:
                 thisType = name_to_type[argName]
@@ -56,8 +64,9 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
         e = dbapi.get_embedding(formdata.get(f"{prefix}embedding_id"))
         dicname = list(e['config']['params'].keys())[0]
         for param in e['config']['params'][dicname]:
-            if param not in ['min-count', 'min-doc-count']: # these aren't in the param lists for feature generators
-                params[param] = e['config']['params'][dicname][param]
+            if param in do_not_propagate:
+                continue
+            params[param] = e['config']['params'][dicname][param]
     return params
 
 def raw_to_config(formdata):

@@ -165,7 +165,7 @@
                 {% for p_inmode in model[key]['params'] %}
                 <ul>
                     {% for param in model[key]['params'][p_inmode] %} {% if not param in ['embedding-id', 'dictionary-id'] %}
-                    <li>{{param}}: </li>
+                    <li>{{param}}: {{model[key]['params'][p_inmode][param]}}</li>
                     {% else %}
                     <li>{{param}}: <a href="{{ url_for('embeddings.view', embedding=model[key]['params'][p_inmode][param]) }}">{{model[key]['params'][p_inmode][param]}}</a></li>
                     {% endif %}

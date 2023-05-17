@@ -36,6 +36,11 @@ def viewform():
     args = dbapi.get_args_wordembed()
     if args is None:
         return render_template('embeddings/error.html')
+    ontologies = [x['file_id'] for x in dbapi.get_ontologies()]
+    for gen in args:
+        for arg in args[gen]:
+            if arg['name'] == 'ontology-id':
+                arg['options'] = ontologies
     return render_template('embeddings/form.html', args=args, default_q=json.dumps(default_q))
 
 @bp.route('/create', methods=["POST"])
