@@ -57,6 +57,7 @@ def parse():
 
                 obj['duration'] = (resolved_dt - created_dt).days
                 obj['link'] = doc['self']
+                obj['mongo_id'] = str(doc['_id'])
 
                 result[obj['id']] = obj
 
