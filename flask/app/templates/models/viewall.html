@@ -3,13 +3,15 @@
 {% block subtitle %}ML Models{% endblock %}
 
 {% block margin_content %}
+<h3>Machine Learning Models</h3>
+
 <form action="{{ url_for('models.viewform') }}", method="GET">
     <input type="submit" value="Create New Model" class="btn btn-primary my-2"/>
 </form>
 
 <div class="card my-2">
     <div class="card-body">
-        <h4>Machine Learning Models</h4>
+        <h4>Available Models</h4>
         <ul>
             {% for m in models %}
             <li><a href="{{ url_for('models.view', model=m['model_id']) }}">{{ m['model_name'] }}</a></li>

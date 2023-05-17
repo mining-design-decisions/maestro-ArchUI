@@ -522,3 +522,25 @@ def train_embedding(embedding):
         }
     })
 
+# ontologies/files
+def get_ontologies():
+    x = requests.get(f"{get_db()}/files", verify=False, json={"category": "ontologies"})
+    return x.json()
+
+@auth_req
+def upload_ontology(desc, file):
+    return requests.post(f"{get_db()}/files", files={
+        "file": ("ontologyFile", file),
+        "description": (None, desc),
+        "category": (None, "ontologies")
+    }, verify=False, headers=_auth_header())
+
+def get_file(file_id):
+    x = requests.get(f"{get_db()}/files/{file_id}", verify=False)
+    if not x.status_code == 200:
+        print(x.json())
+    return x.json()
+
+@auth_req
+def delete_ontology(ontology):
+    return requests.delete(f"{get_db()}/files/{ontology}", verify=False, headers=_auth_header())

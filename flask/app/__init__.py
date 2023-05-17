@@ -7,6 +7,8 @@ from flask import render_template
 from flask_session import Session
 import secrets
 
+ALLOWED_EXTENSIONS = ['json']
+
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
@@ -27,12 +29,13 @@ def create_app(test_config=None):
     
     app.secret_key = secrets.token_hex(16)
     app.config['SESSION_TYPE'] = 'filesystem'
+    app.config['UPLOAD_FOLDER'] = '/data/uploads'
 
     Session(app)
 
     app.debug = True
 
-    from .blueprints import models, predict, classify, statistics, login, manual, help, tags, embeddings
+    from .blueprints import models, predict, classify, statistics, login, manual, help, tags, embeddings, ontologies
 
     app.register_blueprint(models.bp)
     app.register_blueprint(predict.bp)
@@ -43,6 +46,7 @@ def create_app(test_config=None):
     app.register_blueprint(help.bp)
     app.register_blueprint(tags.bp)
     app.register_blueprint(embeddings.bp)
+    app.register_blueprint(ontologies.bp)
 
     @app.route("/hello")
     def hello():

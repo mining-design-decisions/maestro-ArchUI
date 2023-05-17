@@ -3,13 +3,15 @@
 {% block subtitle %}Word Embeddings{% endblock %}
 
 {% block margin_content %}
+<h3>Word Embeddings for Machine Learning Models</h4>
+
 <form action="{{url_for('embeddings.viewform')}}" method="GET">
     <input type="submit" value="Create New Embedding" class="btn btn-primary my-2" />
 </form>
 
 <div class="card my-2">
     <div class="card-body">
-        <h3>Machine Learning Models: Word Embeddings</h4>
+        <h4>Available Word Embeddings</h4>
         {% for t in types %}
         <hr />
         <div class="my-2">

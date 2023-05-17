@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}View Ontology{% endblock %}
+
+{% block margin_content %}
+
+<h3>Viewing Ontology</h3>
+
+<div class="d-flex flex-row-reverse">
+    <button class="btn btn-danger m-2" onclick="deleteOntology()">Delete Ontology</button>
+</div>
+
+<p>Ontology Description: {{data['description']}}</p>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+function deleteOntology() {
+    fetch(`/ontologies/delete/{{data['file_id']}}`, {
+        method: 'DELETE'
+    })
+    .then(e => {
+        if (e.status != 200) {
+            alert("Something went wrong trying to delete this ontology.")
+        }
+        else {
+            location.replace({{url_for('ontologies.viewall')}})
+        }
+    })
+}
+</script>
+{% endblock %}
