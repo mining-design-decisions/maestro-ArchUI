@@ -382,7 +382,7 @@
             "linear",
             "relu",
             "elu",
-            "leakyrule",
+            "leakyrelu",
             "sigmoid",
             "tanh",
             "softmax",
