@@ -14,7 +14,7 @@
         <div class="row my-3">
             <div class="col-sm">
                 <div class="mx-2">
-                    <h4>Word Embeddings</h4>
+                    <h4>ML Models: Word Embeddings</h4>
                     <p>Several machine learning model types require a word embedding to accurately generate features. Word embeddings can be managed: created, trained, deleted. Word embeddings fit with specific feature generators:</p>
                     <ul>
                         <li><em>Word2VecGenerator</em> embedding fits with <em>Word2Vec</em> feature generator</li>
@@ -25,7 +25,7 @@
                     <p>Note that not all feature generators require an embedding.</p>
                 </div>
                 <div class="mx-2">
-                    <h4>Managing Models</h4>
+                    <h4>Managing ML Models</h4>
                     <p>In this application, the term 'model' can refer to two things: either the model configuration, which is used by the ML pipeline, or the trained model data files. In the "ML Models" page, accessible from the navbar at the top of the site, you can access and manage the currently available ML model configurations.</p>
 
                     <p>From this page, the button "Create New Model" allows you to create a new model configuration. Hover over the input fields/dropdowns/checkboxes to see a tooltip. <em>Note that your choice of classifier will impact which input modes are available to use! First choose a classifier, then an input mode.</em> Once you are done, click the "Save Configuration" button at the bottom to save the configuration. This will create the config and redirect you to the view page for your new config. There, you can see all available model configs, and select one for more detailed action.</p>
@@ -36,10 +36,14 @@
                     <h4>Login</h4>
                     <p>In the Login view, you can log in with your username and password, which is required to have to change any data (you can read data without being logged in with a valid account). You can also set the database and pipeline URLs, that the UI will send its data requests to. It is worth noting that you are essentially logging in to the database, so if you change the database URL, you will need to log in again.</p>
                 </div>
+                <div class="mx-2">
+                    <h4>ML Models: Ontologies</h4>
+                    <p>You can upload ontology files for use in word embeddings and ML models on the Ontologies page under ML models.</p>
+                </div>
             </div>
             <div class="col-sm">
                 <div class="mx-2">
-                    <h4>Predicting with Models</h4>
+                    <h4>ML Models: Predicting</h4>
                     <p>In the "Predict With ML Models" tab, you will see options to select any number of models, and select the project(s) they will be run on. Running these models means that they will be used to predict the design decision content of all issues in the target project(s). In this prediction form, you also have the option to create a <b>"query"</b> for this prediction. A query allows you to select and group issues and machine predictions into a view, so that not all data is displayed at once, and you can focus on what you're interested in.</p>
                 </div>
                 <div class="mx-2">
