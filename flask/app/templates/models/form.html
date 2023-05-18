@@ -366,5 +366,11 @@ function nrEarlyStoppingAttribsChanged() {
     div.innerHTML = generate_early_stopping_attribs(new_amt, defaults)
 }
 nrEarlyStoppingAttribsChanged()
+
+function applyOntologyClassesChanged() {
+    apply = document.getElementById('train_apply_ontology_classes').checked
+    document.getElementById('train_ontology_classes_div').setAttribute('class', apply? '' : 'd-none')
+}
+applyOntologyClassesChanged()
 </script>
 {% endblock %}

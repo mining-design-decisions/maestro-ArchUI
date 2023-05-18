@@ -455,6 +455,7 @@ function generate_tab_training(defaults, data) {
         "train_split_size",
         "train_max_train",
         "train_apply_ontology_classes",
+        "train_ontology_classes",
         "train_architectural_only",
         "train_training_data_query",
         // "train_class_balancer", // currently bugged

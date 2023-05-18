@@ -25,6 +25,8 @@ def viewall():
 @bp.route('/create', methods=["GET"])
 def viewform():
     field_configs = data.get_field_configs()
+    ontologies = [x['file_id'] for x in dbapi.get_ontologies()]
+    field_configs['train_ontology_classes']['options'] = ontologies
     embeds_raw = dbapi.get_embeddings()
     embeds_dic = {}
     for e in embeds_raw:

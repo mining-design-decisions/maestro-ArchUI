@@ -155,7 +155,28 @@
         "name": "apply_ontology_classes",
         "label": "Apply Ontology Classes",
         "type": "bool",
-        "tooltip": "Enable application of ontology classes."
+        "tooltip": "Enable application of ontology classes.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "onchange=\"applyOntologyClassesChanged()\""
+            }
+        ]
+    },
+    "train_ontology_classes": {
+        "name": "ontology_classes",
+        "label": "Ontology Classes File",
+        "type": "select",
+        "tooltip": "ID of the DB-file containing ontology classes.",
+        "options": [],
+        "extra": [
+            {
+                "type": "in_div"
+            },
+            {
+                "type": "indent"
+            }
+        ]
     },
     "train_architectural_only": {
         "name": "architectural_only",
