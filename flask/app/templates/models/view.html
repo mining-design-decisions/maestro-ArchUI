@@ -180,7 +180,11 @@
                 <h3>{{key.title()}}</h3>
                 <ul>
                     {% for option in model[key] %}
+                    {% if option == 'ontology classes' %}
+                    <li>{{option}}: <a href="{{url_for('ontologies.view', ontology=model[key][option])}}">{{model[key][option]}}</a></li>
+                    {% else %}
                     <li>{{option}}: {{model[key][option]}}</li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
             </div>
