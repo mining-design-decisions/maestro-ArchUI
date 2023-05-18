@@ -73,6 +73,7 @@ def raw_to_config(formdata):
     config = {}
 
     # tab: general
+    config['seed'] = retrieve_info(formdata, 'gen_seed', 'int', -1)
     config['output-mode'] = formdata.get('gen_output_mode', None)
     model_mode = formdata.get('gen_model_mode', 'Single')
 
@@ -186,6 +187,7 @@ def config_to_display(config):
     # two common tabs for single & ensemble
     general = {
         "output mode": config['output-mode'],
+        "seed": config['seed'] if 'seed' in config else -1
     }
     if 'combination-strategy' in config:
         general['combination strategy'] = config['combination-strategy']

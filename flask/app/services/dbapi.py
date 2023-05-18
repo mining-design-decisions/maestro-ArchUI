@@ -86,6 +86,9 @@ def create_model_config(config, name):
 
     x = requests.post(f"{get_db()}/models", json=postbody, headers=_auth_header(), verify=False)
 
+    if x.status_code != 200 or 'model_id' not in x.json():
+        print(x.json())
+
     return x.json()['model_id']
 
 def get_model_ids_names():

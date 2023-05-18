@@ -86,6 +86,22 @@
             }
         ]
     },
+    "gen_seed": {
+        "name": "seed",
+        "label": "Seed",
+        "type": "number",
+        "tooltip": "Seed to use to initialize all the RNG related stuff. -1 means no seed is used.",
+        "extra": [
+            {
+                "type": "default",
+                "value": -1
+            },
+            {
+                "type": "attribute",
+                "value": "min=-1"
+            }
+        ]
+    },
 
     "train_epochs": {
         "name": "epochs",

@@ -414,6 +414,7 @@ function generate_tab_general(defaults, data) {
     result = ""
 
     result += render_field(data['gen_model_name'], "gen_", "small", defaults)
+    result += render_field(data['gen_seed'], "gen_", "small", defaults)
     result += render_field(data['gen_output_mode'], "gen_", "small", defaults)
     result += render_field(data['gen_model_mode'], "gen_", "small", defaults)
     
