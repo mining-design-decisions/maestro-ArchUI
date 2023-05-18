@@ -154,8 +154,7 @@ def raw_to_config(formdata):
 
     # training
     config['apply-ontology-classes'] = retrieve_info(formdata, 'train_apply_ontology_classes', 'bool', False)
-    if config['apply-ontology-classes']:
-        config['ontology-classes'] = retrieve_info(formdata, 'train_ontology_classes', 'str', '')
+    config['ontology-classes'] = retrieve_info(formdata, 'train_ontology_classes', 'str', '')
     config['epochs'] = retrieve_info(formdata, 'train_epochs', 'int', 1000)
     config['split-size'] = retrieve_info(formdata, 'train_split_size', 'float', 0.2)
     config['max-train'] = retrieve_info(formdata, 'train_max_train', 'int', -1)
