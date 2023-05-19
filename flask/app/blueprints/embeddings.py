@@ -11,13 +11,14 @@ from app.services import dbapi
 bp = Blueprint('embeddings', __name__, url_prefix="/embed")
 
 default_q = {
-    "$or": [
-        {"tags": {"$eq": "Apache-TAJO"}},
-        {"tags": {"$eq": "Apache-HDFS"}},
-        {"tags": {"$eq": "Apache-HADOOP"}},
-        {"tags": {"$eq": "Apache-YARN"}},
-        {"tags": {"$eq": "Apache-MAPREDUCE"}},
-        {"tags": {"$eq": "Apache-HADOOP"}}
+    "$or": 
+    [
+        {"tags": {"$eq": "Apache-TAJO"}}, 
+        {"tags": {"$eq": "Apache-HDFS"}}, 
+        {"tags": {"$eq": "Apache-HADOOP"}}, 
+        {"tags": {"$eq": "Apache-YARN"}}, 
+        {"tags": {"$eq": "Apache-MAPREDUCE"}}, 
+        {"tags": {"$eq": "Apache-CASSANDRA"}}
     ]
 }
 
