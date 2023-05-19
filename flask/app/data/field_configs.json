@@ -296,7 +296,7 @@
         "extra": [
             {
                 "type": "default",
-                "value": {"$or": [{"tags": {"$eq": "Apache-TAJO"}}, {"tags": {"$eq": "Apache-HDFS"}}, {"tags": {"$eq": "Apache-HADOOP"}}, {"tags": {"$eq": "Apache-YARN"}}, {"tags": {"$eq": "Apache-MAPREDUCE"}}, {"tags": {"$eq": "Apache-HADOOP"}}]}
+                "value": {"$or": [{"tags": {"$eq": "Apache-TAJO"}}, {"tags": {"$eq": "Apache-HDFS"}}, {"tags": {"$eq": "Apache-HADOOP"}}, {"tags": {"$eq": "Apache-YARN"}}, {"tags": {"$eq": "Apache-MAPREDUCE"}}, {"tags": {"$eq": "Apache-CASSANDRA"}}]}
             }
         ]
     },
