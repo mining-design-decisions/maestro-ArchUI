@@ -184,6 +184,7 @@ def raw_to_config(formdata):
 
 def config_to_display(config):
     # two common tabs for single & ensemble
+    # general
     general = {
         "output mode": config['output-mode'],
         "seed": config['seed'] if 'seed' in config else -1
@@ -198,7 +199,6 @@ def config_to_display(config):
     train_fields = [
         "ontology-classes",
         "apply-ontology-classes",
-        "ontology-classes",
         "epochs",
         "split-size",
         "max-train",
@@ -206,17 +206,23 @@ def config_to_display(config):
         "class-balancer",
         "batch-size",
         "use-early-stopping",
-        "early-stopping-patience",
-        "early-stopping-min-delta",
-        "early-stopping-attribute",
-        "training-data-query"
+        "early-stopping-patience"
     ]
 
+    # training
     training = {}
     for field in train_fields:
         if field in config:
             train_key = field.replace('-', ' ')
             training[train_key] = config[field]
+    amt_early_stopping_attribs = len(config['early-stopping-attribute'])
+    training['early_stopping_num_attribs'] = amt_early_stopping_attribs
+    for i in range(0, amt_early_stopping_attribs):
+        delta = config['early-stopping-min-delta'][i]
+        attrib = config['early-stopping-attribute'][i]
+        training[f"early_stopping_min_{i+1}_size"] = delta
+        training[f"early_stopping_{i+1}_size"] = attrib
+    training['training_data_query'] = config['training-data-query']
 
     result = {
         "general": general,
@@ -230,16 +236,18 @@ def config_to_display(config):
             'hyper-params': {}
         }
         if config['hyper-params']:
-            classifier['hyper-params'] = config['hyper-params']
+            key = classifier['classifier'] + ".0"
+            classifier['hyper-params'] = config['hyper-params'][key]
         if classifier['classifier'] == 'LinearConv1Model':
-            general['analyze-keywords'] = config['analyze-keywords']
+            general['analyze-keywords'] = config['analyze-keywords'] # todo look
         
         input_mode = {
             'input-mode': config['input-mode'][0],
             "params": {}
         }
         if config['params']:
-            input_mode['params'] = config['params']
+            key = input_mode['input-mode'] + ".0"
+            input_mode['params'] = config['params'][key]
 
         result['classifier'] = classifier
         result['pre-processing'] = input_mode
@@ -324,7 +332,8 @@ def config_to_form(config):
                 for hp in display[tab]['hyper-params']:
                     if display[tab]['hyper-params'][hp]:
                         result[f'stacker_hp_{hp}'] = display[tab]['hyper-params'][hp]
-    print("\n\n\nmodel defaults:")
-    print(result)
+
+    import json
+    result['train_training_data_query'] = json.loads(result['train_training_data_query'])
 
     return result

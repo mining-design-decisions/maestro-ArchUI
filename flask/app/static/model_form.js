@@ -23,7 +23,12 @@
 // helpers for below
 function render_field_str(css_label, css_input, tooltip, name, defaults, label, extra_attr, field_default) {
     if (`${name}` in defaults) {
-        extra_attr += ` value="${defaults[`${name}`]}"`
+        val = defaults[`${name}`]
+        if (typeof val !== 'string') {
+            val = JSON.stringify(val)
+            console.log('a')
+        }
+        extra_attr += ` value=${val}`
     }
     else if (field_default) {
         field_default_str = field_default

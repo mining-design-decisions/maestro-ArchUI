@@ -25,8 +25,6 @@ def viewall():
 @bp.route('/create', methods=["GET"])
 def viewform():
     field_configs = data.get_field_configs()
-    ontologies = [x['file_id'] for x in dbapi.get_ontologies()]
-    field_configs['train_ontology_classes']['options'] = ontologies
     embeds_raw = dbapi.get_embeddings()
     embeds_dic = {}
     for e in embeds_raw:
@@ -91,14 +89,25 @@ def editform(model):
     name = model_data["model_name"]
     model_defaults = modelconfig.config_to_form(model_data['model_config'])
     model_defaults["gen_model_name"] = name
-    print(model_defaults)
+    
+    embeds_raw = dbapi.get_embeddings()
+    embeds_dic = {}
+    for e in embeds_raw:
+        e_type = e['config']['generator']
+        if e_type not in embeds_dic:
+            embeds_dic[e_type] = []
+        embeds_dic[e_type].append({
+            'name': e['name'],
+            'id': e['embedding_id']
+        })
 
     return render_template('models/form_edit.html',
         id=model,
         defaults=model_defaults,
         name=name,
         inmode_per_classifier=inmode_per_classifier,
-        field_configs=field_configs)
+        field_configs=field_configs,
+        embeds_dic=embeds_dic)
 
 @bp.route('/edit/<model>', methods=["POST"])
 def edit(model):
