@@ -182,7 +182,7 @@ def raw_to_config(formdata):
 
     return config
 
-def config_to_display(config):
+def config_to_display(config, separate_attribs=False):
     # two common tabs for single & ensemble
     # general
     general = {
@@ -215,13 +215,19 @@ def config_to_display(config):
         if field in config:
             train_key = field.replace('-', ' ')
             training[train_key] = config[field]
-    amt_early_stopping_attribs = len(config['early-stopping-attribute'])
-    training['early_stopping_num_attribs'] = amt_early_stopping_attribs
-    for i in range(0, amt_early_stopping_attribs):
-        delta = config['early-stopping-min-delta'][i]
-        attrib = config['early-stopping-attribute'][i]
-        training[f"early_stopping_min_{i+1}_size"] = delta
-        training[f"early_stopping_{i+1}_size"] = attrib
+    if separate_attribs:
+        if 'early-stopping-attribute' in config:
+            amt_early_stopping_attribs = len(config['early-stopping-attribute'])
+            training['early_stopping_num_attribs'] = amt_early_stopping_attribs
+            for i in range(0, amt_early_stopping_attribs):
+                delta = config['early-stopping-min-delta'][i]
+                attrib = config['early-stopping-attribute'][i]
+                training[f"early_stopping_min_{i+1}_size"] = delta
+                training[f"early_stopping_{i+1}_size"] = attrib
+    else:
+        if 'early-stopping-min-delta' in config:
+            training['early_stopping_min_delta'] = config['early-stopping-min-delta']
+            training['early_stopping_attribute'] = config['early-stopping-attribute']
     training['training_data_query'] = config['training-data-query']
 
     result = {
@@ -293,13 +299,14 @@ def config_to_display(config):
     return result
 
 def config_to_form(config):
-    display = config_to_display(config)
+    display = config_to_display(config, True)
     result = {}
     for tab in display:
         match(tab):
             case "general":
                 for field in display[tab]:
                     result["gen_" + field.lower().replace(' ', '_')] = display[tab][field]
+                    print(field)
 
             case "training":
                 for field in display[tab]:
@@ -335,5 +342,9 @@ def config_to_form(config):
 
     import json
     result['train_training_data_query'] = json.loads(result['train_training_data_query'])
+
+    if 'analyze-keywords' in display['general']:
+        result['single_analyze_keywords'] = display['general']['analyze-keywords']
+        print('a')
 
     return result

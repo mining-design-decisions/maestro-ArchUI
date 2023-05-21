@@ -330,11 +330,8 @@ function classifierChanged(classifier_element) {
     // if this classifier is the single one
     // and if it is a convolutional one
     // we must set the single_analyze_keywords_div element to be visible
-    if (classifier_element[0].id.startsWith('single_') && class_selected == 'LinearConv1Model') {
-        document.getElementById('single_analyze_keywords_div').setAttribute('class', '')
-    }
-    else {
-        document.getElementById('single_analyze_keywords_div').setAttribute('class', 'd-none')
+    if (classifier_element[0].id.startsWith('single_')) {
+        document.getElementById('single_analyze_keywords_div').setAttribute('class', class_selected == 'LinearConv1Model' ? '' : "d-none")
     }
 
     // update optimizer
@@ -342,7 +339,13 @@ function classifierChanged(classifier_element) {
     optimizerChanged([document.getElementById(`${prefix}_hp_optimizer`)])
 
     // update nr of hidden layers if appropriate
-    nrHiddenLayersChanged([document.getElementById(`${this_prefix}_hp_number_of_hidden_layers`)])
+    hidden_layer_class = ['FullyConnectedModel', 'LinearRNNModel']
+    if (hidden_layer_class.includes(class_selected)) {
+        nrHiddenLayersChanged([document.getElementById(`${this_prefix}_hp_number_of_hidden_layers`)])
+    }
+    else if (class_selected == 'LinearConv1Model') {
+        nrOfConvChanged([document.getElementById(`${this_prefix}_hp_number_of_convolutions`)])
+    }   
 }
 _all_classifiers = $("select[id$='_classifier']")
 for (let i = 0; i < _all_classifiers.length; i++) {

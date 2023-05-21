@@ -26,16 +26,15 @@ function render_field_str(css_label, css_input, tooltip, name, defaults, label, 
         val = defaults[`${name}`]
         if (typeof val !== 'string') {
             val = JSON.stringify(val)
-            console.log('a')
         }
-        extra_attr += ` value=${val}`
+        extra_attr += ` value='${val}'`
     }
     else if (field_default) {
         field_default_str = field_default
         if (typeof field_default_str === 'string')
-            extra_attr += ` value=${field_default}`
+            extra_attr += ` value='${field_default}'`
         else
-            extra_attr += ` value=${JSON.stringify(field_default)}`
+            extra_attr += ` value='${JSON.stringify(field_default)}'`
     }
     new_html = `<label class="${css_label}" title="${tooltip}" for="${name}">${label} </label>\n`
     new_html += `<div class="${css_input}">`
