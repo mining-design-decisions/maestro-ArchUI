@@ -244,8 +244,8 @@ def config_to_display(config, separate_attribs=False):
         if config['hyper-params']:
             key = classifier['classifier'] + ".0"
             classifier['hyper-params'] = config['hyper-params'][key]
-        if classifier['classifier'] == 'LinearConv1Model':
-            general['analyze-keywords'] = config['analyze-keywords'] # todo look
+        if classifier['classifier'] == 'LinearConv1Model' and 'analyze-keywords' in config:
+            general['analyze-keywords'] = config['analyze-keywords']
         
         input_mode = {
             'input-mode': config['input-mode'][0],
