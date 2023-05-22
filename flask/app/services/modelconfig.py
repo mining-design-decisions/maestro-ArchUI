@@ -364,6 +364,5 @@ def config_to_form(config):
 
     if 'analyze-keywords' in display['general']:
         result['single_analyze_keywords'] = display['general']['analyze-keywords']
-        print('a')
 
     return result
