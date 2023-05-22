@@ -155,7 +155,7 @@ def raw_to_config(formdata):
             inmode_count[this_inmode] += 1
 
         # if applicable, the stacker
-        if config['ensemble-strategy'] == "stacking":
+        if 'ensemble-strategy' in config and config['ensemble-strategy'] == "stacking":
             config['stacking-meta-classifier'] = formdata.get('stacker_classifier', None)
             config['use-concat'] = formdata.get('stacker_use_concat', False) == 'on'
             config['no-matrix'] = formdata.get('stacker_no_matrix', False) == 'on'
@@ -304,7 +304,7 @@ def config_to_display(config, separate_attribs=False):
 
 
         # stacker?
-        if config['ensemble-strategy'] == "stacking":
+        if 'ensemble-strategy' in config and config['ensemble-strategy'] == "stacking":
             result['meta classifier'] = {
                 "classifier": config['stacking-meta-classifier'],
                 "use-concat": config['use-concat'],
@@ -324,7 +324,6 @@ def config_to_form(config):
             case "general":
                 for field in display[tab]:
                     result["gen_" + field.lower().replace(' ', '_')] = display[tab][field]
-                    print(field)
 
             case "training":
                 for field in display[tab]:
@@ -339,8 +338,7 @@ def config_to_form(config):
             case "classifier":
                 result['single_classifier'] = display[tab]['classifier']
                 for hp in display[tab]['hyper-params']:
-                    if display[tab]['hyper-params'][hp]:
-                        result[f"single_hp_{hp.replace('-','_')}"] = display[tab]['hyper-params'][hp]
+                    result[f"single_hp_{hp.replace('-','_')}"] = display[tab]['hyper-params'][hp]
                         
             case "ensemble classifiers":
                 for i in range(len(display[tab])):
