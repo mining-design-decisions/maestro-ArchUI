@@ -358,8 +358,9 @@ def config_to_form(config):
                     if display[tab]['hyper-params'][hp]:
                         result[f'stacker_hp_{hp}'] = display[tab]['hyper-params'][hp]
 
-    import json
-    result['train_training_data_query'] = json.loads(result['train_training_data_query'])
+    if type(result['train_training_data_query']) != dict:
+        import json
+        result['train_training_data_query'] = json.loads(result['train_training_data_query'])
 
     if 'analyze-keywords' in display['general']:
         result['single_analyze_keywords'] = display['general']['analyze-keywords']
