@@ -38,7 +38,7 @@ for filename in files:
         ecosys = row[ecosyscol]
 
         if domain != domain: #nan
-            print(f"Wasn't able to find domain for ${key}")
+            print(f"Wasn't able to find domain for {key}")
             continue
         
         if not ecosys in results:
