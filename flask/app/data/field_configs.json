@@ -483,7 +483,7 @@
         "name": "fully_connected_layer_size",
         "label": "Size of Fully Connected Layer",
         "type": "number",
-        "tooltip": "[min, max] = [2, 16384] -- default = 32",
+        "tooltip": "[min, max] = [0, 16384] -- default = 32",
         "extra": [
             {
                 "type": "default",
@@ -491,7 +491,7 @@
             },
             {
                 "type": "attribute",
-                "value": "min=2 max=16384"
+                "value": "min=0 max=16384"
             }
         ]
     },
