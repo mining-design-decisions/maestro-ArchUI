@@ -62,7 +62,8 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
 
     if not is_prepro:
         if 'optimizer-sgdvalue' in params:
-            params['optimizer'] += f"_{params['optimizer-sgdvalue']}"
+            if params['optimizer'] == 'sgd':
+                params['optimizer'] += f"_{params['optimizer-sgdvalue']}"
             del params['optimizer-sgdvalue']
 
     if is_prepro and f"{prefix}embedding_id" in formdata:
@@ -288,7 +289,7 @@ def config_to_display(config, separate_attribs=False):
                 'params': config['params'][f"{this_inmode}.{inmode_count[this_inmode]}"],
                 'hyper-params': config['hyper-params'][f"{this_classifier}.{class_count[this_classifier]}"]
             }
-            
+
             if not this_obj['hyper-params']['optimizer'] == 'adam' and separate_attribs:
                 rate = float(this_obj['hyper-params']['optimizer'].split('_')[1])
                 this_obj['hyper-params']['optimizer'] = 'sgd'
