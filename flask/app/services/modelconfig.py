@@ -65,6 +65,9 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
             if params['optimizer'] == 'sgd':
                 params['optimizer'] += f"_{params['optimizer-sgdvalue']}"
             del params['optimizer-sgdvalue']
+        elif params['optimizer'] == 'sgd':
+            params['optimizer'] += f"_0"
+        
 
     if is_prepro and f"{prefix}embedding_id" in formdata:
         e = dbapi.get_embedding(formdata.get(f"{prefix}embedding_id"))
