@@ -249,6 +249,10 @@ def config_to_display(config, separate_attribs=False):
         if config['hyper-params']:
             key = classifier['classifier'] + ".0"
             classifier['hyper-params'] = config['hyper-params'][key]
+            if not classifier['hyper-params']['optimizer'] == 'adam' and separate_attribs:
+                rate = float(classifier['hyper-params']['optimizer'].split('_')[1])
+                classifier['hyper-params']['optimizer'] = 'sgd'
+                classifier['hyper-params']['optimizer-sgdvalue'] = rate
         if classifier['classifier'] == 'LinearConv1Model' and 'analyze-keywords' in config:
             general['analyze-keywords'] = config['analyze-keywords']
         
@@ -284,6 +288,11 @@ def config_to_display(config, separate_attribs=False):
                 'params': config['params'][f"{this_inmode}.{inmode_count[this_inmode]}"],
                 'hyper-params': config['hyper-params'][f"{this_classifier}.{class_count[this_classifier]}"]
             }
+            
+            if not this_obj['hyper-params']['optimizer'] == 'adam' and separate_attribs:
+                rate = float(this_obj['hyper-params']['optimizer'].split('_')[1])
+                this_obj['hyper-params']['optimizer'] = 'sgd'
+                this_obj['hyper-params']['optimizer-sgdvalue'] = rate
 
             class_count[this_classifier] += 1
             inmode_count[this_inmode] += 1
