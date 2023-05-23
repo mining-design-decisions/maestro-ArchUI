@@ -24,7 +24,7 @@ def get_comment_data(input):
 
     output['comment avg size'] = comment_size
     output['comment count'] = comment_count
-    output
+    return output
 
 files = [f for f in os.listdir('domains/')]
 for fn in files:
@@ -32,7 +32,7 @@ for fn in files:
     with open("domains/" + fn) as f:
         raw = json.load(f)
     
-    pool = ThreadPool(8) # adjust as necessary
+    pool = ThreadPool(4) # adjust as necessary
     intermed = pool.map(get_comment_data, list(raw.values()))
     result = {x['id']: x for x in intermed}
 
