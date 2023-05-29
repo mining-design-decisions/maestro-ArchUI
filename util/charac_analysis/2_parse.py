@@ -22,7 +22,6 @@ def parse():
         for proj in domains[dom]:
             ecosys = proj.split('.')[0]
             key = proj.split('.')[1]
-            coll = client['JiraRepos'][ecosys]
             hierarchy = {} # parent -> children
             in_hierarchy = [] # all issues that either are a parent or are mentioned as child
             for doc in client['JiraRepos'][ecosys].find({'key': {"$regex": f"{key}\-[0-9]+"}}):
