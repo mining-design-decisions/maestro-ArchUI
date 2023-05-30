@@ -426,8 +426,16 @@ function generate_tab_general(defaults, data) {
     result += render_field(data['gen_combination_strategy'], "gen_", "small", defaults)
     result += render_field(data['gen_test_separately'], "gen_", "small", defaults)
 
+    result += '<div id="gen_voting_mode_div">'
+    result += "<hr />"
     result += render_field(data['gen_voting_mode'], "gen_", "small", defaults)
     result += '</div>'
+
+    result += '<div id="gen_combo_model_hparams_div">'
+    result += "<hr />"
+    result += "<h5>Combination Model Hyper Parameters</h5>"
+    result += get_hparams_for('FullyConnectedModel', 'combomodel_', 'large', defaults)
+    result += '</div></div>'
 
     return result
 }
@@ -462,7 +470,7 @@ function generate_tab_training(defaults, data) {
         "train_ontology_classes",
         "train_architectural_only",
         "train_training_data_query",
-        // "train_class_balancer", // currently bugged
+        // "train_class_balancer", // todo?
         "train_batch_size",
         "train_use_early_stopping"
     ]

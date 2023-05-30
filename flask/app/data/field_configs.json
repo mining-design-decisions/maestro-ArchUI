@@ -49,7 +49,7 @@
         "label": "Combination Strategy",
         "type": "select",
         "tooltip": "Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.",
-        "options": ["concat","add","subtract","multiply","max","min","dot","stacking","voting"],
+        "options": ["concat","add","subtract","multiply","max","min","dot","stacking","voting","combination"],
         "extra": [
             {
                 "type": "attribute",
@@ -80,9 +80,6 @@
         "extra": [
             {
                 "type": "indent"
-            },
-            {
-                "type": "in_div"
             }
         ]
     },

@@ -102,21 +102,23 @@ def raw_to_config(formdata):
         if config['classifier'][0] == 'LinearConv1Model':
             config['analyze-keywords'] = formdata.get('single_analyze_keywords', False) == "on"
 
-    else:
+    else: # ensemble
         test_sep = formdata.get('gen_test_separately', False)
         if test_sep:
             config['test-separately'] = test_sep
 
         strat = formdata.get('gen_combination_strategy', None)
-        # config['ensemble_strategy'] = "none" # default?
-        # config['combination_strategy'] = "concat" # default?
-        if strat.lower() in ["stacking", "voting"]:
+        if strat.lower() in ["stacking", "voting", 'combination']:
             config['ensemble-strategy'] = strat.lower()
         elif strat:
             config['combination-strategy'] = strat.lower()
 
         if strat.lower() == 'voting':
             config['voting-mode'] = formdata.get('gen_voting_mode')
+        if strat.lower() == 'combination':
+            config['combination-model-hyper-params'] = {
+                'FullyConnectedModel.0': get_params_by_prefix(formdata, 'combomodel_hp_', False)
+            }
 
         # ensemble mode tabs:
         # ensemble classifiers
@@ -150,7 +152,7 @@ def raw_to_config(formdata):
             if this_inmode not in inmode_count:
                 inmode_count[this_inmode] = 0
 
-            config['params'][f"{this_inmode}.{inmode_count[this_inmode]}"] = get_params_by_prefix(formdata, "ens_{i}_p_", True, get_is_dic(this_inmode))
+            config['params'][f"{this_inmode}.{inmode_count[this_inmode]}"] = get_params_by_prefix(formdata, f"ens_{i}_p_", True, get_is_dic(this_inmode))
 
             inmode_count[this_inmode] += 1
 
@@ -313,6 +315,9 @@ def config_to_display(config, separate_attribs=False):
                     f"{config['stacking-meta-classifier']}.0": config['stacking-meta-classifier-hyper-parameters']
                 }
             }
+        # combination model?
+        if 'ensemble-strategy' in config and config['ensemble-strategy'] == 'combination':
+            result['combination model'] = config['combination-model-hyper-params']['FullyConnectedModel.0']
 
     return result
 

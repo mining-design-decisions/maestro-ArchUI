@@ -147,22 +147,10 @@ modelModeChanged()
 
 function combiStratChanged(combi_strat_el) {
     val = combi_strat_el[0].value
-    
-    if (val == 'stacking') {
-        document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item')
-    }
-    else {
-        document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item d-none')
-    }
 
-    if (val == 'voting') {
-        document.getElementById(`gen_voting_mode_div`).setAttribute('class', '')
-    }
-    else {
-        document.getElementById(`gen_voting_mode_div`).setAttribute('class', 'd-none')
-    }
-
-
+    document.getElementById('meta-classifier-tab-header').setAttribute('class', `nav-item ${val == 'stacking'? '' : 'd-none'}`)
+    document.getElementById('gen_voting_mode_div').setAttribute('class', val == 'voting'? '' : 'd-none')
+    document.getElementById('gen_combo_model_hparams_div').setAttribute('class', val == 'combination'? '' : 'd-none')
 }
 combiStratChanged([document.getElementById("gen_combination_strategy")])
 
