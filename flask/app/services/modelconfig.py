@@ -110,18 +110,37 @@ def raw_to_config(formdata):
         if test_sep:
             config['test-separately'] = test_sep
 
-        strat = formdata.get('gen_combination_strategy', None)
-        if strat.lower() in ["stacking", "voting", 'combination']:
-            config['ensemble-strategy'] = strat.lower()
-        elif strat:
-            config['combination-strategy'] = strat.lower()
+        #strat = formdata.get('gen_combination_strategy', None)
+        #if strat.lower() in ["stacking", "voting", 'combination']:
+        #    config['ensemble-strategy'] = strat.lower()
+        #elif strat:
+        #    config['combination-strategy'] = strat.lower()
 
-        if strat.lower() == 'voting':
-            config['voting-mode'] = formdata.get('gen_voting_mode')
-        if strat.lower() == 'combination':
-            config['combination-model-hyper-params'] = {
-                'FullyConnectedModel.0': get_params_by_prefix(formdata, 'combomodel_hp_', False)
-            }
+        #if strat.lower() == 'voting':
+        #    config['voting-mode'] = formdata.get('gen_voting_mode')
+        #if strat.lower() == 'combination':
+        #    config['combination-model-hyper-params'] = {
+        #        'FullyConnectedModel.0': get_params_by_prefix(formdata, 'combomodel_hp_', False)
+        #    }
+
+        strat = formdata.get('gen_ensemble_strategy', None)
+        config['ensemble-strategy'] = strat
+        match strat:
+            case 'voting':
+                config['voting-mode'] = formdata.get('gen_voting_mode')
+                
+            case 'combination':
+                config['combination-strategy'] = formdata.get('gen_combination_strategy')
+                config['combination-model-hyper-params'] = {
+                    'CombinedModel.0': get_params_by_prefix(formdata, 'combomodel_hp_', False)
+                }
+                
+            case 'stacking':
+                config['stacking-meta-classifier'] = formdata.get('stacker_classifier', None)
+                config['use-concat'] = formdata.get('stacker_use_concat', False) == 'on'
+                config['no-matrix'] = formdata.get('stacker_no_matrix', False) == 'on'
+                config['stacking-meta-classifier-hyper-parameters'] = get_params_by_prefix(formdata, 'stacker_hp_', False)
+
 
         # ensemble mode tabs:
         # ensemble classifiers
@@ -158,13 +177,6 @@ def raw_to_config(formdata):
             config['params'][f"{this_inmode}.{inmode_count[this_inmode]}"] = get_params_by_prefix(formdata, f"ens_{i}_p_", True, get_is_dic(this_inmode))
 
             inmode_count[this_inmode] += 1
-
-        # if applicable, the stacker
-        if 'ensemble-strategy' in config and config['ensemble-strategy'] == "stacking":
-            config['stacking-meta-classifier'] = formdata.get('stacker_classifier', None)
-            config['use-concat'] = formdata.get('stacker_use_concat', False) == 'on'
-            config['no-matrix'] = formdata.get('stacker_no_matrix', False) == 'on'
-            config['stacking-meta-classifier-hyper-parameters'] = get_params_by_prefix(formdata, 'stacker_hp_', False)
 
     # training
     config['apply-ontology-classes'] = retrieve_info(formdata, 'train_apply_ontology_classes', 'bool', False)
@@ -320,7 +332,8 @@ def config_to_display(config, separate_attribs=False):
             }
         # combination model?
         if 'ensemble-strategy' in config and config['ensemble-strategy'] == 'combination':
-            result['combination model'] = config['combination-model-hyper-params']['FullyConnectedModel.0']
+            result['combination strategy'] = config['combination-strategy']
+            result['combination model'] = config['combination-model-hyper-params']['CombinedModel.0']
 
     return result
 

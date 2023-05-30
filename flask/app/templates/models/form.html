@@ -89,9 +89,11 @@ function onDocReady() {
 onDocReady()
 
 function getSize(prefix) {
-    size = "large"
-    if (prefix == "single_hp") size = "small";
-    if (prefix == "stacker_hp") size = "small";
+    // size = "large"
+    // if (prefix == "single_hp") size = "small";
+    // if (prefix == "stacker_hp") size = "small";
+    size = 'small'
+    if (prefix.startsWith('ens_')) size = 'large';
     return size
 }
 </script>
@@ -119,7 +121,7 @@ function modelModeChanged() {
             // enable combi strat field
             ens_only_div.setAttribute('class', '')
 
-            switch(document.getElementById("gen_combination_strategy").value) {
+            switch(document.getElementById("gen_ensemble_strategy").value) {
                 case 'stacking':
                     document.getElementById(`meta-classifier-tab-header`).setAttribute('class', 'nav-item')
                     break;
@@ -145,14 +147,16 @@ function modelModeChanged() {
 }
 modelModeChanged()
 
-function combiStratChanged(combi_strat_el) {
+function ensembleStratChanged(combi_strat_el) {
     val = combi_strat_el[0].value
 
-    document.getElementById('meta-classifier-tab-header').setAttribute('class', `nav-item ${val == 'stacking'? '' : 'd-none'}`)
+    is_ensemble = document.getElementById("gen_model_mode").value == 'Ensemble'
+
+    document.getElementById('meta-classifier-tab-header').setAttribute('class', `nav-item ${val == 'stacking' && is_ensemble? '' : 'd-none'}`)
     document.getElementById('gen_voting_mode_div').setAttribute('class', val == 'voting'? '' : 'd-none')
     document.getElementById('gen_combo_model_hparams_div').setAttribute('class', val == 'combination'? '' : 'd-none')
 }
-combiStratChanged([document.getElementById("gen_combination_strategy")])
+ensembleStratChanged([document.getElementById("gen_ensemble_strategy")])
 
 function useEarlyStoppingChanged() {
     el = document.getElementById("train_early_stopping_div")

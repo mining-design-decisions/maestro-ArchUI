@@ -44,17 +44,29 @@
             }
         ]
     },
+    "gen_ensemble_strategy": {
+        "name": "ensemble_strategy",
+        "label": "Ensemble Strategy",
+        "type": "select",
+        "tooltip": "Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.",
+        "options": ["stacking","voting","combination"],
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required onchange=\"ensembleStratChanged($(this))\""
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
     "gen_combination_strategy": {
         "name": "combination_strategy",
         "label": "Combination Strategy",
         "type": "select",
         "tooltip": "Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.",
-        "options": ["concat","add","subtract","multiply","max","min","dot","stacking","voting","combination"],
+        "options": ["concat","add","subtract","multiply","max","min","dot"],
         "extra": [
-            {
-                "type": "attribute",
-                "value": "required onchange=\"combiStratChanged($(this))\""
-            },
             {
                 "type": "indent"
             }

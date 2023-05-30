@@ -430,7 +430,7 @@ function generate_tab_general(defaults, data) {
     result += render_field(data['gen_model_mode'], "gen_", "small", defaults)
     
     result += '<div id="gen_ensemble_div">'
-    result += render_field(data['gen_combination_strategy'], "gen_", "small", defaults)
+    result += render_field(data['gen_ensemble_strategy'], "gen_", "small", defaults)
     result += render_field(data['gen_test_separately'], "gen_", "small", defaults)
 
     result += '<div id="gen_voting_mode_div">'
@@ -440,9 +440,10 @@ function generate_tab_general(defaults, data) {
 
     result += '<div id="gen_combo_model_hparams_div">'
     result += "<hr />"
+    result += render_field(data['gen_combination_strategy'], "gen_", "small", defaults)
     result += "<h5>Combination Model Hyper Parameters</h5>"
     result += "<p><em>Note that in this combination mode, the optimizer and loss parameters for all ensemble models will be ignored.</em></p>"
-    result += get_hparams_for('FullyConnectedModel', 'combomodel_', 'large', defaults)
+    result += get_hparams_for('FullyConnectedModel', 'combomodel_', 'small', defaults)
     result += '</div></div>'
 
     return result
