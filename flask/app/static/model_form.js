@@ -434,6 +434,7 @@ function generate_tab_general(defaults, data) {
     result += '<div id="gen_combo_model_hparams_div">'
     result += "<hr />"
     result += "<h5>Combination Model Hyper Parameters</h5>"
+    result += "<p><em>Note that in this combination mode, the optimizer and loss parameters for all ensemble models will be ignored.</em></p>"
     result += get_hparams_for('FullyConnectedModel', 'combomodel_', 'large', defaults)
     result += '</div></div>'
 
