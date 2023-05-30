@@ -188,6 +188,16 @@ function generate_count_fields(count, field, prefix, size, defaults, toAppend = 
 function get_hparams_for(classifier, prefix, size, defaults) {
     result = ""
     pref = prefix+'hp_'
+    remfields = [
+        "hparam_optimizer", 
+        "hparam_optimizer_sgdvalue",
+        "hparam_loss", 
+        "hparam_learning_rate_start", 
+        "hparam_learning_rate_stop", 
+        "hparam_learning_rate_steps", 
+        "hparam_learning_rate_power", 
+        "hparam_use_trainable_embedding"
+    ]
     switch(classifier) {
         case "FullyConnectedModel":
             // hidden layers
@@ -199,7 +209,6 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += `</div>`
             
             // optimizer, loss, use-trainable-embedding
-            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss", "hparam_learning_rate", "hparam_use_trainable_embedding"]
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
@@ -214,7 +223,6 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += `</div>`
 
             // optimizer, loss, use-trainable-embedding
-            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss", "hparam_learning_rate", "hparam_use_trainable_embedding"]
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
@@ -230,14 +238,13 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += `</div>`
 
             // optimizer, loss, use-trainable-embedding
-            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue", "hparam_loss", "hparam_learning_rate", "hparam_use_trainable_embedding"]
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
             break;
         case "Bert":
             // optimizer, loss
-            remfields = ["hparam_optimizer", "hparam_optimizer_sgdvalue","hparam_loss", "hparam_learning_rate"]
+            remfields.pop()
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })

@@ -454,19 +454,67 @@
             }
         ]
     },
-    "hparam_learning_rate": {
-        "name": "learning_rate",
-        "label": "Learning Rate",
-        "tooltip": "Learning rate for the learning process.",
+    "hparam_learning_rate_start": {
+        "name": "learning_rate_start",
+        "label": "Learning Rate Start",
+        "tooltip": "Initial learning rate for the learning process.",
         "type": "number",
         "extra": [
             {
                 "type": "default",
-                "value": 0.01
+                "value": 0.005
             },
             {
                 "type": "attribute",
-                "value": "min=0.0 step=0.01"
+                "value": "min=0.0 step=0.0001"
+            }
+        ]
+    },
+    "hparam_learning_rate_stop": {
+        "name": "learning_rate_stop",
+        "label": "Learning Rate Stop",
+        "tooltip": "Learning rate after \"learning-rate-steps\" steps.",
+        "type": "number",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0.0005
+            },
+            {
+                "type": "attribute",
+                "value": "min=0.0 step=0.0001"
+            }
+        ]
+    },
+    "hparam_learning_rate_steps": {
+        "name": "learning_rate_steps",
+        "label": "Learning Rate Steps",
+        "tooltip": "Amount of decay steps required to go from start to stop LR.",
+        "type": "number",
+        "extra": [
+            {
+                "type": "default",
+                "value": 470
+            },
+            {
+                "type": "attribute",
+                "value": "min=1 step=1"
+            }
+        ]
+    },
+    "hparam_learning_rate_power": {
+        "name": "learning_rate_steps",
+        "label": "Learning Rate Steps",
+        "tooltip": "Degree of the polynomial to use for the learning rate.",
+        "type": "number",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1.0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0.0 step=0.0001"
             }
         ]
     },
