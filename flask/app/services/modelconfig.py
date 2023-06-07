@@ -66,10 +66,10 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
     if not is_prepro:
         if 'optimizer-sgdvalue' in params:
             if params['optimizer'] == 'sgd':
-                params['optimizer'] += f"_{params['optimizer-sgdvalue']}"
+                params['optimizer-params'] = {'sgd.0': {'momentum': float(params['optimizer-sgdvalue'])}}
             del params['optimizer-sgdvalue']
         elif params['optimizer'] == 'sgd':
-            params['optimizer'] += f"_0"
+            params['optimizer-params'] = {'sgd.0': {'momentum': 0}}
         
 
     if is_prepro and f"{prefix}embedding_id" in formdata:
@@ -87,6 +87,7 @@ def raw_to_config(formdata):
     # tab: general
     config['seed'] = retrieve_info(formdata, 'gen_seed', 'int', -1)
     config['output-mode'] = formdata.get('gen_output_mode', None)
+    config['tuner-combination-model-hyper-params'] = None
     model_mode = formdata.get('gen_model_mode', 'Single')
 
     if model_mode == 'Single':
@@ -271,9 +272,9 @@ def config_to_display(config, separate_attribs=False):
             key = classifier['classifier'] + ".0"
             classifier['hyper-params'] = config['hyper-params'][key]
             if not classifier['hyper-params']['optimizer'] == 'adam' and separate_attribs:
-                rate = float(classifier['hyper-params']['optimizer'].split('_')[1])
+                rate = classifier['hyper-params']['optimizer-params']['sgd.0']['momentum']
                 classifier['hyper-params']['optimizer'] = 'sgd'
-                classifier['hyper-params']['optimizer-sgdvalue'] = rate
+                classifier['hyper-params']['optimizer-params'] = {'sgd.0': {'momentum': rate}}
         if classifier['classifier'] == 'LinearConv1Model' and 'analyze-keywords' in config:
             general['analyze-keywords'] = config['analyze-keywords']
         
@@ -311,9 +312,9 @@ def config_to_display(config, separate_attribs=False):
             }
 
             if not this_obj['hyper-params']['optimizer'] == 'adam' and separate_attribs:
-                rate = float(this_obj['hyper-params']['optimizer'].split('_')[1])
+                rate = classifier['hyper-params']['optimizer-params']['sgd.0']['momentum']
                 this_obj['hyper-params']['optimizer'] = 'sgd'
-                this_obj['hyper-params']['optimizer-sgdvalue'] = rate
+                this_obj['hyper-params']['optimizer-params'] = {'sgd.0': {'momentum': rate}}
 
             class_count[this_classifier] += 1
             inmode_count[this_inmode] += 1
