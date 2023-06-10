@@ -3,7 +3,8 @@ from pymongo import MongoClient
 
 result = set()
 
-client = MongoClient('mongodb://192.168.178.248:27017')
+# client = MongoClient('mongodb://192.168.178.248:27017')
+client = MongoClient('mongodb://issues-db.nl:27017')
 
 with open('manual/data.json') as f:
     raw = json.load(f)

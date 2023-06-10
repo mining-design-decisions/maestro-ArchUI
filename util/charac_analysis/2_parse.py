@@ -5,6 +5,10 @@ from datetime import datetime
 client = MongoClient('mongodb://192.168.178.248:27017')
 datetime_format = "%Y-%m-%dT%H:%M:%S.%f%z" # https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
 
+# stopwords
+from nltk.corpus import stopwords
+stop = set(stopwords.words('english'))
+
 def parse():
     with open('data/project_domains.json') as f:
         proj_domains = json.load(f)
@@ -37,9 +41,7 @@ def parse():
                 desc = doc['fields']['description']
                 obj['description size'] = 0
                 if desc:
-                    obj['description size'] = len(doc['fields']['description'])
-                # comment size done elsewhere
-                # comment count done elsewhere
+                    obj['description size'] = len([i for i in desc.lower().split() if i not in stop])
                 # hierarchy done later, this is helper
                 hier = doc['fields']['subtasks']
                 if len(hier) > 0:
@@ -48,15 +50,26 @@ def parse():
                     in_hierarchy.extend(children)
                     hierarchy[obj['id']] = children
 
+                # duration calculation
                 created_dt = datetime.strptime(doc['fields']['created'], datetime_format)
                 if doc['fields']['resolutiondate'] is not None:
                     resolved_dt = datetime.strptime(doc['fields']['resolutiondate'], datetime_format)
                 else:
                     resolved_dt = datetime.strptime(doc['fields']['updated'], datetime_format)
 
+                obj['mongo_id'] = str(doc['_id'])
+
+                # comment characteristics
+                obj['comment count'] = len(doc['fields']['comments']) if 'comments' in doc['fields'] else 0
+                obj['comment avg size'] = 0
+                if obj['comment count'] > 0:
+                    total_words = 0
+                    for comment in doc['fields']['comments']:
+                        total_words += len([i for i in comment['body'].lower().split() if i not in stop])
+                    obj['comment avg size'] = float(total_words) / obj['comment count']
+                
                 obj['duration'] = (resolved_dt - created_dt).days
                 obj['link'] = doc['self']
-                obj['mongo_id'] = str(doc['_id'])
 
                 result[obj['id']] = obj
 
