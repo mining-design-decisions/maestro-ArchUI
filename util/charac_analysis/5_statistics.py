@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy
 import json
+import matplotlib.patches as mpatches
 
 def get_label_str(decisiontype, issue):
     types = {
@@ -35,9 +36,27 @@ def get_label_str(decisiontype, issue):
 def get_simple_bar_data(domain, characteristic, decisiontype):
     with open(f"manual/{domain}.json") as f:
         raw = json.load(f)
+
+    values_condensed = {
+        "resolution": {
+            "Fixed": ["fixed", "implemented", "done", "resolved", "delivered", "rxplained", "information provided"],
+            "Won't Do": ["none", "invalid", "won't fix", "not a problem", "won't do", "not a bug", "auto closed", "works for me", "workaround", "abandoned", "out of date", "obsolete", "rejected"],
+            "Duplicate": ["duplicate", "duplicate issue"],
+            "Deferred": ["later", "deferred"],
+            "Incomplete Data": ["cannot reproduce", "incomplete", "incomplete description"],
+            "In Progress": ["pending closed", "partially completed"]
+        }
+    }
+
     result = {}
     for issue in raw:
         char = str(raw[issue][characteristic])
+        if characteristic in values_condensed:
+            for new_val in values_condensed[characteristic]:
+                if char.lower() in values_condensed[characteristic][new_val]:
+                    char = new_val
+                    break
+        
         if not char in result:
             result[char] = {}
         label = get_label_str(decisiontype, raw[issue])
@@ -65,34 +84,52 @@ def get_simple_box_data(domain, characteristic, decisiontype):
 
 x_labels = ["Non-Arch.", 'Exis.', 'Exec.', 'Prop.']
 domains = ["Data storage and analysis", "Middleware"]
-dom_colors = ["blue", "red"]
+dom_colors = ["cyan", "red"]
+hatch_options = ['/', '+', 'x', 'O', '*', '\\', '.', '-', 'o', '|', '+O', '/O', 'oo', 'x*']
+xticks = []
+for j in range(0, len(x_labels)):
+    for i in range(0, len(domains)):
+        xticks.append((j+1) - 0.3 + i * (0.6/(len(domains)-1)))
+widths = 0.6 / len(domains) - 0.05
 
 def bar_charts():
-    # domains = ['data', 'SOA']
-    # characteristics = ['type', 'resolution', 'status', 'description size', 'duration', 'hierarchy', 'comment avg size', 'comment count']
-
     bar_characs = ['type', 'resolution', 'hierarchy', 'status']
-
+    
     for charac in bar_characs:
-        data = get_simple_bar_data('data', charac, 'manual')
-        for this_char in data:
-
-            labels = list(data[this_char].keys())
-            if len(labels) > 0:
-                fig, ax = plt.subplots()
+        fig, ax = plt.subplots()
+        # for dom in domains:
+        legend_hatches = {}
+        for k in range(0, len(domains)):
+            dom = domains[k]
+            bottoms = [0 for _ in x_labels]
+            data = get_simple_bar_data(dom, charac, 'manual')
+            # for this_char in data:
+            this_chars = list(data.keys())
+            for j in range(0, len(this_chars)):
+                this_char = this_chars[j]
+                labels = list(data[this_char].keys())
+                if len(labels) == 0:
+                    continue
+                
                 for i in range(0, len(x_labels)):
                     this_label = x_labels[i]
                     count = 0
                     if this_label in data[this_char]:
                         count = data[this_char][this_label]
-                    ax.bar(i, count, 0.7, label=this_label)
+                    ax.bar(x=(i+1) - 0.3 + k* (0.6 / (len(domains) - 1)), height=count, width=widths, label=this_label, bottom=bottoms[i], hatch=hatch_options[j], color=dom_colors[k], edgecolor="black")
+                    legend_hatches[this_char] = hatch_options[j]
+                    bottoms[i] += count
 
-                ax.set_ylabel('Issue Count')
-                ax.set_xlabel('Per manual decision type')
-                plt.xticks(range(0, len(x_labels)), x_labels)
-                plt.title(f"Manual Label Distribution for Issue Characteristic {charac}: {this_char}")
-                plt.savefig(f"figures/bar_{charac}_{this_char}.png")
-                plt.close()
+        #legend_hatches = [(x, legend_hatches[x]) for x in legend_hatches]
+        #labels, hatches = zip(*legend_hatches)
+        ax.legend(handles=[mpatches.Patch(facecolor="white", edgecolor='black', hatch=legend_hatches[this_char], label=this_char) for this_char in legend_hatches])
+
+        ax.set_ylabel('Issue Count')
+        ax.set_xlabel('Per manual decision type')
+        plt.xticks([x+1 for x in range(0, len(x_labels))], x_labels)
+        plt.title(f"Manual Label Distribution for Issue Characteristic {charac}")
+        plt.savefig(f"figures/bar_{charac}.png")
+        plt.close()
 
 def box_charts():
     box_characs = ["description size", "duration", "comment avg size", "comment count"]
@@ -111,14 +148,12 @@ def box_charts():
                     counts = data[x_labels[i]]
                 to_plot[dom].append(counts)
 
-        xticks = []
         to_plot_arranged = []
         for j in range(0, len(x_labels)):
             for i in range(0, len(domains)):
-                xticks.append((j+1) - 0.4 + i * (0.8/(len(domains)-1)))
                 to_plot_arranged.append(to_plot[domains[i]][j])
 
-        bp = ax.boxplot(to_plot_arranged, positions=xticks, widths=0.8 / len(domains) - 0.05)
+        bp = ax.boxplot(to_plot_arranged, positions=xticks, widths=widths)
 
         for j in range(0, len(x_labels)):
             for i in range(0, len(domains)):
@@ -137,7 +172,7 @@ def box_charts():
                     plt.setp(bp['fliers'][this_idx*2+1], color=dom_colors[i])
 
         plt.xticks([x+1 for x in range(0, len(x_labels))], x_labels)
-        ax.set_ylabel('Issue Count')
+        ax.set_ylabel(charac)
         ax.set_xlabel('Per manual decision type')
 
         colours = []
@@ -153,4 +188,5 @@ def box_charts():
         plt.savefig(f"figures/box_{charac}.png")
         plt.close()
 
-box_charts()
+bar_charts()
+# box_charts()
