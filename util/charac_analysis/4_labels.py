@@ -2,7 +2,7 @@ import json
 import os
 import requests
 
-files = [f for f in os.listdir('comments/')]
+files = [f for f in os.listdir('domains/')]
 
 db_url = "https://issues-db.nl:8000"
 
@@ -10,7 +10,7 @@ with open('data/models.json') as f:
     models = json.load(f)['models']
 
 for fn in files:
-    with open('comments/' + fn) as f:
+    with open('domains/' + fn) as f:
         raw = json.load(f)
 
     # manual labels

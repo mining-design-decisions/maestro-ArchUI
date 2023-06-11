@@ -64,6 +64,8 @@ def get_simple_box_data(domain, characteristic, decisiontype):
     return result
 
 x_labels = ["Non-Arch.", 'Exis.', 'Exec.', 'Prop.']
+domains = ["Data storage and analysis", "Middleware"]
+dom_colors = ["blue", "red"]
 
 def bar_charts():
     # domains = ['data', 'SOA']
@@ -96,22 +98,49 @@ def box_charts():
     box_characs = ["description size", "duration", "comment avg size", "comment count"]
 
     for charac in box_characs:
-        data = get_simple_box_data('data', charac, 'manual')
-
+        to_plot = {}
         fig, ax = plt.subplots()
-        to_plot = []
-        for i in range(0, len(x_labels)):
-            counts = []
-            if x_labels[i] in data:
-                counts = data[x_labels[i]]
-            to_plot.append(counts)
-        ax.boxplot(to_plot)
+        for dom in domains:
+            to_plot[dom] = []
+
+            data = get_simple_box_data(dom, charac, 'manual')
+
+            for i in range(0, len(x_labels)):
+                counts = []
+                if x_labels[i] in data:
+                    counts = data[x_labels[i]]
+                to_plot[dom].append(counts)
+
+        xticks = []
+        to_plot_arranged = []
+        for j in range(0, len(x_labels)):
+            for i in range(0, len(domains)):
+                xticks.append((j+1) - 0.4 + i * (0.8/(len(domains)-1)))
+                to_plot_arranged.append(to_plot[domains[i]][j])
+
+        bp = ax.boxplot(to_plot_arranged, positions=xticks, widths=0.8 / len(domains) - 0.05)
+
+        for j in range(0, len(x_labels)):
+            for i in range(0, len(domains)):
+                this_idx = j*len(domains) + i
+                plt.setp(bp['boxes'][this_idx], color=dom_colors[i])
+                plt.setp(bp['medians'][this_idx], color=dom_colors[i])
+                
+                plt.setp(bp['caps'][this_idx*2], color=dom_colors[i])
+                plt.setp(bp['caps'][this_idx*2+1], color=dom_colors[i])
+                
+                plt.setp(bp['whiskers'][this_idx*2], color=dom_colors[i])
+                plt.setp(bp['whiskers'][this_idx*2+1], color=dom_colors[i])
+                
+                if len(bp['fliers']) == 2*len(bp['boxes']):
+                    plt.setp(bp['fliers'][this_idx*2], color=dom_colors[i])
+                    plt.setp(bp['fliers'][this_idx*2+1], color=dom_colors[i])
+
         plt.xticks([x+1 for x in range(0, len(x_labels))], x_labels)
         ax.set_ylabel('Issue Count')
         ax.set_xlabel('Per manual decision type')
         plt.title(f"Manual Label Distribution for Issue Characteristic {charac}")
         plt.savefig(f"figures/box_{charac}.png")
         plt.close()
-    pass
 
 box_charts()
