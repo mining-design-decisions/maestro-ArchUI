@@ -139,6 +139,16 @@ def box_charts():
         plt.xticks([x+1 for x in range(0, len(x_labels))], x_labels)
         ax.set_ylabel('Issue Count')
         ax.set_xlabel('Per manual decision type')
+
+        colours = []
+        for i in range(0, len(domains)):
+            col, = plt.plot([1,1], dom_colors[i])
+            colours.append((col, domains[i]))
+        cols, doms = zip(*colours)
+        plt.legend(cols, doms)
+        for col in cols:
+            col.set_visible(False)
+
         plt.title(f"Manual Label Distribution for Issue Characteristic {charac}")
         plt.savefig(f"figures/box_{charac}.png")
         plt.close()
