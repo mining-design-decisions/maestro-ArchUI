@@ -45,7 +45,8 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
         "use-ontologies",
         "ontology-id",
         'min-count',
-        'min-doc-count'
+        'min-doc-count',
+        "algorithm"
     ]
     for i in range(1, 12):
         name_to_type[f"hidden-layer-{i}-size"] = 'int'
