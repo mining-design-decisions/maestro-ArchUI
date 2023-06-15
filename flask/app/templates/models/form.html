@@ -186,11 +186,52 @@ function nrHiddenLayersChanged(nr_element) {
 
     // generate
     div_el.innerHTML = generate_count_fields(amt, 'hparam_hidden_layer_size', prefix+'_', getSize(prefix), defaults)
-    div_el.innerHTML += generate_count_fields(amt, 'hparam_layer_activation', prefix+'_', getSize(prefix), defaults, 'activation')
+    // div_el.innerHTML += generate_count_fields(amt, 'hparam_layer_activation', prefix+'_', getSize(prefix), defaults, 'activation')
+    div_el.innerHTML += generate_count_fields(amt, 'hparam_layer_dropout', prefix+'_', getSize(prefix), defaults, 'dropout')
 }
 _all_hidden_layers = $("input[id$='_number_of_hidden_layers']")
 for (let i = 0; i < _all_hidden_layers.length; i++) {
     nrHiddenLayersChanged([_all_hidden_layers[i]])
+}
+
+function nrHiddenLayersRNNChanged(nr_element) {
+    amt = nr_element[0].value
+
+    // get prefix
+    prefix = nr_element[0].id.split('_')
+    prefix.pop() // layers
+    prefix.pop() // rnn
+    prefix.pop() // of
+    prefix.pop() // number
+    prefix = prefix.join('_')
+
+    // get div
+    div_id = prefix+"_hidden_layers_div"
+    div_el = document.getElementById(div_id)
+
+    // generate
+    div_el.innerHTML = generate_count_fields(amt, 'hparam_rnn_layer_type', prefix+'_', getSize(prefix), defaults, 'type')
+    div_el.innerHTML += generate_count_fields(amt, 'hparam_rnn_layer_size', prefix+'_', getSize(prefix), defaults, 'size')
+    div_el.innerHTML += generate_count_fields(amt, 'hparam_rnn_layer_dropout', prefix+'_', getSize(prefix), defaults, 'dropout')
+    div_el.innerHTML += generate_count_fields(amt, 'hparam_rnn_layer_recurrent-dropout', prefix+'_', getSize(prefix), defaults, 'recurrent-dropout')
+}
+function nrDenseLayersChanged(nr_element) {
+    amt = nr_element[0].value
+
+    // get prefix
+    prefix = nr_element[0].id.split('_')
+    prefix.pop() // layers
+    prefix.pop() // dense
+    prefix.pop() // of
+    prefix.pop() // number
+    prefix = prefix.join('_')
+
+    // get div
+    div_id = prefix+"_dense_layers_div"
+    div_el = document.getElementById(div_id)
+
+    // generate
+    div_el.innerHTML = generate_count_fields(amt, 'hparam_dense_layer_size', prefix+'_', getSize(prefix), defaults, 'size')
 }
 
 function optimizerChanged(optimizer_element) {
@@ -331,13 +372,17 @@ function classifierChanged(classifier_element) {
     optimizerChanged([document.getElementById(`${prefix}_hp_optimizer`)])
 
     // update nr of hidden layers if appropriate
-    hidden_layer_class = ['FullyConnectedModel', 'LinearRNNModel']
-    if (hidden_layer_class.includes(class_selected)) {
-        nrHiddenLayersChanged([document.getElementById(`${this_prefix}_hp_number_of_hidden_layers`)])
-    }
-    else if (class_selected == 'LinearConv1Model') {
-        nrOfConvChanged([document.getElementById(`${this_prefix}_hp_number_of_convolutions`)])
-    }   
+    switch(class_selected) {
+        case 'FullyConnectedModel':
+            nrHiddenLayersChanged([document.getElementById(`${this_prefix}_hp_number_of_hidden_layers`)])
+            break
+        case 'LinearConv1Model':
+            nrOfConvChanged([document.getElementById(`${this_prefix}_hp_number_of_convolutions`)])
+            break
+        case 'LinearRNNModel':
+            nrHiddenLayersRNNChanged([document.getElementById(`${this_prefix}_hp_number_of_rnn_layers`)])
+            nrDenseLayersChanged([document.getElementById(`${this_prefix}_hp_number_of_dense_layers`)])
+    } 
 }
 _all_classifiers = $("select[id$='_classifier']")
 for (let i = 0; i < _all_classifiers.length; i++) {

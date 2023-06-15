@@ -56,6 +56,7 @@ def login(un: str, pw: str):
     if x.status_code == 200:
         session['un'] = un
         session['token'] = x.json()['access_token']
+        print(session['token'])
         return True
     else:
         return False

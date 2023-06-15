@@ -153,6 +153,9 @@ function render_field(field_config, prefix="", size="small", defaults={}) {
         case "number":
             field_html = render_field_number(css_label, css_input, tooltip, field_name, defaults, label, extra_attr, field_default)
             break
+        default:
+            console.log("Unknown type in field config")
+            console.log(field_config)
     }
 
     field_html = `<div class="form-group row">${field_html}</div>`
@@ -201,12 +204,25 @@ function get_hparams_for(classifier, prefix, size, defaults) {
     switch(classifier) {
         case "FullyConnectedModel":
             // hidden layers
+            result += "<h5>Hidden Layers</h5>"
             result += render_field(data['hparam_number_of_hidden_layers'], pref, size, defaults)
             result += `<div id="${pref}hidden_layers_div">`
             // todo should probably be pulled from somewhere
             result += generate_count_fields(1, 'hparam_hidden_layer_size', pref, size, defaults)
-            result += generate_count_fields(1, 'hparam_layer_activation', pref, size, defaults, 'activation')
+            // result += generate_count_fields(1, 'hparam_layer_activation', pref, size, defaults, 'activation')
+            result += generate_count_fields(1, 'hparam_layer_dropout', pref, size, defaults, 'dropout')
             result += `</div>`
+
+            result += "<hr />"
+
+            result += render_field(data['hparam_layer_activation'], pref, size, defaults)
+            result += render_field(data['hparam_layer_activation_alpha'], pref, size, defaults)
+            result += render_field(data['hparam_layer_kernel_l1'], pref, size, defaults)
+            result += render_field(data['hparam_layer_kernel_l2'], pref, size, defaults)
+            result += render_field(data['hparam_layer_bias_l1'], pref, size, defaults)
+            result += render_field(data['hparam_layer_bias_l2'], pref, size, defaults)
+            result += render_field(data['hparam_layer_activity_l1'], pref, size, defaults)
+            result += render_field(data['hparam_layer_activity_l2'], pref, size, defaults)
             
             // optimizer, loss, use-trainable-embedding
             remfields.forEach(field => {
@@ -214,37 +230,85 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             })
             break;
         case "LinearConv1Model":
-            fields = ["hparam_fully_connected_layer_size", "hparam_fully_connected_layer_activation", "hparam_filters", "hparam_number_of_convolutions"]
-            fields.forEach(field => {
-                result += render_field(data[field], pref, size, defaults)
-            })
+            result += render_field(data['hparam_fully_connected_layer_size'], pref, size, defaults)
+            result += render_field(data['hparam_fully_connected_layer_activation'], pref, size, defaults)
+            result += render_field(data['hparam_filters'], pref, size, defaults)
+
+            // convolutions
+            result += "<hr /><h5>Convolutions</h5>"
+            result += render_field(data['hparam_number_of_convolutions'], pref, size, defaults)
             result += `<div id="${pref}convolutions_div">`
             result += generate_count_fields(1, 'hparam_kernel_size', pref, size, defaults)
             result += `</div>`
 
+            // other
+            result += "<hr />"
+            result += render_field(data['hparam_fnn_layer_activation_alpha'], pref, size, defaults)
+
+            result += render_field(data['hparam_layer_activation'], pref, size, defaults)
+            result += render_field(data['hparam_layer_activation_alpha'], pref, size, defaults)
+            result += render_field(data['hparam_layer_kernel_l1'], pref, size, defaults)
+            result += render_field(data['hparam_layer_kernel_l2'], pref, size, defaults)
+            result += render_field(data['hparam_layer_bias_l1'], pref, size, defaults)
+            result += render_field(data['hparam_layer_bias_l2'], pref, size, defaults)
+            result += render_field(data['hparam_layer_activity_l1'], pref, size, defaults)
+            result += render_field(data['hparam_layer_activity_l2'], pref, size, defaults)
+
             // optimizer, loss, use-trainable-embedding
+            result += "<hr />"
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
             break;
         case "LinearRNNModel":
-            fields = ["hparam_bidirectional_layer_size", "hparam_number_of_hidden_layers_rnn"]
+            // result += render_field(data['hparam_bidirectional_layer_size'], pref, size, defaults)
+
+            // hidden layers
+            result += "<h5>Hidden Layers</h5>"
+            result += render_field(data['hparam_number_of_hidden_layers_rnn'], pref, size, defaults)
+            result += `<div id="${pref}hidden_layers_div">`
+            result += generate_count_fields(1, 'hparam_rnn_layer_type', pref, size, defaults, 'type')
+            result += generate_count_fields(1, 'hparam_rnn_layer_size', pref, size, defaults, 'size')
+            result += generate_count_fields(1, 'hparam_rnn_layer_dropout', pref, size, defaults, 'dropout')
+            result += generate_count_fields(1, 'hparam_rnn_layer_recurrent-dropout', pref, size, defaults, 'recurrent-dropout')
+            result += `</div>`
+
+            // dense layers
+            result += "<hr /><h5>Dense Layers</h5>"
+            result += render_field(data['hparam_number_of_dense_layers'], pref, size, defaults)
+            result += `<div id="${pref}dense_layers_div">`
+            result += generate_count_fields(1, 'hparam_dense_layer_size', pref, size, defaults, 'size')
+            result += `</div>`
+
+            // all the others
+            result += "<hr /><h5>Other Parameters</h5>"
+            fields = [
+                "hparam_rnn_layer_activation",
+                "hparam_rnn_layer_recurrent_activation",
+                "hparam_rnn_layer_activation_alpha",
+                "hparam_rnn_layer_recurrent_activation_alpha",
+
+                "hparam_rnn_layer_kernel_l1",
+                "hparam_rnn_layer_kernel_l2",
+                "hparam_rnn_layer_recurrent_l1",
+                "hparam_rnn_layer_recurrent_l2",
+                "hparam_rnn_layer_bias_l1",
+                "hparam_rnn_layer_bias_l2",
+                "hparam_rnn_layer_activity_l1",
+                "hparam_rnn_layer_activity_l2",
+            ]
             fields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
-            result += `<div id="${pref}hidden_layers_div">`
-            result += generate_count_fields(1, 'hparam_hidden_layer_size', pref, size, defaults)
-            result += generate_count_fields(1, 'hparam_layer_activation', pref, size, defaults, 'activation')
-            result += `</div>`
 
             // optimizer, loss, use-trainable-embedding
+            result += "<hr />"
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
             break;
         case "Bert":
-            // optimizer, loss
-            remfields.pop()
+            result += render_field(data['hparam_number_of_frozen_layers'], pref, size, defaults)
             remfields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })

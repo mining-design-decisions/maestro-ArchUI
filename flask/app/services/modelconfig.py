@@ -39,7 +39,14 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
         "use-trainable-embedding": "bool",
         "fully-connected-layer-size": "int",
         "filters": "int",
-        "bidirectional-layer-size": "int"
+        "bidirectional-layer-size": "int",
+        "layer-activity-l1": "float",
+        "layer-activity-l2": "float",
+        "layer-bias-l1": "float",
+        "layer-bias-l2": "float",
+        "layer-kernel-l1": "float",
+        "layer-kernel-l2": "float",
+        "layer-activation-alpha": "float"
     }
     do_not_propagate = [
         "use-ontologies",
@@ -50,7 +57,8 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
     ]
     for i in range(1, 12):
         name_to_type[f"hidden-layer-{i}-size"] = 'int'
-        name_to_type[f"kernel-{i}-size"] = 'int'
+        name_to_type[f"layer-{i}-dropout"] = 'float'
+    # print(name_to_type)
     params = {}
     for p in get_by_prefix(formdata, prefix):
         if formdata.get(p) and len(formdata.get(p).strip()) > 0:

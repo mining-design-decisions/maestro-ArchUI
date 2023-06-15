@@ -384,9 +384,9 @@
     },
     "hparam_layer_activation": {
         "name": "layer_activation",
-        "label": "Activation to use in Hidden Layer",
+        "label": "Hidden Layer Activation",
         "type": "select",
-        "tooltip": "Activation to use in the i-th hidden layer",
+        "tooltip": "Activation to use in the hidden layers",
         "options": [
             "linear",
             "relu",
@@ -398,15 +398,160 @@
             "softsign",
             "selu",
             "exp",
-            "prelu"
+            "prelu",
+            "swish"
         ],
         "extra": [
             {
                 "type": "default",
                 "value": "linear"
+            }
+        ]
+    },
+    "hparam_layer_dropout": {
+        "name": "layer_dropout",
+        "label": "Dropout for Hidden Layer",
+        "type": "number",
+        "tooltip": "Dropout for the i-th layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
             },
             {
                 "type": "indent"
+            }
+        ]
+    },
+    "hparam_layer_activation_alpha": {
+        "name": "layer_activation_alpha",
+        "label": "Hidden Layer Activation Alpha",
+        "type": "number",
+        "tooltip": "Alpha value for the elu activation",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "step=0.001"
+            }
+        ]
+    },
+    "hparam_fnn_layer_activation_alpha": {
+        "name": "fnn_layer_activation_alpha",
+        "label": "Fully Connected Layer Activation Alpha",
+        "type": "number",
+        "tooltip": "Alpha value for the elu activation of the fnn layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "step=0.001"
+            }
+        ]
+    },
+    "hparam_layer_kernel_l1": {
+        "name": "layer_kernel_l1",
+        "label": "L1 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L1 Kernel Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_layer_kernel_l2": {
+        "name": "layer_kernel_l2",
+        "label": "L2 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L2 Kernel Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_layer_bias_l1": {
+        "name": "layer_bias_l1",
+        "label": "L1 Bias Regularizer",
+        "type": "number",
+        "tooltip": "L1 Bias Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_layer_bias_l2": {
+        "name": "layer_bias_l2",
+        "label": "L2 Bias Regularizer",
+        "type": "number",
+        "tooltip": "L2 Bias Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_layer_activity_l1": {
+        "name": "layer_activity_l1",
+        "label": "L1 Activity Regularizer",
+        "type": "number",
+        "tooltip": "L1 Activity Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_layer_activity_l2": {
+        "name": "layer_activity_l2",
+        "label": "L2 Activity Regularizer",
+        "type": "number",
+        "tooltip": "L2 Activity Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
             }
         ]
     },
@@ -540,7 +685,7 @@
         "name": "fully_connected_layer_size",
         "label": "Size of Fully Connected Layer",
         "type": "number",
-        "tooltip": "[min, max] = [0, 16384] -- default = 32",
+        "tooltip": "Size of the fully connected layer. Set to 0 to disable.",
         "extra": [
             {
                 "type": "default",
@@ -628,25 +773,9 @@
             }
         ]
     },
-    "hparam_bidirectional_layer_size": {
-        "name": "bidirectional_layer_size",
-        "label": "Size of the Bidirectional Layer",
-        "type": "number",
-        "tooltip": "Size of the bidirectional layer.",
-        "extra": [
-            {
-                "type": "default",
-                "value": 64
-            },
-            {
-                "type": "attribute",
-                "value": "min=1 max=128"
-            }
-        ]
-    },
     "hparam_number_of_hidden_layers_rnn": {
-        "name": "number_of_hidden_layers",
-        "label": "Number of Hidden Layers",
+        "name": "number_of_rnn_layers",
+        "label": "Number of RNN Layers",
         "type": "number",
         "tooltip": "Number of hidden layers in the network.",
         "extra": [
@@ -656,7 +785,347 @@
             },
             {
                 "type": "attribute",
-                "value": "onchange=\"nrHiddenLayersChanged($(this))\" min=0 max=5"
+                "value": "onchange=\"nrHiddenLayersRNNChanged($(this))\" min=0 max=10"
+            }
+        ]
+    },
+    "hparam_rnn_layer_type": {
+        "name": "rnn_layer_type",
+        "label": "Type of RNN Layer",
+        "type": "select",
+        "tooltip": "Type of RNN Layer",
+        "options": [
+            "SimpleRNN",
+            "GRU",
+            "LSTM"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "LSTM"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_rnn_layer_size": {
+        "name": "rnn_layer_size",
+        "label": "Size of RNN Layer ",
+        "type": "number",
+        "tooltip": "Number of units in the i-th RNN layer",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=2 max=4096"
+            },
+            {
+                "type": "default",
+                "value": 32
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_rnn_layer_activation": {
+        "name": "rnn_layer_activation",
+        "label": "RNN Layer Activation",
+        "type": "select",
+        "tooltip": "Activation to use in the rnn layers",
+        "options": [
+            "linear",
+            "relu",
+            "elu",
+            "leakyrelu",
+            "sigmoid",
+            "tanh",
+            "softmax",
+            "softsign",
+            "selu",
+            "exp",
+            "prelu",
+            "swish"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "tanh"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent_activation": {
+        "name": "rnn_layer_recurrent_activation",
+        "label": "RNN Layer Recurrent Activation",
+        "type": "select",
+        "tooltip": "Recurrent activation to use in the rnn layers",
+        "options": [
+            "linear",
+            "relu",
+            "elu",
+            "leakyrelu",
+            "sigmoid",
+            "tanh",
+            "softmax",
+            "softsign",
+            "selu",
+            "exp",
+            "prelu",
+            "swish"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "sigmoid"
+            }
+        ]
+    },
+    "hparam_rnn_layer_dropout": {
+        "name": "rnn_layer_dropout",
+        "label": "Dropout for RNN Layer",
+        "type": "number",
+        "tooltip": "Dropout for the i-th rnn layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent-dropout": {
+        "name": "rnn_layer_recurrent-dropout",
+        "label": "Recurrent Dropout for RNN Layer",
+        "type": "number",
+        "tooltip": "Recurrent Dropout for the i-th rnn layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_number_of_dense_layers": {
+        "name": "number_of_dense_layers",
+        "label": "Number of Dense Layers",
+        "type": "number",
+        "tooltip": "Number of dense layers to use",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=0 max=10 onchange=\"nrDenseLayersChanged($(this))\""
+            },
+            {
+                "type": "default",
+                "value": 0
+            }
+        ]
+    },
+    "hparam_dense_layer_size": {
+        "name": "dense_layer_size",
+        "label": "Size of Dense Layer ",
+        "type": "number",
+        "tooltip": "Number of units in the i-th dense layer",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=2 max=16384"
+            },
+            {
+                "type": "default",
+                "value": 32
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_rnn_layer_activation_alpha": {
+        "name": "rnn_layer_activation_alpha",
+        "label": "Hidden Layer Activation Alpha",
+        "type": "number",
+        "tooltip": "Alpha value for the elu activation of the i-th layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent_activation_alpha": {
+        "name": "rnn_layer_recurrent_activation_alpha",
+        "label": "Hidden Layer Recurrent Activation Alpha",
+        "type": "number",
+        "tooltip": "Alpha value for the elu activation of the i-th layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_kernel_l1": {
+        "name": "rnn_layer_kernel_l1",
+        "label": "L1 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L1 Kernel Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_kernel_l2": {
+        "name": "rnn_layer_kernel_l2",
+        "label": "L2 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L2 Kernel Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent_l1": {
+        "name": "rnn_layer_recurrent_l1",
+        "label": "L1 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L1 Recurrent Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent_l2": {
+        "name": "rnn_layer_recurrent_l2",
+        "label": "L2 Recurrent Regularizer",
+        "type": "number",
+        "tooltip": "L2 Recurrent Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_bias_l1": {
+        "name": "rnn_layer_bias_l1",
+        "label": "L1 Bias Regularizer",
+        "type": "number",
+        "tooltip": "L1 Bias Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_bias_l2": {
+        "name": "rnn_layer_bias_l2",
+        "label": "L2 Bias Regularizer",
+        "type": "number",
+        "tooltip": "L2 Bias Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_activity_l1": {
+        "name": "rnn_layer_activity_l1",
+        "label": "L1 Activity Regularizer",
+        "type": "number",
+        "tooltip": "L1 Activity Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_rnn_layer_activity_l2": {
+        "name": "rnn_layer_activity_l2",
+        "label": "L2 Activity Regularizer",
+        "type": "number",
+        "tooltip": "L2 Activity Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=0.001"
+            }
+        ]
+    },
+    "hparam_number_of_frozen_layers": {
+        "name": "number_of_frozen_layers",
+        "label": "Number of Layers to Freeze",
+        "type": "number",
+        "tooltip": "Number of layers to freeze",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=0 max=12"
+            },
+            {
+                "type": "default",
+                "value": 10
             }
         ]
     },
