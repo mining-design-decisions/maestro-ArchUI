@@ -416,7 +416,7 @@
         "extra": [
             {
                 "type": "default",
-                "value": "0.0"
+                "value": 0
             },
             {
                 "type": "attribute",
@@ -435,7 +435,7 @@
         "extra": [
             {
                 "type": "default",
-                "value": "0.0"
+                "value": 0
             },
             {
                 "type": "attribute",
@@ -451,7 +451,7 @@
         "extra": [
             {
                 "type": "default",
-                "value": "0.0"
+                "value": 0
             },
             {
                 "type": "attribute",
@@ -467,7 +467,7 @@
         "extra": [
             {
                 "type": "default",
-                "value": "0.0"
+                "value": 0
             },
             {
                 "type": "attribute",

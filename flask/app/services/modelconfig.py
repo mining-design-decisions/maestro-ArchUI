@@ -39,14 +39,27 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
         "use-trainable-embedding": "bool",
         "fully-connected-layer-size": "int",
         "filters": "int",
-        "bidirectional-layer-size": "int",
         "layer-activity-l1": "float",
         "layer-activity-l2": "float",
         "layer-bias-l1": "float",
         "layer-bias-l2": "float",
         "layer-kernel-l1": "float",
         "layer-kernel-l2": "float",
-        "layer-activation-alpha": "float"
+        "layer-activation-alpha": "float",
+        "fnn-layer-activation-alpha": "float",
+        "number-of-rnn-layers": "int",
+        "number-of-dense-layers": "int",
+        "rnn-layer-activation-alpha": "float",
+        "rnn-layer-recurrent-activation-alpha": "float",
+        "rnn-layer-activity-l1": "float",
+        "rnn-layer-activity-l2": "float",
+        "rnn-layer-bias-l1": "float",
+        "rnn-layer-bias-l2": "float",
+        "rnn-layer-kernel-l1": "float",
+        "rnn-layer-kernel-l2": "float",
+        "rnn-layer-recurrent-l1": "float",
+        "rnn-layer-recurrent-l2": "float",
+        "number-of-frozen-layers": "int"
     }
     do_not_propagate = [
         "use-ontologies",
@@ -58,7 +71,11 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
     for i in range(1, 12):
         name_to_type[f"hidden-layer-{i}-size"] = 'int'
         name_to_type[f"layer-{i}-dropout"] = 'float'
-    # print(name_to_type)
+        name_to_type[f"kernel-{i}-size"] = 'int'
+        name_to_type[f"rnn-layer-{i}-size"] = 'int'
+        name_to_type[f"rnn-layer-{i}-dropout"] = 'float'
+        name_to_type[f"rnn-layer-{i}-recurrent-dropout"] = 'float'
+        name_to_type[f"dense-layer-{i}-size"] = 'int'
     params = {}
     for p in get_by_prefix(formdata, prefix):
         if formdata.get(p) and len(formdata.get(p).strip()) > 0:
