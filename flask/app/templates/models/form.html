@@ -350,7 +350,7 @@ function classifierChanged(classifier_element) {
     if (div_element) {
         // change it
         inmode_per_class = {{inmode_per_classifier|tojson|safe}}
-        div_element.innerHTML = generate_select_options('prepro_inmode', inmode_per_class[class_selected], defaults)
+        div_element.innerHTML = generate_select_options(prefix+'_inmode', inmode_per_class[class_selected], defaults)
         // force changes
         inmodeChanged([div_element])
     }
