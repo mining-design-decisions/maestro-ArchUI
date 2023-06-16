@@ -59,7 +59,13 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
         "rnn-layer-kernel-l2": "float",
         "rnn-layer-recurrent-l1": "float",
         "rnn-layer-recurrent-l2": "float",
-        "number-of-frozen-layers": "int"
+        "number-of-frozen-layers": "int",
+
+        "opt-beta-1": "float",
+        "opt-beta-2": "float",
+        "opt-epsilon": "float",
+        "opt-momentum": "float",
+        "opt-use-nesterov": "bool"
     }
     do_not_propagate = [
         "use-ontologies",
@@ -90,13 +96,32 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
             params[argName] = retrieve_info(formdata, p, thisType, None)
 
     if not is_prepro:
+        opt = params['optimizer']
+        opt_params = {}
+        all_fields = [x for x in params if x.startswith('opt-')]
+        fields_per_optimizer = {
+            "adam": ["beta-1", "beta-2", "epsilon"],
+            "nadam": ["beta-1", "beta-2", "epsilon"],
+            "sgd": ["momentum", "use-nesterov"]
+        }
+        # grab the relevant optimizer params
+        for field in fields_per_optimizer[opt]:
+            opt_params[field] = params["opt-"+field]
+        
+        params['optimizer-params'] = {
+            opt+'.0': opt_params
+        }
+        # cleanup
+        for field in all_fields:
+            del params[field]
+        """
         if 'optimizer-sgdvalue' in params:
             if params['optimizer'] == 'sgd':
                 params['optimizer-params'] = {'sgd.0': {'momentum': float(params['optimizer-sgdvalue'])}}
             del params['optimizer-sgdvalue']
         elif params['optimizer'] == 'sgd':
             params['optimizer-params'] = {'sgd.0': {'momentum': 0}}
-        
+        """
 
     if is_prepro and f"{prefix}embedding_id" in formdata:
         e = dbapi.get_embedding(formdata.get(f"{prefix}embedding_id"))

@@ -555,47 +555,6 @@
             }
         ]
     },
-    "hparam_optimizer": {
-        "name": "optimizer",
-        "label": "Optimizer",
-        "type": "select",
-        "tooltip": "Optimizer for the classifier. Default: adam.",
-        "options": [
-            "adam", "sgd"
-        ],
-        "extra": [
-            {
-                "type": "default",
-                "value": "adam"
-            },
-            {
-                "type": "attribute",
-                "value": "onchange=\"optimizerChanged($(this))\""
-            }
-        ]
-    },
-    "hparam_optimizer_sgdvalue": {
-        "name": "optimizer_sgdvalue",
-        "label": "Optimizer SGD Momentum",
-        "type": "number",
-        "tooltip": "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent. See https://keras.io/api/optimizers/sgd/ for more information.",
-        "extra": [
-            {
-                "type": "default",
-                "value": "0.0"
-            },
-            {
-                "type": "attribute",
-                "value": "step=any"
-            },
-            {
-                "type": "indent"
-            },
-            {
-                "type": "in_div"
-            }
-        ]
-    },
     "hparam_loss": {
         "name": "loss",
         "label": "Loss",
@@ -1128,6 +1087,108 @@
                 "value": 10
             }
         ]
+    },
+
+    "hparam_optimizer": {
+        "name": "optimizer",
+        "label": "Optimizer",
+        "type": "select",
+        "tooltip": "Optimizer for the classifier. Default: adam.",
+        "options": [
+            "adam", "nadam", "sgd"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "adam"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"optimizerChanged($(this))\""
+            }
+        ]
+    },
+    "optimizer_beta_1": {
+        "name": "beta_1",
+        "label": "Beta-1",
+        "type": "number",
+        "tooltip": "",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0 max=1"
+            },
+            {
+                "type": "default",
+                "value": "0.9"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "optimizer_beta_2": {
+        "name": "beta_2",
+        "label": "Beta-2",
+        "type": "number",
+        "tooltip": "",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0 max=1"
+            },
+            {
+                "type": "default",
+                "value": "0.999"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "optimizer_epsilon": {
+        "name": "epsilon",
+        "label": "Epsilon",
+        "type": "number",
+        "tooltip": "",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0"
+            },
+            {
+                "type": "default",
+                "value": "0.0000001"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "optimizer_momentum": {
+        "name": "momentum",
+        "label": "Momentum",
+        "type": "number",
+        "tooltip": "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent. See https://keras.io/api/optimizers/sgd/ for more information.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0"
+            },
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "optimizer_use_nesterov": {
+        "name": "use_nesterov",
+        "label": "Use Nesterov",
+        "type": "bool",
+        "tooltip": ""
     },
 
     "prepro_inmode": {

@@ -235,24 +235,19 @@ function nrDenseLayersChanged(nr_element) {
 }
 
 function optimizerChanged(optimizer_element) {
+    optim = optimizer_element[0].value
+
     // get prefix
     prefix = optimizer_element[0].id.split('_')
     prefix.pop()
     prefix = prefix.join('_')
 
     // get div
-    div_id = prefix + "_optimizer_sgdvalue_div"
+    div_id = prefix + "_optimizer_params_div"
     div_el = document.getElementById(div_id)
 
     // set
-    switch (optimizer_element[0].value) {
-        case "adam":
-            div_el.setAttribute('class', 'd-none')
-            break;
-        case "sgd":
-            div_el.setAttribute('class', '')
-            break;
-    }
+    div_el.innerHTML = get_optimizer_params_for(optim, prefix+'_', getSize(prefix), defaults)
 }
 _all_optimizers = $("select[id$='_optimizer']")
 for (let i = 0; i < _all_optimizers.length; i++) {

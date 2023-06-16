@@ -192,8 +192,6 @@ function get_hparams_for(classifier, prefix, size, defaults) {
     result = ""
     pref = prefix+'hp_'
     remfields = [
-        "hparam_optimizer", 
-        "hparam_optimizer_sgdvalue",
         "hparam_loss", 
         "hparam_learning_rate_start", 
         "hparam_learning_rate_stop", 
@@ -223,11 +221,6 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += render_field(data['hparam_layer_bias_l2'], pref, size, defaults)
             result += render_field(data['hparam_layer_activity_l1'], pref, size, defaults)
             result += render_field(data['hparam_layer_activity_l2'], pref, size, defaults)
-            
-            // optimizer, loss, use-trainable-embedding
-            remfields.forEach(field => {
-                result += render_field(data[field], pref, size, defaults)
-            })
             break;
         case "LinearConv1Model":
             result += render_field(data['hparam_fully_connected_layer_size'], pref, size, defaults)
@@ -253,16 +246,8 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             result += render_field(data['hparam_layer_bias_l2'], pref, size, defaults)
             result += render_field(data['hparam_layer_activity_l1'], pref, size, defaults)
             result += render_field(data['hparam_layer_activity_l2'], pref, size, defaults)
-
-            // optimizer, loss, use-trainable-embedding
-            result += "<hr />"
-            remfields.forEach(field => {
-                result += render_field(data[field], pref, size, defaults)
-            })
             break;
         case "LinearRNNModel":
-            // result += render_field(data['hparam_bidirectional_layer_size'], pref, size, defaults)
-
             // hidden layers
             result += "<h5>Hidden Layers</h5>"
             result += render_field(data['hparam_number_of_hidden_layers_rnn'], pref, size, defaults)
@@ -300,20 +285,40 @@ function get_hparams_for(classifier, prefix, size, defaults) {
             fields.forEach(field => {
                 result += render_field(data[field], pref, size, defaults)
             })
-
-            // optimizer, loss, use-trainable-embedding
-            result += "<hr />"
-            remfields.forEach(field => {
-                result += render_field(data[field], pref, size, defaults)
-            })
             break;
         case "Bert":
             result += render_field(data['hparam_number_of_frozen_layers'], pref, size, defaults)
-            remfields.forEach(field => {
-                result += render_field(data[field], pref, size, defaults)
-            })
             break;
     }
+    // optimizer
+    result += "<hr /><h5>Optimizer</h5>"
+    result += render_field(data["hparam_optimizer"], pref, size, defaults)
+    result += `<div id="${pref}optimizer_params_div"></div>` // gets generated in-place
+
+    // loss, learning rate, use-trainable-embedding
+    result += "<hr />"
+    remfields.forEach(field => {
+        result += render_field(data[field], pref, size, defaults)
+    })
+
+    return result
+}
+
+function get_optimizer_params_for(optimizer, prefix, size, defaults) {
+    result = ""
+
+    fields_per_optimizer = {
+        "adam": ["beta_1", "beta_2", "epsilon"],
+        "nadam": ["beta_1", "beta_2", "epsilon"],
+        "sgd": ["momentum", "use_nesterov"]
+    }
+
+    pref = prefix+"opt_"
+
+    fields_per_optimizer[optimizer].forEach(field => {
+        result += render_field(data["optimizer_"+field], pref, size, defaults)
+    })
+
     return result
 }
 
