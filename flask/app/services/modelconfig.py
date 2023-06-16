@@ -322,10 +322,7 @@ def config_to_display(config, separate_attribs=False):
         if config['hyper-params']:
             key = classifier['classifier'] + ".0"
             classifier['hyper-params'] = config['hyper-params'][key]
-            if not classifier['hyper-params']['optimizer'] == 'adam' and separate_attribs:
-                rate = classifier['hyper-params']['optimizer-params']['sgd.0']['momentum']
-                classifier['hyper-params']['optimizer'] = 'sgd'
-                classifier['hyper-params']['optimizer-params'] = {'sgd.0': {'momentum': rate}}
+            
         if classifier['classifier'] == 'LinearConv1Model' and 'analyze-keywords' in config:
             general['analyze-keywords'] = config['analyze-keywords']
         
@@ -362,15 +359,9 @@ def config_to_display(config, separate_attribs=False):
                 'hyper-params': config['hyper-params'][f"{this_classifier}.{class_count[this_classifier]}"]
             }
 
-            if not this_obj['hyper-params']['optimizer'] == 'adam' and separate_attribs:
-                rate = classifier['hyper-params']['optimizer-params']['sgd.0']['momentum']
-                this_obj['hyper-params']['optimizer'] = 'sgd'
-                this_obj['hyper-params']['optimizer-params'] = {'sgd.0': {'momentum': rate}}
-
             class_count[this_classifier] += 1
             inmode_count[this_inmode] += 1
             result['ensemble classifiers'].append(this_obj)
-
 
         # stacker?
         if 'ensemble-strategy' in config and config['ensemble-strategy'] == "stacking":
@@ -412,7 +403,10 @@ def config_to_form(config):
                 result['single_classifier'] = display[tab]['classifier']
                 for hp in display[tab]['hyper-params']:
                     result[f"single_hp_{hp.replace('-','_')}"] = display[tab]['hyper-params'][hp]
-                        
+                for optimizer in result['single_hp_optimizer_params']:
+                    for field in result['single_hp_optimizer_params'][optimizer]:
+                        result[f"single_hp_opt_{field.replace('-', '_')}"] = result['single_hp_optimizer_params'][optimizer][field]
+
             case "ensemble classifiers":
                 for i in range(len(display[tab])):
                     obj = display[tab][i]
@@ -420,6 +414,9 @@ def config_to_form(config):
                     result[f"ens_{i}_inmode"] = obj['inmode']
                     for hp in obj['hyper-params']:
                         result[f"ens_{i}_hp_{hp}"] = obj["hyper-params"][hp]
+                        for optimizer in result[f"ens_{i}_hp_optimizer_params"]:
+                            for field in result[f"ens_{i}_hp_optimizer_params"][optimizer]:
+                                result[f"ens_{i}_hp_opt_{field.replace('-', '_')}"] = result[f"ens_{i}_hp_optimizer_params"][optimizer][field]
                     for p in obj["params"]:
                         result[f"ens_{i}_p_{p}"] = obj["params"][p]
                         
@@ -428,6 +425,9 @@ def config_to_form(config):
                 for hp in display[tab]['hyper-params']:
                     if display[tab]['hyper-params'][hp]:
                         result[f'stacker_hp_{hp}'] = display[tab]['hyper-params'][hp]
+                    for optimizer in result[f"stacker_hp_optimizer_params"]:
+                        for field in result[f"stacker_hp_optimizer_params"][optimizer]:
+                            result[f"stacker_hp_opt_{field.replace('-', '_')}"] = result[f"stacker_hp_optimizer_params"][optimizer][field]
 
     if type(result['train_training_data_query']) != dict:
         import json
