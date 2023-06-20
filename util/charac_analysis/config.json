@@ -1,0 +1,32 @@
+{
+    "colors": [
+        "tab:blue",
+        "tab:orange",
+        "tab:green",
+        "tab:pink",
+        "cyan",
+        "tab:gray",
+        "tab:brown",
+        "tab:olive",
+        "tab:purple",
+        "blue",
+        "gold",
+        "gray",
+        "coral"
+    ],
+    "hatches": [
+        "oo",
+        "++",
+        "OO",
+        "xx",
+        "..",
+        "**",
+        "//",
+        "\\\\",
+        "||",
+        "--",
+        "+o",
+        "/O",
+        "x*"
+    ]
+}

@@ -84,8 +84,12 @@ def get_simple_box_data(domain, characteristic, decisiontype):
 
 x_labels = ["Non-Arch.", 'Exis.', 'Exec.', 'Prop.']
 domains = ["Data storage and analysis", "Middleware"]
-dom_colors = ["cyan", "red"]
-hatch_options = ['/', '+', 'x', 'O', '*', '\\', '.', '-', 'o', '|', '+O', '/O', 'oo', 'x*']
+
+with open('config.json') as f:
+    file = json.load(f)
+    colors = file['colors']
+    hatches = file['hatches']
+
 xticks = []
 for j in range(0, len(x_labels)):
     for i in range(0, len(domains)):
@@ -98,6 +102,7 @@ def bar_charts():
     for charac in bar_characs:
         fig, ax = plt.subplots()
         # for dom in domains:
+        legend_colors = {}
         legend_hatches = {}
         for k in range(0, len(domains)):
             dom = domains[k]
@@ -116,13 +121,15 @@ def bar_charts():
                     count = 0
                     if this_label in data[this_char]:
                         count = data[this_char][this_label]
-                    ax.bar(x=(i+1) - 0.3 + k* (0.6 / (len(domains) - 1)), height=count, width=widths, label=this_label, bottom=bottoms[i], hatch=hatch_options[j], color=dom_colors[k], edgecolor="black")
-                    legend_hatches[this_char] = hatch_options[j]
+                    ax.bar(x=(i+1) - 0.3 + k* (0.6 / (len(domains) - 1)), height=count, width=widths, label=this_label, bottom=bottoms[i], hatch=hatches[k], color=colors[j], edgecolor="black")
+                    legend_colors[this_char] = colors[j]
+                    legend_hatches[domains[k]] = hatches[k]
                     bottoms[i] += count
 
-        #legend_hatches = [(x, legend_hatches[x]) for x in legend_hatches]
-        #labels, hatches = zip(*legend_hatches)
-        ax.legend(handles=[mpatches.Patch(facecolor="white", edgecolor='black', hatch=legend_hatches[this_char], label=this_char) for this_char in legend_hatches])
+        handles = [mpatches.Patch(facecolor=legend_colors[this_char], edgecolor='black', label=this_char) for this_char in legend_colors]
+        handles.extend([mpatches.Patch(facecolor='white', edgecolor='black', hatch=legend_hatches[this_dom], label=this_dom) for this_dom in legend_hatches])
+
+        ax.legend(handles=handles)
 
         ax.set_ylabel('Issue Count')
         ax.set_xlabel('Per manual decision type')
@@ -158,18 +165,18 @@ def box_charts():
         for j in range(0, len(x_labels)):
             for i in range(0, len(domains)):
                 this_idx = j*len(domains) + i
-                plt.setp(bp['boxes'][this_idx], color=dom_colors[i])
-                plt.setp(bp['medians'][this_idx], color=dom_colors[i])
+                plt.setp(bp['boxes'][this_idx], color=colors[i])
+                plt.setp(bp['medians'][this_idx], color=colors[i])
                 
-                plt.setp(bp['caps'][this_idx*2], color=dom_colors[i])
-                plt.setp(bp['caps'][this_idx*2+1], color=dom_colors[i])
+                plt.setp(bp['caps'][this_idx*2], color=colors[i])
+                plt.setp(bp['caps'][this_idx*2+1], color=colors[i])
                 
-                plt.setp(bp['whiskers'][this_idx*2], color=dom_colors[i])
-                plt.setp(bp['whiskers'][this_idx*2+1], color=dom_colors[i])
+                plt.setp(bp['whiskers'][this_idx*2], color=colors[i])
+                plt.setp(bp['whiskers'][this_idx*2+1], color=colors[i])
                 
                 if len(bp['fliers']) == 2*len(bp['boxes']):
-                    plt.setp(bp['fliers'][this_idx*2], color=dom_colors[i])
-                    plt.setp(bp['fliers'][this_idx*2+1], color=dom_colors[i])
+                    plt.setp(bp['fliers'][this_idx*2], color=colors[i])
+                    plt.setp(bp['fliers'][this_idx*2+1], color=colors[i])
 
         plt.xticks([x+1 for x in range(0, len(x_labels))], x_labels)
         ax.set_ylabel(charac)
@@ -177,7 +184,7 @@ def box_charts():
 
         colours = []
         for i in range(0, len(domains)):
-            col, = plt.plot([1,1], dom_colors[i])
+            col, = plt.plot([1,1], colors[i])
             colours.append((col, domains[i]))
         cols, doms = zip(*colours)
         plt.legend(cols, doms)
@@ -189,4 +196,4 @@ def box_charts():
         plt.close()
 
 bar_charts()
-# box_charts()
+box_charts()
