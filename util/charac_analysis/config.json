@@ -28,5 +28,16 @@
         "+o",
         "/O",
         "x*"
+    ],
+    "split_nonarch": false,
+    "include formatting and stopwords": true,
+    "database": "https://issues-db.nl:8000",
+    "domains": [
+        "Data storage & processing", 
+        "Content management",
+        "DevOps and cloud",
+        "Software development tools",
+        "Web development",
+        "SOA and Middlewares"
     ]
 }

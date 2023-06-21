@@ -29,7 +29,6 @@ def get_label_str(decisiontype, issue):
     if len(result) == 0:
         result.append('Non-Arch.')
 
-    # return ', '.join(result)
     return result
 
 # data format: dic of label -> count
@@ -83,7 +82,14 @@ def get_simple_box_data(domain, characteristic, decisiontype):
     return result
 
 x_labels = ["Non-Arch.", 'Exis.', 'Exec.', 'Prop.']
-domains = ["Data storage and analysis", "Middleware"]
+domains = [
+    "Data storage and analysis", 
+    "Content management",
+    "DevOps and cloud",
+    "Software development tools",
+    "Web development",
+    "SOA and Middlewares"
+]
 
 with open('config.json') as f:
     file = json.load(f)
