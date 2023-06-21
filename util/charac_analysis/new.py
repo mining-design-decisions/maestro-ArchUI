@@ -15,8 +15,11 @@ with open('config.json') as f:
     split_nonarch = rawfile['split_nonarch']
     keep_format = rawfile['include formatting and stopwords']
     widths = 0.6 / len(domains) - 0.05
+    label_models = rawfile['models']
 
 def count_words(str):
+    if str is None:
+        return 0
     if keep_format:
         return len(str.split())
     else:
@@ -43,7 +46,7 @@ def get_duration(issue_dic):
         return None
     return (resolved_dt - created_dt).days
 
-def get_domain_data(domain):
+def get_domain_data(domain, labeling):
     x = requests.get(database+"/projects", verify=False)
     if x.status_code != 200:
         print(x.json())
@@ -65,7 +68,7 @@ def get_domain_data(domain):
     if x.status_code != 200:
         print(x.json())
         return None
-    statistics = x.json()
+    statistics = x.json()['data']
     
     children = []
 
@@ -94,15 +97,46 @@ def get_domain_data(domain):
         statistics[child]['hierarchy'] = "Child"
     print(domain)
 
-    return statistics['data']
+    # labeling
+    if labeling == 'manual':
+        x = requests.get(database+"/manual-labels", verify=False, json=issue_ids).json()
+        if "detail" in x:
+            opening = x['detail'].find('[')
+            closing = x['detail'].find(']')
+            cut = x['detail'][opening+1:closing].split(', ')
+            issues_to_skip = [x[1:-1] for x in cut]
+            has_manual_label_ids = issue_ids['issue_ids'].copy()
+            for issue in issues_to_skip:
+                has_manual_label_ids.remove(issue)
+            x = requests.get(f"{database}/manual-labels", json={"issue_ids": has_manual_label_ids}, verify=False).json()
 
-def get_label_str(decisiontype, issue):
+        labels = x['manual_labels']
+        for issue in statistics:
+            statistics[issue]['label'] = labels[issue] if issue in labels else None
+    elif labeling.startswith('model.'):
+        model_name = labeling[len('model.'):]
+        model_data = label_models[model_name]
+        x = requests.get(f"{database}/models/{model_data['model_id']}/versions/{model_data['version_id']}/predictions", json=issue_ids, verify=False)
+        if x.status_code != 200:
+            print(x.json())
+            return None
+        labels = x.json()['predictions']
+        for issue in statistics:
+            statistics[issue]['label'] = None
+            if issue in labels:
+                for label in labels[issue]:
+                    statistics[issue]['label'][label] = labels[issue][label]['prediction']
+
+    return statistics
+
+def get_label_str(issue):
     types = {
         "existence": "Exis.",
         "executive": "Exec.",
         "property": "Prop."
     }
     result = []
+    """
     if decisiontype == 'manual':
         if issue['manual'] is None:
             return None
@@ -118,13 +152,20 @@ def get_label_str(decisiontype, issue):
         for type in types:
             if issue['models'][model][type]:
                 result.append(types[type])
+    """
+    if issue['label'] is None:
+        return None
+
+    for type in types:
+        if issue['label'][type]:
+            result.append(types[type])
     
     if len(result) == 0:
         result.append('Non-Arch.')
 
     return result
 
-def get_simple_bar_data(data, characteristic, decisiontype):
+def get_simple_bar_data(data, characteristic):
     result = {}
     for issue in data:
         if characteristic not in data[issue]:
@@ -133,7 +174,7 @@ def get_simple_bar_data(data, characteristic, decisiontype):
         
         if not char in result:
             result[char] = {}
-        label = get_label_str(decisiontype, data[issue])
+        label = get_label_str(data[issue])
         if label is not None:
             for tag in label:
                 if tag not in result[char]:
@@ -141,14 +182,14 @@ def get_simple_bar_data(data, characteristic, decisiontype):
                 result[char][tag] += 1
     return result
 
-def get_simple_box_data(data, characteristic, decisiontype):
+def get_simple_box_data(data, characteristic):
     result = {}
     for issue in data:
         if characteristic not in data[issue]:
             continue
         char = data[issue][characteristic] # number data
         if char is not None:
-            label = get_label_str(decisiontype, data[issue])
+            label = get_label_str(data[issue])
             if label is not None:
                 for tag in label:
                     if tag not in result:
@@ -167,10 +208,11 @@ def bar_chart(characteristic, labeling, dom_data):
     legend_colors = {}
     legend_hatches = {}
 
-    for k in range(len(domains)):
-        dom = domains[k]
+    dom_keys = list(dom_data.keys())
+    for k in range(len(dom_keys)):
+        dom = dom_keys[k]
         bottoms = [0 for _ in x_labels]
-        data = get_simple_bar_data(dom_data[dom], characteristic, labeling)
+        data = get_simple_bar_data(dom_data[dom], characteristic)
 
         this_chars = list(data.keys())
         for j in range(0, len(this_chars)):
@@ -184,9 +226,9 @@ def bar_chart(characteristic, labeling, dom_data):
                 count = 0
                 if this_label in data[this_char]:
                     count = data[this_char][this_label]
-                ax.bar(x=(i+1) - 0.3 + k* (0.6 / (len(domains) - 1)), height=count, width=widths, label=this_label, bottom=bottoms[i], hatch=hatches[k], color=colors[j], edgecolor="black")
+                ax.bar(x=(i+1) - 0.3 + k* (0.6 / max((len(dom_keys) - 1), 1)), height=count, width=widths, label=this_label, bottom=bottoms[i], hatch=hatches[k], color=colors[j], edgecolor="black")
                 legend_colors[this_char] = colors[j]
-                legend_hatches[domains[k]] = hatches[k]
+                legend_hatches[dom_keys[k]] = hatches[k]
                 bottoms[i] += count
 
     handles = [mpatches.Patch(facecolor=legend_colors[this_char], edgecolor='black', label=this_char) for this_char in legend_colors]
@@ -197,7 +239,7 @@ def bar_chart(characteristic, labeling, dom_data):
     ax.set_ylabel('Issue Count')
     ax.set_xlabel('Per manual decision type')
     plt.xticks([x+1 for x in range(0, len(x_labels))], x_labels)
-    plt.title(f"Manual Label Distribution for Issue Characteristic {characteristic}")
+    plt.title(f"{labeling.title()} Label Distribution for Issue Characteristic {characteristic}")
     plt.savefig(f"figures/bar_{characteristic}.png")
     plt.close()
 
@@ -210,18 +252,19 @@ def box_chart(characteristic, labeling, dom_data):
         x_labels = ["Non-Arch.", 'Exis.', 'Exec.', 'Prop.']
 
     xticks = []
+    dom_keys = list(dom_data.keys())
     for j in range(0, len(x_labels)):
-        for i in range(0, len(domains)):
-            xticks.append((j+1) - 0.3 + i * (0.6/(len(domains)-1)))
+        for i in range(0, len(dom_keys)):
+            xticks.append((j+1) - 0.3 + i * (0.6/max((len(dom_keys) - 1), 1)))
 
     # todo cut off outliers past a certain point
 
     to_plot = {}
     fig, ax = plt.subplots()
-    for dom in domains:
+    for dom in dom_keys:
         to_plot[dom] = []
 
-        data = get_simple_box_data(dom_data[dom], characteristic, labeling)
+        data = get_simple_box_data(dom_data[dom], characteristic)
 
         for i in range(0, len(x_labels)):
             counts = []
@@ -231,14 +274,14 @@ def box_chart(characteristic, labeling, dom_data):
 
     to_plot_arranged = []
     for j in range(0, len(x_labels)):
-        for i in range(0, len(domains)):
-            to_plot_arranged.append(to_plot[domains[i]][j])
+        for i in range(0, len(dom_keys)):
+            to_plot_arranged.append(to_plot[dom_keys[i]][j])
 
     bp = ax.boxplot(to_plot_arranged, positions=xticks, widths=widths)
 
     for j in range(0, len(x_labels)):
-        for i in range(0, len(domains)):
-            this_idx = j*len(domains) + i
+        for i in range(0, len(dom_keys)):
+            this_idx = j*len(dom_keys) + i
             plt.setp(bp['boxes'][this_idx], color=colors[i])
             plt.setp(bp['medians'][this_idx], color=colors[i])
             
@@ -257,9 +300,9 @@ def box_chart(characteristic, labeling, dom_data):
     ax.set_xlabel('Per manual decision type')
 
     colours = []
-    for i in range(0, len(domains)):
+    for i in range(0, len(dom_keys)):
         col, = plt.plot([1,1], colors[i])
-        colours.append((col, domains[i]))
+        colours.append((col, dom_keys[i]))
     cols, doms = zip(*colours)
     plt.legend(cols, doms)
     for col in cols:
@@ -290,17 +333,18 @@ def plot(charac, labeling, dom_data):
     else:
         bar_chart(charac, labeling, dom_data)
 
-dom_data = {}
-complete = True
-for dom in domains:
-    dom_data[dom] = get_domain_data(dom)
-    if dom_data[dom] is None:
-        complete = False
-        break
-    break # todo remove
+if __name__ == "__main__":
+    labeling = "manual"
+    # for automatic: "model.<model name in config>"
 
-#with open('test.json', 'w') as f:
-#    json.dump(dom_data, f)
+    dom_data = {}
+    complete = True
+    for dom in domains:
+        dom_data[dom] = get_domain_data(dom, labeling)
+        if dom_data[dom] is None:
+            complete = False
+            break
+        break # todo remove
 
-if complete:
-    plot('comment avg size', 'manual', dom_data)
+    if complete:
+        plot('comment avg size', labeling, dom_data)
