@@ -331,11 +331,12 @@ def create_query(models, query, name):
     for model in models:
         modelVersions_raw = requests.get(f"{get_db()}/models/{model}/versions", verify=False).json()["versions"]
         if len(modelVersions_raw) > 0:
-            latest = modelVersions_raw[0]
-            for i in range(1, len(modelVersions_raw)):
-                if modelVersions_raw[i]['time'] > latest['time']:
-                    latest = modelVersions_raw[i]
-            modelversions[model] = latest["version_id"]
+            #latest = modelVersions_raw[0]
+            #for i in range(1, len(modelVersions_raw)):
+            #    if modelVersions_raw[i]['time'] > latest['time']:
+            #        latest = modelVersions_raw[i]
+            #modelversions[model] = latest["version_id"]
+            modelversions[model] = modelVersions_raw[-1]['version_id']
         else:
             failed_models.append(model)
     _query_dir()
