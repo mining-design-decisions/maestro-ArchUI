@@ -16,6 +16,7 @@ with open('config.json') as f:
     keep_format = rawfile['include formatting and stopwords']
     widths = 0.6 / len(domains) - 0.05
     label_models = rawfile['models']
+    show_outliers = rawfile['show_outliers']
 
 def count_words(str):
     if str is None:
@@ -94,7 +95,8 @@ def get_domain_data(domain, labeling):
 
     # hierarchy part 2
     for child in children:
-        statistics[child]['hierarchy'] = "Child"
+        if child in statistics:
+            statistics[child]['hierarchy'] = "Child"
     print(domain)
 
     # labeling
@@ -261,6 +263,8 @@ def box_chart(characteristic, labeling, dom_data):
 
     to_plot = {}
     fig, ax = plt.subplots()
+    fig.set_figheight(12)
+    fig.set_figwidth(20)
     for dom in dom_keys:
         to_plot[dom] = []
 
@@ -277,7 +281,7 @@ def box_chart(characteristic, labeling, dom_data):
         for i in range(0, len(dom_keys)):
             to_plot_arranged.append(to_plot[dom_keys[i]][j])
 
-    bp = ax.boxplot(to_plot_arranged, positions=xticks, widths=widths)
+    bp = ax.boxplot(to_plot_arranged, positions=xticks, widths=widths, showfliers=show_outliers)
 
     for j in range(0, len(x_labels)):
         for i in range(0, len(dom_keys)):
@@ -336,6 +340,7 @@ def plot(charac, labeling, dom_data):
 if __name__ == "__main__":
     labeling = "manual"
     # for automatic: "model.<model name in config>"
+    # e.g. "model.bert round 2"
 
     dom_data = {}
     complete = True
@@ -343,8 +348,8 @@ if __name__ == "__main__":
         dom_data[dom] = get_domain_data(dom, labeling)
         if dom_data[dom] is None:
             complete = False
+            print("Incomplete data")
             break
-        break # todo remove
 
     if complete:
         plot('comment avg size', labeling, dom_data)
