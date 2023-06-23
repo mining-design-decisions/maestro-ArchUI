@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
-{% block subtitle %}Statistics{% endblock %}
+{% block subtitle %}Viewing Statistics{{data['name']}}{% endblock %}
 
 {% block margin_content %}
-Under construction!
+<h3>Viewing Statistics {{data['name']}}</h3>
+<p>Timestamp: {{data['timestamp']}}</p>
+<div>
+    {% for fig in figs %}
+    <img src="{{url_for('static', filename=fig['location'])}}" alt="{{fig['label']}}">
+    {% endfor %}
+</div>
 {% endblock %}

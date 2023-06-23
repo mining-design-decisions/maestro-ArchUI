@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}Create Statistics{% endblock %}
+
+{% block margin_content %}
+<h4>Generate Statistics</h4>
+
+<hr />
+
+<form method="POST" action="{{ url_for('statistics.create') }}">
+    <h5>Data Formatting</h5>
+
+    <div class="form-group row">
+        <div class="col-sm-10 offset-sm-2 mb-1">
+            <input name="split_nonarch" id="split_nonarch" type="checkbox" checked="checked">
+            <label for="split_nonarch" class="col-form-label">
+                Split out Non-Architectural issues?
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-10 offset-sm-2 mb-1">
+            <input name="include_format" id="include_format" type="checkbox">
+            <label for="include_format" class="col-form-label">
+                Include Formatting (Stopwords)?
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-10 offset-sm-2 mb-1">
+            <input name="show_outliers" id="show_outliers" type="checkbox">
+            <label for="show_outliers" class="col-form-label">
+                Show Outliers?
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="domains">Domains to analyse: </label>
+        <div class="col-sm-10">
+            <select multiple required id="domains" name="domains" size="6">
+                <option value="Data storage & processing">Data storage & processing</option>
+                <option value="Content management">Content management</option>
+                <option value="DevOps and cloud">DevOps and cloud</option>
+                <option value="Software development tools">Software development tools</option>
+                <option value="Web development">Web development</option>
+                <option value="SOA and Middlewares">SOA and Middlewares</option>
+            </select>
+        </div>
+    </div>
+
+    <hr />
+    <h5>Labeling to Use</h5>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="labeling">Labeling: </label>
+        <div class="col-sm-10">
+            <input type="text" size="30" id="labeling" name="labeling" required value="manual"/>
+        </div>
+    </div>
+    
+    <hr />
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="name">Name of statistics run: </label>
+        <div class="col-sm-10">
+            <input type="text" size="30" id="name" name="name" required />
+        </div>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Generate Statistics">
+</form>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}
