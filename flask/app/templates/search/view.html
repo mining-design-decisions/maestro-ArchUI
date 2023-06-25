@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block subtitle %}Search{% endblock %}
+
+{% block margin_content %}
+<h3>Search Engine</h3>
+<div class="row">
+    <input type="text" class="col-sm-4" id="query_text"/>
+    <button type="submit" class="btn btn-primary col-sm-1" onclick="clickSearch()">Search</button>
+    <button type="submit" class="btn btn-secondary col-sm-1 offset-sm-1" onclick="regenIndex()">Regenerate Index</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+function clickSearch() {
+    text = document.getElementById('query_text').value
+    fetch(`/search/search`, {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: text,
+            architectural: true
+        })
+    })
+    .then(e => {
+        if (e.status == 200) {
+            e.json().then(data => {
+                // todo load data into UI
+            })
+        }
+        else {
+            alert('An error occurred fetching the search data.')
+        }
+    })
+}
+function regenIndex() {
+    fetch(`/search/index`, {
+        method: "POST"
+    })
+}
+</script>
+{% endblock %}
