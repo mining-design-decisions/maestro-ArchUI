@@ -23,12 +23,14 @@ function clickSearch() {
         body: JSON.stringify({
             query: text,
             architectural: true
-        })
+        }),
+        method: "POST" // is only post because get methods aren't allowed a body
     })
     .then(e => {
         if (e.status == 200) {
             e.json().then(data => {
-                // todo load data into UI
+                // todo load data into 
+                console.log(data)
             })
         }
         else {
