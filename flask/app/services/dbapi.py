@@ -621,3 +621,16 @@ def post_stat_obj(name, obj):
         print(x.json())
         return None
     return x.json()['file_id']
+
+def get_single_issue_data(issue_id):
+    body = {
+        "filter": {"_id": {"$eq": issue_id}},
+        "sort_ascending": True,
+        "models": [],
+        "page": 1,
+        "limit": 1
+    }
+    x = requests.get(f"{get_db()}/ui", json=body, verify=False)
+    if not x.status_code == 200:
+        print(x.json())
+    return x.json()["data"][0]

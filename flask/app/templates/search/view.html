@@ -9,6 +9,11 @@
     <button type="submit" class="btn btn-primary col-sm-1" onclick="clickSearch()">Search</button>
     <button type="submit" class="btn btn-secondary col-sm-1 offset-sm-1" onclick="regenIndex()">Regenerate Index</button>
 </div>
+
+<div>
+    <ol id="search_results">
+    </ol>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -29,8 +34,26 @@ function clickSearch() {
     .then(e => {
         if (e.status == 200) {
             e.json().then(data => {
-                // todo load data into 
                 console.log(data)
+
+                element = document.getElementById("search_results")
+                element.innerHTML = ""
+                data.forEach(result => {
+                    // box header
+                    ecosys = result.issue_id.split('-')[0]
+                    box_header = `${ecosys}: ${result.issue_key}`
+                    box_header = `<a href="/search/issue/${result.issue_id}" target="_blank">${box_header}</a>`
+
+                    // box labels
+                    box_labels = []
+                    if (result.executive == "True") box_labels.push("Executive")
+                    if (result.existence == "True") box_labels.push("Existence")
+                    if (result.property == "True") box_labels.push("Property")
+                    if (box_labels.length == 0) box_labels.push("Non-Architectural")
+                    box_labels = `Classifier Prediction: ${box_labels.join(', ')}`
+
+                    element.innerHTML += `<li><div class="card m-2"><div class="card-body">${box_header}<hr />${box_labels}<hr />"${result.text}"</div></div></li>`
+                });
             })
         }
         else {
