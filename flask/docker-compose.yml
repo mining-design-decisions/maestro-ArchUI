@@ -1,0 +1,11 @@
+version: "3.1"
+services:
+  arch_ui:
+    build:
+      network: host 
+      context: .
+    ports: 
+      - "5000:5000"
+    volumes:
+      - ./arch-ui-data:/app/data
+      - ./arch-ui-session:/flask_session
