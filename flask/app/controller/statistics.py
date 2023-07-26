@@ -1,4 +1,3 @@
-from app.services import dbapi
 import requests
 from nltk.corpus import stopwords
 from datetime import datetime
@@ -6,6 +5,9 @@ from matplotlib import pyplot as plt
 import numpy
 import json
 import matplotlib.patches as mpatches
+
+from app.data import statistics as stats_data
+from app.data import login
 
 stop = set(stopwords.words('english'))
 
@@ -369,7 +371,7 @@ def plot(labeling, domains, split_nonarch, keep_format, show_outliers):
     dom_data = {}
     complete = True
     for dom in domains:
-        dom_data[dom] = get_domain_data(dom, labeling, keep_format, dbapi.get_db())
+        dom_data[dom] = get_domain_data(dom, labeling, keep_format, login.get_db())
         if dom_data[dom] is None:
             complete = False
             print("Incomplete data")
@@ -401,3 +403,18 @@ def plot(labeling, domains, split_nonarch, keep_format, show_outliers):
                 filenames.append(bar_chart(charac, labeling, dom_data, split_nonarch, widths))
         return filenames
     return []
+
+def generate_statistics(labeling, domains, split_nonarch, include_format, show_outliers, name):
+    figure_paths = plot(labeling, domains, split_nonarch, include_format, show_outliers)
+
+    file_ids = stats_data.post_stat_graphs(figure_paths)
+    graphs = [{"file_id": file_id, "label": "temp"} for file_id in file_ids]
+
+    obj = {
+        "timestamp": str(datetime.datetime.now()),
+        "name": name,
+        "graphs": graphs
+    }
+
+    s_id = stats_data.post_stat_obj(name, obj)
+    return s_id

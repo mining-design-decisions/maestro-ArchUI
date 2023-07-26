@@ -35,23 +35,26 @@ def create_app(test_config=None):
 
     app.debug = True
 
-    from .blueprints import models, predict, classify, statistics, login, manual, help, tags, embeddings, ontologies, search
-
-    app.register_blueprint(models.bp)
-    app.register_blueprint(predict.bp)
-    app.register_blueprint(classify.bp)
-    app.register_blueprint(statistics.bp)
-    app.register_blueprint(login.bp)
-    app.register_blueprint(manual.bp)
-    app.register_blueprint(help.bp)
-    app.register_blueprint(tags.bp)
-    app.register_blueprint(embeddings.bp)
-    app.register_blueprint(ontologies.bp)
+    from app.view import search, statistics
     app.register_blueprint(search.bp)
+    app.register_blueprint(statistics.bp)
 
-    @app.route("/hello")
-    def hello():
-        return "Hello, world!"
+    from app.view.class_tag import query_view
+    app.register_blueprint(query_view.bp)
+
+    from app.view.ml import embeddings, models, ontologies, predict
+    app.register_blueprint(embeddings.bp)
+    app.register_blueprint(models.bp)
+    app.register_blueprint(ontologies.bp)
+    app.register_blueprint(predict.bp)
+
+    from app.controller.class_tag import labeling as c_labeling
+    app.register_blueprint(c_labeling.bp)
+
+    from app.view import login
+    app.register_blueprint(login.contr.bp)
+    from app.view.class_tag import tags
+    app.register_blueprint(tags.contr.bp)
 
     @app.route('/')
     def index():

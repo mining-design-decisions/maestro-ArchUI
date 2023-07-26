@@ -1,4 +1,4 @@
-from app.services import dbapi
+from app.data.ml import embeddings as e_data
 
 def retrieve_info(formdata, name, type, default):
     value = formdata.get(name, default)
@@ -124,7 +124,7 @@ def get_params_by_prefix(formdata, prefix, is_prepro, embed_is_dic = False):
         """
 
     if is_prepro and f"{prefix}embedding_id" in formdata:
-        e = dbapi.get_embedding(formdata.get(f"{prefix}embedding_id"))
+        e = e_data.get_embedding(formdata.get(f"{prefix}embedding_id"))
         dicname = list(e['config']['params'].keys())[0]
         for param in e['config']['params'][dicname]:
             if param in do_not_propagate:

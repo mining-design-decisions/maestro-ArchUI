@@ -7,5 +7,5 @@ services:
     ports: 
       - "5000:5000"
     volumes:
-      - ./arch-ui-data:/app/data
+      - ./arch-ui-data:/app/cache
       - ./arch-ui-session:/flask_session
