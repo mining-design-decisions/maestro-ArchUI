@@ -17,6 +17,7 @@ def get_search():
     return common.get_cache('search_url', "https://localhost:8042")
 def set_search(new_url):
     common.set_cache('search_url', new_url)
+    print(common.get_cache('search_url', "https://localhost:8042"))
 
 def get_username():
     return common.get_cache('un', '')

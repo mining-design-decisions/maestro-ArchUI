@@ -31,6 +31,17 @@
     New ML Pipeline URL was saved!
 </div>
 
+<hr />
+
+<div class="form-group my-2">
+    <label for="search_url" class="col-form-label">Search Engine URL: </label>
+    <input name="search_url" id="search_url" type="text" class="mx-2" value="{{search}}" />
+</div>
+<button type="button" class="btn btn-primary my-2" onclick="setNewSearchURL()">Save Search Engine URL</button>
+<div class="d-none" id="search_url_saved">
+    New Search Engine URL was saved!
+</div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -51,6 +62,15 @@ function setNewCLIURL() {
         new_url: new_url
     })}).then(r => {
         document.getElementById("cli_url_saved").setAttribute("class", "")
+    })
+}
+
+function setNewSearchURL() {
+    new_url = document.getElementById("search_url").value
+    fetch(`/login/setsearch`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
+        new_url: new_url
+    })}).then(r => {
+        document.getElementById("search_url_saved").setAttribute("class", "")
     })
 }
 </script>

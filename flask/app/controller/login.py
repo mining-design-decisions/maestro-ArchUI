@@ -31,7 +31,8 @@ def setCLI():
 
 @bp.route('/setsearch', methods=["POST"])
 def setSearch():
-    data.set_search(request.json('new_url'))
+    data.set_search(request.json['new_url'])
+    return 'ok', 200
 
 @bp.route('/isloggedin', methods=["GET"])
 def isLoggedIn():
