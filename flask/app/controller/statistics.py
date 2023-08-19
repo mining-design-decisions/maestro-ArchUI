@@ -2,8 +2,6 @@ import requests
 from nltk.corpus import stopwords
 from datetime import datetime
 from matplotlib import pyplot as plt
-import numpy
-import json
 import matplotlib.patches as mpatches
 
 from app.data import statistics as stats_data
