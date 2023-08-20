@@ -10,6 +10,31 @@
     <button type="submit" class="btn btn-secondary col-sm-1 offset-sm-1" onclick="regenIndex()">Regenerate Index</button>
 </div>
 
+<div class="form-group row my-2">
+    <label class="col-sm-2 col-form-label">Existence: </label>
+    <select class="col-sm-2" title="Should the result issues have the Existence label?" id="existence">
+        <option value="null">Either</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+    </select>
+</div>
+<div class="form-group row my-2">
+    <label class="col-sm-2 col-form-label">Executive: </label>
+    <select class="col-sm-2" title="Should the result issues have the Executive label?" id="executive">
+        <option value="null">Either</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+    </select>
+</div>
+<div class="form-group row my-2">
+    <label class="col-sm-2 col-form-label">Property: </label>
+    <select class="col-sm-2" title="Should the result issues have the Property label?" id="property">
+        <option value="null">Either</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+    </select>
+</div>
+
 <div>
     <ol id="search_results">
     </ol>
@@ -19,6 +44,16 @@
 {% block scripts %}
 {{ super() }}
 <script>
+function parseSelect(value) {
+    switch(value) {
+        case 'null':
+            return null
+        case 'true':
+            return true
+        case 'false':
+            return false
+    }
+}
 function clickSearch() {
     text = document.getElementById('query_text').value
     fetch(`/search/search`, {
@@ -27,7 +62,9 @@ function clickSearch() {
         },
         body: JSON.stringify({
             query: text,
-            architectural: true
+            existence: parseSelect(document.getElementById('existence').value),
+            executive: parseSelect(document.getElementById('executive').value),
+            property: parseSelect(document.getElementById('property').value)
         }),
         method: "POST" // is only post because get methods aren't allowed a body
     })
