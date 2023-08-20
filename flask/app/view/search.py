@@ -13,7 +13,6 @@ def view():
 
 @bp.route('/search', methods=["POST"])
 def search():
-    print(request.json)
     return data.get_search_data(request.json)
 
 @bp.route('/issue/<issue_id>', methods=["GET"])
