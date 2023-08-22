@@ -7,14 +7,14 @@ def get_query_names():
     from os import walk
     results = []
     _query_dir()
-    for (dirpath, dirnames, filenames) in walk('app/data/queries'):
+    for (dirpath, dirnames, filenames) in walk('app/cache/queries'):
         for file in filenames:
             results.append(file[:-5])
     return results
 
 def get_paginated_data(query_name, page, pageLimit, sort, sort_asc, issue_id):  
     # data to return in order: issue_data, manual_labels, headers, total_pages, model_versions
-    with open(f'app/data/queries/{query_name}.json', 'r') as f:
+    with open(f'app/cache/queries/{query_name}.json', 'r') as f:
         qdata = json.load(f)
         models = qdata['models']
         query = qdata['query']
@@ -105,7 +105,7 @@ def get_p_query(projects):
 
 def _query_dir():
     import os
-    os.makedirs("app/data/queries", exist_ok=True)
+    os.makedirs("app/cache/queries", exist_ok=True)
 
 def create_query(models, query, name):
     modelversions = {}
@@ -117,7 +117,7 @@ def create_query(models, query, name):
         else:
             failed_models.append(model)
     _query_dir()
-    with open(f'app/data/queries/{name}.json', 'w') as f:
+    with open(f'app/cache/queries/{name}.json', 'w') as f:
         json.dump({
             "models": modelversions,
             "query": query

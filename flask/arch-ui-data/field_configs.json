@@ -1,0 +1,1355 @@
+{
+    "gen_model_name": {
+        "name": "model_name",
+        "label": "Model Name",
+        "type": "str",
+        "tooltip": "Name of this model configuration.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required"
+            },
+            {
+                "type": "disabled_if_default"
+            }
+        ]
+    },
+    "gen_output_mode": {
+        "name": "output_mode",
+        "label": "Output Mode",
+        "type": "select",
+        "tooltip": "Output mode to use.",
+        "options": ["Detection", "Classification3", "Classification3Simplified", "Classification8"],
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required"
+            }
+        ]
+    },
+    "gen_model_mode": {
+        "name": "model_mode",
+        "label": "Model Mode",
+        "type": "select",
+        "tooltip": "Is this a single model or does it use ensemble learning?",
+        "options": ["Single", "Ensemble"],
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"modelModeChanged()\""
+            }
+        ]
+    },
+    "gen_ensemble_strategy": {
+        "name": "ensemble_strategy",
+        "label": "Ensemble Strategy",
+        "type": "select",
+        "tooltip": "Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.",
+        "options": ["stacking","voting","combination"],
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required onchange=\"ensembleStratChanged($(this))\""
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "gen_combination_strategy": {
+        "name": "combination_strategy",
+        "label": "Combination Strategy",
+        "type": "select",
+        "tooltip": "Strategy used to combine models. Please find the Combination Strategy Help page in the navbar for more information.",
+        "options": ["concat","add","subtract","multiply","max","min","dot"],
+        "extra": [
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "gen_test_separately": {
+        "name": "test_separately",
+        "label": "Test Separately",
+        "type": "bool",
+        "tooltip": "Disable combining multiple classifiers. Instead, test them separately on the same data.",
+        "extra": [
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "gen_voting_mode": {
+        "name": "voting_mode",
+        "label": "Voting Mode",
+        "type": "select",
+        "tooltip": "Mode for the voting ensemble. Either hard or sort voting.",
+        "options": ["soft", "hard"],
+        "extra": [
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "gen_seed": {
+        "name": "seed",
+        "label": "Seed",
+        "type": "number",
+        "tooltip": "Seed to use to initialize all the RNG related stuff. -1 means no seed is used.",
+        "extra": [
+            {
+                "type": "default",
+                "value": -1
+            },
+            {
+                "type": "attribute",
+                "value": "min=-1"
+            }
+        ]
+    },
+
+    "train_epochs": {
+        "name": "epochs",
+        "label": "Epochs",
+        "type": "number",
+        "tooltip": "Amount of training epochs.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required min=1"
+            },
+            {
+                "type": "default",
+                "value": 1000
+            }
+        ]
+    },
+    "train_split_size": {
+        "name": "split_size",
+        "label": "Split Size",
+        "type": "number",
+        "tooltip": "Size of testing and validation splits. Ignored when k-cross > 0",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=0.01 max=0.5 step=any"
+            },
+            {
+                "type": "default",
+                "value": 0.2
+            }
+        ]
+    },
+    "train_max_train": {
+        "name": "max_train",
+        "label": "Max Train",
+        "type": "number",
+        "tooltip": "Maximum amount of training items. -1 for infinite.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=-1"
+            },
+            {
+                "type": "default",
+                "value": -1
+            }
+        ]
+    },
+    "train_apply_ontology_classes": {
+        "name": "apply_ontology_classes",
+        "label": "Apply Ontology Classes",
+        "type": "bool",
+        "tooltip": "Enable application of ontology classes.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "onchange=\"applyOntologyClassesChanged()\""
+            }
+        ]
+    },
+    "train_ontology_classes": {
+        "name": "ontology_classes",
+        "label": "Ontology Classes File",
+        "type": "select",
+        "tooltip": "ID of the DB-file containing ontology classes.",
+        "options": [],
+        "extra": [
+            {
+                "type": "in_div"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "train_architectural_only": {
+        "name": "architectural_only",
+        "label": "Architectural Only",
+        "type": "bool",
+        "tooltip": "If specified, only architectural issues are used in training."
+    },
+    "train_class_balancer": {
+        "name": "class_balancer",
+        "label": "Class Balancer",
+        "type": "select",
+        "tooltip": "Enable class-balancing.",
+        "options": ["", "class-weight", "upsample"]
+    },
+    "train_batch_size": {
+        "name": "batch_size",
+        "label": "Batch Size",
+        "type": "number",
+        "tooltip": "Specify the batch size used during training.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=1"
+            },
+            {
+                "type": "default",
+                "value": 32
+            }
+        ]
+    },
+    "train_use_early_stopping": {
+        "name": "use_early_stopping",
+        "label": "Use Early Stopping",
+        "type": "bool",
+        "tooltip": "Stop the training early in case of diminishing returns.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "onchange=\"useEarlyStoppingChanged()\""
+            }
+        ]
+    },
+    "train_early_stopping_patience": {
+        "name": "early_stopping_patience",
+        "label": "Early stopping patience",
+        "type": "number",
+        "tooltip": "Patience used when using early stopping.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=1"
+            },
+            {
+                "type": "indent"
+            },
+            {
+                "type": "default",
+                "value": 5
+            }
+        ]
+    },
+    "train_early_stopping_num_attribs": {
+        "name": "early_stopping_num_attribs",
+        "label": "Number of Early Stopping Attributes",
+        "type": "number",
+        "tooltip": "Amount of Early Stopping Attributes to Configure",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0"
+            },
+            {
+                "type": "indent"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"nrEarlyStoppingAttribsChanged()\" min=0"
+            }
+        ]
+    },
+    "train_early_stopping_min_delta": {
+        "name": "early_stopping_min_delta",
+        "label": "Early stopping min delta",
+        "type": "number",
+        "tooltip": "Minimum delta for attribute.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0.001 required"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "train_early_stopping_attribute": {
+        "name": "early_stopping_attribute",
+        "label": "Early stopping attribute",
+        "type": "select",
+        "tooltip": "Attribute(s) to configure for early stopping.",
+        "options": ["loss", "accuracy", "precision", "recall", "f_score_tf", "true_positives", "true_negatives", "false_positives", "false_negatives"],
+        "extra": [
+            {
+                "type": "indent"
+            },
+            {
+                "type": "attribute",
+                "value": "required"
+            }
+        ]
+    },
+    "train_training_data_query": {
+        "name": "training_data_query",
+        "label": "Training Data Query",
+        "type": "str",
+        "tooltip": "Query for Training Data",
+        "extra": [
+            {
+                "type": "default",
+                "value": {"$or": [{"tags": {"$eq": "Apache-TAJO"}}, {"tags": {"$eq": "Apache-HDFS"}}, {"tags": {"$eq": "Apache-HADOOP"}}, {"tags": {"$eq": "Apache-YARN"}}, {"tags": {"$eq": "Apache-MAPREDUCE"}}, {"tags": {"$eq": "Apache-CASSANDRA"}}]}
+            }
+        ]
+    },
+
+    "class_classifier": {
+        "name": "classifier",
+        "label": "Classifier",
+        "type": "select",
+        "tooltip": "Classifier to use.",
+        "options": [
+            "FullyConnectedModel", 
+            "LinearConv1Model", 
+            "LinearRNNModel",
+            "Bert"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "FullyConnectedModel"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"classifierChanged($(this))\" required"
+            }
+        ]
+    },
+    "class_analyze_keywords": {
+        "name": "analyze_keywords",
+        "label": "Analyze Keywords",
+        "type": "bool",
+        "tooltip": "Compute a list of important keywords. Convolutional mode only. Saves to a local file.",
+        "extra": [
+            {
+                "type": "in_div"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+
+    "hparam_number_of_hidden_layers": {
+        "name": "number_of_hidden_layers",
+        "label": "Number of Hidden Layers",
+        "type": "number",
+        "tooltip": "Number of Hidden Layers in the model.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"nrHiddenLayersChanged($(this))\" min=0 max=11"
+            }
+        ]
+    },
+    "hparam_hidden_layer_size": {
+        "name": "hidden_layer_size",
+        "label": "Size of Hidden Layer",
+        "type": "number",
+        "tooltip": "Number of units in the i-th hidden layer.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 32
+            },
+            {
+                "type": "indent"
+            },
+            {
+                "type": "attribute",
+                "value": "min=2 max=16384"
+            }
+        ]
+    },
+    "hparam_layer_activation": {
+        "name": "layer_activation",
+        "label": "Hidden Layer Activation",
+        "type": "select",
+        "tooltip": "Activation to use in the hidden layers",
+        "options": [
+            "linear",
+            "relu",
+            "elu",
+            "leakyrelu",
+            "sigmoid",
+            "tanh",
+            "softmax",
+            "softsign",
+            "selu",
+            "exp",
+            "prelu",
+            "swish"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "linear"
+            }
+        ]
+    },
+    "hparam_layer_dropout": {
+        "name": "layer_dropout",
+        "label": "Dropout for Hidden Layer",
+        "type": "number",
+        "tooltip": "Dropout for the i-th layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_layer_activation_alpha": {
+        "name": "layer_activation_alpha",
+        "label": "Hidden Layer Activation Alpha",
+        "type": "number",
+        "tooltip": "Alpha value for the elu activation",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "step=any"
+            }
+        ]
+    },
+    "hparam_fnn_layer_activation_alpha": {
+        "name": "fnn_layer_activation_alpha",
+        "label": "Fully Connected Layer Activation Alpha",
+        "type": "number",
+        "tooltip": "Alpha value for the elu activation of the fnn layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "step=any"
+            }
+        ]
+    },
+    "hparam_layer_kernel_l1": {
+        "name": "layer_kernel_l1",
+        "label": "L1 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L1 Kernel Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_layer_kernel_l2": {
+        "name": "layer_kernel_l2",
+        "label": "L2 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L2 Kernel Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_layer_bias_l1": {
+        "name": "layer_bias_l1",
+        "label": "L1 Bias Regularizer",
+        "type": "number",
+        "tooltip": "L1 Bias Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_layer_bias_l2": {
+        "name": "layer_bias_l2",
+        "label": "L2 Bias Regularizer",
+        "type": "number",
+        "tooltip": "L2 Bias Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_layer_activity_l1": {
+        "name": "layer_activity_l1",
+        "label": "L1 Activity Regularizer",
+        "type": "number",
+        "tooltip": "L1 Activity Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_layer_activity_l2": {
+        "name": "layer_activity_l2",
+        "label": "L2 Activity Regularizer",
+        "type": "number",
+        "tooltip": "L2 Activity Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_loss": {
+        "name": "loss",
+        "label": "Loss",
+        "type": "select",
+        "tooltip": "Loss for the classifier. Default: crossentropy.",
+        "options": [
+            "crossentropy", "hinge"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "crossentropy"
+            }
+        ]
+    },
+    "hparam_learning_rate_start": {
+        "name": "learning_rate_start",
+        "label": "Learning Rate Start",
+        "tooltip": "Initial learning rate for the learning process.",
+        "type": "number",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0.005
+            },
+            {
+                "type": "attribute",
+                "value": "min=0.0 step=any"
+            }
+        ]
+    },
+    "hparam_learning_rate_stop": {
+        "name": "learning_rate_stop",
+        "label": "Learning Rate Stop",
+        "tooltip": "Learning rate after \"learning-rate-steps\" steps.",
+        "type": "number",
+        "extra": [
+            {
+                "type": "default",
+                "value": 0.0005
+            },
+            {
+                "type": "attribute",
+                "value": "min=0.0 step=any"
+            }
+        ]
+    },
+    "hparam_learning_rate_steps": {
+        "name": "learning_rate_steps",
+        "label": "Learning Rate Steps",
+        "tooltip": "Amount of decay steps required to go from start to stop LR.",
+        "type": "number",
+        "extra": [
+            {
+                "type": "default",
+                "value": 470
+            },
+            {
+                "type": "attribute",
+                "value": "min=1"
+            }
+        ]
+    },
+    "hparam_learning_rate_power": {
+        "name": "learning_rate_power",
+        "label": "Learning Rate Power",
+        "tooltip": "Degree of the polynomial to use for the learning rate.",
+        "type": "number",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1.0
+            },
+            {
+                "type": "attribute",
+                "value": "min=0.0 step=any"
+            }
+        ]
+    },
+    "hparam_use_trainable_embedding": {
+        "name": "use_trainable_embedding",
+        "label": "Use Trainable Embedding",
+        "type": "bool",
+        "tooltip": "Whether to make the word-embedding trainable."
+    },
+    "hparam_fully_connected_layer_size": {
+        "name": "fully_connected_layer_size",
+        "label": "Size of Fully Connected Layer",
+        "type": "number",
+        "tooltip": "Size of the fully connected layer. Set to 0 to disable.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 32
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=16384"
+            }
+        ]
+    },
+    "hparam_filters": {
+        "name": "filters",
+        "label": "Filters",
+        "type": "number",
+        "tooltip": "Number of filters per convolution layer.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 32
+            },
+            {
+                "type": "attribute",
+                "value": "min=1 max=64"
+            }
+        ]
+    },
+    "hparam_number_of_convolutions": {
+        "name": "number_of_convolutions",
+        "label": "Number of Convolutions",
+        "type": "number",
+        "tooltip": "Number of different convolutions to use.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"nrOfConvChanged($(this))\" min=1 max=11"
+            }
+        ]
+    },
+    "hparam_fully_connected_layer_activation": {
+        "name": "fnn_layer_activation",
+        "label": "Fully Connected Layer Activation",
+        "tooltip": "Activation to use in the fully connected layer.",
+        "type": "select",
+        "options": [
+            "linear",
+            "relu",
+            "elu",
+            "leakyrule",
+            "sigmoid",
+            "tanh",
+            "softmax",
+            "softsign",
+            "selu",
+            "exp",
+            "prelu"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "linear"
+            }
+        ]
+    },
+    "hparam_kernel_size": {
+        "name": "kernel_size",
+        "label": "Size of Kernel",
+        "type": "number",
+        "tooltip": "Size of the i-th convolution kernel.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 4
+            },
+            {
+                "type": "indent"
+            },
+            {
+                "type": "attribute",
+                "value": "min=1 max=512"
+            }
+        ]
+    },
+    "hparam_number_of_hidden_layers_rnn": {
+        "name": "number_of_rnn_layers",
+        "label": "Number of RNN Layers",
+        "type": "number",
+        "tooltip": "Number of hidden layers in the network.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 1
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"nrHiddenLayersRNNChanged($(this))\" min=0 max=10"
+            }
+        ]
+    },
+    "hparam_rnn_layer_type": {
+        "name": "rnn_layer_type",
+        "label": "Type of RNN Layer",
+        "type": "select",
+        "tooltip": "Type of RNN Layer",
+        "options": [
+            "SimpleRNN",
+            "GRU",
+            "LSTM"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "LSTM"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_rnn_layer_size": {
+        "name": "rnn_layer_size",
+        "label": "Size of RNN Layer ",
+        "type": "number",
+        "tooltip": "Number of units in the i-th RNN layer",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=2 max=4096"
+            },
+            {
+                "type": "default",
+                "value": 32
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_rnn_layer_activation": {
+        "name": "rnn_layer_activation",
+        "label": "RNN Layer Activation",
+        "type": "select",
+        "tooltip": "Activation to use in the rnn layers",
+        "options": [
+            "linear",
+            "relu",
+            "elu",
+            "leakyrelu",
+            "sigmoid",
+            "tanh",
+            "softmax",
+            "softsign",
+            "selu",
+            "exp",
+            "prelu",
+            "swish"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "tanh"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent_activation": {
+        "name": "rnn_layer_recurrent_activation",
+        "label": "RNN Layer Recurrent Activation",
+        "type": "select",
+        "tooltip": "Recurrent activation to use in the rnn layers",
+        "options": [
+            "linear",
+            "relu",
+            "elu",
+            "leakyrelu",
+            "sigmoid",
+            "tanh",
+            "softmax",
+            "softsign",
+            "selu",
+            "exp",
+            "prelu",
+            "swish"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "sigmoid"
+            }
+        ]
+    },
+    "hparam_rnn_layer_dropout": {
+        "name": "rnn_layer_dropout",
+        "label": "Dropout for RNN Layer",
+        "type": "number",
+        "tooltip": "Dropout for the i-th rnn layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent-dropout": {
+        "name": "rnn_layer_recurrent-dropout",
+        "label": "Recurrent Dropout for RNN Layer",
+        "type": "number",
+        "tooltip": "Recurrent Dropout for the i-th rnn layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_number_of_dense_layers": {
+        "name": "number_of_dense_layers",
+        "label": "Number of Dense Layers",
+        "type": "number",
+        "tooltip": "Number of dense layers to use",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=0 max=10 onchange=\"nrDenseLayersChanged($(this))\""
+            },
+            {
+                "type": "default",
+                "value": "0"
+            }
+        ]
+    },
+    "hparam_dense_layer_size": {
+        "name": "dense_layer_size",
+        "label": "Size of Dense Layer ",
+        "type": "number",
+        "tooltip": "Number of units in the i-th dense layer",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=2 max=16384"
+            },
+            {
+                "type": "default",
+                "value": 32
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "hparam_rnn_layer_activation_alpha": {
+        "name": "rnn_layer_activation_alpha",
+        "label": "Hidden Layer Activation Alpha",
+        "type": "number",
+        "tooltip": "Alpha value for the elu activation of the i-th layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent_activation_alpha": {
+        "name": "rnn_layer_recurrent_activation_alpha",
+        "label": "Hidden Layer Recurrent Activation Alpha",
+        "type": "number",
+        "tooltip": "Alpha value for the elu activation of the i-th layer",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_kernel_l1": {
+        "name": "rnn_layer_kernel_l1",
+        "label": "L1 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L1 Kernel Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_kernel_l2": {
+        "name": "rnn_layer_kernel_l2",
+        "label": "L2 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L2 Kernel Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent_l1": {
+        "name": "rnn_layer_recurrent_l1",
+        "label": "L1 Kernel Regularizer",
+        "type": "number",
+        "tooltip": "L1 Recurrent Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_recurrent_l2": {
+        "name": "rnn_layer_recurrent_l2",
+        "label": "L2 Recurrent Regularizer",
+        "type": "number",
+        "tooltip": "L2 Recurrent Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_bias_l1": {
+        "name": "rnn_layer_bias_l1",
+        "label": "L1 Bias Regularizer",
+        "type": "number",
+        "tooltip": "L1 Bias Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_bias_l2": {
+        "name": "rnn_layer_bias_l2",
+        "label": "L2 Bias Regularizer",
+        "type": "number",
+        "tooltip": "L2 Bias Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_activity_l1": {
+        "name": "rnn_layer_activity_l1",
+        "label": "L1 Activity Regularizer",
+        "type": "number",
+        "tooltip": "L1 Activity Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_rnn_layer_activity_l2": {
+        "name": "rnn_layer_activity_l2",
+        "label": "L2 Activity Regularizer",
+        "type": "number",
+        "tooltip": "L2 Activity Regularizer for Layers",
+        "extra": [
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "attribute",
+                "value": "min=0 max=1 step=any"
+            }
+        ]
+    },
+    "hparam_number_of_frozen_layers": {
+        "name": "number_of_frozen_layers",
+        "label": "Number of Layers to Freeze",
+        "type": "number",
+        "tooltip": "Number of layers to freeze",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "min=0 max=12"
+            },
+            {
+                "type": "default",
+                "value": 10
+            }
+        ]
+    },
+
+    "hparam_optimizer": {
+        "name": "optimizer",
+        "label": "Optimizer",
+        "type": "select",
+        "tooltip": "Optimizer for the classifier. Default: adam.",
+        "options": [
+            "adam", "nadam", "sgd"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "adam"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"optimizerChanged($(this))\""
+            }
+        ]
+    },
+    "optimizer_beta_1": {
+        "name": "beta_1",
+        "label": "Beta-1",
+        "type": "number",
+        "tooltip": "",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0 max=1"
+            },
+            {
+                "type": "default",
+                "value": "0.9"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "optimizer_beta_2": {
+        "name": "beta_2",
+        "label": "Beta-2",
+        "type": "number",
+        "tooltip": "",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0 max=1"
+            },
+            {
+                "type": "default",
+                "value": "0.999"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "optimizer_epsilon": {
+        "name": "epsilon",
+        "label": "Epsilon",
+        "type": "number",
+        "tooltip": "",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0"
+            },
+            {
+                "type": "default",
+                "value": "0.0000001"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "optimizer_momentum": {
+        "name": "momentum",
+        "label": "Momentum",
+        "type": "number",
+        "tooltip": "Float hyperparameter >= 0 that accelerates gradient descent in the relevant direction and dampens oscillations. Defaults to 0, i.e., vanilla gradient descent. See https://keras.io/api/optimizers/sgd/ for more information.",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "step=any min=0"
+            },
+            {
+                "type": "default",
+                "value": "0.0"
+            },
+            {
+                "type": "indent"
+            }
+        ]
+    },
+    "optimizer_use_nesterov": {
+        "name": "use_nesterov",
+        "label": "Use Nesterov",
+        "type": "bool",
+        "tooltip": ""
+    },
+
+    "prepro_inmode": {
+        "name": "inmode",
+        "label": "Input Mode",
+        "type": "select",
+        "tooltip": "Feature Generator to use.",
+        "options": [
+            "Word2Vec",
+            "Doc2Vec",
+            "BOWFrequency",
+            "BOWNormalized",
+            "Bert",
+            "TfidfGenerator",
+            "Metadata",
+            "OntologyFeatures"
+        ],
+        "extra": [
+            {
+                "type": "default",
+                "value": "BOWFrequency"
+            },
+            {
+                "type": "attribute",
+                "value": "onchange=\"inmodeChanged($(this))\" required"
+            }
+        ]
+    },
+    "param_embedding_id": {
+        "name": "embedding_id",
+        "label": "Word Embedding",
+        "type": "select",
+        "tooltip": "Word Embedding to Use (User-Created)",
+        "options": []
+    },
+    "param_vector_length": {
+        "name": "vector_length",
+        "label": "Vector Length",
+        "type": "number",
+        "tooltip": "Specify the length of the output vector.",
+        "extra": [
+            {
+                "type": "default",
+                "value": 400
+            },
+            {
+                "type": "attribute",
+                "value": "required min=1"
+            }
+        ]
+    },
+    "param_max_len": {
+        "name": "max_len",
+        "label": "Maximum Length",
+        "type": "number",
+        "tooltip": "Words limit of the issue text",
+        "extra": [
+            {
+                "type": "attribute",
+                "value": "required min=1"
+            },
+            {
+                "type": "default",
+                "value": 400,
+                "comment": "Not an official default."
+            }
+        ]
+    },
+    "param_disable_lowercase": {
+        "name": "disable_lowercase",
+        "label": "Disable Lowercase",
+        "type": "bool",
+        "tooltip": "Transform words to lowercase"
+    },
+    "param_disable_stopwords": {
+        "name": "disable_stopwords",
+        "label": "Disable Stopwords",
+        "type": "bool",
+        "tooltip": "Remove stopwords from text"
+    },
+    "param_use_stemming": {
+        "name": "use_stemming",
+        "label": "Use Stemming",
+        "type": "bool",
+        "tooltip": "Stem the words in the text"
+    },
+    "param_use_lemmatization": {
+        "name": "use_lemmatization",
+        "label": "Use Lemmatization",
+        "type": "bool",
+        "tooltip": "Use lemmatization on words in the text"
+    },
+    "param_use_pos": {
+        "name": "use_pos",
+        "label": "Use POS",
+        "type": "bool",
+        "tooltip": "Enhance words in the text with part of speech information"
+    },
+    "param_class_limit": {
+        "name": "class_limit",
+        "label": "Class Limit",
+        "type": "number",
+        "tooltip": "Limit the amount of items per class. -1 to disable.",
+        "extra": [
+            {
+                "type": "default",
+                "value": -1
+            },
+            {
+                "type": "attribute",
+                "value": "min=-1"
+            }
+        ]
+    },
+    "param_metadata_attributes": {
+        "name": "metadata_attributes",
+        "label": "Metadata Attributes",
+        "type": "str",
+        "tooltip": "Comma-separated list of metadata attributes to fetch for use in feature generation"
+    },
+    "param_formatting_handling": {
+        "name": "formatting_handling",
+        "label": "Formatting Handling",
+        "type": "select",
+        "tooltip": "How to handle formatting",
+        "options": ["markers", "remove", "keep"],
+        "extra": [
+            {
+                "type": "default",
+                "value": "markers"
+            }
+        ]
+    },
+
+    "ens_classifier_count": {
+        "name": "classifier_count",
+        "label": "Amount of Ensemble Classifiers",
+        "type": "number",
+        "tooltip": "Amount of Ensemble Classifiers to combine",
+        "extra": [
+            {
+                "type": "default",
+                "value": 2
+            },
+            {
+                "type": "attribute",
+                "value": "min=2 required onchange=\"ensClassCountChanged($(this))\""
+            }
+        ]
+    },
+
+    "stacker_use_concat": {
+        "name": "use_concat",
+        "label": "Use Concatenation",
+        "type": "bool",
+        "tooltip": " Use simple concatenation to create the input for the meta classifier"
+    },
+    "stacker_no_matrix": {
+        "name": "no_matrix",
+        "label": "No Matrix",
+        "type": "bool",
+        "tooltip": "Disallow the use of matrices for meta classifier input"
+    }
+}

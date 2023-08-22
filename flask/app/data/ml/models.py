@@ -22,7 +22,7 @@ def get_model_ids_names():
         return {}
     
 def get_field_configs():
-    with open('app/data/field_configs.json', 'r') as f:
+    with open('app/cache/field_configs.json', 'r') as f:
         data = json.load(f)
         
     ontologies = [x['file_id'] for x in o_data.get_ontologies()]
