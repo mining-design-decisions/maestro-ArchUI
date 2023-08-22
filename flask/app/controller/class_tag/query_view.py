@@ -45,6 +45,8 @@ def view_query_data(query, page, pageLimit, sort, sort_asc, search_issue_id):
 
 def create_query(requestform):
     models = [requestform.get(x) for x in requestform if x.startswith('model_')]
+    versions = [requestform.get(x) for x in requestform if x.startswith('modelversion')]
+    print(models, versions)
     query_type = requestform.get('query_type', False)
     data_q = ""
     if query_type:
@@ -62,5 +64,5 @@ def create_query(requestform):
             data_q = {}
         
     q_name = requestform.get('query_name')
-    failed_models = q_data.create_query(models, data_q, q_name)
+    failed_models = q_data.create_query(models, versions, data_q, q_name)
     common.set_cache('failed_models', failed_models)

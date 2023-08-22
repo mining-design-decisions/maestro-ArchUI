@@ -121,15 +121,23 @@ function add_model() {
     new_id = `model_${max_id}`
     new_html = `<div class="form-group my-2" id="${new_id}_div">`
     new_html += `<label for="${new_id}" class="col-form-label">ML Model: </label>`
-    new_html += `<select id="${new_id}" name="${new_id}" class="mx-3">`
+    new_html += `<select id="${new_id}" name="${new_id}" class="mx-3" onchange="updateVersionSelection(${max_id})">`
     models = {{models|tojson|safe}}
     if (models.length > 0) {
         models.forEach(model => {
             new_html += `<option value="${model['model_id']}">${model['model_name']}</option>`
         })
     }
-    
     new_html += `</select>`
+
+    // Add selection box for model version (initially empty)
+    new_id_version = `modelversion_${max_id}`
+    new_html += `<select id="${new_id_version}" name="${new_id_version}" class="mx-3">`
+    if (models.length > 0) {
+        new_html += `<option value="latest-version">Latest Version</option>`
+    }
+    new_html += `</select>`
+
     new_html += `<button onclick="remove_model('${new_id}_div')" type="button" class="btn btn-secondary">Remove this ML Model Option</button>`
     new_html += `</div>`
 
@@ -151,6 +159,41 @@ function add_model() {
     })
 }
 add_model(); // initial option
+
+function updateVersionSelection(element_id) {
+    var model_select_id = `model_${element_id}`;
+    var element = document.getElementById(model_select_id);
+    var value = element.value;
+    var version_select_id = `modelversion_${element_id}`;
+    var version_select = document.getElementById(version_select_id);
+    var new_html = ``;
+    var models = {{models|tojson|safe}}
+    if (models.length > 0) {
+        new_html += `<option value="latest-version">Latest Version</option>`
+    }
+    console.log('Model ID:' + value);
+    fetch("/classify/get_model_versions/" + value)
+        .then(res => res.json())
+        .then(versions => {
+           versions.forEach(
+               v => {
+                   console.log(v);
+                   new_html += `<option value="${v['version_id']}">${v['version_id']}</option>`
+               }
+           )
+            return versions;
+        }
+        ).then(
+            versions => {
+                if (versions.length > 0) {
+                    version_select.innerHTML = new_html;
+                } else {
+                    version_select.innerHTML = `<option value=""></option>`;
+                }
+            }
+        );
+}
+updateVersionSelection(0);  // Initial option
 
 function remove_model(id) {
     document.getElementById(id).remove();
