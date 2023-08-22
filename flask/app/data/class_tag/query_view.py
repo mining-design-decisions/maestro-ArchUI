@@ -43,11 +43,25 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc, issue_id):
 
     # get issue data from UI endpoint
     x = requests.get(f'{login.get_db()}/ui', verify=False, json=uibody)
-    try:
-        issue_data = x.json()['data']
-        total_pages = x.json()['total_pages']
-    except:
-        print(x.json())
+    done = False
+    while not done:
+        try:
+            issue_data = x.json()['data']
+            total_pages = x.json()['total_pages']
+            done = True
+        except:
+            offending_model = x.json()['detail'].split(':')[1].strip().split('.')[1]
+            model_ids.remove(offending_model)
+            sort = None
+            uibody = {
+                "filter": query_filter,
+                "sort": sort,
+                "sort_ascending": sort_asc,
+                "models": model_ids,
+                "page": int(page),
+                "limit": pageLimit
+            }
+            x = requests.get(f'{login.get_db()}/ui', verify=False, json=uibody)
 
     # parse manual labels (issue id -> str)
     manual_labels = {}
