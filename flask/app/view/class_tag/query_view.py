@@ -10,6 +10,8 @@ from app.data.ml import models as m_data
 
 from app.data import common
 
+import json
+
 bp = Blueprint('classify', __name__, url_prefix="/classify")
 
 @bp.route('/', methods=["GET"])
@@ -42,3 +44,7 @@ def viewform():
 def create():
     contr.create_query(request.form)
     return redirect(url_for('classify.viewall'))
+
+@bp.route('get_model_versions/<model_id>', methods=['GET'])
+def get_model_versions(model_id):
+    return json.dumps(m_data.get_model_versions_by_id(model_id))

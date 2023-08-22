@@ -20,7 +20,17 @@ def get_model_ids_names():
         return model_ids.json()['models']
     except:
         return {}
-    
+
+
+def get_model_versions_by_id(ident):
+    try:
+        response = requests.get(f'{login.get_db()}/models/{ident}/versions', verify=False)
+        response.raise_for_status()
+        return response.json()['versions']
+    except requests.HTTPError:
+        return []
+
+
 def get_field_configs():
     with open('app/data/field_configs.json', 'r') as f:
         data = json.load(f)
