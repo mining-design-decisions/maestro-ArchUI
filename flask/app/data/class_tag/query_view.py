@@ -72,7 +72,11 @@ def get_paginated_data(query_name, page, pageLimit, sort, sort_asc, issue_id):
         'Classification3': ['existence', 'executive', 'property']
     }
     for m_id in models:
-        output_mode = requests.get(f'{login.get_db()}/models/{m_id}', verify=False).json()['model_config']['output-mode']
+        config = requests.get(f'{login.get_db()}/models/{m_id}', verify=False).json()['model_config']
+        if 'output-mode' in config:
+            output_mode = config['output-mode']
+        elif 'output_mode' in config:
+            output_mode = config['output_mode']
         if output_mode not in output_mode_to_headers:
             print('\nERROR: Unknown Output Mode: ' + output_mode + ". Please complete output_mode_to_headers.\n\n")
         headers[f"{m_id}-{models[m_id]}"] = output_mode_to_headers[output_mode]
