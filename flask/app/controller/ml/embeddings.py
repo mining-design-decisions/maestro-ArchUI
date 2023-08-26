@@ -53,6 +53,8 @@ def create_config(reqform):
                 case 'int':
                     # grab the min.
                     params[setting['name']] = setting['minimum']
+                case 'str':
+                    pass # do not give this one
                 case _:
                     print(f"WARNING: Unhandled Embedding Param {setting['name']} of type {setting['type']}")
 

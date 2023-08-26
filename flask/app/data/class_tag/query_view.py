@@ -110,12 +110,6 @@ def _query_dir():
 def create_query(models, versions, query, name):
     modelversions = {}
     failed_models = []
-    # for model in models:
-    #     modelVersions_raw = requests.get(f"{login.get_db()}/models/{model}/versions", verify=False).json()["versions"]
-    #     if len(modelVersions_raw) > 0:
-    #         modelversions[model] = modelVersions_raw[-1]['version_id']
-    #     else:
-    #         failed_models.append(model)
     for model, version in zip(models, versions, strict=True):
         if version == '':
             failed_models.append(model)
