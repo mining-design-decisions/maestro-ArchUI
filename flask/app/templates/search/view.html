@@ -11,6 +11,19 @@
     <h5>Query</h5>
 <div class="row">
     <input type="text" class="col-sm-8" id="query_text"/>
+    <div class="row col-sm-1 mx-2">
+        <label for="num-results">Number of results:</label>
+        <select id="num-results" name="num-results">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="250">250</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+        </select>
+    </div>
     <button type="submit" class="btn btn-primary col-sm-1 mx-2" onclick="clickSearch()">Search</button>
     <button type="submit" class="btn btn-secondary col-sm-1" onclick="regenIndex()">Regenerate Index</button>
 </div>
@@ -119,8 +132,9 @@ $(document).ready(function() {
 
 function updateModelVersions() {
     let selectedModel = document.getElementById('model-id-select').value;
-    if (selectedModel.value === 'null') {
+    if (selectedModel === 'null') {
         document.getElementById('model-version-id-select').innerHTML = `<option value=""></option>`;
+        maybeEnableLabels();
         return;
     }
     fetch("/classify/get_model_versions/" + selectedModel)
@@ -187,7 +201,7 @@ function clickSearch() {
         },
         body: JSON.stringify({
             database_url: "{{ db_url }}",
-            num_results: 10,
+            num_results: Number.parseInt(document.getElementById("num-results").value),
             query: text,
             model_id: modelID,
             version_id: modelVersion,
@@ -232,9 +246,9 @@ function clickSearch() {
 
                     // box labels
                     box_labels = []
-                    if (result.executive == "True") box_labels.push("Executive")
-                    if (result.existence == "True") box_labels.push("Existence")
-                    if (result.property == "True") box_labels.push("Property")
+                    if (result.executive == "true") box_labels.push("Executive")
+                    if (result.existence == "true") box_labels.push("Existence")
+                    if (result.property == "true") box_labels.push("Property")
                     if (box_labels.length == 0) box_labels.push("Non-Architectural")
                     box_labels = `Classifier Prediction: ${box_labels.join(', ')}`
 
