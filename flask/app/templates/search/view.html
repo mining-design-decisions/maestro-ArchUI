@@ -3,40 +3,73 @@
 {% block subtitle %}Search{% endblock %}
 
 {% block margin_content %}
+
 <h3>Search Engine</h3>
+
+    <hr />
+
+    <h5>Query</h5>
 <div class="row">
-    <input type="text" class="col-sm-4" id="query_text"/>
+    <input type="text" class="col-sm-8" id="query_text"/>
     <button type="submit" class="btn btn-primary col-sm-1 mx-2" onclick="clickSearch()">Search</button>
     <button type="submit" class="btn btn-secondary col-sm-1" onclick="regenIndex()">Regenerate Index</button>
 </div>
 
-<div class="form-group row my-2">
-    <label class="col-sm-2 col-form-label">Existence: </label>
-    <select class="col-sm-2" title="Should the result issues have the Existence label?" id="existence">
-        <option value="null">Either</option>
-        <option value="true">True</option>
-        <option value="false">False</option>
-    </select>
-</div>
-<div class="form-group row my-2">
-    <label class="col-sm-2 col-form-label">Executive: </label>
-    <select class="col-sm-2" title="Should the result issues have the Executive label?" id="executive">
-        <option value="null">Either</option>
-        <option value="true">True</option>
-        <option value="false">False</option>
-    </select>
-</div>
-<div class="form-group row my-2">
-    <label class="col-sm-2 col-form-label">Property: </label>
-    <select class="col-sm-2" title="Should the result issues have the Property label?" id="property">
-        <option value="null">Either</option>
-        <option value="true">True</option>
-        <option value="false">False</option>
-    </select>
+    <hr />
+
+<h5>Model</h5>
+<div class="row">
+    <div class="col-sm-4 bg-light">
+        <div class="form-group row my-2">
+            <label class="col-sm-2 col-form-label">Model: </label>
+            <select class="col-sm-6" title="Model to use as a source for labels" id="model-id-select" onchange="updateModelVersions()">
+                <option value="null">None</option>
+            </select>
+        </div>
+        <div class="form-group row my-2">
+            <label class="col-sm-2 col-form-label">Version: </label>
+            <select class="col-sm-6" title="Model version to use as a source for labels" id="model-version-id-select" onchange="maybeEnableLabels()">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4 bg-light">
+        <div class="form-group row my-2">
+            <label class="col-sm-2 col-form-label">Existence: </label>
+            <select class="col-sm-6" title="Should the result issues have the Existence label?" id="existence" disabled>
+                <option value="null">Either</option>
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+        </div>
+        <div class="form-group row my-2">
+            <label class="col-sm-2 col-form-label">Executive: </label>
+            <select class="col-sm-6" title="Should the result issues have the Executive label?" id="executive" disabled>
+                <option value="null">Either</option>
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+        </div>
+        <div class="form-group row my-2">
+            <label class="col-sm-2 col-form-label">Property: </label>
+            <select class="col-sm-6" title="Should the result issues have the Property label?" id="property" disabled>
+                <option value="null">Either</option>
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+        </div>
+    </div>
 </div>
 
 <hr />
-
+<h5>Projects</h5>
+    <div class="row form-group">
+        <label class="col-sm-1 col-form-label">Projects</label>
+        <select class="col-sm-6" multiple="multiple" id="projects-box">
+            <option value="all">All</option>
+        </select>
+    </div>
+<hr />
 <div>
     <ol id="search_results">
     </ol>
@@ -46,8 +79,96 @@
 {% block scripts %}
 {{ super() }}
 <script>
-function parseSelect(value) {
-    switch(value) {
+
+let projectsByRepo = null;
+
+$(document).ready(function() {
+    $('#projects-box').select2();
+});
+
+$(document).ready(function() {
+    let models = {{models|tojson|safe}};
+    let new_html = `<option value="null">None</option>`;
+    if (models.length > 0) {
+        models.forEach(model => {
+            new_html += `<option value="${model['model_id']}">${model['model_name']}</option>`
+        })
+    }
+    document.getElementById('model-id-select').innerHTML = new_html;
+    maybeEnableLabels();
+});
+
+$(document).ready(function() {
+    fetch("/search/get_projects_by_repo")
+        .then(res => res.json())
+        .then(response => {
+            let projects_by_repo = response['projects_by_repo'];
+            projectsByRepo = projects_by_repo;
+            let inner_html = `<option value="all">All</option>`;
+            for (const repo of response['repos']) {
+                inner_html += `<option value="${repo}-all">All ${repo}</option>`;
+            }
+            for (const [repo, projects] of Object.entries(projects_by_repo)) {
+                for (const project of projects) {
+                    inner_html += `<option value="${repo}-${project}">${repo} ${project}</option>`;
+                }
+            }
+            document.getElementById('projects-box').innerHTML = inner_html;
+        });
+});
+
+function updateModelVersions() {
+    let selectedModel = document.getElementById('model-id-select').value;
+    if (selectedModel.value === 'null') {
+        document.getElementById('model-version-id-select').innerHTML = `<option value=""></option>`;
+        return;
+    }
+    fetch("/classify/get_model_versions/" + selectedModel)
+        .then(res => res.json())
+        .then(versions => {
+            let ident = versions[versions.length - 1]['version_id'];
+            let new_html = `<option value="${ident}">Latest Version</option>`;
+            versions.forEach(
+               v => {
+                   new_html += `<option value="${v['version_id']}">${v['version_id']}</option>`
+               }
+           )
+            return [new_html, versions];
+        }
+        ).then(
+            pair => {
+                let [new_html, versions] = pair;
+                if (versions.length > 0) {
+                    document.getElementById('model-version-id-select').innerHTML = new_html;
+                } else {
+                    document.getElementById('model-version-id-select').innerHTML = `<option value=""></option>`;
+                }
+                maybeEnableLabels();
+            }
+        );
+}
+
+function maybeEnableLabels() {
+    let modelBox = document.getElementById('model-id-select');
+    let versionBox = document.getElementById('model-version-id-select');
+    console.log(modelBox.value);
+    console.log(versionBox.value);
+    if (modelBox.value && versionBox.value) {
+        document.getElementById('existence').disabled = false;
+        document.getElementById('executive').disabled = false;
+        document.getElementById('property').disabled = false;
+    } else {
+        document.getElementById('existence').disabled = true;
+        document.getElementById('executive').disabled = true;
+        document.getElementById('property').disabled = true;
+    }
+}
+
+function parseSelect(widget) {
+    if (widget.disabled) {
+        return null;
+    }
+    switch(widget.value) {
         case 'null':
             return null
         case 'true':
@@ -57,22 +178,48 @@ function parseSelect(value) {
     }
 }
 function clickSearch() {
-    text = document.getElementById('query_text').value
+    let text = document.getElementById('query_text').value;
+    let [modelID, modelVersion] = getModelIDs();
+    let reposAndProjects = getSelectedProjects();
     fetch(`/search/search`, {
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            database_url: "{{ db_url }}",
+            num_results: 10,
             query: text,
-            existence: parseSelect(document.getElementById('existence').value),
-            executive: parseSelect(document.getElementById('executive').value),
-            property: parseSelect(document.getElementById('property').value)
+            model_id: modelID,
+            version_id: modelVersion,
+            predictions: {
+                existence: parseSelect(document.getElementById('existence')),
+                executive: parseSelect(document.getElementById('executive')),
+                property: parseSelect(document.getElementById('property'))
+            },
+            repos_and_projects: reposAndProjects
         }),
         method: "POST" // is only post because get methods aren't allowed a body
     })
     .then(e => {
         if (e.status == 200) {
             e.json().then(data => {
+                if (data['result'] === 'busy') {
+                    alert('The search engine is currently busy (perhaps generating indexes)');
+                    return;
+                }
+                if (data['result'] === 'missing-indexes') {
+                    alert('Missing indexes: ' + data['payload'] + ". Try (re-)generating the index.");
+                    return;
+                }
+                if (data['result'] === 'unexpected-error') {
+                    alert('Unexpected error in backend: ' + data['payload']);
+                    return
+                }
+                if (data['result'] !== 'done') {
+                    alert('Unknown status: ' + data['result'] + '. Payload: ' + data['payload']);
+                    return;
+                }
+                data = data['payload'];
                 console.log(data)
 
                 element = document.getElementById("search_results")
@@ -91,7 +238,7 @@ function clickSearch() {
                     if (box_labels.length == 0) box_labels.push("Non-Architectural")
                     box_labels = `Classifier Prediction: ${box_labels.join(', ')}`
 
-                    element.innerHTML += `<li><div class="card m-2"><div class="card-body">${box_header}<hr />${box_labels}<hr />"${result.text}"</div></div></li>`
+                    element.innerHTML += `<li><div class="card m-2"><div class="card-body">${box_header}<hr />${box_labels}<hr /><b>${result.summary}</b><br><br>${result.description}</div></div></li>`
                 });
             })
         }
@@ -101,9 +248,78 @@ function clickSearch() {
     })
 }
 function regenIndex() {
+    alert('Indexes are being generated. You will be alerted once this is done.');
+    let [modelID, modelVersion] = getModelIDs();
+    let reposAndProjects = getSelectedProjects();
+    let payload = {
+        database_url: "{{ db_url }}",
+        model_id: modelID,
+        version_id: modelVersion,
+        repos_and_projects: reposAndProjects
+    };
     fetch(`/search/index`, {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload),
         method: "POST"
     })
+        .then(res => res.json())
+        .then(res => {
+            if (res['result'] === 'busy') {
+                alert('The search engine is currently busy (perhaps generating indexes)');
+                return;
+            }
+            if (res['result'] === 'unexpected-error') {
+                alert('Unexpected error in backend: ' + res['payload']);
+                return;
+            }
+            if (res['result'] === 'missing-prediction') {
+                alert('Missing prediction for issue ' + res['payload']['ident'] + ' (' + res['payload']['key'] + ').');
+                return;
+            }
+            if (res['result'] !== 'done') {
+                alert('Unknown status: ' + res['result'] + '. Payload: ' + res['payload']);
+                return;
+            }
+            alert('Indexes have been generated');
+        })
+        .catch(error => {
+            alert('Unexpected error during index generation: ' + error)
+        });
+
+}
+
+function getModelIDs() {
+    let modelID = document.getElementById('model-id-select').value;
+    let modelVersion = document.getElementById('model-version-id-select').value;
+    if (modelID === 'null' || !modelID) {
+        modelID = null;
+        modelVersion = null;
+    }
+    return [modelID, modelVersion];
+}
+
+function getSelectedProjects() {
+    let reposAndProjects = {};
+    for (const ob of $('#projects-box').select2('data')) {
+        let key = ob['id'];
+        if (key === 'all') {
+            reposAndProjects = projectsByRepo;
+            break;
+        } else if (key.split('-')[1] === 'all') {
+            let p = key.split('-')[0];
+            reposAndProjects[p] = projectsByRepo[p];
+        } else {
+            let r = key.split('-')[0];
+            let p = key.split('-')[1];
+            if (!Object.hasOwn(reposAndProjects, r)) {
+                reposAndProjects[r] = [];
+            }
+            reposAndProjects[r].push(p);
+        }
+    }
+    return reposAndProjects;
 }
 </script>
 {% endblock %}
