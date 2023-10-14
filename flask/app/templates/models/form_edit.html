@@ -1,8 +1,0 @@
-{% extends 'models/form.html' %}
-
-{% block subtitle %}Edit ML Model{% endblock %}
-
-{% block formheader %}
-<h3>Editing Model {{name}}</h3>
-<form method="POST" id="editmodel" action="{{ url_for('models.edit', model=id ) }}">
-{% endblock %}
