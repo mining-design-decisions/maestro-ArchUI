@@ -3,13 +3,14 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const navigation = [
   { name: "Classify Issues", href: "/classify-issues", current: false },
-  { name: "Statistics", href: "#", current: false },
-  { name: "Tags", href: "#", current: false },
-  { name: "Search", href: "#", current: false },
-  { name: "Login", href: "#", current: false },
+  { name: "Statistics", href: "/statistics", current: false },
+  { name: "Tags", href: "/tags", current: false },
+  { name: "Search", href: "/search", current: false },
+  { name: "Login", href: "/login", current: false },
 ];
 
 function classNames(...classes) {

@@ -13,11 +13,16 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "axios": "^1.5.1",
+    "jquery": "^3.7.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-multi-select-component": "^4.3.4",
     "react-router-dom": "^6.16.0",
+    "react-select": "^5.7.7",
+    "react-select-virtualized": "^5.5.1",
+    "react-windowed-select": "^5.1.0",
     "sort-by": "^0.0.2"
   },
   "devDependencies": {
