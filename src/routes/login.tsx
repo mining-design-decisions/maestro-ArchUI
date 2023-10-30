@@ -45,6 +45,7 @@ export default function Login() {
             };
             fetch(connectionSettings["databaseURL"] + "/token", request).then(
               (response) => {
+                console.log(response);
                 if (response.ok) {
                   alert("Login succesful");
                 } else {

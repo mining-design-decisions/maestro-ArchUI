@@ -117,19 +117,6 @@ export default function MainMenu() {
                               </a>
                             )}
                           </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
-                                href="#"
-                                className={classNames(
-                                  active ? "bg-gray-600" : "",
-                                  "block px-4 py-2 text-sm text-white"
-                                )}
-                              >
-                                Predict with ML Models
-                              </a>
-                            )}
-                          </Menu.Item>
                         </Menu.Items>
                       </Transition>
                     </Menu>

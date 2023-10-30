@@ -1,35 +1,25 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
+import { getRequest, patchRequest, postRequest } from "./util";
 
 function DropDown({ name, options, value, onChange }) {
   return (
     <div className="text-white flex items-center space-x-4 mt-3 justify-between">
       <label>{name}</label>
-      <div className="flex relative">
-        <select
-          className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-1 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          value={value === null ? "null" : value}
-          onChange={(event) => onChange(event.target.value)}
-        >
-          <option className="disabled hidden" key="empty"></option>
-          {options.map((x) => {
-            return (
-              <option key={x["value"]} value={x["value"]}>
-                {x["name"]} ({x["value"]})
-              </option>
-            );
-          })}
-        </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-          <svg
-            className="fill-current h-4 w-4"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-          </svg>
-        </div>
-      </div>
+      <select
+        className="p-1 rounded-lg bg-gray-700"
+        value={value === null ? "null" : value}
+        onChange={(event) => onChange(event.target.value)}
+      >
+        <option className="disabled hidden" key="empty"></option>
+        {options.map((x) => {
+          return (
+            <option key={x["value"]} value={x["value"]}>
+              {x["name"]} ({x["value"]})
+            </option>
+          );
+        })}
+      </select>
     </div>
   );
 }
@@ -63,18 +53,16 @@ function IssueTable({
   let [tags, setTags] = useState([]);
 
   useEffect(() => {
-    fetch("https://localhost:8000/tags")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        let tmp = [];
-        data["tags"].map((tag) => {
-          if (tag["type"] === "manual-tag") {
-            tmp.push(tag["name"]);
-          }
-        });
-        setTags(tmp);
+    getRequest("/tags").then((data) => {
+      console.log(data);
+      let tmp = [];
+      data["tags"].map((tag) => {
+        if (tag["type"] === "manual-tag") {
+          tmp.push(tag["name"]);
+        }
       });
+      setTags(tmp);
+    });
   }, []);
 
   function updateLabel(className) {
@@ -428,19 +416,9 @@ function IssueTable({
                           <button
                             className="flex items-center space-x-4 mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                             onClick={() => {
-                              let request = {
-                                method: "POST",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                  "Access-Control-Allow-Credentials": "true",
-                                },
-                                body: JSON.stringify(label),
-                                credentials: "include",
-                              };
-                              fetch(
-                                "https://localhost:8000/manual-labels/" +
-                                  currentIssue["issue_id"],
-                                request
+                              postRequest(
+                                "/manual-labels/" + currentIssue["issue_id"],
+                                label
                               );
                             }}
                           >
@@ -453,19 +431,11 @@ function IssueTable({
                             <button
                               className="flex items-center space-x-4 mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
                               onClick={() => {
-                                let request = {
-                                  method: "POST",
-                                  headers: {
-                                    "Content-Type": "application/json",
-                                    "Access-Control-Allow-Credentials": "true",
-                                  },
-                                  credentials: "include",
-                                };
-                                fetch(
-                                  "https://localhost:8000/issues/" +
+                                postRequest(
+                                  "/issues/" +
                                     currentIssue["issue_id"] +
                                     "/finish-review",
-                                  request
+                                  null
                                 );
                               }}
                             >
@@ -475,19 +445,11 @@ function IssueTable({
                             <button
                               className="flex items-center space-x-4 mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
                               onClick={() => {
-                                let request = {
-                                  method: "POST",
-                                  headers: {
-                                    "Content-Type": "application/json",
-                                    "Access-Control-Allow-Credentials": "true",
-                                  },
-                                  credentials: "include",
-                                };
-                                fetch(
-                                  "https://localhost:8000/issues/" +
+                                postRequest(
+                                  "/issues/" +
                                     currentIssue["issue_id"] +
                                     "/mark-review",
-                                  request
+                                  null
                                 );
                               }}
                             >
@@ -526,6 +488,17 @@ function IssueTable({
                                       type="submit"
                                       className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
                                       onClick={() => {
+                                        patchRequest(
+                                          "/manual-labels/" +
+                                            currentIssue["issue_id"] +
+                                            "/comments/" +
+                                            key,
+                                          {
+                                            comment:
+                                              document.getElementById(key)
+                                                .value,
+                                          }
+                                        );
                                         let comment =
                                           document.getElementById(key).value;
                                         let request = {
@@ -600,7 +573,6 @@ function IssueTable({
                                 onClick={() => {
                                   let comment =
                                     document.getElementById("comment").value;
-                                  let token = "";
                                   let request = {
                                     method: "POST",
                                     headers: {
@@ -679,7 +651,7 @@ function IssueTable({
                             <div className="flex relative">
                               <select
                                 id="add-tag-dropdown"
-                                className="block appearance-none w-full bg-gray-700 border border-gray-700 text-white py-1 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-700 focus:border-gray-700"
+                                className="appearance-none w-full bg-gray-600 border border-gray-600 text-white py-1 px-4 pr-8 rounded leading-tight"
                               >
                                 {tags.map((tag) => {
                                   if (!currentIssue["tags"].includes(tag)) {
