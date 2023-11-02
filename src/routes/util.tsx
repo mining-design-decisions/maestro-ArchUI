@@ -1,4 +1,4 @@
-function getDatabaseURL() {
+export function getDatabaseURL() {
   return JSON.parse(localStorage.getItem("connectionSettings"))["databaseURL"];
 }
 
@@ -6,7 +6,18 @@ function getDlManagerURL() {
   return JSON.parse(localStorage.getItem("connectionSettings"))["dlManagerURL"];
 }
 
-export function uploadFile(url, method, file) {
+export function getSearchEngineURL() {
+  return JSON.parse(localStorage.getItem("connectionSettings"))[
+    "searchEngineURL"
+  ];
+}
+
+export function uploadFile(
+  url,
+  method,
+  file,
+  thenFunction: null | ((data) => void) = null
+) {
   let body = new FormData();
   body.append("file", file);
   let request = {
@@ -21,7 +32,9 @@ export function uploadFile(url, method, file) {
   fetch(getDatabaseURL() + url, request)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      if (thenFunction !== null) {
+        thenFunction(data);
+      }
     });
 }
 
@@ -56,19 +69,24 @@ export function request(
   method,
   url,
   body,
-  thenFunction: null | (() => void) = null
+  thenFunction: null | ((data) => void) = null,
+  formData = false
 ) {
   let request = {
     method: method,
     headers: {
       "Access-Control-Allow-Credentials": "true",
-      "Content-Type": "application/json",
     },
     credentials: "include",
   };
 
   if (body !== null) {
-    request["body"] = JSON.stringify(body);
+    if (formData) {
+      request["body"] = body;
+    } else {
+      request["body"] = JSON.stringify(body);
+      request["headers"]["COntent-Type"] = "application/json";
+    }
   }
 
   fetch(getDatabaseURL() + url, request)
@@ -76,7 +94,7 @@ export function request(
     .then((data) => {
       console.log(data);
       if (thenFunction !== null) {
-        thenFunction();
+        thenFunction(data);
       }
     });
 }
@@ -84,28 +102,35 @@ export function request(
 export function postRequest(
   url,
   body,
-  thenFunction: null | (() => void) = null
+  thenFunction: null | ((data) => void) = null,
+  formData = false
 ) {
-  request("POST", url, body, thenFunction);
+  request("POST", url, body, thenFunction, formData);
 }
 
 export function putRequest(
   url,
   body,
-  thenFunction: null | (() => void) = null
+  thenFunction: null | ((data) => void) = null,
+  formData = false
 ) {
-  request("PUT", url, body, thenFunction);
+  request("PUT", url, body, thenFunction, formData);
 }
 
 export function patchRequest(
   url,
   body,
-  thenFunction: null | (() => void) = null
+  thenFunction: null | ((data) => void) = null,
+  formData = false
 ) {
-  request("PATCH", url, body, thenFunction);
+  request("PATCH", url, body, thenFunction, formData);
 }
 
-export function postRequestDlManager(url, body) {
+export function postRequestDlManager(
+  url,
+  body,
+  thenFunction: null | ((data) => void) = null
+) {
   let request = {
     method: "POST",
     headers: {
@@ -133,7 +158,9 @@ export function postRequestDlManager(url, body) {
       fetch(getDlManagerURL() + url, request)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          if (thenFunction !== null) {
+            thenFunction(data);
+          }
         });
     });
 }

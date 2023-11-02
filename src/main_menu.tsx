@@ -81,19 +81,6 @@ export default function MainMenu() {
                           <Menu.Item>
                             {({ active }) => (
                               <a
-                                href="/ml-models/ontologies"
-                                className={classNames(
-                                  active ? "bg-gray-600" : "",
-                                  "block px-4 py-2 text-sm text-white"
-                                )}
-                              >
-                                Ontologies
-                              </a>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item>
-                            {({ active }) => (
-                              <a
                                 href="/ml-models/embeddings"
                                 className={classNames(
                                   active ? "bg-gray-600" : "",

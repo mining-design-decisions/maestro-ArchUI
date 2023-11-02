@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
-import { getRequest, patchRequest, postRequest } from "./util";
+import { deleteRequest, getRequest, patchRequest, postRequest } from "./util";
 
 function DropDown({ name, options, value, onChange }) {
   return (
@@ -499,27 +499,6 @@ function IssueTable({
                                                 .value,
                                           }
                                         );
-                                        let comment =
-                                          document.getElementById(key).value;
-                                        let request = {
-                                          method: "PATCH",
-                                          headers: {
-                                            "Content-Type": "application/json",
-                                            "Access-Control-Allow-Credentials":
-                                              "true",
-                                          },
-                                          body: JSON.stringify({
-                                            comment: comment,
-                                          }),
-                                          credentials: "include",
-                                        };
-                                        fetch(
-                                          "https://localhost:8000/manual-labels/" +
-                                            currentIssue["issue_id"] +
-                                            "/comments/" +
-                                            key,
-                                          request
-                                        );
                                       }}
                                     >
                                       Edit comment
@@ -528,20 +507,11 @@ function IssueTable({
                                       type="submit"
                                       className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-900 hover:bg-red-800"
                                       onClick={() => {
-                                        let request = {
-                                          method: "DELETE",
-                                          headers: {
-                                            "Access-Control-Allow-Credentials":
-                                              "true",
-                                          },
-                                          credentials: "include",
-                                        };
-                                        fetch(
-                                          "https://localhost:8000/manual-labels/" +
+                                        deleteRequest(
+                                          "/manual-labels/" +
                                             currentIssue["issue_id"] +
                                             "/comments/" +
-                                            key,
-                                          request
+                                            key
                                         );
                                       }}
                                     >
@@ -571,25 +541,15 @@ function IssueTable({
                                 type="submit"
                                 className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-green-700 rounded-lg focus:ring-4 focus:ring-green-200 dark:focus:ring-green-900 hover:bg-green-800"
                                 onClick={() => {
-                                  let comment =
-                                    document.getElementById("comment").value;
-                                  let request = {
-                                    method: "POST",
-                                    headers: {
-                                      "Content-Type": "application/json",
-                                      "Access-Control-Allow-Credentials":
-                                        "true",
-                                    },
-                                    body: JSON.stringify({
-                                      comment: comment,
-                                    }),
-                                    credentials: "include",
-                                  };
-                                  fetch(
-                                    "https://localhost:8000/manual-labels/" +
+                                  postRequest(
+                                    "/manual-labels/" +
                                       currentIssue["issue_id"] +
                                       "/comments",
-                                    request
+                                    {
+                                      comment:
+                                        document.getElementById("comment")
+                                          .value,
+                                    }
                                   );
                                 }}
                               >
@@ -606,21 +566,11 @@ function IssueTable({
                                 <div className="m-2 flex items-center">
                                   <button
                                     onClick={() => {
-                                      let request = {
-                                        method: "DELETE",
-                                        headers: {
-                                          "Content-Type": "application/json",
-                                          "Access-Control-Allow-Credentials":
-                                            "true",
-                                        },
-                                        credentials: "include",
-                                      };
-                                      fetch(
-                                        "https://localhost:8000/issues/" +
+                                      deleteRequest(
+                                        "/issues/" +
                                           currentIssue["issue_id"] +
                                           "/tags/" +
-                                          tag,
-                                        request
+                                          tag
                                       );
                                     }}
                                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
@@ -675,24 +625,15 @@ function IssueTable({
                             </div>
                             <button
                               onClick={() => {
-                                let request = {
-                                  method: "POST",
-                                  headers: {
-                                    "Content-Type": "application/json",
-                                    "Access-Control-Allow-Credentials": "true",
-                                  },
-                                  body: JSON.stringify({
+                                postRequest(
+                                  "/issues/" +
+                                    currentIssue["issue_id"] +
+                                    "/tags",
+                                  {
                                     tag: document.getElementById(
                                       "add-tag-dropdown"
                                     ).value,
-                                  }),
-                                  credentials: "include",
-                                };
-                                fetch(
-                                  "https://localhost:8000/issues/" +
-                                    currentIssue["issue_id"] +
-                                    "/tags",
-                                  request
+                                  }
                                 );
                               }}
                               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-flex items-center"
@@ -776,43 +717,29 @@ function OverView({ socket }) {
   }
 
   function fetchUiData(newQuery) {
-    let parsedQuery = getParsedQuery(newQuery);
-    let request = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(parsedQuery),
-    };
-    fetch("https://localhost:8000/ui", request)
-      .then((response) => response.json())
-      .then((data) => {
-        setUiData(data);
-      });
+    postRequest("/ui", getParsedQuery(newQuery), (data) => {
+      setUiData(data);
+    });
   }
 
   function fetchModels() {
-    fetch("https://localhost:8000/models")
-      .then((response) => response.json())
-      .then((data) => {
-        setModelData(
-          data["models"].map((item) => {
-            return { name: item["model_name"], value: item["model_id"] };
-          })
-        );
-      });
+    getRequest("/models").then((data) =>
+      setModelData(
+        data["models"].map((item) => {
+          return { name: item["model_name"], value: item["model_id"] };
+        })
+      )
+    );
   }
 
   function fetchVersions(modelId) {
-    fetch("https://localhost:8000/models/" + modelId + "/versions")
-      .then((response) => response.json())
-      .then((data) => {
-        let tmp = { ...versions };
-        tmp[modelId] = data["versions"].map((item) => {
-          return { name: item["description"], value: item["version_id"] };
-        });
-        setVersions(tmp);
+    getRequest("/models/" + modelId + "/versions").then((data) => {
+      let tmp = { ...versions };
+      tmp[modelId] = data["versions"].map((item) => {
+        return { name: item["description"], value: item["version_id"] };
       });
+      setVersions(tmp);
+    });
   }
 
   useEffect(() => {

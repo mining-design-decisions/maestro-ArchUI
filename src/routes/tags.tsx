@@ -1,5 +1,6 @@
 import { Transition, Dialog } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
+import { deleteRequest, getRequest } from "./util";
 
 function CreateTag({ showCreateTag, setShowCreateTag, fetchTags }) {
   let [tag, setTag] = useState({ tag: "", description: "" });
@@ -274,9 +275,7 @@ export default function Tags() {
   );
 
   function fetchTags() {
-    fetch(connectionSettings["databaseURL"] + "/tags")
-      .then((response) => response.json())
-      .then((data) => setTags(data["tags"]));
+    getRequest("/tags").then((data) => setTags(data["tags"]));
   }
 
   useEffect(() => {

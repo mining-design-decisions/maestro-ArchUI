@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import WindowedSelect from "react-windowed-select";
+import { getDatabaseURL, getRequest, getSearchEngineURL } from "./util";
 
 function SearchResults({ searchResults }) {
   return (
@@ -40,65 +41,57 @@ export default function Search() {
   let [selectedProjects, setSelectedProjects] = useState([]);
   let [projectsByRepo, setProjectsByRepo] = useState({});
 
-  let connectionSettings = JSON.parse(
-    localStorage.getItem("connectionSettings")
-  );
-
   function fetchProjects() {
-    fetch(connectionSettings["databaseURL"] + "/repos")
-      .then((response) => response.json())
-      .then((data) => {
-        let repos: string[] = [];
-        data["repos"].sort();
-        Promise.all(
-          data["repos"].map((repo: string) => {
-            repos.push(repo);
-            return fetch(
-              connectionSettings["databaseURL"] + "/repos/" + repo + "/projects"
-            );
-          })
-        ).then((responses) => {
-          Promise.all(responses.map((response) => response.json())).then(
-            (results) => {
-              let tmp: {
-                value: { repo: string; project: string };
-                label: string;
-              }[] = [];
-              let tmpProjectsByRepo = {};
+    getRequest("/repos").then((data) => {
+      let repos: string[] = [];
+      data["repos"].sort();
+      Promise.all(
+        data["repos"].map((repo: string) => {
+          repos.push(repo);
+          return fetch(getDatabaseURL() + "/repos/" + repo + "/projects");
+        })
+      ).then((responses) => {
+        Promise.all(responses.map((response) => response.json())).then(
+          (results) => {
+            let tmp: {
+              value: { repo: string; project: string };
+              label: string;
+            }[] = [];
+            let tmpProjectsByRepo = {};
+            tmp.push({
+              value: {
+                repo: "All",
+                project: "All",
+              },
+              label: "All",
+            });
+            results.map((result, idx) => {
               tmp.push({
                 value: {
-                  repo: "All",
+                  repo: repos[idx],
                   project: "All",
                 },
-                label: "All",
+                label: "All " + repos[idx],
               });
-              results.map((result, idx) => {
+            });
+            results.map((result, idx) => {
+              tmpProjectsByRepo[repos[idx]] = [...result["projects"]];
+              for (let project of result["projects"]) {
                 tmp.push({
                   value: {
                     repo: repos[idx],
-                    project: "All",
+                    project: project,
                   },
-                  label: "All " + repos[idx],
+                  label: repos[idx] + " " + project,
                 });
-              });
-              results.map((result, idx) => {
-                tmpProjectsByRepo[repos[idx]] = [...result["projects"]];
-                for (let project of result["projects"]) {
-                  tmp.push({
-                    value: {
-                      repo: repos[idx],
-                      project: project,
-                    },
-                    label: repos[idx] + " " + project,
-                  });
-                }
-              });
-              setProjects(tmp);
-              setProjectsByRepo(tmpProjectsByRepo);
-            }
-          );
-        });
+              }
+            });
+            setProjects(tmp);
+            setProjectsByRepo(tmpProjectsByRepo);
+          }
+        );
       });
+    });
   }
 
   let [selectedModel, setSelectedModel] = useState({
@@ -107,23 +100,17 @@ export default function Search() {
   });
   let [models, setModels] = useState([]);
   function fetchModels() {
-    fetch(connectionSettings["databaseURL"] + "/models")
-      .then((response) => response.json())
-      .then((data) => setModels([...data["models"]]));
+    getRequest("/models").then((data) => setModels([...data["models"]]));
   }
 
   let [versions, setVersions] = useState({});
   function fetchVersions(modelId) {
-    fetch(
-      connectionSettings["databaseURL"] + "/models/" + modelId + "/versions"
-    )
-      .then((response) => response.json())
-      .then((data) =>
-        setVersions((prevState) => ({
-          ...prevState,
-          [modelId]: [...data["versions"]],
-        }))
-      );
+    getRequest("/models/" + modelId + "/versions").then((data) =>
+      setVersions((prevState) => ({
+        ...prevState,
+        [modelId]: [...data["versions"]],
+      }))
+    );
   }
 
   function checkModel() {
@@ -177,14 +164,14 @@ export default function Search() {
         "Access-Control-Allow-Credentials": "true",
       },
       body: JSON.stringify({
-        database_url: connectionSettings["databaseURL"],
+        database_url: getDatabaseURL(),
         model_id: selectedModel["modelId"],
         version_id: selectedModel["versionId"],
         repos_and_projects: getProjectsByRepo(),
       }),
     };
 
-    fetch(connectionSettings["searchEngineURL"] + "/create-index", request)
+    fetch(getSearchEngineURL() + "/create-index", request)
       .then((response) => response.json())
       .then((data) => console.log(data));
   }
@@ -209,7 +196,7 @@ export default function Search() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        database_url: connectionSettings["databaseURL"],
+        database_url: getDatabaseURL(),
         model_id: selectedModel["modelId"],
         version_id: selectedModel["versionId"],
         repos_and_projects: getProjectsByRepo(),
@@ -219,7 +206,7 @@ export default function Search() {
       }),
     };
 
-    fetch(connectionSettings["searchEngineURL"] + "/search", request)
+    fetch(getSearchEngineURL() + "/search", request)
       .then((response) => response.json())
       .then((data) => setSearchResults([...data["payload"]]));
   }

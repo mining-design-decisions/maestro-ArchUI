@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { postRequest } from "./util";
 
 export default function Login() {
   let connectionSettings = JSON.parse(
@@ -35,27 +36,11 @@ export default function Login() {
             let body = new FormData();
             body.append("username", document.getElementById("username")?.value);
             body.append("password", document.getElementById("password")?.value);
-            let request = {
-              method: "POST",
-              headers: {
-                "Access-Control-Allow-Credentials": "true",
-              },
-              body: body,
-              credentials: "include",
-            };
-            fetch(connectionSettings["databaseURL"] + "/token", request).then(
-              (response) => {
-                console.log(response);
-                if (response.ok) {
-                  alert("Login succesful");
-                } else {
-                  response
-                    .json()
-                    .then((data) =>
-                      alert(response.status + ": " + JSON.stringify(data))
-                    );
-                }
-              }
+            postRequest(
+              "/token",
+              body,
+              (data) => alert(JSON.stringify(data)),
+              true
             );
           }}
         >
@@ -68,23 +53,7 @@ export default function Login() {
               username: document.getElementById("username")?.value,
               password: document.getElementById("password")?.value,
             };
-            let request = {
-              method: "POST",
-              headers: {
-                "Content-type": "application/json",
-                "Access-Control-Allow-Credentials": "true",
-              },
-              body: JSON.stringify(body),
-              credentials: "include",
-            };
-            fetch(
-              connectionSettings["databaseURL"] + "/create-account",
-              request
-            )
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data);
-              });
+            postRequest("/create-account", body);
           }}
         >
           Create Account
