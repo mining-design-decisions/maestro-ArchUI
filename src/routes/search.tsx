@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import WindowedSelect from "react-windowed-select";
-import { getDatabaseURL, getRequest, getSearchEngineURL } from "./util";
+import {
+  getDatabaseURL,
+  getRequest,
+  getSearchEngineURL,
+  postRequestSearchEngine,
+} from "./util";
 
 function SearchResults({ searchResults }) {
   return (
     <>
-      {searchResults.map((result) => {
+      {searchResults.map((result, idx) => {
         let label: string[] = [];
         for (let className of ["existence", "executive", "property"]) {
           if (result[className] === "true") {
@@ -16,13 +21,20 @@ function SearchResults({ searchResults }) {
           label.push("non-architectural");
         }
         return (
-          <div className="my-8">
+          <div
+            className="my-4 rounded-lg bg-gray-700 p-2"
+            key={result["issue_id"]}
+          >
             <p className="text-2xl font-bold">
-              {result["issue_key"]}: {result["summary"]}
+              {idx + 1}: {result["issue_key"]}: {result["summary"]}
             </p>
-            <p className="italic mt-2">Issue ID: {result["issue_id"]}</p>
-            <p className="italic">Label: {label.join(", ")}</p>
-            <p className="italic">Score: {result["hit_score"]}</p>
+            <p className="italic mt-2 text-green-500">
+              Issue ID: {result["issue_id"]}
+            </p>
+            <p className="italic text-green-500">Label: {label.join(", ")}</p>
+            <p className="italic text-green-500">
+              Score: {result["hit_score"]}
+            </p>
             <p className="text-lg mt-2">{result["description"]}</p>
           </div>
         );
@@ -153,27 +165,21 @@ export default function Search() {
   }
 
   function generateIndex() {
-    if (!checkModel()) {
-      return;
+    if (checkModel()) {
+      postRequestSearchEngine(
+        "/create-index",
+        {
+          database_url: getDatabaseURL(),
+          model_id: selectedModel["modelId"],
+          version_id: selectedModel["versionId"],
+          repos_and_projects: getProjectsByRepo(),
+        },
+        (data) => {
+          alert(JSON.stringify(data));
+        }
+      );
+      alert("Generating index...");
     }
-
-    let request = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": "true",
-      },
-      body: JSON.stringify({
-        database_url: getDatabaseURL(),
-        model_id: selectedModel["modelId"],
-        version_id: selectedModel["versionId"],
-        repos_and_projects: getProjectsByRepo(),
-      }),
-    };
-
-    fetch(getSearchEngineURL() + "/create-index", request)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
   }
 
   let [query, setQuery] = useState("");
@@ -186,29 +192,21 @@ export default function Search() {
   let [searchResults, setSearchResults] = useState([]);
 
   function search() {
-    if (!checkModel()) {
-      return;
+    if (checkModel()) {
+      postRequestSearchEngine(
+        "/search",
+        {
+          database_url: getDatabaseURL(),
+          model_id: selectedModel["modelId"],
+          version_id: selectedModel["versionId"],
+          repos_and_projects: getProjectsByRepo(),
+          query: query,
+          num_results: numResults,
+          predictions: filterClasses,
+        },
+        (data) => setSearchResults([...data["payload"]])
+      );
     }
-
-    let request = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        database_url: getDatabaseURL(),
-        model_id: selectedModel["modelId"],
-        version_id: selectedModel["versionId"],
-        repos_and_projects: getProjectsByRepo(),
-        query: query,
-        num_results: numResults,
-        predictions: filterClasses,
-      }),
-    };
-
-    fetch(getSearchEngineURL() + "/search", request)
-      .then((response) => response.json())
-      .then((data) => setSearchResults([...data["payload"]]));
   }
 
   useEffect(() => {

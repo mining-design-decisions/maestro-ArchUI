@@ -89,14 +89,25 @@ export function request(
     }
   }
 
-  fetch(getDatabaseURL() + url, request)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      if (thenFunction !== null) {
-        thenFunction(data);
-      }
-    });
+  fetch(getDatabaseURL() + url, request).then((response) => {
+    if (!response.ok) {
+      response.json().then((data) => {
+        alert(
+          response.status +
+            ": " +
+            response.statusText +
+            "\n\n" +
+            JSON.stringify(data)
+        );
+      });
+    } else {
+      response.json().then((data) => {
+        if (thenFunction !== null) {
+          thenFunction(data);
+        }
+      });
+    }
+  });
 }
 
 export function postRequest(
@@ -155,16 +166,63 @@ export function postRequestDlManager(
           config: body,
         }),
       };
-      fetch(getDlManagerURL() + url, request)
-        .then((response) => response.json())
-        .then((data) => {
-          if (thenFunction !== null) {
-            thenFunction(data);
-          }
-        });
+      fetch(getDlManagerURL() + url, request).then((response) => {
+        if (!response.ok) {
+          response.json().then((data) => {
+            alert(
+              response.status +
+                ": " +
+                response.statusText +
+                "\n\n" +
+                JSON.stringify(data)
+            );
+          });
+        } else {
+          response.json().then((data) => {
+            if (thenFunction !== null) {
+              thenFunction(data);
+            }
+          });
+        }
+      });
     });
 }
 
 export function getRequestDlManager(url) {
   return fetch(getDlManagerURL() + url).then((response) => response.json());
+}
+
+export function postRequestSearchEngine(
+  url,
+  body,
+  thenFunction: null | ((data) => void) = null
+) {
+  let request = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Credentials": "true",
+    },
+    body: JSON.stringify(body),
+  };
+
+  fetch(getSearchEngineURL() + url, request).then((response) => {
+    if (!response.ok) {
+      response.json().then((data) => {
+        alert(
+          response.status +
+            ": " +
+            response.statusText +
+            "\n\n" +
+            JSON.stringify(data)
+        );
+      });
+    } else {
+      response.json().then((data) => {
+        if (thenFunction !== null) {
+          thenFunction(data);
+        }
+      });
+    }
+  });
 }

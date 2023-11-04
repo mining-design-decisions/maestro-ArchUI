@@ -39,7 +39,9 @@ export default function Login() {
             postRequest(
               "/token",
               body,
-              (data) => alert(JSON.stringify(data)),
+              () => {
+                alert("Login successful");
+              },
               true
             );
           }}
@@ -86,6 +88,7 @@ export default function Login() {
                   "connectionSettings",
                   JSON.stringify(connectionSettings)
                 );
+                alert(item[1] + " set");
               }}
             >
               Set {item[1]}

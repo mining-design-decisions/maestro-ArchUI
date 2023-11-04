@@ -24,21 +24,6 @@ function DropDown({ name, options, value, onChange }) {
   );
 }
 
-function InputNumber({ name, value, onChange }) {
-  return (
-    <div key={name} className="flex mt-4 text-white justify-between">
-      <label className="md:w-2/3 block">{name}</label>
-      <input
-        key={name}
-        className="bg-gray-200 appearance-none border-2 border-gray-200 rounded py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-        type="number"
-        value={value === null ? 0 : value}
-        onChange={(event) => onChange(Number(event.target.value))}
-      />
-    </div>
-  );
-}
-
 function IssueTable({
   uiData,
   issueModalIsOpen,
@@ -54,7 +39,6 @@ function IssueTable({
 
   useEffect(() => {
     getRequest("/tags").then((data) => {
-      console.log(data);
       let tmp = [];
       data["tags"].map((tag) => {
         if (tag["type"] === "manual-tag") {
@@ -114,9 +98,9 @@ function IssueTable({
   let [focusRow, setFocusRow] = useState<number>(-1);
   return (
     <>
-      <div className="relative overflow-x-auto rounded-lg m-4 mb-0">
-        <table className="table-auto text-left text-gray-200 dark:text-gray-100">
-          <thead className="uppercase bg-gray-50 dark:bg-gray-700">
+      <div className="relative overflow-x-auto m-4 border-4 border-gray-700 rounded-lg">
+        <table className="table-auto text-left text-white">
+          <thead className="uppercase bg-gray-700">
             <tr>
               <th className="p-4">Row</th>
               <th className="p-4">Issue Key</th>
@@ -127,6 +111,7 @@ function IssueTable({
                 return Object.keys(predictions[modelId]).map((className) => {
                   return (
                     <th
+                      key={modelId + className}
                       className="p-4"
                       onClick={() => {
                         let newSort =
@@ -215,13 +200,10 @@ function IssueTable({
             {uiData["data"].map((item, index) => {
               return (
                 <tr
+                  key={index}
                   className={
-                    (item["tags"].includes("needs-review")
-                      ? " bg-yellow-900"
-                      : " bg-gray-800") +
-                    (focusRow === index
-                      ? " border-4 border-l-8 border-white"
-                      : "")
+                    (index % 2 === 0 ? " bg-gray-600" : " bg-gray-700") +
+                    (focusRow === index ? " italic font-bold" : " ")
                   }
                   onClick={() => setFocusRow(index)}
                 >
@@ -244,18 +226,28 @@ function IssueTable({
                         setLabel(item["manual_label"]);
                         setIssueModalIsOpen(true);
                       }}
-                      className="blockappearance-none w-full bg-blue-500 border border-blue-500 text-white py-1 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring focus:ring-white hover:bg-blue-700 hover:border-blue-700"
+                      className={
+                        "blockappearance-none w-full text-white py-1 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring focus:ring-white" +
+                        (item["tags"].includes("needs-review")
+                          ? " bg-orange-500 border-orange-500 hover:bg-orange-700 hover:border-orange-700"
+                          : " bg-blue-500 border-blue-500 hover:bg-blue-700 hover:border-blue-700")
+                      }
                     >
-                      Classify
+                      Classify{" "}
+                      {item["tags"].includes("needs-review")
+                        ? "(needs-review)"
+                        : ""}
                     </button>
                   </td>
                   <td className="p-4">{renderLabel(item["manual_label"])}</td>
                   <td className="p-4">
-                    {item["tags"].map((tag) => {
-                      if (tags.includes(tag)) {
-                        return <p>{tag}</p>;
-                      }
-                    })}
+                    <ul className="list-disc">
+                      {item["tags"].map((tag) => {
+                        if (tags.includes(tag)) {
+                          return <li key={tag}>{tag}</li>;
+                        }
+                      })}
+                    </ul>
                   </td>
                   {Object.keys(item["predictions"]).map((modelId) => {
                     return Object.keys(item["predictions"][modelId]).map(
@@ -265,7 +257,7 @@ function IssueTable({
                         let confidence =
                           item["predictions"][modelId][className]["confidence"];
                         return (
-                          <td className="p-4">
+                          <td key={modelId + className} className="p-4">
                             {String(prediction)} ({confidence})
                           </td>
                         );
@@ -312,7 +304,7 @@ function IssueTable({
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Dialog.Panel className="m-4 w-fill transform overflow-hidden rounded-2xl bg-slate-700 p-6 text-left align-middle shadow-xl transition-all">
+                      <Dialog.Panel className="m-4 w-fill transform overflow-hidden rounded-2xl bg-slate-600 p-6 text-left align-middle shadow-xl transition-all">
                         <Dialog.Title
                           as="h3"
                           className="text-xl font-bold leading-6 text-white"
@@ -335,11 +327,12 @@ function IssueTable({
                           <p className="text-base">{currentIssue["summary"]}</p>
 
                           <p className="text-2xl font-bold">Description</p>
-                          <div className="px-4 py-2 bg-white rounded-lg dark:bg-gray-800">
+                          <div className="p-1 bg-gray-800 rounded-lg">
                             <textarea
                               value={currentIssue["description"]}
                               rows={8}
-                              className="text-base w-full px-0 text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                              disabled
+                              className="text-base w-full bg-gray-800 text-white"
                             />
                           </div>
 
@@ -418,7 +411,8 @@ function IssueTable({
                             onClick={() => {
                               postRequest(
                                 "/manual-labels/" + currentIssue["issue_id"],
-                                label
+                                label,
+                                () => alert("Manual label set")
                               );
                             }}
                           >
@@ -460,12 +454,11 @@ function IssueTable({
                           {/* Comments */}
                           <p className="text-2xl font-bold">Comments</p>
                           {Object.keys(currentIssue["comments"]).map((key) => {
-                            console.log(
-                              "comment",
-                              currentIssue["comments"][key]["comment"]
-                            );
                             return (
-                              <div className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                              <div
+                                key={key}
+                                className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+                              >
                                 <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
                                   <p>
                                     {currentIssue["comments"][key]["author"]} (
@@ -563,7 +556,10 @@ function IssueTable({
                           <div className="text-base">
                             {uiData["data"][currentIndex]["tags"].map((tag) => {
                               return (
-                                <div className="m-2 flex items-center">
+                                <div
+                                  key={tag}
+                                  className="m-2 flex items-center"
+                                >
                                   <button
                                     onClick={() => {
                                       deleteRequest(
@@ -601,7 +597,7 @@ function IssueTable({
                             <div className="flex relative">
                               <select
                                 id="add-tag-dropdown"
-                                className="appearance-none w-full bg-gray-600 border border-gray-600 text-white py-1 px-4 pr-8 rounded leading-tight"
+                                className="appearance-none w-full bg-gray-700 border border-gray-700 text-white py-1 px-4 pr-8 rounded leading-tight"
                               >
                                 {tags.map((tag) => {
                                   if (!currentIssue["tags"].includes(tag)) {
@@ -1015,15 +1011,17 @@ function OverView({ socket }) {
               />
             </div>
           </div>
-          <IssueTable
-            uiData={uiData}
-            issueModalIsOpen={issueModalIsOpen}
-            setIssueModalIsOpen={setIssueModalIsOpen}
-            modelData={modelData}
-            query={query}
-            setQuery={setQuery}
-            fetchUiData={fetchUiData}
-          />
+          <div className="pb-4 flex">
+            <IssueTable
+              uiData={uiData}
+              issueModalIsOpen={issueModalIsOpen}
+              setIssueModalIsOpen={setIssueModalIsOpen}
+              modelData={modelData}
+              query={query}
+              setQuery={setQuery}
+              fetchUiData={fetchUiData}
+            />
+          </div>
         </>
       )}
     </>

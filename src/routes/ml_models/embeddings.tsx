@@ -24,7 +24,10 @@ function EmbeddingList({
       {embeddings.map((embedding) => {
         return (
           <li key={embedding["embedding_id"]}>
-            <div className="flex space-x-4 mt-4">
+            <div className="flex space-x-4 mt-4 items-center">
+              <span>
+                {embedding["name"]} ({embedding["embedding_id"]})
+              </span>
               <button
                 type="button"
                 onClick={() => {
@@ -33,18 +36,34 @@ function EmbeddingList({
                 }}
                 className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
               >
-                {embedding["name"]} - {embedding["embedding_id"]}
+                View Embedding
               </button>
               <button
                 onClick={() => {
                   deleteRequest(
                     "/embeddings/" + embedding["embedding_id"],
-                    fetchEmbeddings
+                    () => {
+                      fetchEmbeddings();
+                      alert("Embedding deleted");
+                    }
                   );
                 }}
                 className="flex bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
               >
-                Delete
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                  />
+                </svg>
               </button>
             </div>
           </li>
@@ -513,13 +532,15 @@ function ConfigModal({
                   as="h3"
                   className="text-xl font-bold leading-6 text-white"
                 >
-                  Create Embedding
+                  {embedding === undefined
+                    ? "Create Embedding"
+                    : "Edit Embedding"}
                 </Dialog.Title>
 
                 {embedding === undefined ? (
                   ""
                 ) : (
-                  <div className="mt-4 text-white">
+                  <div className="mt-4 text-white border-2 rounded-lg p-2">
                     <button
                       className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                       onClick={() => {
@@ -529,7 +550,10 @@ function ConfigModal({
                             "database-url": getDatabaseURL(),
                             "embedding-id": embedding["embedding_id"],
                           },
-                          fetchEmbeddings
+                          () => {
+                            fetchEmbeddings();
+                            alert("Embedding generated");
+                          }
                         );
                       }}
                     >
@@ -551,7 +575,10 @@ function ConfigModal({
                               "/file",
                             "POST",
                             file,
-                            (data) => fetchEmbeddings()
+                            () => {
+                              fetchEmbeddings();
+                              alert("File uploaded");
+                            }
                           );
                         }}
                       >
@@ -576,7 +603,10 @@ function ConfigModal({
                               "/embeddings/" +
                                 embedding["embedding_id"] +
                                 "/file",
-                              fetchEmbeddings
+                              () => {
+                                fetchEmbeddings();
+                                alert("Embedding file deleted");
+                              }
                             );
                           }}
                           className="flex mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
@@ -590,12 +620,13 @@ function ConfigModal({
                   </div>
                 )}
 
-                <div className="mt-4 text-white">
-                  <p className="text-2xl font-bold mt-8">Config</p>
+                <div className="mt-4 text-white border-2 p-2 rounded-lg">
+                  <p className="text-2xl font-bold">Config</p>
                   {generateForms(endpoint, [], config, [], setConfig)}
                   <div className="mt-8">
                     <p>embedding name:</p>
                     <input
+                      value={embeddingName}
                       onChange={(event) => setEmbeddingName(event.target.value)}
                       className="p-1 rounded-lg bg-gray-700"
                     />
@@ -609,7 +640,10 @@ function ConfigModal({
                             name: embeddingName,
                             config: getParsedConfig(config, endpoint),
                           },
-                          fetchEmbeddings
+                          () => {
+                            fetchEmbeddings();
+                            alert("Embedding created");
+                          }
                         );
                       }}
                       className="flex mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
@@ -625,7 +659,10 @@ function ConfigModal({
                             name: embeddingName,
                             config: getParsedConfig(config, endpoint),
                           },
-                          fetchEmbeddings
+                          () => {
+                            fetchEmbeddings();
+                            alert("Updated embedding");
+                          }
                         );
                       }}
                       className="flex mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"

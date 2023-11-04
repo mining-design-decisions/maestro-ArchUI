@@ -10,6 +10,39 @@ import {
   putRequest,
   uploadFile,
 } from "../util";
+import { Modal } from "../../components";
+
+function getParsedConfig(config, endpoint) {
+  let tmp = { ...config };
+  for (const [key, value] of Object.entries(endpoint)) {
+    if (value["enabled-if"] !== null) {
+      // Check for constraint
+      let payload = value["enabled-if"]["payload"];
+      let lhs = payload["lhs"]["payload"]["name"];
+      lhs = config[lhs];
+      let rhs = payload["rhs"]["payload"]["value"];
+      if (payload["operation"] === "equal") {
+        if (lhs !== rhs) {
+          delete tmp[key];
+        }
+      }
+    } else if (value["argument_type"] === "query") {
+      if (tmp[key] === null || tmp[key] === "") {
+        tmp[key] = {};
+      } else {
+        tmp[key] = JSON.parse(tmp[key]);
+      }
+    } else if (
+      value["argument_type"] === "enum" ||
+      value["argument_type"] === "dynamic-enum"
+    ) {
+      if (tmp[key] === "") {
+        delete tmp[key];
+      }
+    }
+  }
+  return tmp;
+}
 
 function ModelForms({ endpoints, prevData, setCurrentView }) {
   if (endpoints === undefined) {
@@ -30,9 +63,15 @@ function ModelForms({ endpoints, prevData, setCurrentView }) {
         return {};
       }
       case "enum": {
+        if (param["default"] === null) {
+          return "";
+        }
         return param["options"][0];
       }
       case "dynamic-enum": {
+        if (param["default"] === null) {
+          return "";
+        }
         return param["options"][0];
       }
       case "string": {
@@ -56,6 +95,9 @@ function ModelForms({ endpoints, prevData, setCurrentView }) {
       tmp[key] = prevData["model_config"][key];
       if (value["argument_type"] === "nested" && tmp[key] === null) {
         tmp[key] = {};
+      }
+      if (value["argument_type"] === "query" && typeof tmp[key] === "object") {
+        tmp[key] = JSON.stringify(tmp[key]);
       }
     } else {
       tmp[key] = getDefaultParamValue(value);
@@ -84,6 +126,18 @@ function ModelForms({ endpoints, prevData, setCurrentView }) {
     return (
       <div>
         {Object.entries(params).map(([key, value]) => {
+          if (value["enabled-if"] !== null) {
+            // Check for constraint
+            let payload = value["enabled-if"]["payload"];
+            let lhs = payload["lhs"]["payload"]["name"];
+            lhs = config[lhs];
+            let rhs = payload["rhs"]["payload"]["value"];
+            if (payload["operation"] === "equal") {
+              if (lhs !== rhs) {
+                return <></>;
+              }
+            }
+          }
           let form;
           if (
             value["argument_type"] === "string" ||
@@ -144,6 +198,13 @@ function ModelForms({ endpoints, prevData, setCurrentView }) {
                   setConfig(tmp);
                 }}
               >
+                {value["default"] === null ? (
+                  <option key="null" value={""}>
+                    null
+                  </option>
+                ) : (
+                  <></>
+                )}
                 {value["options"].map((option) => (
                   <option key={option} value={option}>
                     {option}
@@ -191,10 +252,20 @@ function ModelForms({ endpoints, prevData, setCurrentView }) {
                           className="p-1 rounded-lg bg-gray-700"
                           value={item}
                           onChange={(event) => {
-                            let tmp = { ...config };
-                            getNestedValue(tmp, configPath)[key][idx] =
-                              event.target.value;
-                            setConfig(tmp);
+                            if (value["inner"]["argument_type"] === "float") {
+                              let value = Number(event.target.value);
+                              if (!Number.isNaN(value)) {
+                                let tmp = { ...config };
+                                getNestedValue(tmp, configPath)[key][idx] =
+                                  value;
+                                setConfig(tmp);
+                              }
+                            } else {
+                              let tmp = { ...config };
+                              getNestedValue(tmp, configPath)[key][idx] =
+                                event.target.value;
+                              setConfig(tmp);
+                            }
                           }}
                         />
                       )}
@@ -447,10 +518,14 @@ function ModelForms({ endpoints, prevData, setCurrentView }) {
         <button
           className="flex mt-8 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => {
-            postRequest("/models", {
-              model_config: config,
-              model_name: modelName,
-            });
+            postRequest(
+              "/models",
+              {
+                model_config: getParsedConfig(config, endpoints["run"]["args"]),
+                model_name: modelName,
+              },
+              () => alert("Model created")
+            );
           }}
         >
           <svg
@@ -475,10 +550,17 @@ function ModelForms({ endpoints, prevData, setCurrentView }) {
           <button
             className="flex mt-8 ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
             onClick={() => {
-              postRequest("/models/" + prevData["model_id"], {
-                model_config: config,
-                model_name: modelName,
-              });
+              postRequest(
+                "/models/" + prevData["model_id"],
+                {
+                  model_config: getParsedConfig(
+                    config,
+                    endpoints["run"]["args"]
+                  ),
+                  model_name: modelName,
+                },
+                () => alert("Model updated")
+              );
             }}
           >
             <svg
@@ -546,15 +628,18 @@ function ModelList({ setCurrentModelId, setCurrentView }) {
 
   return (
     <>
-      <p className="text-2xl font-bold pt-4">Existing Models</p>
       {modelsList.length === 0 ? (
         <p>No ML Models available</p>
       ) : (
-        <ul className="list-disc pl-4 space-y-4">
+        <ul className="list-disc pl-4 space-y-4 mt-4">
           {modelsList.map((model) => {
             return (
               <li key={model["model_id"]}>
                 <div className="flex items-center space-x-4">
+                  <span>
+                    {" "}
+                    {model["model_name"]} ({model["model_id"]})
+                  </span>
                   <button
                     className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                     onClick={() => {
@@ -562,15 +647,15 @@ function ModelList({ setCurrentModelId, setCurrentView }) {
                       setCurrentView("model");
                     }}
                   >
-                    {model["model_name"]} ({model["model_id"]})
+                    View Model
                   </button>
                   <button
                     className="flex bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
                     onClick={() => {
-                      deleteRequest(
-                        "/models/" + model["model_id"],
-                        fetchModels
-                      );
+                      deleteRequest("/models/" + model["model_id"], () => {
+                        fetchModels();
+                        alert("Model deleted");
+                      });
                     }}
                   >
                     <svg
@@ -599,7 +684,13 @@ function ModelList({ setCurrentModelId, setCurrentView }) {
   );
 }
 
-function EditVersion({ modelId, versionId, description, fetchVersions }) {
+function EditVersionOrPerformance({
+  modelId,
+  versionId,
+  description,
+  fetchVersions,
+  name,
+}) {
   let [openModal, setOpenModal] = useState(false);
   let [descriptionInput, setDescriptionInput] = useState(description);
 
@@ -608,8 +699,6 @@ function EditVersion({ modelId, versionId, description, fetchVersions }) {
     setFile(event.target.files[0]);
   }
 
-  console.log(descriptionInput);
-
   return (
     <>
       <div className="flex items-center space-x-4">
@@ -617,128 +706,104 @@ function EditVersion({ modelId, versionId, description, fetchVersions }) {
           className="flex mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => setOpenModal(true)}
         >
-          {description} ({versionId})
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+            />
+          </svg>
+          Edit
         </button>
       </div>
 
-      <Transition appear show={openModal} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10 text-white"
-          onClose={() => setOpenModal(false)}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="m-4 w-fill transform overflow-hidden rounded-2xl bg-slate-700 p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-bold leading-6 text-white"
-                  >
-                    Edit version
-                  </Dialog.Title>
-
-                  {/* Body */}
-                  <div className="flex items-center space-x-4 mt-2">
-                    <input
-                      onChange={onFileChange}
-                      type="file"
-                      className="p-1 rounded-lg bg-gray-500"
-                    />
-                    <button
-                      onClick={() => {
-                        uploadFile(
-                          "/models/" + modelId + "/versions/" + versionId,
-                          "PUT",
-                          file
-                        );
-                      }}
-                      className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                    >
-                      Replace file
-                    </button>
-                  </div>
-                  <a
-                    href={downloadFileLink(
-                      "/models/" + modelId + "/versions/" + versionId
-                    )}
-                    target="_blank"
-                  >
-                    <button className="flex mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
-                      Download file
-                    </button>
-                  </a>
-                  <button
-                    onClick={() =>
-                      deleteRequest(
-                        "/models/" + modelId + "/versions/" + versionId
-                      )
-                    }
-                    className="flex mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-                  >
-                    Delete file
-                  </button>
-                  <div className="flex items-center space-x-4 mt-2">
-                    <input
-                      value={descriptionInput}
-                      onChange={(event) =>
-                        setDescriptionInput(event.target.value)
-                      }
-                      className="p-1 rounded-lg bg-gray-500"
-                    />
-                    <button
-                      onClick={() => {
-                        putRequest(
-                          "/models/" +
-                            modelId +
-                            "/versions/" +
-                            versionId +
-                            "/description",
-                          { description: descriptionInput },
-                          fetchVersions
-                        );
-                      }}
-                      className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                    >
-                      Edit description
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
+      {Modal(
+        "Edit " + name,
+        <>
+          <div className="flex items-center space-x-4 mt-2">
+            <input
+              onChange={onFileChange}
+              type="file"
+              className="p-1 rounded-lg bg-gray-500"
+            />
+            <button
+              onClick={() => {
+                uploadFile(
+                  "/models/" + modelId + "/" + name + "s/" + versionId,
+                  "PUT",
+                  file
+                );
+              }}
+              className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            >
+              Replace file
+            </button>
           </div>
-        </Dialog>
-      </Transition>
+          <a
+            href={downloadFileLink(
+              "/models/" + modelId + "/" + name + "s/" + versionId
+            )}
+            target="_blank"
+          >
+            <button className="flex mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
+              Download file
+            </button>
+          </a>
+          <button
+            onClick={() =>
+              deleteRequest(
+                "/models/" + modelId + "/" + name + "s/" + versionId,
+                () => alert("Version deleted")
+              )
+            }
+            className="flex mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Delete file
+          </button>
+          <div className="flex items-center space-x-4 mt-2">
+            <input
+              value={descriptionInput}
+              onChange={(event) => setDescriptionInput(event.target.value)}
+              className="p-1 rounded-lg bg-gray-500"
+            />
+            <button
+              onClick={() => {
+                putRequest(
+                  "/models/" +
+                    modelId +
+                    "/" +
+                    name +
+                    "s/" +
+                    versionId +
+                    "/description",
+                  { description: descriptionInput },
+                  () => {
+                    fetchVersions();
+                    alert("Description updated");
+                  }
+                );
+              }}
+              className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            >
+              Edit description
+            </button>
+          </div>
+        </>,
+        openModal,
+        setOpenModal
+      )}
     </>
   );
 }
 
-function PredictWithVersion({
-  modelId,
-  versionId,
-  description,
-  fetchVersions,
-}) {
+function PredictWithVersion({ modelId, versionId }) {
   let [openModal, setOpenModal] = useState(false);
   let [queryInput, setQueryInput] = useState("");
 
@@ -749,73 +814,248 @@ function PredictWithVersion({
           className="flex mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           onClick={() => setOpenModal(true)}
         >
-          Predict with Version
+          Predict
         </button>
       </div>
 
-      <Transition appear show={openModal} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10 text-white"
-          onClose={() => setOpenModal(false)}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+      {Modal(
+        "Predict with Version",
+        <div className="flex items-center space-x-4 mt-2">
+          <textarea
+            value={queryInput}
+            onChange={(event) => setQueryInput(event.target.value)}
+            className="p-1 rounded-lg bg-gray-500 text-white"
+          />
+          <button
+            onClick={() => {
+              postRequestDlManager(
+                "/predict",
+                {
+                  model: modelId,
+                  version: versionId,
+                  "data-query": JSON.parse(queryInput),
+                },
+                () => alert("Predictions completed")
+              );
+            }}
+            className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
+            Predict
+          </button>
+        </div>,
+        openModal,
+        setOpenModal
+      )}
+    </>
+  );
+}
 
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="m-4 w-fill transform overflow-hidden rounded-2xl bg-slate-700 p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-bold leading-6 text-white"
-                  >
-                    Predict with Version
-                  </Dialog.Title>
+function Metrics({ modelId, versionId }) {
+  let [openModal, setOpenModal] = useState(false);
+  let [config, setConfig] = useState({
+    "classification-as-detection": false,
+    epoch: "stopping-point",
+    "include-non-arch": true,
+    metrics: [],
+  });
 
-                  {/* Body */}
-                  <div className="flex items-center space-x-4 mt-2">
-                    <textarea
-                      value={queryInput}
-                      onChange={(event) => setQueryInput(event.target.value)}
-                      className="p-1 rounded-lg bg-gray-500"
-                    />
-                    <button
-                      onClick={() => {
-                        postRequestDlManager("/predict", {
-                          model: modelId,
-                          version: versionId,
-                          "data-query": queryInput,
-                        });
-                      }}
-                      className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                    >
-                      Predict
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
+  return (
+    <>
+      <div className="flex items-center space-x-4">
+        <button
+          className="flex mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          onClick={() => setOpenModal(true)}
+        >
+          Metrics
+        </button>
+      </div>
+
+      {Modal(
+        "Get Metrics",
+        <div className="">
+          <div className="flex space-x-2 mt-4">
+            <p>classification-as-detection</p>
+            <input
+              className="p-1 rounded-lg bg-gray-700"
+              checked={config["classification-as-detection"]}
+              onChange={() => {
+                let tmp = { ...config };
+                tmp["classification-as-detection"] =
+                  !tmp["classification-as-detection"];
+                setConfig(tmp);
+              }}
+              type="checkbox"
+            />
           </div>
-        </Dialog>
-      </Transition>
+          <div className="flex space-x-2 mt-4">
+            <p className="mt-1">epoch</p>
+            <input
+              className="p-1 rounded-lg bg-gray-700"
+              value={config["epoch"]}
+              onChange={(event) => {
+                let tmp = { ...config };
+                tmp["epoch"] = event.target.value;
+                setConfig(tmp);
+              }}
+            />
+          </div>
+          <div className="flex space-x-2 mt-4">
+            <p>include-non-arch</p>
+            <input
+              className="p-1 rounded-lg bg-gray-700"
+              checked={config["include-non-arch"]}
+              onChange={() => {
+                let tmp = { ...config };
+                tmp["include-non-arch"] = !tmp["include-non-arch"];
+                setConfig(tmp);
+              }}
+              type="checkbox"
+            />
+          </div>
+          <div>
+            {config["metrics"].map((metric, idx) => (
+              <div key={idx} className="border rounded-lg mt-4 p-4">
+                <div className="flex space-x-2">
+                  <span>dataset</span>
+                  <select
+                    className="p-1 rounded-lg bg-gray-700"
+                    value={config["metrics"][idx]["dataset"]}
+                    onChange={(event) => {
+                      let tmp = { ...config };
+                      tmp["metrics"][idx]["dataset"] = event?.target.value;
+                      setConfig(tmp);
+                    }}
+                  >
+                    <option key="training" value={"training"}>
+                      training
+                    </option>
+                    <option key="validation" value={"validation"}>
+                      validation
+                    </option>
+                    <option key="testing" value={"testing"}>
+                      testing
+                    </option>
+                  </select>
+                </div>
+                <div className="flex space-x-2 mt-4">
+                  <span>metric</span>
+                  <select
+                    className="p-1 rounded-lg bg-gray-700"
+                    value={config["metrics"][idx]["metric"]}
+                    onChange={(event) => {
+                      let tmp = { ...config };
+                      tmp["metrics"][idx]["metric"] = event?.target.value;
+                      setConfig(tmp);
+                    }}
+                  >
+                    <option key="f_1_score" value={"f_1_score"}>
+                      f_1_score
+                    </option>
+                    <option key="precision" value={"precision"}>
+                      precision
+                    </option>
+                    <option key="recall" value={"recall"}>
+                      recall
+                    </option>
+                  </select>
+                </div>
+                <div className="flex space-x-2 mt-4">
+                  <span>variant</span>
+                  <select
+                    className="p-1 rounded-lg bg-gray-700"
+                    value={config["metrics"][idx]["variant"]}
+                    onChange={(event) => {
+                      let tmp = { ...config };
+                      tmp["metrics"][idx]["variant"] = event?.target.value;
+                      setConfig(tmp);
+                    }}
+                  >
+                    <option key="macro" value={"macro"}>
+                      macro
+                    </option>
+                    <option key="class" value={"class"}>
+                      class
+                    </option>
+                  </select>
+                </div>
+                <button
+                  onClick={() => {
+                    let tmp = { ...config };
+                    tmp["metrics"].splice(idx, 1);
+                    setConfig(tmp);
+                  }}
+                  className="flex mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                    />
+                  </svg>
+                </button>
+              </div>
+            ))}
+            <button
+              className="flex mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+              onClick={() => {
+                let tmp = { ...config };
+                tmp["metrics"].push({
+                  dataset: "training",
+                  metric: "f_1_score",
+                  variant: "macro",
+                });
+                setConfig(tmp);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+              Add metric
+            </button>
+          </div>
+          <button
+            onClick={() => {
+              let tmp = { ...config };
+              tmp["model-id"] = modelId;
+              tmp["version-id"] = versionId;
+              postRequestDlManager("/metrics", tmp, (data) => {
+                alert("Predictions completed");
+                const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+                  JSON.stringify(data)
+                )}`;
+                const link = document.createElement("a");
+                link.href = jsonString;
+                link.download = "metrics.json";
+                link.click();
+              });
+            }}
+            className="mt-4 flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Calculate Metrics
+          </button>
+        </div>,
+        openModal,
+        setOpenModal
+      )}
     </>
   );
 }
@@ -845,8 +1085,39 @@ function Model({ currentModelId, setCurrentView, setCurrentModelId }) {
 
   function Versions() {
     return (
-      <div className="mt-4">
-        <p className="text-3xl font-bold">Versions</p>
+      <div className="mt-8">
+        <div className="flex items-center space-x-4">
+          <span className="text-3xl font-bold">Versions</span>
+          <button
+            className="flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            onClick={() => {
+              postRequestDlManager(
+                "/train",
+                { "model-id": currentModelId },
+                () => {
+                  fetchAllModelData();
+                  alert("Model trained");
+                }
+              );
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+            Train New Version
+          </button>
+        </div>
         {/* Create version button */}
         {versions.length === 0 ? (
           <p>No versions available</p>
@@ -854,15 +1125,22 @@ function Model({ currentModelId, setCurrentView, setCurrentModelId }) {
           <>
             <ul className="list-disc pl-4 pt-4">
               {versions.map((version) => (
-                <li>
+                <li key={version["version_id"]}>
                   <div className="flex items-center space-x-4">
-                    <EditVersion
+                    <span className="mt-4">
+                      {version["description"]} ({version["version_id"]})
+                    </span>
+                    <EditVersionOrPerformance
                       modelId={currentModelId}
                       versionId={version["version_id"]}
                       description={version["description"]}
                       fetchVersions={fetchVersions}
+                      name="version"
                     />
-                    <PredictWithVersion />
+                    <PredictWithVersion
+                      modelId={currentModelId}
+                      versionId={version["version_id"]}
+                    />
                     <button
                       className="flex mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
                       onClick={() =>
@@ -870,12 +1148,28 @@ function Model({ currentModelId, setCurrentView, setCurrentModelId }) {
                           "/models/" +
                             currentModelId +
                             "/versions/" +
-                            performance["performance_id"],
-                          fetchVersions
+                            version["version_id"],
+                          () => {
+                            fetchVersions();
+                            alert("Version deleted");
+                          }
                         )
                       }
                     >
-                      Delete Version
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
                     </button>
                   </div>
                 </li>
@@ -894,11 +1188,25 @@ function Model({ currentModelId, setCurrentView, setCurrentModelId }) {
         {performances.length === 0 ? (
           <p>No performances available</p>
         ) : (
-          <>
-            {performances.map((performance) => {
-              <li>
+          <ul className="list-disc pl-4 pt-4">
+            {performances.map((performance) => (
+              <li key={performance["performance_id"]}>
                 <div className="flex items-center space-x-4">
-                  {performance["description"]} ({performance["performance_id"]})
+                  <span>
+                    {performance["description"]} (
+                    {performance["performance_id"]})
+                  </span>
+                  <EditVersionOrPerformance
+                    modelId={currentModelId}
+                    versionId={performance["performance_id"]}
+                    description={performance["description"]}
+                    fetchVersions={fetchPerformances}
+                    name="performance"
+                  />
+                  <Metrics
+                    modelId={currentModelId}
+                    versionId={performance["performance_id"]}
+                  />
                   <button
                     className="flex mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
                     onClick={() =>
@@ -907,26 +1215,46 @@ function Model({ currentModelId, setCurrentView, setCurrentModelId }) {
                           currentModelId +
                           "/performances/" +
                           performance["performance_id"],
-                        fetchPerformances
+                        () => {
+                          fetchPerformances();
+                          alert("Performance deleted");
+                        }
                       )
                     }
                   >
-                    Delete Performance
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                      />
+                    </svg>
                   </button>
                 </div>
-              </li>;
-            })}
-          </>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     );
   }
 
+  function fetchAllModelData() {
+    fetchModelData();
+    fetchVersions();
+    fetchPerformances();
+  }
+
   if (currentModelId !== undefined) {
     useEffect(() => {
-      fetchModelData();
-      fetchVersions();
-      fetchPerformances();
+      fetchAllModelData();
     }, []);
   }
 
@@ -969,30 +1297,9 @@ function Model({ currentModelId, setCurrentView, setCurrentModelId }) {
         Edit Config
       </button>
 
-      <button
-        className="flex mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-        onClick={() => {
-          postRequestDlManager("/train", { "model-id": currentModelId });
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg>
-        Train New Version
-      </button>
-
+      <hr className="m-8" />
       <Versions />
+      <hr className="m-8" />
       <Performances />
     </>
   );
@@ -1006,7 +1313,7 @@ export default function MLModels() {
     undefined
   );
   return (
-    <div className="mx-4 pb-8">
+    <div className="container mx-auto pb-8">
       {currentView === "model-forms" ? (
         <CreateOrUpdateModel
           currentModelId={currentModelId}
@@ -1017,10 +1324,25 @@ export default function MLModels() {
       )}
       {currentView === "model-list" ? (
         <>
+          <p className="text-4xl font-bold">ML Models</p>
           <button
             className="flex mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
             onClick={() => setCurrentView("model-forms")}
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 mr-2 text-white"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
             Create New Model
           </button>
           <ModelList

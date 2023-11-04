@@ -1,13 +1,9 @@
 import { Transition, Dialog } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
-import { deleteRequest, getRequest } from "./util";
+import { deleteRequest, getRequest, postRequest } from "./util";
 
 function CreateTag({ showCreateTag, setShowCreateTag, fetchTags }) {
   let [tag, setTag] = useState({ tag: "", description: "" });
-
-  let connectionSettings = JSON.parse(
-    localStorage.getItem("connectionSettings")
-  );
 
   return (
     <>
@@ -72,32 +68,10 @@ function CreateTag({ showCreateTag, setShowCreateTag, fetchTags }) {
                     <button
                       className="flex items-center space-x-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                       onClick={() => {
-                        let request = {
-                          method: "POST",
-                          headers: {
-                            "Content-Type": "application/json",
-                            "Access-Control-Allow-Credentials": "true",
-                          },
-                          body: JSON.stringify(tag),
-                          credentials: "include",
-                        };
-                        fetch(
-                          connectionSettings["databaseURL"] + "/tags",
-                          request
-                        ).then((response) => {
-                          if (response.ok) {
-                            alert("Tag created");
-                            setShowCreateTag(false);
-                            fetchTags();
-                          } else {
-                            response
-                              .json()
-                              .then((data) =>
-                                alert(
-                                  response.status + ": " + JSON.stringify(data)
-                                )
-                              );
-                          }
+                        postRequest("/tags", tag, () => {
+                          alert("Tag created");
+                          setShowCreateTag(false);
+                          fetchTags();
                         });
                       }}
                     >
@@ -134,10 +108,6 @@ function EditTag({ tag, description, fetchTags }) {
     description: description,
   });
   let [modalOpen, setModalOpen] = useState<boolean>(false);
-
-  let connectionSettings = JSON.parse(
-    localStorage.getItem("connectionSettings")
-  );
 
   return (
     <>
@@ -209,32 +179,10 @@ function EditTag({ tag, description, fetchTags }) {
                     <button
                       className="flex items-center space-x-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                       onClick={() => {
-                        let request = {
-                          method: "POST",
-                          headers: {
-                            "Content-Type": "application/json",
-                            "Access-Control-Allow-Credentials": "true",
-                          },
-                          body: JSON.stringify(newDescription),
-                          credentials: "include",
-                        };
-                        fetch(
-                          connectionSettings["databaseURL"] + "/tags/" + tag,
-                          request
-                        ).then((response) => {
-                          if (response.ok) {
-                            alert("Tag upated");
-                            setModalOpen(false);
-                            fetchTags();
-                          } else {
-                            response
-                              .json()
-                              .then((data) =>
-                                alert(
-                                  response.status + ": " + JSON.stringify(data)
-                                )
-                              );
-                          }
+                        postRequest("/tags/" + tag, newDescription, () => {
+                          alert("Tag upated");
+                          setModalOpen(false);
+                          fetchTags();
                         });
                       }}
                     >
@@ -269,10 +217,6 @@ function EditTag({ tag, description, fetchTags }) {
 export default function Tags() {
   let [showCreateTag, setShowCreateTag] = useState<boolean>(false);
   let [tags, setTags] = useState([]);
-
-  let connectionSettings = JSON.parse(
-    localStorage.getItem("connectionSettings")
-  );
 
   function fetchTags() {
     getRequest("/tags").then((data) => setTags(data["tags"]));
@@ -344,32 +288,10 @@ export default function Tags() {
                     <button
                       className="flex items-center space-x-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
                       onClick={() => {
-                        let request = {
-                          method: "DELETE",
-                          headers: {
-                            "Access-Control-Allow-Credentials": "true",
-                          },
-                          credentials: "include",
-                        };
-                        fetch(
-                          connectionSettings["databaseURL"] +
-                            "/tags/" +
-                            item["name"],
-                          request
-                        ).then((response) => {
-                          if (response.ok) {
-                            alert("Tag " + item["name"] + " deleted");
-                            setShowCreateTag(false);
-                            fetchTags();
-                          } else {
-                            response
-                              .json()
-                              .then((data) =>
-                                alert(
-                                  response.status + ": " + JSON.stringify(data)
-                                )
-                              );
-                          }
+                        deleteRequest("/tags/" + item["name"], () => {
+                          alert("Tag " + item["name"] + " deleted");
+                          setShowCreateTag(false);
+                          fetchTags();
                         });
                       }}
                     >
