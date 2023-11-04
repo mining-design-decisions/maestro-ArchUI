@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  sample:
+    container_name: archui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173
