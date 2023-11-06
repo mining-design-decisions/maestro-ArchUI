@@ -5,47 +5,16 @@ import Root from "./routes/root";
 import Embeddings from "./routes/ml_models/embeddings";
 import MLModels from "./routes/ml_models/ml_models";
 import ClassifyIssues from "./routes/classify_issues";
-import Login from "./routes/login";
+import Settings from "./routes/settings";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Tags from "./routes/tags";
 import Statistics from "./routes/statistics";
 import Search from "./routes/search";
+import { initConnectionSettings } from "./components/connectionSettings";
 
 function App() {
-  const defaultSettings = {
-    databaseURL: "https://localhost:8000",
-    dlManagerURL: "https://localhost:9011",
-    searchEngineURL: "https://localhost:8042",
-  };
-  let connectionSettings = localStorage.getItem("connectionSettings");
-  if (connectionSettings === null) {
-    localStorage.setItem("connectionSettings", JSON.stringify(defaultSettings));
-  } else {
-    try {
-      let parsedSettings = JSON.parse(connectionSettings);
-      for (const urlName of [
-        "databaseURL",
-        "dlManagerURL",
-        "searchEngineURL",
-      ]) {
-        if (
-          !(urlName in parsedSettings) ||
-          typeof parsedSettings[urlName] !== "string"
-        ) {
-          localStorage.setItem(
-            "connectionSettings",
-            JSON.stringify(defaultSettings)
-          );
-        }
-      }
-    } catch (error) {
-      localStorage.setItem(
-        "connectionSettings",
-        JSON.stringify(defaultSettings)
-      );
-    }
-  }
+  initConnectionSettings();
 
   const router = createBrowserRouter([
     {
@@ -77,8 +46,8 @@ function App() {
       element: <Search />,
     },
     {
-      path: "/login",
-      element: <Login />,
+      path: "/settings",
+      element: <Settings />,
     },
   ]);
 
