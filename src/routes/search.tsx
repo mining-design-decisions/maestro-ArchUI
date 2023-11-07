@@ -254,7 +254,10 @@ function ClassForms({ setFilterClasses, selectedModel }) {
 function SearchResults({ searchResults }) {
   return (
     <div className=" border-gray-500 rounded-lg p-4 mt-4 space-y-4">
-      <p className="flex justify-center text-2xl font-bold">Search results</p>
+      {searchResults.length !== 0 ? (
+        <p className="flex justify-center text-2xl font-bold">Search results</p>
+      ) : null}
+
       {searchResults.map((result, idx) => {
         let label: string[] = [];
         for (let className of ["existence", "executive", "property"]) {
@@ -263,7 +266,11 @@ function SearchResults({ searchResults }) {
           }
         }
         if (label.length === 0) {
-          label.push("non-architectural");
+          if (result["existence"] === null) {
+            label.push("Not classified");
+          } else {
+            label.push("non-architectural");
+          }
         }
         return (
           <div
