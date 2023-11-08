@@ -2,7 +2,7 @@ import { Transition, Dialog } from "@headlessui/react";
 import React, { Fragment } from "react";
 
 interface IModal {
-  title: string;
+  title: string | React.JSX.Element;
   body: React.JSX.Element;
   openModal: boolean;
   setOpenModal: (param: boolean) => void;

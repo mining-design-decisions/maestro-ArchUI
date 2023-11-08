@@ -1,3 +1,5 @@
+import { getDatabaseURL } from "../routes/util";
+
 export interface ConnectionSettings {
   databaseURL: string;
   dlManagerURL: string;
@@ -48,4 +50,8 @@ export function getConnectionSettings(): ConnectionSettings {
     return { ...defaultSettings };
   }
   return JSON.parse(connectionSettings);
+}
+
+export function getWebSocket() {
+  return new WebSocket(`${getDatabaseURL().replace("https", "wss")}/ws`);
 }

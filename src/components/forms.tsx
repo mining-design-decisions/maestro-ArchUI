@@ -4,7 +4,7 @@ import WindowedSelect from "react-windowed-select";
 export function TextForm({ label, value, onChange, password = false }) {
   return (
     <div className="flex items-center justify-between space-x-4">
-      <label>{label} </label>
+      <label className="whitespace-nowrap">{label} </label>
       <input
         value={value}
         onChange={onChange}
@@ -24,11 +24,11 @@ export function TextAreaForm({ label, value, onChange }) {
   }
 
   return (
-    <div className="flex justify-between items-center space-x-4">
-      <span>{label}</span>
+    <div className="flex items-center space-x-4 justify-between">
+      <label className="whitespace-nowrap">{label}</label>
       <textarea
         wrap="off"
-        className="p-1 rounded-lg rounded-br-none bg-gray-700 w-full resize-y"
+        className="w-full p-1 rounded-lg rounded-br-none bg-gray-700 resize-y"
         value={value}
         onChange={onChange}
         rows={rows}
@@ -41,7 +41,13 @@ export function CheckBox() {
   return <></>;
 }
 
-export function Select({ label, options, onChange, includeNull = false }) {
+export function Select({
+  label,
+  value,
+  options,
+  onChange,
+  includeNull = false,
+}) {
   if (includeNull) {
     options = [{ label: "None", value: "null" }].concat(options);
   }
@@ -54,8 +60,12 @@ export function Select({ label, options, onChange, includeNull = false }) {
 
   return (
     <div className="flex items-center justify-between space-x-4">
-      <label>{label}</label>
-      <select className="p-1 rounded-lg bg-gray-700 w-full" onChange={onChange}>
+      <label className="whitespace-nowrap">{label}</label>
+      <select
+        className="p-1 rounded-lg bg-gray-700 w-full"
+        value={value}
+        onChange={onChange}
+      >
         {parsedOptions}
       </select>
     </div>
@@ -98,5 +108,19 @@ export function MultiSelectForm({ options, onChange }) {
       windowThreshold={20}
       onChange={onChange}
     />
+  );
+}
+
+export function FileForm({ label, onChange, accept = "application/json" }) {
+  return (
+    <div className="flex items-center justify-between space-x-4">
+      <label className="whitespace-nowrap">{label}</label>
+      <input
+        type="file"
+        className="w-full p-1 bg-gray-700 text-white rounded"
+        accept={accept}
+        onChange={onChange}
+      />
+    </div>
   );
 }

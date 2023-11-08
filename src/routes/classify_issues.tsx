@@ -1,53 +1,449 @@
 import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, version } from "react";
 import { deleteRequest, getRequest, patchRequest, postRequest } from "./util";
+import { FileForm, Select, TextAreaForm, TextForm } from "../components/forms";
+import { Button } from "../components/button";
+import {
+  ArrowDown,
+  ArrowDownTray,
+  ArrowUp,
+  ArrowUpTray,
+  ArrowsUpDown,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+} from "../icons";
+import { Modal } from "../components/modal";
+import { getWebSocket } from "../components/connectionSettings";
 
-function DropDown({ name, options, value, onChange }) {
+function fetchVersions(modelId, versions, setVersions) {
+  getRequest(`/models/${modelId}/versions`).then((data) => {
+    let tmp = { ...versions };
+    tmp[modelId] = data["versions"].map((item) => {
+      return {
+        label: `${item["description"]} (${item["version_id"]})`,
+        value: item["version_id"],
+      };
+    });
+    setVersions(tmp);
+  });
+}
+
+function ModelForms({
+  query,
+  setQuery,
+  modelData,
+  setModelData,
+  versions,
+  setVersions,
+}) {
+  function fetchModels() {
+    getRequest("/models").then((data) =>
+      setModelData(
+        data["models"].map((item) => {
+          return {
+            label: `${item["model_name"]} (${item["model_id"]})`,
+            value: item["model_id"],
+          };
+        })
+      )
+    );
+  }
+
+  useEffect(() => {
+    fetchModels();
+  }, []);
+
+  let dropDowns: React.JSX.Element[] = [];
+  for (let i = 0; i < query["models"].length; i++) {
+    dropDowns.push(
+      <div key={"model " + i} className="space-y-2">
+        {i > 0 ? <hr className="border-gray-500 m-4" /> : null}
+        <div className="flex items-center space-x-4">
+          <span className="text-xl font-bold">{"Model " + i}</span>
+          <Button
+            label=""
+            onClick={() => {
+              let tmp = { ...query };
+              tmp["models"].splice(i, 1);
+              setQuery(tmp);
+            }}
+            icon={<TrashIcon />}
+            color="red"
+          />
+        </div>
+        <Select
+          label="model id"
+          value={query["models"][i]["modelId"]}
+          options={modelData}
+          onChange={(e) => {
+            let value = e.target.value;
+            let tmp = { ...query };
+            tmp["models"][i]["modelId"] = value;
+            setQuery(tmp);
+            if (!(value in versions)) {
+              fetchVersions(value, versions, setVersions);
+            }
+          }}
+          includeNull={true}
+        />
+        {query["models"][i]["modelId"] in versions ? (
+          <Select
+            label="version id"
+            value={query["models"][i]["versionId"]}
+            options={versions[query["models"][i]["modelId"]]}
+            onChange={(e) => {
+              let tmp = { ...query };
+              tmp["models"][i]["versionId"] = e.target.value;
+              setQuery(tmp);
+            }}
+            includeNull={true}
+          />
+        ) : null}
+      </div>
+    );
+  }
   return (
-    <div className="text-white flex items-center space-x-4 mt-3 justify-between">
-      <label>{name}</label>
-      <select
-        className="p-1 rounded-lg bg-gray-700"
-        value={value === null ? "null" : value}
-        onChange={(event) => onChange(event.target.value)}
-      >
-        <option className="disabled hidden" key="empty"></option>
-        {options.map((x) => {
-          return (
-            <option key={x["value"]} value={x["value"]}>
-              {x["name"]} ({x["value"]})
-            </option>
-          );
-        })}
-      </select>
+    <div className="border border-gray-500 rounded-lg p-2 m-2 space-y-2">
+      <p className="flex justify-center text-xl font-bold">Models</p>
+      {dropDowns}
+      <div className="flex justify-center">
+        <Button
+          label="Add model"
+          onClick={() => {
+            let tmp = { ...query };
+            tmp["models"].push({ modelId: null, versionId: null });
+            setQuery(tmp);
+          }}
+          icon={<PlusIcon />}
+        />
+      </div>
     </div>
   );
 }
 
-function IssueTable({
-  uiData,
-  issueModalIsOpen,
-  setIssueModalIsOpen,
-  modelData,
+function Pagination({ query, setQuery, uiData, setUiData }) {
+  function changePage(value) {
+    if (!Number.isInteger(value)) {
+      return;
+    }
+    if (value < 1) {
+      value = 1;
+    } else if (value > uiData["total_pages"]) {
+      value = uiData["total_pages"];
+    }
+    let tmp = { ...query };
+    tmp["page"] = value;
+    setQuery(tmp);
+    fetchUiData(tmp, setUiData);
+  }
+
+  if (uiData === undefined) {
+    return <></>;
+  }
+
+  return (
+    <div className="flex flex-col items-center mt-4">
+      <span className="text-gray-700 dark:text-gray-400">
+        Showing page{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {query["page"]}
+        </span>{" "}
+        out of{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">
+          {uiData["total_pages"]}
+        </span>
+      </span>
+      <div className="inline-flex mt-2 xs:mt-0">
+        <button
+          onClick={() => changePage(query["page"] - 1)}
+          className="flex items-center justify-center px-3 h-8 font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          Prev
+        </button>
+        <input
+          className="flex items-center justify-center px-3 h-8 font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          type="text"
+          value={query["page"]}
+          onChange={(event) => {
+            changePage(Number(event.target.value));
+          }}
+        />
+        <button
+          onClick={() => changePage(query["page"] + 1)}
+          className="flex items-center justify-center px-3 h-8 font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          Next
+        </button>
+      </div>
+      <div className="inline-flex mt-2 xs:mt-0 items-center space-x-2">
+        <p className="text-gray-700 dark:text-gray-400">Items per page:</p>
+        <input
+          className="flex items-center justify-center px-3 h-8font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          type="text"
+          value={query["limit"]}
+          onChange={(event) => {
+            let value = Number(event.target.value);
+            if (!Number.isInteger(value)) {
+              return;
+            }
+            if (value < 1) {
+              value = 1;
+            }
+            let tmp = { ...query };
+            tmp["limit"] = value;
+            tmp["page"] = 1;
+            setQuery(tmp);
+            fetchUiData(tmp, setUiData);
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function getParsedQuery(newQuery) {
+  let parsedQuery = { ...newQuery };
+  parsedQuery["filter"] = JSON.parse(parsedQuery["filter"]);
+  parsedQuery["models"] = parsedQuery["models"].map(
+    (item) => item["modelId"] + "-" + item["versionId"]
+  );
+  return parsedQuery;
+}
+
+function fetchUiData(newQuery, setUiData) {
+  postRequest("/ui", getParsedQuery(newQuery), (data) => {
+    setUiData(data);
+  });
+}
+
+function Query({
   query,
   setQuery,
-  fetchUiData,
+  uiData,
+  setUiData,
+  modelData,
+  setModelData,
 }) {
-  let [currentIssueId, setCurrentIssueId] = useState(undefined);
-  let [label, setLabel] = useState({});
-  let [tags, setTags] = useState([]);
+  let [versions, setVersions] = useState({});
+  let [queryName, setQueryName] = useState("");
+  let [selectedQuery, setSelectedQuery] = useState("null");
+  let [storedQueries, setStoredQueries] = useState(getQueries());
 
-  useEffect(() => {
-    getRequest("/tags").then((data) => {
-      let tmp = [];
-      data["tags"].map((tag) => {
-        if (tag["type"] === "manual-tag") {
-          tmp.push(tag["name"]);
+  function readFile(event) {
+    if (event.target.files) {
+      let fileReader = new FileReader();
+      fileReader.addEventListener("load", (event) => {
+        if (event.target?.result) {
+          let newQuery = JSON.parse(event.target.result);
+          setQuery(newQuery);
+          newQuery["models"].map((item) => {
+            fetchVersions(item["modelId"], versions, setVersions);
+          });
         }
       });
-      setTags(tmp);
-    });
-  }, []);
+      fileReader.readAsText(event.target.files[0]);
+    }
+  }
+
+  function saveQuery() {
+    let queries: string | null = localStorage.getItem("queries");
+    let parsedQueries: Object;
+    if (queries === null) {
+      parsedQueries = {};
+    } else {
+      parsedQueries = JSON.parse(queries);
+    }
+    parsedQueries[queryName] = query;
+    localStorage.setItem("queries", JSON.stringify(parsedQueries));
+    setStoredQueries(getQueries());
+  }
+
+  function deleteQuery() {
+    if (selectedQuery === "null") {
+      return;
+    }
+
+    let queries: string | null = localStorage.getItem("queries");
+    if (queries === null) {
+      return;
+    }
+
+    let parsedQueries: Object = JSON.parse(queries);
+    delete parsedQueries[selectedQuery];
+    localStorage.setItem("queries", JSON.stringify(parsedQueries));
+    setStoredQueries(getQueries());
+  }
+
+  function loadQuery(queryName: string) {
+    if (queryName === "null") {
+      return;
+    }
+    let queries: string | null = localStorage.getItem("queries");
+    if (queries === null) {
+      return;
+    }
+    setQuery(JSON.parse(queries)[queryName]);
+  }
+
+  function getQueries() {
+    let queries: string | null = localStorage.getItem("queries");
+    if (queries === null) {
+      return [];
+    }
+    let parsedQueries = JSON.parse(queries);
+    return Object.keys(parsedQueries)
+      .map((key) => {
+        return {
+          label: key,
+          value: key,
+        };
+      })
+      .filter((x) => x !== undefined);
+  }
+
+  return (
+    <div className="border rounded-lg border-gray-500 p-2 space-y-4">
+      <p className="flex justify-center text-2xl font-bold mb-4">Query</p>
+      <FileForm label="Import query from file" onChange={readFile} />
+      <div className="flex items-center space-x-4">
+        <div className="w-full">
+          <Select
+            label={"Import query"}
+            value={selectedQuery}
+            options={storedQueries}
+            onChange={(e) => {
+              setSelectedQuery(e.target.value);
+              loadQuery(e.target.value);
+            }}
+            includeNull={true}
+          />
+        </div>
+        <Button
+          label={""}
+          onClick={deleteQuery}
+          color="red"
+          icon={<TrashIcon />}
+        />
+      </div>
+      <TextAreaForm
+        label="Issue filter"
+        value={query["filter"]}
+        onChange={(event) => {
+          setQuery((prevState) => ({
+            ...prevState,
+            filter: event.target.value,
+          }));
+        }}
+      />
+      <ModelForms
+        query={query}
+        setQuery={setQuery}
+        versions={versions}
+        setVersions={setVersions}
+        modelData={modelData}
+        setModelData={setModelData}
+      />
+      <div className="flex space-x-4">
+        <div className="w-full">
+          <TextForm
+            label={"Save query as:"}
+            value={queryName}
+            onChange={(e) => setQueryName(e.target.value)}
+          />
+        </div>
+        <Button label={"Save"} onClick={saveQuery} />
+      </div>
+      <div className="flex justify-center space-x-4">
+        <Button
+          label="Submit Query"
+          onClick={() => {
+            fetchUiData(query, setUiData);
+          }}
+          icon={<ArrowUpTray />}
+        />
+        <Button
+          label="Download Query"
+          onClick={() => {
+            const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+              JSON.stringify(query)
+            )}`;
+            const link = document.createElement("a");
+            link.href = jsonString;
+            link.download = "data.json";
+
+            link.click();
+          }}
+          icon={<ArrowDownTray />}
+        />
+      </div>
+      <Pagination
+        query={query}
+        setQuery={setQuery}
+        uiData={uiData}
+        setUiData={setUiData}
+      />
+    </div>
+  );
+}
+
+function TableHeader({ query, setQuery, predictions, setUiData, modelData }) {
+  return (
+    <thead className="uppercase bg-gray-700">
+      <tr>
+        <th className="p-4">Row</th>
+        <th className="p-4">Issue Key</th>
+        <th className="p-4">Classify</th>
+        <th className="p-4">Manual Label</th>
+        <th className="p-4">Tags</th>
+        {Object.keys(predictions).map((modelId) => {
+          return Object.keys(predictions[modelId]).map((className) => {
+            return (
+              <th
+                key={modelId + className}
+                className="p-4"
+                onClick={() => {
+                  let newSort = "predictions." + modelId + "." + className;
+                  let tmp = { ...query };
+                  if (newSort === tmp["sort"]) {
+                    if (!tmp["sort_ascending"]) {
+                      tmp["sort_ascending"] = true;
+                    } else {
+                      tmp["sort"] = null;
+                    }
+                  } else {
+                    tmp["sort"] = newSort;
+                    tmp["sort_ascending"] = false;
+                  }
+                  setQuery(tmp);
+                  fetchUiData(tmp, setUiData);
+                }}
+              >
+                <div className="flex items-center">
+                  {modelData.map((model) => {
+                    if (model["value"] === modelId.split("-")[0]) {
+                      return model["label"];
+                    }
+                  })}{" "}
+                  - {className}
+                  {query["sort"] ===
+                  "predictions." + modelId + "." + className ? (
+                    <>{query["sort_ascending"] ? <ArrowUp /> : <ArrowDown />}</>
+                  ) : (
+                    <ArrowsUpDown />
+                  )}
+                </div>
+              </th>
+            );
+          });
+        })}
+      </tr>
+    </thead>
+  );
+}
+
+function ManualLabelForm({ issue }) {
+  let [label, setLabel] = useState({ ...issue["manual_label"] });
 
   function updateLabel(className) {
     if (className === "non-architectural") {
@@ -65,19 +461,335 @@ function IssueTable({
     }
   }
 
-  if (uiData["data"] === undefined) {
+  function getChecked(className: string) {
+    if (className === "non-architectural") {
+      return !label["existence"] && !label["executive"] && !label["property"];
+    }
+    return label[className];
+  }
+
+  return (
+    <div>
+      <p className="text-2xl font-bold">Manual Label</p>
+      <div className="border rounded-lg p-2 border-gray-400 space-y-2">
+        <table>
+          <tbody>
+            {["existence", "executive", "property", "non-architectural"].map(
+              (className) => (
+                <tr>
+                  <td>
+                    <label>{className}</label>
+                  </td>
+                  <td>
+                    <input
+                      className="ml-4"
+                      type="checkbox"
+                      checked={getChecked(className)}
+                      onChange={() => {
+                        updateLabel(className);
+                      }}
+                    />
+                  </td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
+        <div className="flex space-x-4 justify-between">
+          <Button
+            label="Set Manual Label"
+            onClick={() => {
+              postRequest("/manual-labels/" + issue["issue_id"], label, () =>
+                alert("Manual label set")
+              );
+            }}
+          />
+          {issue["tags"].includes("needs-review") ? (
+            <Button
+              label="Finish review"
+              onClick={() => {
+                postRequest(
+                  "/issues/" + issue["issue_id"] + "/finish-review",
+                  null
+                );
+              }}
+              color="green"
+            />
+          ) : (
+            <Button
+              label="Mark for review"
+              onClick={() => {
+                postRequest(
+                  "/issues/" + issue["issue_id"] + "/mark-review",
+                  null
+                );
+              }}
+              color="red"
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EditComment({ issueId, commentKey, comment }) {
+  let [editing, setEditing] = useState(false);
+  let [value, setValue] = useState(comment["comment"]);
+
+  return (
+    <div className="space-y-2 mt-2">
+      {editing ? (
+        <TextAreaForm
+          label="New comment"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+      ) : null}
+      <div className="flex justify-between">
+        <Button
+          label="Delete Comment"
+          onClick={() => {
+            deleteRequest(`/manual-labels/${issueId}/comments/${commentKey}`);
+          }}
+          icon={<TrashIcon />}
+          color="red"
+        />
+        <Button
+          label="Edit Comment"
+          onClick={() => {
+            if (editing) {
+              patchRequest(`/manual-labels/${issueId}/comments/${commentKey}`, {
+                comment: value,
+              });
+              setEditing(false);
+            } else {
+              setEditing(true);
+            }
+          }}
+          icon={<PencilIcon />}
+        />
+      </div>
+    </div>
+  );
+}
+
+function Comments({ issue }) {
+  let [newComment, setNewComment] = useState("");
+
+  return (
+    <>
+      <p className="text-2xl font-bold">Comments</p>
+      {Object.entries(issue["comments"]).map(([key, comment]) => {
+        return (
+          <div key={key} className="border rounded-lg p-2 border-gray-400">
+            <p className="bg-gray-700 rounded-t-lg p-2 font-bold">
+              {issue["comments"][key]["author"]} ({key})
+            </p>
+            <p className="bg-gray-800 rounded-b-lg p-2">
+              {issue["comments"][key]["comment"]}
+            </p>
+            <EditComment
+              comment={comment}
+              issueId={issue["issue_id"]}
+              commentKey={key}
+            />
+          </div>
+        );
+      })}
+
+      <div className="border rounded-lg p-2 border-gray-400 space-y-2">
+        <TextAreaForm
+          label="New comment:"
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        />
+        <div className="flex justify-end">
+          <Button
+            label="Post comment"
+            onClick={() => {
+              postRequest("/manual-labels/" + issue["issue_id"] + "/comments", {
+                comment: newComment,
+              });
+              setNewComment("");
+            }}
+            color="green"
+            icon={<ArrowUpTray />}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Tags({ issue, tags }) {
+  let [selectedTag, setSelectedTag] = useState("null");
+
+  return (
+    <>
+      <p className="text-2xl font-bold">Tags</p>
+      <div className="border rounded-lg p-2 border-gray-400">
+        <p className="font-bold text-xl">Manual tags</p>
+        {issue["tags"].map((tag) => {
+          if (tags.includes(tag)) {
+            return (
+              <div key={tag} className="m-2 flex items-center">
+                <Button
+                  label=""
+                  onClick={() =>
+                    deleteRequest(`/issues/${issue["issue_id"]}/tags/${tag}`)
+                  }
+                  color="red"
+                  icon={<TrashIcon />}
+                />
+                <p className="ml-2">{tag}</p>
+              </div>
+            );
+          }
+        })}
+
+        <p className="font-bold text-xl">Auto-generated tags</p>
+        {issue["tags"].map((tag) => {
+          if (!tags.includes(tag)) {
+            return (
+              <div key={tag} className="m-2 flex items-center">
+                <Button
+                  label=""
+                  onClick={() =>
+                    deleteRequest(`/issues/${issue["issue_id"]}/tags/${tag}`)
+                  }
+                  color="red"
+                  icon={<TrashIcon />}
+                />
+                <p className="ml-2">{tag}</p>
+              </div>
+            );
+          }
+        })}
+
+        <hr className="border-gray-400 m-2" />
+
+        <div className="flex space-x-4">
+          <Select
+            label={"New tag:"}
+            value={selectedTag}
+            options={tags
+              .map((tag) => {
+                if (!issue["tags"].includes(tag)) {
+                  return {
+                    label: tag,
+                    value: tag,
+                  };
+                }
+              })
+              .filter((x) => x !== undefined)}
+            onChange={(e) => setSelectedTag(e.target.value)}
+            includeNull={true}
+          />
+          <Button
+            label={"Add Tag"}
+            onClick={() => {
+              if (selectedTag !== "null") {
+                postRequest("/issues/" + issue["issue_id"] + "/tags", {
+                  tag: selectedTag,
+                });
+              } else {
+                alert("Please select a tag");
+              }
+            }}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ClassifyModal({ issue, tags }) {
+  let [openModal, setOpenModal] = useState(false);
+
+  return (
+    <>
+      <Button
+        label={`Classify ${
+          issue["tags"].includes("needs-review") ? "(needs-review)" : ""
+        }`}
+        onClick={() => {
+          setOpenModal(true);
+        }}
+        color={issue["tags"].includes("needs-review") ? "orange" : "blue"}
+      />
+      <Modal
+        title={
+          <p className="text-4xl font-bold">
+            <a
+              href={issue["issue_link"]}
+              target="_blank"
+              className="text-blue-500 underline hover:no-underline"
+            >
+              {issue["issue_key"]}
+            </a>{" "}
+            ({issue["issue_id"]})
+          </p>
+        }
+        body={
+          <div className="mt-4 space-y-4">
+            <div>
+              <p className="text-2xl font-bold">Summary</p>
+              <p className="text-base">{issue["summary"]}</p>
+            </div>
+
+            <div>
+              <p className="text-2xl font-bold mt-4">Description</p>
+              <p className="max-h-96 overflow-auto">{issue["description"]}</p>
+            </div>
+
+            <ManualLabelForm issue={issue} />
+
+            <Comments issue={issue} />
+
+            <Tags issue={issue} tags={tags} />
+          </div>
+        }
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
+    </>
+  );
+}
+
+function sortTags(a, b) {
+  if (a.toLowerCase() < b.toLowerCase()) {
+    return -1;
+  }
+  if (a.toLowerCase() > b.toLowerCase()) {
+    return 1;
+  }
+  return 0;
+}
+
+function IssueTable({ socket, uiData, setUiData, query, setQuery, modelData }) {
+  if (uiData === undefined) {
     return <></>;
   }
 
-  let currentIndex = -1;
-  let currentIssue = undefined;
+  let [tags, setTags] = useState([]);
 
-  uiData["data"].map((item, index) => {
-    if (item["issue_id"] === currentIssueId) {
-      currentIndex = index;
-      currentIssue = uiData["data"][index];
-    }
-  });
+  useEffect(() => {
+    getRequest("/tags").then((data) => {
+      let tmp = [];
+      data["tags"].map((tag) => {
+        if (tag["type"] === "manual-tag") {
+          tmp.push(tag["name"]);
+        }
+      });
+      tmp.sort(sortTags);
+      setTags(tmp);
+    });
+  }, []);
+
+  if (uiData["data"] === undefined) {
+    return <></>;
+  }
 
   function renderLabel(label) {
     if (label["existence"] === null) {
@@ -96,577 +808,6 @@ function IssueTable({
   }
   let predictions = uiData["data"][0]["predictions"];
   let [focusRow, setFocusRow] = useState<number>(-1);
-  return (
-    <>
-      <div className="relative overflow-x-auto m-4 border-4 border-gray-700 rounded-lg">
-        <table className="table-auto text-left text-white">
-          <thead className="uppercase bg-gray-700">
-            <tr>
-              <th className="p-4">Row</th>
-              <th className="p-4">Issue Key</th>
-              <th className="p-4">Classify</th>
-              <th className="p-4">Manual Label</th>
-              <th className="p-4">Tags</th>
-              {Object.keys(predictions).map((modelId) => {
-                return Object.keys(predictions[modelId]).map((className) => {
-                  return (
-                    <th
-                      key={modelId + className}
-                      className="p-4"
-                      onClick={() => {
-                        let newSort =
-                          "predictions." + modelId + "." + className;
-                        let tmp = { ...query };
-                        if (newSort === tmp["sort"]) {
-                          if (!tmp["sort_ascending"]) {
-                            tmp["sort_ascending"] = true;
-                          } else {
-                            tmp["sort"] = null;
-                          }
-                        } else {
-                          tmp["sort"] = newSort;
-                          tmp["sort_ascending"] = false;
-                        }
-                        setQuery(tmp);
-                        fetchUiData(tmp);
-                      }}
-                    >
-                      <div className="flex items-center">
-                        {modelData.map((model) => {
-                          if (model["value"] === modelId.split("-")[0]) {
-                            return model["name"];
-                          }
-                        })}{" "}
-                        - {className}
-                        {query["sort"] ===
-                        "predictions." + modelId + "." + className ? (
-                          <>
-                            {query["sort_ascending"] ? (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-10 h-10"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
-                                />
-                              </svg>
-                            ) : (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-10 h-10"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
-                                />
-                              </svg>
-                            )}
-                          </>
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-10 h-10"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                    </th>
-                  );
-                });
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {uiData["data"].map((item, index) => {
-              return (
-                <tr
-                  key={index}
-                  className={
-                    (index % 2 === 0 ? " bg-gray-600" : " bg-gray-700") +
-                    (focusRow === index ? " italic font-bold" : " ")
-                  }
-                  onClick={() => setFocusRow(index)}
-                >
-                  <td className="p-4">
-                    {index + 1 + query["limit"] * (query["page"] - 1)}
-                  </td>
-                  <td className="p-4">
-                    <a
-                      href={item["issue_link"]}
-                      target="_blank"
-                      className="text-blue-500 underline hover:no-underline"
-                    >
-                      {item["issue_key"]}
-                    </a>
-                  </td>
-                  <td className="p-4">
-                    <button
-                      onClick={() => {
-                        setCurrentIssueId(item["issue_id"]);
-                        setLabel(item["manual_label"]);
-                        setIssueModalIsOpen(true);
-                      }}
-                      className={
-                        "blockappearance-none w-full text-white py-1 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring focus:ring-white" +
-                        (item["tags"].includes("needs-review")
-                          ? " bg-orange-500 border-orange-500 hover:bg-orange-700 hover:border-orange-700"
-                          : " bg-blue-500 border-blue-500 hover:bg-blue-700 hover:border-blue-700")
-                      }
-                    >
-                      Classify{" "}
-                      {item["tags"].includes("needs-review")
-                        ? "(needs-review)"
-                        : ""}
-                    </button>
-                  </td>
-                  <td className="p-4">{renderLabel(item["manual_label"])}</td>
-                  <td className="p-4">
-                    <ul className="list-disc">
-                      {item["tags"].map((tag) => {
-                        if (tags.includes(tag)) {
-                          return <li key={tag}>{tag}</li>;
-                        }
-                      })}
-                    </ul>
-                  </td>
-                  {Object.keys(item["predictions"]).map((modelId) => {
-                    return Object.keys(item["predictions"][modelId]).map(
-                      (className) => {
-                        let prediction =
-                          item["predictions"][modelId][className]["prediction"];
-                        let confidence =
-                          item["predictions"][modelId][className]["confidence"];
-                        return (
-                          <td key={modelId + className} className="p-4">
-                            {String(prediction)} ({confidence})
-                          </td>
-                        );
-                      }
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      {issueModalIsOpen ? (
-        <>
-          {currentIssue === undefined ? (
-            ""
-          ) : (
-            <Transition appear show={currentIssue !== undefined} as={Fragment}>
-              <Dialog
-                as="div"
-                className="relative z-10 text-white"
-                onClose={() => setIssueModalIsOpen(false)}
-              >
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <div className="fixed inset-0 bg-black bg-opacity-25" />
-                </Transition.Child>
-
-                <div className="fixed inset-0 overflow-y-auto">
-                  <div className="flex min-h-full items-center justify-center p-4 text-center">
-                    <Transition.Child
-                      as={Fragment}
-                      enter="ease-out duration-300"
-                      enterFrom="opacity-0 scale-95"
-                      enterTo="opacity-100 scale-100"
-                      leave="ease-in duration-200"
-                      leaveFrom="opacity-100 scale-100"
-                      leaveTo="opacity-0 scale-95"
-                    >
-                      <Dialog.Panel className="m-4 w-fill transform overflow-hidden rounded-2xl bg-slate-600 p-6 text-left align-middle shadow-xl transition-all">
-                        <Dialog.Title
-                          as="h3"
-                          className="text-xl font-bold leading-6 text-white"
-                        >
-                          <p className="text-4xl font-bold">
-                            <a
-                              href={currentIssue["issue_link"]}
-                              target="_blank"
-                              className="text-blue-500 underline hover:no-underline"
-                            >
-                              {currentIssue["issue_key"]}
-                            </a>{" "}
-                            ({currentIssue["issue_id"]})
-                          </p>
-                        </Dialog.Title>
-
-                        {/* Body */}
-                        <div className="mt-4 space-y-4">
-                          <p className="text-2xl font-bold">Summary</p>
-                          <p className="text-base">{currentIssue["summary"]}</p>
-
-                          <p className="text-2xl font-bold">Description</p>
-                          <div className="p-1 bg-gray-800 rounded-lg">
-                            <textarea
-                              value={currentIssue["description"]}
-                              rows={8}
-                              disabled
-                              className="text-base w-full bg-gray-800 text-white"
-                            />
-                          </div>
-
-                          {/* Manual Label */}
-                          <p className="text-2xl font-bold">Manual Label</p>
-                          <table>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <label>Existence</label>
-                                </td>
-                                <td>
-                                  <input
-                                    className="ml-4"
-                                    type="checkbox"
-                                    checked={label["existence"]}
-                                    onChange={() => {
-                                      updateLabel("existence");
-                                    }}
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <label>Executive</label>
-                                </td>
-                                <td>
-                                  <input
-                                    className="ml-4"
-                                    type="checkbox"
-                                    checked={label["executive"]}
-                                    onChange={() => {
-                                      updateLabel("executive");
-                                    }}
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <label>Property</label>
-                                </td>
-                                <td>
-                                  <input
-                                    className="ml-4"
-                                    type="checkbox"
-                                    checked={label["property"]}
-                                    onChange={() => {
-                                      updateLabel("property");
-                                    }}
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <label>Non-Architectural</label>
-                                </td>
-                                <td>
-                                  <input
-                                    className="ml-4"
-                                    type="checkbox"
-                                    checked={
-                                      !label["existence"] &&
-                                      !label["executive"] &&
-                                      !label["property"]
-                                    }
-                                    onChange={() => {
-                                      updateLabel("non-architectural");
-                                    }}
-                                  />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                          <button
-                            className="flex items-center space-x-4 mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                            onClick={() => {
-                              postRequest(
-                                "/manual-labels/" + currentIssue["issue_id"],
-                                label,
-                                () => alert("Manual label set")
-                              );
-                            }}
-                          >
-                            Set Manual Label
-                          </button>
-
-                          <hr />
-
-                          {currentIssue["tags"].includes("needs-review") ? (
-                            <button
-                              className="flex items-center space-x-4 mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-                              onClick={() => {
-                                postRequest(
-                                  "/issues/" +
-                                    currentIssue["issue_id"] +
-                                    "/finish-review",
-                                  null
-                                );
-                              }}
-                            >
-                              Mark for training
-                            </button>
-                          ) : (
-                            <button
-                              className="flex items-center space-x-4 mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-                              onClick={() => {
-                                postRequest(
-                                  "/issues/" +
-                                    currentIssue["issue_id"] +
-                                    "/mark-review",
-                                  null
-                                );
-                              }}
-                            >
-                              Mark for review
-                            </button>
-                          )}
-
-                          {/* Comments */}
-                          <p className="text-2xl font-bold">Comments</p>
-                          {Object.keys(currentIssue["comments"]).map((key) => {
-                            return (
-                              <div
-                                key={key}
-                                className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
-                              >
-                                <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                                  <p>
-                                    {currentIssue["comments"][key]["author"]} (
-                                    {key})
-                                  </p>
-                                </div>
-                                <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-                                  <textarea
-                                    id={key}
-                                    className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                                    placeholder={
-                                      currentIssue["comments"][key]["comment"]
-                                    }
-                                  ></textarea>
-                                </div>
-                                {currentIssue["comments"][key]["author"] ===
-                                localStorage.getItem("username") ? (
-                                  <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                                    <button
-                                      type="submit"
-                                      className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
-                                      onClick={() => {
-                                        patchRequest(
-                                          "/manual-labels/" +
-                                            currentIssue["issue_id"] +
-                                            "/comments/" +
-                                            key,
-                                          {
-                                            comment:
-                                              document.getElementById(key)
-                                                .value,
-                                          }
-                                        );
-                                      }}
-                                    >
-                                      Edit comment
-                                    </button>
-                                    <button
-                                      type="submit"
-                                      className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 dark:focus:ring-red-900 hover:bg-red-800"
-                                      onClick={() => {
-                                        deleteRequest(
-                                          "/manual-labels/" +
-                                            currentIssue["issue_id"] +
-                                            "/comments/" +
-                                            key
-                                        );
-                                      }}
-                                    >
-                                      Delete comment
-                                    </button>
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                            );
-                          })}
-
-                          {/* Add comment */}
-                          <div className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                            <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-                              <textarea
-                                id="comment"
-                                rows={4}
-                                className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                                placeholder="Write a comment..."
-                                required
-                              ></textarea>
-                            </div>
-                            <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-                              <button
-                                type="submit"
-                                className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-green-700 rounded-lg focus:ring-4 focus:ring-green-200 dark:focus:ring-green-900 hover:bg-green-800"
-                                onClick={() => {
-                                  postRequest(
-                                    "/manual-labels/" +
-                                      currentIssue["issue_id"] +
-                                      "/comments",
-                                    {
-                                      comment:
-                                        document.getElementById("comment")
-                                          .value,
-                                    }
-                                  );
-                                }}
-                              >
-                                Post comment
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Tags */}
-                          <p className="text-2xl font-bold">Tags</p>
-                          <div className="text-base">
-                            {uiData["data"][currentIndex]["tags"].map((tag) => {
-                              return (
-                                <div
-                                  key={tag}
-                                  className="m-2 flex items-center"
-                                >
-                                  <button
-                                    onClick={() => {
-                                      deleteRequest(
-                                        "/issues/" +
-                                          currentIssue["issue_id"] +
-                                          "/tags/" +
-                                          tag
-                                      );
-                                    }}
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke-width="1.5"
-                                      stroke="currentColor"
-                                      className="w-4 h-4"
-                                    >
-                                      <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                                      />
-                                    </svg>
-                                  </button>
-                                  <p className="ml-2">{tag}</p>
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          {/* Add tag */}
-                          <div className="text-white flex items-center space-x-4 mt-3">
-                            <div className="flex relative">
-                              <select
-                                id="add-tag-dropdown"
-                                className="appearance-none w-full bg-gray-700 border border-gray-700 text-white py-1 px-4 pr-8 rounded leading-tight"
-                              >
-                                {tags.map((tag) => {
-                                  if (!currentIssue["tags"].includes(tag)) {
-                                    return (
-                                      <option key={tag} value={tag}>
-                                        {tag}
-                                      </option>
-                                    );
-                                  }
-                                })}
-                              </select>
-                              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
-                                <svg
-                                  className="fill-current h-4 w-4"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                </svg>
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => {
-                                postRequest(
-                                  "/issues/" +
-                                    currentIssue["issue_id"] +
-                                    "/tags",
-                                  {
-                                    tag: document.getElementById(
-                                      "add-tag-dropdown"
-                                    ).value,
-                                  }
-                                );
-                              }}
-                              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded inline-flex items-center"
-                            >
-                              Add Tag
-                            </button>
-                          </div>
-                        </div>
-                        {/* End Body */}
-                      </Dialog.Panel>
-                    </Transition.Child>
-                  </div>
-                </div>
-              </Dialog>
-            </Transition>
-          )}
-        </>
-      ) : (
-        ""
-      )}
-    </>
-  );
-}
-
-function OverView({ socket }) {
-  let [uiData, setUiData] = useState(undefined);
-  let [modelData, setModelData] = useState(undefined);
-  let [versions, setVersions] = useState({});
-  let [issueModalIsOpen, setIssueModalIsOpen] = useState<bool>(false);
-  let [query, setQuery] = useState({
-    filter: "",
-    sort: null,
-    sort_ascending: false,
-    models: [],
-    page: 1,
-    limit: 10,
-  });
 
   socket.onopen = () => {
     console.log("socket opened");
@@ -703,338 +844,115 @@ function OverView({ socket }) {
     }
   };
 
-  function getParsedQuery(newQuery) {
-    let parsedQuery = { ...newQuery };
-    parsedQuery["filter"] = JSON.parse(parsedQuery["filter"]);
-    parsedQuery["models"] = parsedQuery["models"].map(
-      (item) => item["modelId"] + "-" + item["versionId"]
-    );
-    return parsedQuery;
-  }
-
-  function fetchUiData(newQuery) {
-    postRequest("/ui", getParsedQuery(newQuery), (data) => {
-      setUiData(data);
-    });
-  }
-
-  function fetchModels() {
-    getRequest("/models").then((data) =>
-      setModelData(
-        data["models"].map((item) => {
-          return { name: item["model_name"], value: item["model_id"] };
-        })
-      )
-    );
-  }
-
-  function fetchVersions(modelId) {
-    getRequest("/models/" + modelId + "/versions").then((data) => {
-      let tmp = { ...versions };
-      tmp[modelId] = data["versions"].map((item) => {
-        return { name: item["description"], value: item["version_id"] };
-      });
-      setVersions(tmp);
-    });
-  }
-
-  useEffect(() => {
-    fetchModels();
-  }, []);
-
-  function ModelDropDowns() {
-    let dropDowns: React.JSX.Element[] = [];
-    for (let i = 0; i < query["models"].length; i++) {
-      dropDowns.push(
-        <div key={"model " + i} className="mt-8">
-          <div className="flex items-center space-x-2">
-            <span className="text-xl font-bold">{"Model " + i}</span>
-            <button
-              onClick={() => {
-                let tmp = { ...query };
-                tmp["models"].splice(i, 1);
-                setQuery(tmp);
-              }}
-              className="flex items-center space-x-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 mr-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                />
-              </svg>
-              Delete model
-            </button>
-          </div>
-          <DropDown
-            name="model id"
-            options={modelData}
-            value={query["models"][i]["modelId"]}
-            onChange={(value) => {
-              let tmp = { ...query };
-              tmp["models"][i]["modelId"] = value;
-              setQuery(tmp);
-              if (!(value in versions)) {
-                fetchVersions(value);
-              }
-            }}
-          />
-          {query["models"][i]["modelId"] in versions ? (
-            <DropDown
-              name="version id"
-              options={versions[query["models"][i]["modelId"]]}
-              value={query["models"][i]["versionId"]}
-              onChange={(value) => {
-                let tmp = { ...query };
-                tmp["models"][i]["versionId"] = value;
-                setQuery(tmp);
-              }}
-            />
-          ) : (
-            ""
-          )}
-        </div>
-      );
-    }
-    return dropDowns;
-  }
-
-  function changePage(value) {
-    if (!Number.isInteger(value)) {
-      return;
-    }
-    if (value < 1) {
-      value = 1;
-    } else if (value > uiData["total_pages"]) {
-      value = uiData["total_pages"];
-    }
-    let tmp = { ...query };
-    tmp["page"] = value;
-    setQuery(tmp);
-    fetchUiData(tmp);
-  }
-
   return (
     <>
-      {/* Query */}
-      <div className="ml-4 mr-4">
-        <div className="flex items-start">
-          <div className="flex items-center space-x-2">
-            <span>Import query:</span>
-            <input
-              type="file"
-              className="bg-gray-700 text-white rounded"
-              accept="application/json"
-              onChange={(event) => {
-                if (event.target.files) {
-                  let fileReader = new FileReader();
-                  fileReader.addEventListener("load", (event) => {
-                    if (event.target?.result) {
-                      let newQuery = JSON.parse(event.target.result);
-                      setQuery(newQuery);
-                      fetchUiData(newQuery);
-                      newQuery["models"].map((item) => {
-                        fetchVersions(item["modelId"]);
-                      });
-                    }
-                  });
-                  fileReader.readAsText(event.target.files[0]);
-                }
-              }}
-            />
-          </div>
-        </div>
-        <div className="flex items-start space-x-2 mt-2">
-          <span>Filter:</span>
-          <textarea
-            className="bg-gray-700 text-white w-full rounded"
-            value={query["filter"]}
-            onChange={(event) => {
-              setQuery((prevState) => ({
-                ...prevState,
-                filter: event.target.value,
-              }));
-            }}
+      <div className="relative overflow-x-auto m-4 border-4 border-gray-700 rounded-lg">
+        <table className="table-auto text-left text-white">
+          <TableHeader
+            query={query}
+            setQuery={setQuery}
+            predictions={predictions}
+            setUiData={setUiData}
+            modelData={modelData}
           />
-        </div>
-        {ModelDropDowns()}
-        <button
-          onClick={() => {
-            let tmp = { ...query };
-            tmp["models"].push({ modelId: null, versionId: null });
-            setQuery(tmp);
-          }}
-          className="flex items-center space-x-4 mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6 mr-2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
-          Add model
-        </button>
-
-        <hr className="m-4" />
-
-        <div className="flex justify-between">
-          <button
-            onClick={() => {
-              fetchUiData(query);
-            }}
-            className="flex items-center space-x-4 mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6 mr-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-              />
-            </svg>
-            Submit Query
-          </button>
-          <button
-            onClick={() => {
-              const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-                JSON.stringify(query)
-              )}`;
-              const link = document.createElement("a");
-              link.href = jsonString;
-              link.download = "data.json";
-
-              link.click();
-            }}
-            className="flex items-center space-x-4 mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6 mr-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-              />
-            </svg>
-            Download Query
-          </button>
-        </div>
+          <tbody>
+            {uiData["data"].map((item, index) => {
+              item["tags"].sort(sortTags);
+              return (
+                <tr
+                  key={index}
+                  className={
+                    (index % 2 === 0 ? " bg-gray-600" : " bg-gray-700") +
+                    (focusRow === index ? " bg-gray-400" : " ")
+                  }
+                  onClick={() => setFocusRow(index)}
+                >
+                  <td className="p-4">
+                    {index + 1 + query["limit"] * (query["page"] - 1)}
+                  </td>
+                  <td className="p-4">
+                    <a
+                      href={item["issue_link"]}
+                      target="_blank"
+                      className="text-blue-500 underline hover:no-underline"
+                    >
+                      {item["issue_key"]}
+                    </a>
+                  </td>
+                  <td className="p-4">
+                    <ClassifyModal issue={item} tags={tags} />
+                  </td>
+                  <td className="p-4">{renderLabel(item["manual_label"])}</td>
+                  <td className="p-4">
+                    <ul className="list-disc">
+                      {item["tags"].map((tag) => {
+                        if (tags.includes(tag)) {
+                          return <li key={tag}>{tag}</li>;
+                        }
+                      })}
+                    </ul>
+                  </td>
+                  {Object.keys(item["predictions"]).map((modelId) => {
+                    return Object.keys(item["predictions"][modelId]).map(
+                      (className) => {
+                        let prediction =
+                          item["predictions"][modelId][className]["prediction"];
+                        let confidence =
+                          item["predictions"][modelId][className]["confidence"];
+                        return (
+                          <td key={modelId + className} className="p-4">
+                            {String(prediction)} ({confidence})
+                          </td>
+                        );
+                      }
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
-      {uiData === undefined ? (
-        ""
-      ) : (
-        <>
-          <hr className="m-4" />
-          {/* Pagination */}
-          <div className="flex flex-col items-center mt-4">
-            <span className="text-gray-700 dark:text-gray-400">
-              Showing page{" "}
-              <span className="font-semibold text-gray-900 dark:text-white">
-                {query["page"]}
-              </span>{" "}
-              out of{" "}
-              <span className="font-semibold text-gray-900 dark:text-white">
-                {uiData["total_pages"]}
-              </span>
-            </span>
-            <div className="inline-flex mt-2 xs:mt-0">
-              <button
-                onClick={() => changePage(query["page"] - 1)}
-                className="flex items-center justify-center px-3 h-8 font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Prev
-              </button>
-              <input
-                className="flex items-center justify-center px-3 h-8 font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                type="text"
-                value={query["page"]}
-                onChange={(event) => {
-                  changePage(Number(event.target.value));
-                }}
-              />
-              <button
-                onClick={() => changePage(query["page"] + 1)}
-                className="flex items-center justify-center px-3 h-8 font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Next
-              </button>
-            </div>
-            <div className="inline-flex mt-2 xs:mt-0 items-center space-x-2">
-              <p className="text-gray-700 dark:text-gray-400">
-                Items per page:
-              </p>
-              <input
-                className="flex items-center justify-center px-3 h-8font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                type="text"
-                value={query["limit"]}
-                onChange={(event) => {
-                  let value = Number(event.target.value);
-                  if (!Number.isInteger(value)) {
-                    return;
-                  }
-                  if (value < 1) {
-                    value = 1;
-                  }
-                  let tmp = { ...query };
-                  tmp["limit"] = value;
-                  tmp["page"] = 1;
-                  setQuery(tmp);
-                  fetchUiData(tmp);
-                }}
-              />
-            </div>
-          </div>
-          <div className="pb-4 flex">
-            <IssueTable
-              uiData={uiData}
-              issueModalIsOpen={issueModalIsOpen}
-              setIssueModalIsOpen={setIssueModalIsOpen}
-              modelData={modelData}
-              query={query}
-              setQuery={setQuery}
-              fetchUiData={fetchUiData}
-            />
-          </div>
-        </>
-      )}
     </>
   );
 }
 
 export default function ClassifyIssues() {
   // Websocket
-  const socket = new WebSocket("wss://localhost:8000/ws");
+  const socket = getWebSocket();
+
+  let [query, setQuery] = useState({
+    filter: "",
+    sort: null,
+    sort_ascending: false,
+    models: [],
+    page: 1,
+    limit: 10,
+  });
+  let [modelData, setModelData] = useState(undefined);
+  let [uiData, setUiData] = useState(undefined);
 
   return (
-    <>
-      <OverView socket={socket} />
-    </>
+    <div className="container mx-auto w-fit pb-4">
+      <p className="text-4xl font-bold justify-center flex mb-4">
+        Classify Issues
+      </p>
+      <Query
+        uiData={uiData}
+        setUiData={setUiData}
+        query={query}
+        setQuery={setQuery}
+        modelData={modelData}
+        setModelData={setModelData}
+      />
+      <IssueTable
+        socket={socket}
+        uiData={uiData}
+        setUiData={setUiData}
+        query={query}
+        setQuery={setQuery}
+        modelData={modelData}
+      />
+    </div>
   );
 }

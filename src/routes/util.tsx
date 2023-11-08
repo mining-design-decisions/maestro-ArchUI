@@ -55,14 +55,25 @@ export function deleteRequest(url, thenFunction: null | (() => void) = null) {
     credentials: "include",
   };
 
-  fetch(getDatabaseURL() + url, request)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      if (thenFunction !== null) {
-        thenFunction();
-      }
-    });
+  fetch(getDatabaseURL() + url, request).then((response) => {
+    if (!response.ok) {
+      response.json().then((data) => {
+        alert(
+          response.status +
+            ": " +
+            response.statusText +
+            "\n\n" +
+            JSON.stringify(data)
+        );
+      });
+    } else {
+      response.json().then(() => {
+        if (thenFunction !== null) {
+          thenFunction();
+        }
+      });
+    }
+  });
 }
 
 export function request(
