@@ -4,7 +4,9 @@ import WindowedSelect from "react-windowed-select";
 export function TextForm({ label, value, onChange, password = false }) {
   return (
     <div className="flex items-center justify-between space-x-4">
-      <label className="whitespace-nowrap">{label} </label>
+      {label === "" ? null : (
+        <label className="whitespace-nowrap">{label} </label>
+      )}
       <input
         value={value}
         onChange={onChange}
@@ -25,7 +27,9 @@ export function TextAreaForm({ label, value, onChange }) {
 
   return (
     <div className="flex items-center space-x-4 justify-between">
-      <label className="whitespace-nowrap">{label}</label>
+      {label === "" ? null : (
+        <label className="whitespace-nowrap">{label} </label>
+      )}
       <textarea
         wrap="off"
         className="w-full p-1 rounded-lg rounded-br-none bg-gray-700 resize-y"
@@ -37,8 +41,20 @@ export function TextAreaForm({ label, value, onChange }) {
   );
 }
 
-export function CheckBox() {
-  return <></>;
+export function CheckBox({ label, checked, onChange }) {
+  return (
+    <div className="flex items-center justify-left space-x-4">
+      {label === "" ? null : (
+        <label className="whitespace-nowrap">{label} </label>
+      )}
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      />
+    </div>
+  );
 }
 
 export function Select({
@@ -60,7 +76,9 @@ export function Select({
 
   return (
     <div className="flex items-center justify-between space-x-4">
-      <label className="whitespace-nowrap">{label}</label>
+      {label === "" ? null : (
+        <label className="whitespace-nowrap">{label} </label>
+      )}
       <select
         className="p-1 rounded-lg bg-gray-700 w-full"
         value={value}
@@ -114,7 +132,9 @@ export function MultiSelectForm({ options, onChange }) {
 export function FileForm({ label, onChange, accept = "application/json" }) {
   return (
     <div className="flex items-center justify-between space-x-4">
-      <label className="whitespace-nowrap">{label}</label>
+      {label === "" ? null : (
+        <label className="whitespace-nowrap">{label} </label>
+      )}
       <input
         type="file"
         className="w-full p-1 bg-gray-700 text-white rounded"

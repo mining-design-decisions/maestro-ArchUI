@@ -15,11 +15,11 @@ export function Button({
 }: IButton) {
   return (
     <button
-      className={`flex bg-${color}-500 hover:bg-${color}-700 text-white font-bold py-1 px-2 rounded-lg`}
+      className={`flex items-center bg-${color}-500 hover:bg-${color}-700 text-white font-bold py-1 px-2 rounded-lg`}
       onClick={onClick}
     >
       {icon}
-      {label}
+      <span className="whitespace-nowrap">{label}</span>
     </button>
   );
 }
