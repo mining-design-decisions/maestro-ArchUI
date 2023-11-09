@@ -3,11 +3,16 @@ import { PlusIcon, QuestionMarkCircleIcon, TrashIcon } from "../../icons";
 import { CheckBox, Select, TextForm } from "../../components/forms";
 import { Button } from "../../components/button";
 
-export function getInitialConfig(endpoint, prevData) {
+export function getInitialConfig(
+  endpoint,
+  prevData,
+  type: "model" | "embedding" = "model"
+) {
   let tmp = {};
   for (const [key, value] of Object.entries(endpoint)) {
-    if (prevData !== undefined && key in prevData["model_config"]) {
-      tmp[key] = prevData["model_config"][key];
+    let configKey = type === "model" ? "model_config" : "config";
+    if (prevData !== undefined && key in prevData[configKey]) {
+      tmp[key] = prevData[configKey][key];
       if (value["argument_type"] === "nested" && tmp[key] === null) {
         tmp[key] = {};
       }
@@ -304,7 +309,7 @@ export function GenerateForms({
           </div>
         );
 
-        if (value["enabled-if"] !== null) {
+        if ("enabled-if" in value && value["enabled-if"] !== null) {
           // Check for constraint
           let payload = value["enabled-if"]["payload"];
           let lhs = payload["lhs"]["payload"]["name"];

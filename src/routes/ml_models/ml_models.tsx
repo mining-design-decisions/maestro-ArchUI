@@ -30,7 +30,7 @@ import {
 } from "../../components/forms";
 import { GenerateForms, getInitialConfig, getParsedConfig } from "./components";
 
-function ModelForms({ endpoints, prevData }) {
+function ModelForms({ endpoints, prevData, fetchModels }) {
   if (endpoints === undefined) {
     return <>Loading data</>;
   }
@@ -51,7 +51,10 @@ function ModelForms({ endpoints, prevData }) {
         model_config: getParsedConfig(config, endpoints["run"]["args"]),
         model_name: modelName,
       },
-      () => alert(message)
+      () => {
+        fetchModels();
+        alert(message);
+      }
     );
   }
 
@@ -113,17 +116,7 @@ function ModelForms({ endpoints, prevData }) {
   );
 }
 
-function ModelList() {
-  let [modelsList, setModelsList] = useState([]);
-
-  function fetchModels() {
-    getRequest("/models").then((data) => setModelsList(data["models"]));
-  }
-
-  useEffect(() => {
-    fetchModels();
-  }, []);
-
+function ModelList({ modelsList, fetchModels }) {
   return (
     <>
       {modelsList.length === 0 ? (
@@ -187,6 +180,7 @@ function ViewVersionOrPerformance({
                     "PUT",
                     file
                   );
+                  fetchVersions();
                 }}
                 icon={<ArrowUpTray />}
               />
@@ -539,7 +533,7 @@ function Model({ modelId, modelName, fetchModels }) {
       {showModel ? (
         <div className="space-y-4 bg-gray-600 p-4 rounded-lg">
           <div className="flex justify-between">
-            <UpdateModelConfig modelId={modelId} />
+            <UpdateModelConfig modelId={modelId} fetchModels={fetchModels} />
             <Button
               label={"Delete Model"}
               onClick={() => {
@@ -566,7 +560,7 @@ function Model({ modelId, modelName, fetchModels }) {
   );
 }
 
-function ConfigForms({ prevData }) {
+function ConfigForms({ prevData, fetchModels }) {
   let [endpoints, setEndpoints] = useState(undefined);
 
   useEffect(() => {
@@ -575,10 +569,16 @@ function ConfigForms({ prevData }) {
     );
   }, []);
 
-  return <ModelForms endpoints={endpoints} prevData={prevData} />;
+  return (
+    <ModelForms
+      endpoints={endpoints}
+      prevData={prevData}
+      fetchModels={fetchModels}
+    />
+  );
 }
 
-function UpdateModelConfig({ modelId }) {
+function UpdateModelConfig({ modelId, fetchModels }) {
   let [prevData, setPrevData] = useState(undefined);
 
   useEffect(() => {
@@ -586,20 +586,30 @@ function UpdateModelConfig({ modelId }) {
   }, []);
 
   if (prevData !== undefined) {
-    return <ConfigForms prevData={prevData} />;
+    return <ConfigForms prevData={prevData} fetchModels={fetchModels} />;
   }
   return <></>;
 }
 
-function CreateNewModel() {
-  return <ConfigForms prevData={undefined} />;
+function CreateNewModel({ fetchModels }) {
+  return <ConfigForms prevData={undefined} fetchModels={fetchModels} />;
 }
 
 export default function MLModels() {
+  let [modelsList, setModelsList] = useState([]);
+
+  function fetchModels() {
+    getRequest("/models").then((data) => setModelsList(data["models"]));
+  }
+
+  useEffect(() => {
+    fetchModels();
+  }, []);
+
   return (
     <div className="container mx-auto space-y-4">
-      <CreateNewModel />
-      <ModelList />
+      <CreateNewModel fetchModels={fetchModels} />
+      <ModelList modelsList={modelsList} fetchModels={fetchModels} />
     </div>
   );
 }
