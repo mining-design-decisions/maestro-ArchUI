@@ -29,13 +29,25 @@ export function uploadFile(
     body: body,
   };
 
-  fetch(getDatabaseURL() + url, request)
-    .then((response) => response.json())
-    .then((data) => {
-      if (thenFunction !== null) {
-        thenFunction(data);
-      }
-    });
+  fetch(getDatabaseURL() + url, request).then((response) => {
+    if (!response.ok) {
+      response.json().then((data) => {
+        alert(
+          response.status +
+            ": " +
+            response.statusText +
+            "\n\n" +
+            JSON.stringify(data)
+        );
+      });
+    } else {
+      response.json().then((data) => {
+        if (thenFunction !== null) {
+          thenFunction(data);
+        }
+      });
+    }
+  });
 }
 
 export function downloadFileLink(url) {
@@ -43,7 +55,22 @@ export function downloadFileLink(url) {
 }
 
 export function getRequest(url) {
-  return fetch(getDatabaseURL() + url).then((response) => response.json());
+  return fetch(getDatabaseURL() + url).then((response) => {
+    if (!response.ok) {
+      response.json().then((data) => {
+        alert(
+          response.status +
+            ": " +
+            response.statusText +
+            "\n\n" +
+            JSON.stringify(data)
+        );
+        return data;
+      });
+    } else {
+      return response.json();
+    }
+  });
 }
 
 export function deleteRequest(url, thenFunction: null | (() => void) = null) {
@@ -200,7 +227,22 @@ export function postRequestDlManager(
 }
 
 export function getRequestDlManager(url) {
-  return fetch(getDlManagerURL() + url).then((response) => response.json());
+  return fetch(getDlManagerURL() + url).then((response) => {
+    if (!response.ok) {
+      response.json().then((data) => {
+        alert(
+          response.status +
+            ": " +
+            response.statusText +
+            "\n\n" +
+            JSON.stringify(data)
+        );
+        return data;
+      });
+    } else {
+      return response.json();
+    }
+  });
 }
 
 export function postRequestSearchEngine(
