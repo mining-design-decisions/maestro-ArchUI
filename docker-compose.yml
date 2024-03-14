@@ -1,10 +1,21 @@
 version: "3.7"
 
 services:
-  sample:
+  archui:
     container_name: archui
     build:
       context: .
       dockerfile: Dockerfile
+    image: archui
     ports:
       - 5173:5173
+    networks:
+      - maestro_traefik
+    labels:
+      - "traefik.http.routers.archui.rule=PathPrefix(`/archui`)"
+      - "traefik.http.routers.archui.entrypoints=web"
+      - "traefik.enable=true"
+
+networks:
+  maestro_traefik:
+    external: true
