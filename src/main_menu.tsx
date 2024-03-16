@@ -4,12 +4,17 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import React from "react";
 
+const prefix = "/archui";
 const navigation = [
-  { name: "Classify Issues", href: "/classify-issues", current: false },
-  { name: "Statistics", href: "/statistics", current: false },
-  { name: "Tags", href: "/tags", current: false },
-  { name: "Search", href: "/search", current: false },
-  { name: "Settings", href: "/settings", current: false },
+  {
+    name: "Classify Issues",
+    href: `${prefix}/classify-issues`,
+    current: false,
+  },
+  { name: "Statistics", href: `${prefix}/statistics`, current: false },
+  { name: "Tags", href: `${prefix}/tags`, current: false },
+  { name: "Search", href: `${prefix}/search`, current: false },
+  { name: "Settings", href: `${prefix}/settings`, current: false },
 ];
 
 function classNames(...classes) {
@@ -37,7 +42,10 @@ export default function MainMenu() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <a href="/" className="text-xl font-bold text-inherit">
+                  <a
+                    href={`${prefix}`}
+                    className="text-xl font-bold text-inherit"
+                  >
                     Arch UI
                   </a>
                 </div>
@@ -75,7 +83,7 @@ export default function MainMenu() {
                           <Menu.Item>
                             {({ active }) => (
                               <a
-                                href="/ml-models/embeddings"
+                                href={`${prefix}/ml-models/embeddings`}
                                 className={classNames(
                                   active ? "bg-gray-600" : "",
                                   "block px-4 py-2 text-sm text-white"
@@ -88,7 +96,7 @@ export default function MainMenu() {
                           <Menu.Item>
                             {({ active }) => (
                               <a
-                                href="/ml-models/ml-models"
+                                href={`${prefix}/ml-models/ml-models`}
                                 className={classNames(
                                   active ? "bg-gray-600" : "",
                                   "block px-4 py-2 text-sm text-white"
@@ -127,7 +135,7 @@ export default function MainMenu() {
               <Disclosure.Button
                 key={"Word Embeddings"}
                 as="a"
-                href={"/ml-models/embeddings"}
+                href={`${prefix}/ml-models/embeddings`}
                 className={classNames(
                   false
                     ? "bg-gray-900 text-white"
@@ -141,7 +149,7 @@ export default function MainMenu() {
               <Disclosure.Button
                 key={"ML Models"}
                 as="a"
-                href={"/ml-models/ml-models"}
+                href={`${prefix}/ml-models/ml-models`}
                 className={classNames(
                   false
                     ? "bg-gray-900 text-white"

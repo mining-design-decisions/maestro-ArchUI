@@ -7,9 +7,9 @@ export interface ConnectionSettings {
 }
 
 const defaultSettings: ConnectionSettings = {
-  databaseURL: "https://localhost:8000",
-  dlManagerURL: "https://localhost:9011",
-  searchEngineURL: "https://localhost:8042",
+  databaseURL: "https://docker.localhost/issues-db-api",
+  dlManagerURL: "https://docker.localhost/dl-manager",
+  searchEngineURL: "https://docker.localhost/search-engine",
 };
 
 export function initConnectionSettings() {
@@ -53,5 +53,8 @@ export function getConnectionSettings(): ConnectionSettings {
 }
 
 export function getWebSocket() {
-  return new WebSocket(`${getDatabaseURL().replace("https", "wss")}/ws`);
+  if (getDatabaseURL().includes("https")) {
+    return new WebSocket(`${getDatabaseURL().replace("https", "wss")}/ws`);
+  }
+  return new WebSocket(`${getDatabaseURL().replace("http", "ws")}/ws`);
 }

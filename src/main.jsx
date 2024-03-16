@@ -16,37 +16,38 @@ import { initConnectionSettings } from "./components/connectionSettings";
 function App() {
   initConnectionSettings();
 
+  const prefix = "/archui";
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: `${prefix}/`,
       element: <Root />,
     },
     {
-      path: "/ml-models/embeddings",
+      path: `${prefix}/ml-models/embeddings`,
       element: <Embeddings />,
     },
     {
-      path: "/ml-models/ml-models",
+      path: `${prefix}/ml-models/ml-models`,
       element: <MLModels />,
     },
     {
-      path: "/classify-issues",
+      path: `${prefix}/classify-issues`,
       element: <ClassifyIssues />,
     },
     {
-      path: "/statistics",
+      path: `${prefix}/statistics`,
       element: <Statistics />,
     },
     {
-      path: "/tags",
+      path: `${prefix}/tags`,
       element: <Tags />,
     },
     {
-      path: "/search",
+      path: `${prefix}/search`,
       element: <Search />,
     },
     {
-      path: "/settings",
+      path: `${prefix}/settings`,
       element: <Settings />,
     },
   ]);

@@ -12,9 +12,11 @@ services:
     networks:
       - maestro_traefik
     labels:
-      - "traefik.http.routers.archui.rule=PathPrefix(`/archui`)"
-      - "traefik.http.routers.archui.entrypoints=web"
       - "traefik.enable=true"
+      - "traefik.http.routers.archui.rule=Host(`docker.localhost`)"
+      - "traefik.http.routers.archui.rule=PathPrefix(`/archui`)"
+      - "traefik.http.routers.archui.entrypoints=websecure"
+      - "traefik.http.routers.archui.tls=true"
 
 networks:
   maestro_traefik:
