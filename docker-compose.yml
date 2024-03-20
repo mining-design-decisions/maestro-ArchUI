@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  archui:
+    container_name: archui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: archui
+    ports:
+      - 5173:5173
+    networks:
+      - maestro_traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.archui.rule=Host(`docker.localhost`)"
+      - "traefik.http.routers.archui.rule=PathPrefix(`/archui`)"
+      - "traefik.http.routers.archui.entrypoints=websecure"
+      - "traefik.http.routers.archui.tls=true"
+
+networks:
+  maestro_traefik:
+    external: true
