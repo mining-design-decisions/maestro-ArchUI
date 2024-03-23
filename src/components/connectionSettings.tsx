@@ -7,9 +7,9 @@ export interface ConnectionSettings {
 }
 
 const defaultSettings: ConnectionSettings = {
-  databaseURL: "https://docker.localhost/issues-db-api",
-  dlManagerURL: "https://docker.localhost/dl-manager",
-  searchEngineURL: "https://docker.localhost/search-engine",
+  databaseURL: "https://maestro.localhost/issues-db-api",
+  dlManagerURL: "https://maestro.localhost/dl-manager",
+  searchEngineURL: "https://maestro.localhost/search-engine",
 };
 
 export function initConnectionSettings() {
