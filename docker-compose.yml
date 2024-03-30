@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: archui
+    image: archuiv3
     ports:
       - 5173:5173
     networks:
@@ -14,9 +14,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.archui.rule=Host(`maestro.localhost`)"
-      - "traefik.http.routers.archui.rule=PathPrefix(`/archui`)"
+      - "traefik.http.routers.archui.rule=PathPrefix(`/`)"
       - "traefik.http.routers.archui.entrypoints=websecure"
       - "traefik.http.routers.archui.tls=true"
+    volumes:
+      - ./:/app/
 
 networks:
   maestro_traefik:
