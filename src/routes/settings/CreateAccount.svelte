@@ -48,7 +48,7 @@
     <Checkbox text="May edit models" bind:checked={may_edit_models}/>
     <Checkbox text="May edit tags" bind:checked={may_edit_tags}/>
     <Checkbox text="May edit users" bind:checked={may_edit_users}/>
-    <Checkbox text="ay import issues" bind:checked={may_import_issues}/>
+    <Checkbox text="May import issues" bind:checked={may_import_issues}/>
 
     <div class="flex justify-end">
         <GreenButton text="+ Create Account" on:click={createAccount}/>

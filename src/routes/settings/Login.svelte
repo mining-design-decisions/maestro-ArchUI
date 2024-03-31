@@ -3,7 +3,7 @@
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SubTitle from "$lib/components/SubTitle.svelte";
     import TextInput from "$lib/components/TextInput.svelte";
-    import { postRequest } from "$lib/util/util";
+    import { postRequest, setToken } from "$lib/util/util";
 
     let username = "";
     let password = "";
@@ -13,7 +13,7 @@
             username: username,
             password: password
         }
-		postRequest("/login", body, () => alert("Login successful"), true);
+		postRequest("/login", body, (data) => {setToken(data.token); alert("Login successful")});
 	};
 </script>
 

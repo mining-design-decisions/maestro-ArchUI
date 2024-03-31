@@ -7,13 +7,13 @@
 	let label = "";
 	let description = "";
 
-	const insertTag = async () => {
+	const insertTag = () => {
 		const body = {
 			name: label,
 			description: description,
-			type: "custom"
+			type: "Custom"
 		}
-		postRequest('/tags', body)
+		postRequest('/tags', body, () => alert("Tag created!"))
 	}
 </script>
 

@@ -6,8 +6,11 @@
 
 	export let data;
 
-	const deleteTag = (id: string) => {
-		deleteRequest(`/tags/${id}`)
+	const safeDeleteTag = (id: string) => {
+		deleteRequest(`/tags/${id}?safe=true`, () => alert("Tag deleted safely!"))
+	}
+	const unsafeDeleteTag = (id: string) => {
+		deleteRequest(`/tags/${id}?safe=false`, () => alert("Tag deleted unsafely!"))
 	}
 </script>
 
@@ -25,7 +28,8 @@
 			<th class="p-4">Name</th>
 			<th class="p-4">Description</th>
 			<th class="p-4">Edit</th>
-			<th class="p-4">Delete</th>
+			<th class="p-4">Safe Delete</th>
+			<th class="p-4">Unsafe Delete</th>
 		</tr>
 		</thead>
 			<tbody>
@@ -37,7 +41,10 @@
 							<RedirectButton text="Edit" url={`/tags/edit?id=${tag.id}`}/>
 						</td>
 						<td class="p-4">
-							<RedButton text="Delete" on:click={() => deleteTag(tag.id)}/>
+							<RedButton text="Safe delete" on:click={() => safeDeleteTag(tag.id)}/>
+						</td>
+						<td class="p-4">
+							<RedButton text="Unsafe delete" on:click={() => unsafeDeleteTag(tag.id)}/>
 						</td>
 					</tr>
 				{/each}
