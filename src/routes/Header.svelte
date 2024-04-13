@@ -1,5 +1,4 @@
 <script>
-	import { page } from '$app/stores';
   import MenuButton from './MenuButton.svelte';
 </script>
 

@@ -22,7 +22,7 @@
 </script>
 
 <div class="container mx-auto w-fit space-y-4">
-	<Title text="Projects" />
+	<Title text="Repos" />
 
 	<div class="rounded overflow-hidden">
 		<table class="table-auto text-left text-gray-200 dark:text-gray-100">
