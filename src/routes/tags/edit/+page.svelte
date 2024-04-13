@@ -10,9 +10,9 @@
 		const body = {
 			name: data.tag.name,
 			description: data.tag.description,
-			type: "custom"
+			type: "Custom"
 		}
-		putRequest(`/tags/${data.tag.id}`, body)
+		putRequest(`/tags/${data.tag.id}`, body, () => alert("Tag edited!"))
 	}
 </script>
 
