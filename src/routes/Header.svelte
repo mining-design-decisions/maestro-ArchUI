@@ -12,7 +12,10 @@
 			<MenuButton text="Classify" url="/classify"/>
 			<MenuButton text="Search" url="/search"/>
 			<MenuButton text="Statistics" url="/statistics"/>
+			<MenuButton text="Labels" url="/labels"/>
 			<MenuButton text="Tags" url="/tags"/>
+			<MenuButton text="Repos" url="/repos"/>
+			<MenuButton text="Projects" url="/projects"/>
 			<MenuButton text="Settings" url="/settings"/>
 		</ul>
 	</nav>
