@@ -3,30 +3,30 @@
     import PasswordInput from "$lib/components/PasswordInput.svelte";
     import SubTitle from "$lib/components/SubTitle.svelte";
     import TextInput from "$lib/components/TextInput.svelte";
-    import { postRequest, setCurrentUsername, setToken } from "$lib/util/util";
+    import { postRequest, setToken } from "$lib/util/util";
 
-    let username = "";
     let password = "";
+    let passwordCheck = "";
 
-    const login = async () => {
+    const changePassword = async () => {
+        if (password !== passwordCheck) {
+            alert("Passwords not the same");
+            return;
+        }
 		let body = {
-            username: username,
             password: password
         }
-		const response = await postRequest("/login", body);
-        setToken(response.token);
-        setCurrentUsername(username);
-        alert("Login successful");
+		await postRequest("/change-password", body);
 	};
 </script>
 
 <div class="space-y-2">
-    <SubTitle text="Login"/>
+    <SubTitle text="Change password"/>
 
-    <TextInput text="Username" bind:value={username}/>
     <PasswordInput text="Password" bind:value={password}/>
+    <PasswordInput text="Re-type password" bind:value={passwordCheck}/>
 
     <div class="flex justify-end">
-        <BlueButton text="Login" on:click={login}/>
+        <BlueButton text="Change password" on:click={changePassword}/>
     </div>
 </div>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Title from "$lib/components/Title.svelte";
+  import ChangePassword from "./ChangePassword.svelte";
 	import CreateAccount from "./CreateAccount.svelte";
 	import Login from "./Login.svelte";
 	import UrlSettings from "./UrlSettings.svelte";
@@ -16,6 +17,7 @@
 
 		<div class="space-y-16">
 			<Login />
+			<ChangePassword />
 			<CreateAccount />
 			<UrlSettings />
 		</div>

@@ -15,6 +15,7 @@
 			<MenuButton text="Tags" url="/tags"/>
 			<MenuButton text="Repos" url="/repos"/>
 			<MenuButton text="Projects" url="/projects"/>
+			<MenuButton text="Files" url="/files"/>
 			<MenuButton text="Settings" url="/settings"/>
 		</ul>
 	</nav>
