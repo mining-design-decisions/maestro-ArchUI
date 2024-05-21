@@ -13,6 +13,8 @@ import {
 } from "../components/forms";
 import { MagnifyingGlassIcon, RocketLaunchIcon } from "../icons";
 import { Button } from "../components/button";
+import Accordion from "../components/Accordion";
+import Comments from "../components/comments";
 
 function ProjectsForm({ setSelectedProjects, setProjectsByRepo }) {
   let [projects, setProjects] = useState<
@@ -288,6 +290,14 @@ function SearchResults({ searchResults }) {
               Score: {result["hit_score"]}
             </p>
             <p className="mt-2">{result["description"]}</p>
+            {result["comments"] &&
+            (
+              <Accordion title="Comments" answer={<Comments commentsString={result["comments"]} />} />
+            )
+              // <Accordion title={"comments"} answer={Comments(commentsString={"ajay"})}></Accordion>
+            // <Comments commentsString={result["comments"]}></Comments>
+
+            }
           </div>
         );
       })}

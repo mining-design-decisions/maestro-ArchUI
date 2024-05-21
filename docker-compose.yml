@@ -11,6 +11,8 @@ services:
       - 5173:5173
     networks:
       - maestro_traefik
+    volumes:
+      - .:/app
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.archui.rule=Host(`maestro.localhost`)"
