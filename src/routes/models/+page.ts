@@ -7,6 +7,6 @@ export const load = async () => {
   let data = await getRequest("/models");
 
   return {
-    data: data,
+    models: data.models,
   };
 };

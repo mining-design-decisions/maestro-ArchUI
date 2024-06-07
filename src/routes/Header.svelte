@@ -6,8 +6,7 @@
 	<nav>
 		<ul class="flex justify-center space-x-8 bg-slate-600 rounded-b-lg p-2">
 			<MenuButton text="Home" url="/"/>
-			<MenuButton text="Embeddings" url="/embeddings"/>
-			<MenuButton text="ML Models" url="/models"/>
+			<MenuButton text="Models" url="/models"/>
 			<MenuButton text="Classify" url="/classify"/>
 			<MenuButton text="Search" url="/search"/>
 			<MenuButton text="Statistics" url="/statistics"/>

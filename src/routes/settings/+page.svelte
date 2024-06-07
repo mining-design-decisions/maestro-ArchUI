@@ -3,6 +3,7 @@
   import ChangePassword from "./ChangePassword.svelte";
 	import CreateAccount from "./CreateAccount.svelte";
 	import Login from "./Login.svelte";
+  import Settings from "./Settings.svelte";
 	import UrlSettings from "./UrlSettings.svelte";
 </script>
 
@@ -20,6 +21,7 @@
 			<ChangePassword />
 			<CreateAccount />
 			<UrlSettings />
+			<Settings />
 		</div>
 	</div>
 </div>
