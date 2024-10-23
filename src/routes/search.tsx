@@ -15,6 +15,7 @@ import { MagnifyingGlassIcon, RocketLaunchIcon } from "../icons";
 import { Button } from "../components/button";
 import Accordion from "../components/Accordion";
 import Comments from "../components/comments";
+import Attachments from "../components/Attachments";
 
 function ProjectsForm({ setSelectedProjects, setProjectsByRepo }) {
   let [projects, setProjects] = useState<
@@ -287,12 +288,13 @@ function SearchResults({ searchResults }) {
             </p>
             <p className="italic text-green-500">Label: {label.join(", ")}</p>
             <p className="italic text-green-500">
-              Score: {result["hit_score"]}
+              Score: {result["new_score"]}
             </p>
             <p className="mt-2">{result["description"]}</p>
+            <Attachments attachments={result["attachments"]}></Attachments>
             {result["comments"] &&
             (
-              <Accordion title="Comments" answer={<Comments commentsString={result["comments"]} />} />
+              <Accordion title="Comments" answer={<Comments comments={result["comment"]} />} />
             )
               // <Accordion title={"comments"} answer={Comments(commentsString={"ajay"})}></Accordion>
             // <Comments commentsString={result["comments"]}></Comments>

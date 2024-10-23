@@ -13,6 +13,7 @@ services:
       - maestro_traefik
     volumes:
       - .:/app
+      - /app/node_modules
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.archui.rule=Host(`maestro.localhost`)"
